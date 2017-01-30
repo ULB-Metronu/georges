@@ -49,6 +49,22 @@ def read_ptc_twiss(file):
     df.index.name = 'NAME'
     return df
 
+
+def read_madx_tracking(file):
+    """Read a MAD-X Tracking onetable=true file to a dataframe."""
+    column_names = ['ID','TURN','X','PX','Y','PY','T','PT','S','E']
+    data = pd.read_csv(file, skiprows=54, delim_whitespace=True, names=column_names)
+    return data.apply(pd.to_numeric, errors="ignore").dropna()
+
+
+def read_ptc_tracking(file):
+    """Read a PTC Tracking 'one' file to a dataframe."""
+    column_names = ['ID', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT', 'S', 'E']
+    data = pd.read_csv(file, skiprows=9, delim_whitespace=True,
+                       names=column_names) \
+              .apply(pd.to_numeric, errors="ignore").dropna()
+    return data[data['TURN'] == 1]
+
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
 
@@ -182,13 +198,13 @@ class Madx:
         return self
 
     def __add_particles_for_tracking(self, particles, ptc=False):
-        for e in particles:
-            if len(e) != 5: # Expect 5D coordinates
-                continue
+        if {'X', 'PX', 'Y', 'PY', 'DPP'} > set(particles):
+            return
+        for r in particles.iterrows():
             if ptc:
-                self.__add_input('ptc_start', tuple(e))
+                self.__add_input('ptc_start', tuple(r[1]))
             else:
-                self.__add_input('start_particle', tuple(e))
+                self.__add_input('start_particle', tuple(r[1]))
 
     def track(self, particles, **kwargs):
         """Add a (ptc) `track` command."""
@@ -207,7 +223,7 @@ class Madx:
         self.makethin(self.__beamline.name)
         self.__add_input('track_beamline')
         self.__add_particles_for_tracking(particles)
-        self.__beamline.sequence.apply(self.__generate_observation_points, axis=1)
+        self.__beamline.line.apply(self.__generate_observation_points, axis=1)
         self.__add_input('run_track_beamline')
         self.__add_input('end_track')
         return self
@@ -222,7 +238,7 @@ class Madx:
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout', (False, 1, 4, 3, True))
         self.__add_particles_for_tracking(particles, True)
-        self.__beamline.sequence.apply(self.__generate_observation_points_ptc, axis=1)
+        self.__beamline.line.apply(self.__generate_observation_points_ptc, axis=1)
         self.__add_input('ptc_track', (
             5,
             0.0,
@@ -238,12 +254,12 @@ class Madx:
         self.__add_input('ptc_end')
 
     def __generate_observation_points(self, e):
-        if not e['S'] == self.__beamline.length:
-            self.__add_input('observe', (e['NAME'],))
+        if not e['AT_EXIT'] == self.__beamline.length:
+            self.__add_input('observe', (e.name,))
 
     def __generate_observation_points_ptc(self, e):
-        if not e['S'] == self.__beamline.length and e['CLASS'] == 'MARKER':
-            self.__add_input('ptc_observe', (e['NAME'],))
+        if not e['AT_EXIT'] == self.__beamline.length and e['CLASS'] == 'MARKER':
+            self.__add_input('ptc_observe', (e.name,))
 
     def show_beam(self):
         """Add a MAD-X `show beam` command."""

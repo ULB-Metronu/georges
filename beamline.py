@@ -3,6 +3,7 @@ import os.path
 import pandas as pd
 import numpy as np
 import numpy.linalg as npl
+import georges.beam as beam
 import georges.madx.madx as madx
 
 DEFAULT_EXT = 'csv'
@@ -25,6 +26,7 @@ def compute_derived_data(row):
             row[d] = row[d + '_ELEMENT']
         if pd.isnull(row.get(d)):
             row[d] = getattr(sys.modules[__name__], d.lower(), lambda r: np.nan)(row)
+
     return row
 
 
@@ -198,6 +200,34 @@ class Beamline:
                                            )
         return self.__beamline
 
+    @property
+    def track(self, **kwargs):
+        """Compute the distribution of the beam as it propagates through the beamline."""
+        if kwargs.get('ptc', False):
+            self.__flag_ptc = True
+        m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
+        m.beam()
+        m.track(self.__beam.distribution, ptc=self.__flag_ptc)
+        errors = m.run(self.__get_context()).fatals
+        if len(errors) > 0:
+            print(m.input)
+            print(errors)
+            raise BeamlineException("MAD-X ended with fatal error.")
+        if self.__flag_ptc:
+            madx_track = madx.read_ptc_tracking(os.path.join(self.__path, ''))
+        else:
+            madx_track = madx.read_madx_tracking(os.path.join(self.__path, 'tracking.outxone')).dropna()
+            madx_track['PY'] = pd.to_numeric(madx_track['PY'])
+        madx_track['S'] = round(madx_track['S'], 8)
+        tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
+        self.__beamline['AT_CENTER_TRUNCATED'] = round(self.__beamline['AT_CENTER'], 8)
+        self.__beamline = self.__beamline.merge(pd.DataFrame(tmp, columns=['BEAM']),
+                                                left_on='AT_CENTER_TRUNCATED',
+                                                right_index=True,
+                                                how='left')
+        self.__beamline.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
+        return self.__beamline
+
     def __get_context(self):
         return {
             'PARTICLE': self.__beam.particle,
@@ -244,6 +274,8 @@ class Beamline:
                                                 how='left',
                                                 suffixes=('', '_ELEMENT')
                                                 )
+        # Angle conversion
+        self.__beamline['ANGLE'] = self.__beamline['ANGLE'] / 180.0 * np.pi
 
     def __convert_survey_to_sequence(self):
         s = self.__beamline
@@ -257,4 +289,4 @@ class Beamline:
             s['LENGTH'].fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].fillna(0.0) / 2.0
         ) + (
             s['LENGTH'].shift(1).fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].shift(1).fillna(0.0) / 2.0
-        )).cumsum() + offset
+        )).cumsum() / 1000.0 + offset

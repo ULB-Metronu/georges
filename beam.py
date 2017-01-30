@@ -87,7 +87,7 @@ class Beam:
     @property
     def std(self):
         """Return a dataframe containing the second order moments of each dimensions."""
-        return self.__distribution.std()
+        return self.__distribution.dropna().std()
 
     @property
     def halo(self):
