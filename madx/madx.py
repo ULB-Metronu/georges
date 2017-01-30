@@ -10,6 +10,8 @@ SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK'
 
 def element_to_mad(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
+    if not e['PHYSICAL'] or pd.isnull(e['PHYSICAL']):
+        return ""
     mad = "{}: {}, ".format(e.name, e.CLASS)
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e[p])])
     if pd.notnull(e['ORBIT_LENGTH']): mad += ", L={}".format(e['ORBIT_LENGTH'])
@@ -21,7 +23,8 @@ def element_to_mad(e):
 
 
 def sequence_to_mad(sequence):
-    """Convert a pandas.DataFrame seuqence onto a MAD-X input."""
+    """Convert a pandas.DataFrame sequence onto a MAD-X input."""
+    sequence.sort_values(by='AT_CENTER', inplace=True)
     if sequence is None:
         return ""
     input = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
@@ -79,7 +82,8 @@ class Madx:
     """
     def __init__(self, **kwargs):
         self.__beamline = kwargs.get('beamline', None)
-        self.__input = sequence_to_mad(self.__beamline.line)
+        if self.__beamline:
+            self.__input = sequence_to_mad(self.__beamline.line)
         self._path = kwargs.get('path', "")
         self.__madx = kwargs.get('madx', None)
         self.__warnings = []

@@ -143,9 +143,9 @@ class Beamline:
         if self.__length == 0:
             self.__length = self.__beamline['AT_EXIT'].values[-1]
 
-        # Add name and length to the beamline dataframe
-        self.__beamline.name = self.name
-        self.__beamline.length = self.length
+        # Flag to distinguish MAD-X generated elements from beamline elements
+        self.__beamline['PHYSICAL'] = True
+
 
     @property
     def name(self):
@@ -176,6 +176,8 @@ class Beamline:
     @property
     def line(self):
         """The beamline representation."""
+        self.__beamline.name = self.name
+        self.__beamline.length = self.length
         return self.__beamline
 
     @property
@@ -197,7 +199,7 @@ class Beamline:
                                            right_index=True,
                                            how='outer',
                                            suffixes=('_TWISS', '')
-                                           )
+                                           ).sort_values(by='S')
         return self.__beamline
 
     @property
@@ -224,7 +226,7 @@ class Beamline:
         self.__beamline = self.__beamline.merge(pd.DataFrame(tmp, columns=['BEAM']),
                                                 left_on='AT_CENTER_TRUNCATED',
                                                 right_index=True,
-                                                how='left')
+                                                how='left').sort_values(by='S')
         self.__beamline.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
         return self.__beamline
 
