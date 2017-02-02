@@ -95,6 +95,7 @@ class Beamline:
         self.__strengths = None
         self.__beam = kwargs.get('beam', None)
         self.__flag_ptc = kwargs.get('ptc', False)
+        self.__madx_input = None
 
         # Some type inference to get the elements right
         # Elements as a file name
@@ -174,6 +175,11 @@ class Beamline:
         return self.__elements
 
     @property
+    def last_madx_input(self):
+        """Provides the last flat input sent to MAD-X."""
+        return self.__madx_input
+
+    @property
     def line(self):
         """The beamline representation."""
         self.__beamline.name = self.name
@@ -187,7 +193,8 @@ class Beamline:
             self.__flag_ptc = True
         m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
         m.beam()
-        m.twiss(ptc=self.__flag_ptc)
+        m.twiss(ptc=self.__flag_ptc, centre=True)
+        print(m.input)
         errors = m.run(self.__get_context()).fatals
         if len(errors) > 0:
             print(m.input)
@@ -200,6 +207,7 @@ class Beamline:
                                            how='outer',
                                            suffixes=('_TWISS', '')
                                            ).sort_values(by='S')
+        self.__madx_input = m.input
         return self.__beamline
 
     @property
