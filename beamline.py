@@ -1,76 +1,22 @@
-import sys
 import os.path
 import pandas as pd
 import numpy as np
 import numpy.linalg as npl
 import georges.beam as beam
 import georges.madx.madx as madx
+from georges.sequence_geometry import compute_derived_data
 
 DEFAULT_EXT = 'csv'
 
 
-def compute_derived_data(row):
-    """Compute derived data for a beamline element."""
-    # Add a bunch of mandatory columns
-    for c in ['E1', 'E2', 'FINT', 'ANGLE', 'HGAP', 'THICK', 'TILT']:
-        if pd.isnull(row.get(c)):
-            row[c] = np.nan
-
-    # Corner case
-    if pd.isnull(row.get('CLASS')):
-        row['CLASS'] = row.get('TYPE', 'MARKER')
-
-    # Should be changed to infer the list of the module functions
-    for d in row.index | ['AT_ENTRY', 'AT_EXIT', 'AT_CENTER', 'ORBIT_LENGTH', 'ANGLE', 'E1', 'E2']:
-        if pd.isnull(row.get(d)) and not pd.isnull(row.get(d + '_ELEMENT')):
-            row[d] = row[d + '_ELEMENT']
-        if pd.isnull(row.get(d)):
-            row[d] = getattr(sys.modules[__name__], d.lower(), lambda r: np.nan)(row)
-
-    return row
-
-
-def at_entry(r):
-    """Try to compute the element's entry 's' position from other data."""
-    if not pd.isnull(r.get('AT_CENTER')):
-        return r['AT_CENTER'] - r['ORBIT_LENGTH']/2.0
-    elif not pd.isnull(r.get('AT_EXIT')):
-        return r['AT_EXIT'] - r['ORBIT_LENGTH']
-    else:
-        return np.nan
-
-
-def at_center(r):
-    """Try to compute the element's center 's' position from other data."""
-    if pd.isnull(r.get('ORBIT_LENGTH')):
-        return np.nan
-    if not pd.isnull(r.get('AT_ENTRY')):
-        return r['AT_ENTRY'] + r['ORBIT_LENGTH']/2.0
-    elif not pd.isnull(r.get('AT_EXIT')):
-        return r['AT_EXIT'] - r['ORBIT_LENGTH']/2.0
-    else:
-        return np.nan
-
-
-def at_exit(r):
-    """Try to compute the element's entry 's' position from other data."""
-    if pd.isnull(r.get('ORBIT_LENGTH')):
-        return np.nan
-    if not pd.isnull(r.get('AT_ENTRY')):
-        return r['AT_ENTRY'] + r['ORBIT_LENGTH']
-    elif not pd.isnull(r.get('AT_CENTER')):
-        return r['AT_CENTER'] + r['ORBIT_LENGTH']/2.0
-    else:
-        return np.nan
-
-
-def orbit_length(r):
-    """Try to compute the element's orbit length from other data."""
-    if pd.isnull(r.get('LENGTH')):
-        return 0.0
-    if pd.isnull(r.get('ANGLE')):
-        return r['LENGTH']
-    return r['ANGLE']*np.pi/180.0 * r['LENGTH'] / (2.0 * np.sin((r['ANGLE']*np.pi/180.0) / 2.0))
+def beamline_is_defined(method):
+    def with_check_defined(self, *args, **kwargs):
+        if not hasattr(self, '_Beamline__beamline'):
+            print("Beamline is not defined.")
+            return
+        else:
+            return method(self, *args, **kwargs)
+    return with_check_defined
 
 
 class BeamlineException(Exception):
@@ -96,6 +42,7 @@ class Beamline:
         self.__beam = kwargs.get('beam', None)
         self.__flag_ptc = kwargs.get('ptc', False)
         self.__madx_input = None
+        self.__beamline = None
 
         # Some type inference to get the elements right
         # Elements as a file name
@@ -120,6 +67,10 @@ class Beamline:
             if isinstance(arg, pd.DataFrame) and i == 0:
                 self.__name = getattr(arg, 'name', 'BEAMLINE')
                 self.__beamline = arg
+
+        if self.__beamline is None:
+            print("No beamline defined.")
+            return
 
         # Check before hand if the survey will need to be converted
         survey = False
@@ -146,7 +97,6 @@ class Beamline:
 
         # Flag to distinguish MAD-X generated elements from beamline elements
         self.__beamline['PHYSICAL'] = True
-
 
     @property
     def name(self):
@@ -180,6 +130,7 @@ class Beamline:
         return self.__madx_input
 
     @property
+    @beamline_is_defined
     def line(self):
         """The beamline representation."""
         self.__beamline.name = self.name
@@ -187,6 +138,7 @@ class Beamline:
         return self.__beamline
 
     @property
+    @beamline_is_defined
     def twiss(self, **kwargs):
         """Compute the Twiss parameters of the beamline."""
         if kwargs.get('ptc', False):
@@ -211,6 +163,7 @@ class Beamline:
         return self.__beamline
 
     @property
+    @beamline_is_defined
     def track(self, **kwargs):
         """Compute the distribution of the beam as it propagates through the beamline."""
         if kwargs.get('ptc', False):
@@ -256,9 +209,13 @@ class Beamline:
 
     def __build_from_files(self, names):
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
-        sequences = [
-            pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col = 'NAME') for f in files
+        try:
+            sequences = [
+                pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col = 'NAME') for f in files
             ]
+        except OSError:
+            print("One of the file has not been found.")
+            return
         self.__beamline = pd.concat(sequences)
 
     def __expand_sequence_data(self):
@@ -273,7 +230,11 @@ class Beamline:
 
     def __build_elements_from_file(self, file):
         file = os.path.splitext(file)[0] + '.' + (os.path.splitext(file)[1] or DEFAULT_EXT)
-        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
+        try:
+            self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
+        except OSError:
+            print("ERROR: File apparently not found")
+            self.__elements = pd.DataFrame()
 
     def __expand_elements_data(self):
         if self.__elements is None:
