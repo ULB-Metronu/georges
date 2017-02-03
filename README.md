@@ -9,19 +9,19 @@ A Docker image is made available to provide an easy access to a complete Jupyter
  Use  the *Dockerfile* to build the image:
  
  ```
-   docker build .
+ docker build .
 ```
 
 or, to register the image as well:
 
 ```
-  docker build -t username/georges .
+docker build -t username/georges .
 ```
 
 You can run a container with
 
 ```
-  docker run -it username/georges
+docker run -it username/georges
 ```
 
 then connect to [http://localhost:8888](http://localhost:8888 "Jupyter Notebook") to access the Jupyter Notebook interface.
