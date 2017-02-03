@@ -3,7 +3,7 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
-from madx.grammar import madx_syntax
+from madx.madx.grammar import madx_syntax
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
