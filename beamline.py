@@ -3,8 +3,8 @@ import os.path
 import pandas as pd
 import numpy as np
 import numpy.linalg as npl
-import beam as beam
-import madx.madx as madx
+import georges.beam as beam
+import georges.madx.madx as madx
 
 DEFAULT_EXT = 'csv'
 
