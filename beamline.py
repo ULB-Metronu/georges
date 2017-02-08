@@ -43,6 +43,7 @@ class Beamline:
         self.__flag_ptc = kwargs.get('ptc', False)
         self.__madx_input = None
         self.__beamline = None
+        self.__context = {}
 
         # Some type inference to get the elements right
         # Elements as a file name
@@ -138,6 +139,26 @@ class Beamline:
         return self.__beamline
 
     @property
+    def context(self):
+        """The current state of the beamline."""
+        if self.__context.get('PARTICLE') is None and self.__beam is not None:
+            self.__context['PARTICLE'] = self.__beam.particle
+        if self.__context.get('PC') is None and self.__beam is not None:
+            self.__context['PC'] = self.__beam.pc
+        if self.__context.get('BETAREL') is None and self.__beam is not None:
+            self.__context['BETAREL'] = self.__beam.betarel
+        return self.__context
+
+    @context.setter
+    def context(self, c):
+        self.__context = c
+
+    def set(self, k, v):
+        """Set a single variable in the context. Allows method chaining."""
+        self.__context[k] = v
+        return self
+
+    @property
     @beamline_is_defined
     def twiss(self, **kwargs):
         """Compute the Twiss parameters of the beamline."""
@@ -147,7 +168,8 @@ class Beamline:
         m.beam()
         m.twiss(ptc=self.__flag_ptc, centre=True)
         print(m.input)
-        errors = m.run(self.__get_context()).fatals
+        errors = m.run(self.context).fatals
+        self.__madx_input = m.input
         if len(errors) > 0:
             print(m.input)
             print(errors)
@@ -159,7 +181,6 @@ class Beamline:
                                            how='outer',
                                            suffixes=('_TWISS', '')
                                            ).sort_values(by='S')
-        self.__madx_input = m.input
         return self.__beamline
 
     @property
@@ -171,7 +192,8 @@ class Beamline:
         m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
         m.beam()
         m.track(self.__beam.distribution, ptc=self.__flag_ptc)
-        errors = m.run(self.__get_context()).fatals
+        errors = m.run(self.context).fatals
+        self.__madx_input = m.input
         if len(errors) > 0:
             print(m.input)
             print(errors)
@@ -184,28 +206,15 @@ class Beamline:
         madx_track['S'] = round(madx_track['S'], 8)
         tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
         self.__beamline['AT_CENTER_TRUNCATED'] = round(self.__beamline['AT_CENTER'], 8)
+        if 'BEAM' in self.__beamline:
+            self.__beamline.drop('BEAM', inplace=True, axis=1)
         self.__beamline = self.__beamline.merge(pd.DataFrame(tmp, columns=['BEAM']),
                                                 left_on='AT_CENTER_TRUNCATED',
                                                 right_index=True,
-                                                how='left').sort_values(by='S')
+                                                how='left').sort_values(by='AT_CENTER')
         self.__beamline.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
         return self.__beamline
 
-    def __get_context(self):
-        return {
-            'PARTICLE': self.__beam.particle,
-            'PC': self.__beam.pc,
-            'BETAREL': self.__beam.betarel,
-            'BETAX': 0.0846155,
-            'BETAY': 0.0846155,
-            'ALPHAX': 0.0,
-            'ALPHAY': 0.0,
-            'DELTAP': 0.0,
-            'DPP': 0.5e-2,
-            'N_TRACKING': 5000,
-            'EMITX': 14.3e-6,
-            'EMITY': 14.3e-6,
-        }
 
     def __build_from_files(self, names):
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]

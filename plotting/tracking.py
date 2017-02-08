@@ -1,3 +1,10 @@
+from georges.plotting.common import palette, filled_plot
+
+
+def track(ax, bl):
+    pass
+
+
 def tracking_plot(ax, tracking, plane):
     envelope = tracking['envelope']
     envelope2 = tracking['envelope2']

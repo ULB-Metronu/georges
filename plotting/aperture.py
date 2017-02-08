@@ -1,74 +1,91 @@
-def aperture_plot(ax, beamline, context, planes):
-    global palette
+import matplotlib
+import numpy as np
+from georges.plotting.common import palette
 
-    if planes == 'both':
-        up = 1
-        down = 0
-    elif planes == 'X':
-        up = 0
-        down = 0
-    elif planes == 'Y':
-        up = 1
-        down = 1
+
+def xy_from_string(a, i):
+    if len(str(a).strip('[]').split(',')) >= int(i) + 1:
+        return float(str(a).strip('[]').split(',')[int(i)])
+    elif len(str(a).strip('[]').split(',')) > 0:
+        return float(str(a).strip('[]').split(',')[0])
     else:
-        up = 1
-        down = 0
+        return np.inf
 
-    def draw_quad(ax, e):
-        # Poles
-        ax.add_patch(
-            matplotlib.patches.Rectangle(
-                (e['S'] - e['L'] / 2.0, 1000*e['POLES'][0]),  # (x,y)
-                e['L'],  # width
-                100,  # height
-                hatch='.', facecolor=palette['quad']
-            )
+def draw_chamber(ax, e):
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], 1000 * (e['APERTURE_UP'] - e['CHAMBER_UP'])),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            1000 * e['CHAMBER_UP'],  # height
+            hatch='', facecolor=palette['base01']
         )
-        ax.add_patch(
-            matplotlib.patches.Rectangle(
-                (e['S'] - e['L'] / 2.0, -1000*e['POLES'][0]),  # (x,y)
-                e['L'],  # width
-                -100,  # height
-                hatch='.', facecolor=palette['quad']
-            )
+    )
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], 1000 * (-e['APERTURE_DOWN'] + e['CHAMBER_UP'])),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            -1000 * e['CHAMBER_UP'],  # height
+            hatch='', facecolor=palette['base01']
         )
+    )
 
 
-    def draw_bend(ax, e):
-        ax.add_patch(
-            matplotlib.patches.Rectangle(
-                (e['S'] - e['L'] / 2.0, 1000*e['POLES'][up]),  # (x,y)
-                e['L'],  # width
-                100,  # height
-                hatch='/', facecolor=palette['bend']
-            )
+def draw_quad(ax, e):
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            100,  # height
+            hatch='.', facecolor=palette['quad']
         )
-        ax.add_patch(
-            matplotlib.patches.Rectangle(
-                (e['S'] - e['L'] / 2.0, -1000*e['POLES'][down]),  # (x,y)
-                e['L'],  # width
-                -100,  # height
-                hatch='/', facecolor=palette['bend']
-            )
+    )
+
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            -100,  # height
+            hatch='.', facecolor=palette['quad']
         )
+    )
+    draw_chamber(ax, e)
 
 
-    beamline.sequence[beamline.sequence['CLASS'] == 'QUADRUPOLE'].apply(lambda e: draw_quad(ax,e), axis=1);
-    beamline.sequence[beamline.sequence['CLASS'] == 'RBEND'].apply(lambda e: draw_bend(ax,e), axis=1);
-    beamline.sequence[beamline.sequence['CLASS'] == 'SBEND'].apply(lambda e: draw_bend(ax,e), axis=1);
-    # Beam pipe
-    if planes == 'X':
-        ax.plot(beamline.sequence['S'],
-                 1000*beamline.sequence['APERTURE_X'].fillna(method='ffill'), 'k')
-        ax.plot(beamline.sequence['S'],
-                 -1000*beamline.sequence['APERTURE_X'].fillna(method='ffill'), 'k')
-    elif planes == 'Y':
-        ax.plot(beamline.sequence['S'],
-                 1000*beamline.sequence['APERTURE_Y'].fillna(method='ffill'), 'k')
-        ax.plot(beamline.sequence['S'],
-                 -1000*beamline.sequence['APERTURE_Y'].fillna(method='ffill'), 'k')
-    elif planes == 'both':
-        ax.plot(beamline.sequence['S'],
-                 1000*beamline.sequence['APERTURE_Y'].fillna(method='ffill'), 'k')
-        ax.plot(beamline.sequence['S'],
-                 -1000*beamline.sequence['APERTURE_X'].fillna(method='ffill'), 'k')
+def draw_bend(ax, e):
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            100,  # height
+            hatch='/', facecolor=palette['bend']
+        )
+    )
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            -100,  # height
+            hatch='/', facecolor=palette['bend']
+        )
+    )
+    draw_chamber(ax ,e)
+
+
+def aperture(ax, bl, **kwargs):
+    if 'APERTURE' not in bl:
+        return
+
+    planes = kwargs.get('planes', 'both')
+
+    bl['APERTURE_UP'] = bl['APERTURE'].apply(lambda a: xy_from_string(a, planes == 'both' or planes == 'Y'))
+    bl['APERTURE_DOWN'] = bl['APERTURE'].apply(lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X')))
+
+    if 'CHAMBER' not in bl:
+        bl['CHAMBER'] = 0
+
+    bl['CHAMBER_UP'] = bl['CHAMBER'].apply(lambda a: xy_from_string(a, planes == 'both' or planes == 'Y'))
+    bl['CHAMBER_DOWN'] = bl['CHAMBER'].apply(lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X')))
+
+    bl.query("CLASS == 'QUADRUPOLE'").apply(lambda e: draw_quad(ax, e), axis=1)
+    bl.query("CLASS == 'SBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
+    bl.query("CLASS == 'RBEND'").apply(lambda e: draw_bend(ax, e), axis=1)

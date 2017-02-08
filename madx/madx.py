@@ -14,9 +14,12 @@ def element_to_mad(e):
         return ""
     mad = "{}: {}, ".format(e.name, e.CLASS)
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e[p])])
-    if pd.notnull(e['ORBIT_LENGTH']): mad += ", L={}".format(e['ORBIT_LENGTH'])
-    if pd.notnull(e['APERTYPE']): mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
-    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')): mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
+    if pd.notnull(e['ORBIT_LENGTH']):
+        mad += ", L={}".format(e['ORBIT_LENGTH'])
+    if pd.notnull(e['APERTYPE']):
+        mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
+    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
+        mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
     mad += ", AT={}".format(e['AT_CENTER'])
     mad += ";"
     return mad
@@ -31,7 +34,8 @@ def sequence_to_mad(sequence):
     input += '\n'.join(sequence.apply(element_to_mad, axis=1)) + '\n'
     input += "ENDSEQUENCE;\n"
     if 'CIRCUIT' in sequence:
-        input += '\n'.join(sequence['CIRCUIT'].dropna().map(lambda c: "{}:={{{{ {} }}}};".format(c, c)))
+        input += '\n'.join(sequence['CIRCUIT'].dropna().map(lambda c: "{}:={{{{ {} or '0.0' }}}};".format(c, c)))
+        input += '\n'
     return input
 
 
