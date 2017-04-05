@@ -29,7 +29,7 @@ class BeamlineException(Exception):
 class Beamline:
     """A beamline or accelerator model.
 
-    The internal representation is essentially a set of pandas DataFrame.
+    The internal representation is essentially a set of pandas DataFrames.
     """
 
     def __init__(self, *args, **kwargs):
@@ -41,6 +41,7 @@ class Beamline:
         self.__strengths = None
         self.__beam = kwargs.get('beam', None)
         self.__flag_ptc = kwargs.get('ptc', False)
+        self.__flag_g4 = kwargs.get('g4', False)
         self.__madx_input = None
         self.__beamline = None
         self.__context = {}
@@ -86,7 +87,7 @@ class Beamline:
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
 
-        # Infer if the sequence is given as a survey and convert to positions
+        # If the sequence is given as a survey and convert to positions
         if survey:
             self.__convert_survey_to_sequence()
             # Re-expand
@@ -163,6 +164,7 @@ class Beamline:
     def twiss(self, **kwargs):
         """Compute the Twiss parameters of the beamline."""
         if kwargs.get('ptc', False):
+            # Override the argument to Beamline
             self.__flag_ptc = True
         m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
         m.beam()
