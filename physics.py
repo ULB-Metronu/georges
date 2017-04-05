@@ -13,6 +13,11 @@ def momentum_to_brho(p):
     return 3.33564 * p
 
 
+def energy_to_brho(e):
+    """Return BRHO [T.m] from E [GeV] (proton)."""
+    return 3.33564 * energy_to_momentum(e)
+
+
 def energy_to_momentum(ekin):
     """Return P [GeV] from E [GeV/c^2] (proton)."""
     E = PROTON_MASS + ekin/1000

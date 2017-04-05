@@ -72,6 +72,7 @@ def draw_bend(ax, e):
 
 
 def aperture(ax, bl, **kwargs):
+    bl = bl.line
     if 'APERTURE' not in bl:
         return
 

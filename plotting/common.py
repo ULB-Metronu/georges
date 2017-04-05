@@ -54,6 +54,7 @@ def beamline_get_ticks_labels(o):
 
 
 def prepare(ax, bl, **kwargs):
+    bl = bl.line
     ticks_locations = beamline_get_ticks_locations(bl)
     ticks_labels = beamline_get_ticks_labels(bl)
     ax.tick_params(axis='both', which='major')

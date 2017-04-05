@@ -46,6 +46,10 @@ class Beamline:
         self.__beamline = None
         self.__context = {}
 
+        # A beam must be defined
+        if self.__beam is None:
+            print("No beam defined!")
+
         # Some type inference to get the elements right
         # Elements as a file name
         if self.__elements and isinstance(self.__elements, str):
@@ -87,7 +91,7 @@ class Beamline:
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
 
-        # If the sequence is given as a survey and convert to positions
+        # If the sequence is given as a survey, convert to s-positions
         if survey:
             self.__convert_survey_to_sequence()
             # Re-expand
@@ -163,9 +167,8 @@ class Beamline:
     @beamline_is_defined
     def twiss(self, **kwargs):
         """Compute the Twiss parameters of the beamline."""
-        if kwargs.get('ptc', False):
-            # Override the argument to Beamline
-            self.__flag_ptc = True
+        # Override the argument to Beamline
+        self.__flag_ptc = kwargs.get('ptc', self.__flag_ptc)
         m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
         m.beam()
         m.twiss(ptc=self.__flag_ptc, centre=True)
@@ -215,6 +218,7 @@ class Beamline:
                                                 right_index=True,
                                                 how='left').sort_values(by='AT_CENTER')
         self.__beamline.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
+        self.__beamline.sort_values(by='S', inplace=True)
         return self.__beamline
 
 
