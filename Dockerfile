@@ -6,6 +6,7 @@ RUN wget http://madx.web.cern.ch/madx/releases/last-dev/madx-linux64-gnu -O /usr
 RUN chmod +x /usr/local/bin/madx
 USER $NB_USER
 RUN git clone https://github.com/chernals/georges.git packages/georges
+RUN git clone https://github.com/iba-group/IBA-optics.git packages/iba-optics
 ENV PYTHONPATH "/home/$NB_USER/work/packages:$PYTHONPATH"
 # To build matplotlib.pyplot font cache
 RUN ipython -c "import matplotlib.pyplot"
