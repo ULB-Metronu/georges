@@ -131,9 +131,9 @@ class Beamline:
         return self.__elements
 
     @property
-    def last_madx_input(self):
-        """Provides the last flat input sent to MAD-X."""
-        return self.__madx_input
+    def print_madx_input(self):
+        """Print the last flat input sent to MAD-X."""
+        print(self.__madx_input)
 
     @property
     @beamline_is_defined

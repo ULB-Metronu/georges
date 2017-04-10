@@ -197,8 +197,11 @@ class Madx:
         self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
         return self
 
-    def makethin(self, sequence, style='TEAPOT', dipole_slices=1, quadrupole_slices=3):
+    def makethin(self, sequence, **kwargs):
         """Add a MAD-X `makethin` command."""
+        style = kwargs.get('style', 'TEAPOT')
+        dipole_slices = kwargs.get('dipole_slices', 4)
+        quadrupole_slices = kwargs.get('quadrupole_slices', 4)
         self.__input += "SELECT, FLAG=makethin, CLASS=quadrupole, THICK=false, SLICE={};\n".format(quadrupole_slices)
         self.__input += "SELECT, FLAG=makethin, CLASS=rbend, THICK=false, SLICE={};\n".format(dipole_slices)
         self.__add_input('makethin', (sequence, style))
@@ -219,16 +222,16 @@ class Madx:
         if kwargs.get('ptc'):
             self.__ptc_track(particles, **kwargs)
         else:
-            self.__track(particles)
+            self.__track(particles, **kwargs)
 
-    def __track(self, particles):
+    def __track(self, particles, **kwargs):
         if self.__beamline is None:
             print("No lattice defined.")
             return
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
-        self.makethin(self.__beamline.name)
+        self.makethin(self.__beamline.name, **kwargs)
         self.__add_input('track_beamline')
         self.__add_particles_for_tracking(particles)
         self.__beamline.line.apply(self.__generate_observation_points, axis=1)
