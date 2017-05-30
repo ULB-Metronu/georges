@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 PROTON_MASS = 0.938272
 
@@ -112,4 +113,6 @@ def compute_TwissParameter(Data):
     #GammaHOR=sigma_xpxp/EmitHOR
     #GammaVER=sigma_ypyp/EmitVER
     
-    return [EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]
+    Beamparameter=[xmean,ymean,EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]  
+    
+    return Beamparameter

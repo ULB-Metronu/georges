@@ -1,5 +1,5 @@
 from georges.plotting.common import palette, filled_plot
-
+import numpy as np
 
 def track(ax, bl, plane):
     bl = bl.line
@@ -44,39 +44,15 @@ def tracking(ax, tracking, plane):
              markeredgecolor=palette[plane],
              linewidth=1.0)
 			 
-def g4tracking(ax, tracking, plane):
+def plotg4enveloppe(ax,DataPlot):
+    """ plot the enveloppe wich is defined by E(z)=eps*beta(z)"""
+    #DataPlot[0]=mean
+    #DataPlot[1]=eps
+    #DataPlot[2]=beta
 
-    envelope = tracking['envelope']
-    envelope2 = tracking['envelope2']
-    trajectory = tracking['trajectory']
-    halo_sup = tracking['halo_sup']
-    halo_inf = tracking['halo_inf']
-    halo_sup_bis = tracking['halo_sup_bis']
-    halo_inf_bis = tracking['halo_inf_bis']
-    filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * trajectory[plane] + 1000 * envelope[plane],
-                       palette[plane], True, alpha=0.4)
-    filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * trajectory[plane] - 1000 * envelope[plane],
-                       palette[plane], True, alpha=0.4)
+    DataPlot['Product']=np.sqrt(DataPlot['Emittance']*DataPlot['Beta'])
+    enveloppe_Min=DataPlot['meanPos']-DataPlot['Product']
+    enveloppe_Max=DataPlot['meanPos']+DataPlot['Product']
+    
+    ax.fill_between(DataPlot.index, DataPlot['meanPos']-enveloppe_Min, DataPlot['meanPos']+enveloppe_Max,color='blue', lw=1, alpha=0.5)
 
-    filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * halo_sup[plane],
-                       palette[plane], True, alpha=0.2)
-    filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * halo_inf[plane],
-                       palette[plane], True, alpha=0.2)
-    filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * halo_sup_bis[plane],
-                       palette[plane], True, alpha=0.1)
-    filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * halo_inf_bis   [plane],
-                       palette[plane], True, alpha=0.1)
-
-    ax.plot(envelope2.index, 1000 * trajectory[plane] + 1000 * envelope[plane], '*-',
-             color=palette[plane],
-             markeredgecolor=palette[plane],
-             linewidth=1.0, alpha=0.4)
-    ax.plot(envelope2.index, 1000 * trajectory[plane] - 1000 * envelope[plane], '*-',
-             color=palette[plane],
-             markeredgecolor=palette[plane],
-             linewidth=1.0, alpha=0.4)
-
-    ax.plot(trajectory.index, 1000 * trajectory[plane], '*-',
-             color=palette[plane],
-             markeredgecolor=palette[plane],
-             linewidth=1.0)
