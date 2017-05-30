@@ -65,3 +65,51 @@ def compute_ess_transmission(beam_sigma, slits, dispersion):
     slits[np.where((error < slits_at) & (error > -slits_at))] = 1.0
     beam = np.exp(-(error/sigma)**2/2)
     return np.roll(np.convolve(slits, beam, mode="same"), -1)/np.trapz(beam)
+	
+	
+def compute_EnergyAndDivergence(ProfileTable):
+    """ Compute the energy and divergence of dataframe obtained with G4BeamLine. """
+    protonMass=PROTON_MASS*1000
+    Px2 = ProfileTable.Px**2
+    Py2 = ProfileTable.Py**2
+    Pz2 = ProfileTable.Pz**2
+    ProfileTable['Ptot'] = np.sqrt(Px2+Py2+Pz2)
+    ProfileTable['Energy'] = np.sqrt((protonMass*protonMass)+Px2+Py2+Pz2)-protonMass
+    ProfileTable['xp'] = 1000*ProfileTable['Px']/ProfileTable['Ptot']
+    ProfileTable['yp'] = 1000*ProfileTable['Py']/ProfileTable['Ptot']
+    ProfileTable['dP_P'] = (ProfileTable['Ptot']-energy_to_momentum(230)*1000)/(energy_to_momentum(230)*1000)	
+	
+def compute_TwissParameter(Data):
+    """ Compute different paramaeters of the beam : alpha, beta, emittance, enveloppe, .... """
+    
+    # Data for emittance calculation
+    xmean=Data['x'].mean()
+    xpmean=Data['xp'].mean()
+    ymean=Data['x'].mean()
+    ypmean=Data['xp'].mean()
+
+    # Diagonal elements
+    sigma_xx = ((Data['x']-xmean)*(Data['x']-xmean)).mean()
+    sigma_yy = ((Data['y']-ymean)*(Data['y']-ymean)).mean()
+    sigma_xpxp = ((Data['xp']-xpmean)*(Data['xp']-xpmean)).mean()
+    sigma_ypyp = ((Data['yp']-ypmean)*(Data['yp']-ypmean)).mean()
+
+    # Off-diagonal elements
+    sigma_xxp=((Data['x']-xmean)*(Data['xp']-xpmean)).mean()
+    sigma_yyp=((Data['y']-ymean)*(Data['yp']-ypmean)).mean()
+ 
+    # Compute the emittance
+    EmitHOR=np.sqrt(sigma_xx*sigma_xpxp-sigma_xxp**2)
+    EmitVER=np.sqrt(sigma_yy*sigma_ypyp-sigma_yyp**2)
+
+    # Twiss parameter
+    BetaHOR=sigma_xx/EmitHOR
+    BetaVER=sigma_yy/EmitVER
+
+    AlphaHOR=-1*sigma_xxp/EmitHOR
+    AlphaVER=-1*sigma_yyp/EmitVER
+
+    #GammaHOR=sigma_xpxp/EmitHOR
+    #GammaVER=sigma_ypyp/EmitVER
+    
+    return [EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]
