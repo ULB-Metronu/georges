@@ -1,5 +1,5 @@
 from georges.plotting.common import palette, filled_plot
-
+import numpy as np
 
 def track(ax, bl, plane):
     bl = bl.line
@@ -43,3 +43,16 @@ def tracking(ax, tracking, plane):
              color=palette[plane],
              markeredgecolor=palette[plane],
              linewidth=1.0)
+			 
+def plotg4enveloppe(ax,DataPlot):
+    """ plot the enveloppe wich is defined by E(z)=eps*beta(z)"""
+    #DataPlot[0]=mean
+    #DataPlot[1]=eps
+    #DataPlot[2]=beta
+
+    DataPlot['Product']=np.sqrt(DataPlot['Emittance']*DataPlot['Beta'])
+    enveloppe_Min=DataPlot['meanPos']-DataPlot['Product']
+    enveloppe_Max=DataPlot['meanPos']+DataPlot['Product']
+    
+    ax.fill_between(DataPlot.index, DataPlot['meanPos']-enveloppe_Min, DataPlot['meanPos']+enveloppe_Max,color='blue', lw=1, alpha=0.5)
+
