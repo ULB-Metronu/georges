@@ -79,9 +79,31 @@ def compute_EnergyAndDivergence(ProfileTable):
     ProfileTable['xp'] = 1000*ProfileTable['Px']/ProfileTable['Ptot']
     ProfileTable['yp'] = 1000*ProfileTable['Py']/ProfileTable['Ptot']
     ProfileTable['dP_P'] = (ProfileTable['Ptot']-energy_to_momentum(230)*1000)/(energy_to_momentum(230)*1000)	
+
+
+def compute_meanAndsigma(Data):
+    """ Compute useful parameters of the beam : mean, sigma, dP/P, .... """
 	
+    xmean=Data['x'].mean()
+    xpmean=Data['xp'].mean()
+    ymean=Data['x'].mean()
+    ypmean=Data['xp'].mean()
+
+    sigmax=Data['x'].std()
+    sigmay=Data['y'].std()
+    sigmaxp=Data['xp'].std()
+    sigmayp=Data['yp'].std()
+    
+    columnsName=['xmean','ymean','xpmean','ypmean','sigmax','sigmay','sigmaxp','sigmayp']
+    DataBeam=[xmean,ymean,xpmean,ypmean,sigmax,sigmay,sigmaxp,sigmayp]
+    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
+    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
+    
+    return Beamparameter
+
+
 def compute_TwissParameter(Data):
-    """ Compute different paramaeters of the beam : alpha, beta, emittance, enveloppe, .... """
+    """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """
     
     # Data for emittance calculation
     xmean=Data['x'].mean()
@@ -113,6 +135,9 @@ def compute_TwissParameter(Data):
     #GammaHOR=sigma_xpxp/EmitHOR
     #GammaVER=sigma_ypyp/EmitVER
     
-    Beamparameter=[xmean,ymean,EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]  
+    columnsName=['EmitHOR','EmitVER','BetaHOR','BetaVER','AlphaHOR','AlphaVER']
+    DataBeam=[EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]
+    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
+    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
     
     return Beamparameter
