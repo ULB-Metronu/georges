@@ -80,39 +80,60 @@ def compute_EnergyAndDivergence(ProfileTable):
     ProfileTable['yp'] = 1000*ProfileTable['Py']/ProfileTable['Ptot']
     ProfileTable['dP_P'] = (ProfileTable['Ptot']-energy_to_momentum(230)*1000)/(energy_to_momentum(230)*1000)	
 	
-def compute_TwissParameter(Data):
-    """ Compute different paramaeters of the beam : alpha, beta, emittance, enveloppe, .... """
-    
-    # Data for emittance calculation
+def compute_meanAndsigma(Data):
+    """ Compute useful parameters of the beam : mean, sigma, .... """
+	
     xmean=Data['x'].mean()
     xpmean=Data['xp'].mean()
     ymean=Data['x'].mean()
     ypmean=Data['xp'].mean()
 
+    sigmax=Data['x'].std()
+    sigmay=Data['y'].std()
+    sigmaxp=Data['xp'].std()
+    sigmayp=Data['yp'].std()
+    
+    dp_pmean=Data['dP_P'].mean()
+    dp_psigma=Data['dP_P'].std()
+    
+    columnsName=['xmean','ymean','xpmean','ypmean','sigmax','sigmay','sigmaxp','sigmayp','meandp_p','sigmadp_p']
+    DataBeam=[xmean,ymean,xpmean,ypmean,sigmax,sigmay,sigmaxp,sigmayp,dp_pmean,dp_psigma]
+    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
+    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
+    
+    return Beamparameter
+
+
+def compute_TwissParameter(Data):
+    """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """ 
+    
+    # Data for emittance calculation 
+    xmean=Data['x'].mean() 
+    xpmean=Data['xp'].mean()
+    ymean=Data['x'].mean()
+    ypmean=Data['xp'].mean()
     # Diagonal elements
     sigma_xx = ((Data['x']-xmean)*(Data['x']-xmean)).mean()
     sigma_yy = ((Data['y']-ymean)*(Data['y']-ymean)).mean()
     sigma_xpxp = ((Data['xp']-xpmean)*(Data['xp']-xpmean)).mean()
     sigma_ypyp = ((Data['yp']-ypmean)*(Data['yp']-ypmean)).mean()
-
     # Off-diagonal elements
     sigma_xxp=((Data['x']-xmean)*(Data['xp']-xpmean)).mean()
     sigma_yyp=((Data['y']-ymean)*(Data['yp']-ypmean)).mean()
- 
     # Compute the emittance
     EmitHOR=np.sqrt(sigma_xx*sigma_xpxp-sigma_xxp**2)
     EmitVER=np.sqrt(sigma_yy*sigma_ypyp-sigma_yyp**2)
-
     # Twiss parameter
     BetaHOR=sigma_xx/EmitHOR
     BetaVER=sigma_yy/EmitVER
-
     AlphaHOR=-1*sigma_xxp/EmitHOR
     AlphaVER=-1*sigma_yyp/EmitVER
-
-    #GammaHOR=sigma_xpxp/EmitHOR
-    #GammaVER=sigma_ypyp/EmitVER
+    #GammaHOR=sigma_xpxp/EmitHOR 
+    #GammaVER=sigma_ypyp/EmitVER 
     
-    Beamparameter=[xmean,ymean,EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]  
+    columnsName=['EmitHOR','EmitVER','BetaHOR','BetaVER','AlphaHOR','AlphaVER'] 
+    DataBeam=[EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER] 
+    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam)) 
+    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName) 
     
-    return Beamparameter
+    return Beamparameter 
