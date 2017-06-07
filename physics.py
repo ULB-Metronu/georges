@@ -104,7 +104,7 @@ def compute_meanAndsigma(Data):
     return Beamparameter
 
 
-def compute_TwissParameter(Data):
+def compute_twiss_parameter(Data):
     """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """ 
     
     # Data for emittance calculation 
