@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import numpy.linalg as npl
 import georges.beam as beam
-import georges.madx.madx as madx
+import georges.madx as madx
 from georges.sequence_geometry import compute_derived_data
 
 DEFAULT_EXT = 'csv'
@@ -130,7 +130,6 @@ class Beamline:
         """Elements composing the beamline."""
         return self.__elements
 
-    @property
     def print_madx_input(self):
         """Print the last flat input sent to MAD-X."""
         print(self.__madx_input)
@@ -167,26 +166,30 @@ class Beamline:
     @beamline_is_defined
     def twiss(self, **kwargs):
         """Compute the Twiss parameters of the beamline."""
-        # Override the argument to Beamline
-        self.__flag_ptc = kwargs.get('ptc', self.__flag_ptc)
+        #line = kwargs.get('line', None)
+        #m = kwargs.get('madx', None)
+
+        # self.__flag_ptc = kwargs.get('ptc', self.__flag_ptc)
+        #m.attach(line)
         m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
         m.beam()
-        m.twiss(ptc=self.__flag_ptc, centre=True)
-        print(m.input)
+        m.twiss(ptc=False, centre=True)
         errors = m.run(self.context).fatals
+        print(m.input)
         self.__madx_input = m.input
         if len(errors) > 0:
-            print(m.input)
+            m.print_input()
             print(errors)
-            raise BeamlineException("MAD-X ended with fatal error.")
+            raise "error"
+            # raise BeamlineException("MAD-X ended with fatal error.")
         madx_twiss = madx.read_madx_twiss(os.path.join(self.__path, 'twiss.outx'))
-        self.__beamline = madx_twiss.merge(self.__beamline,
+        line_with_twiss = madx_twiss.merge(line,
                                            left_index=True,
                                            right_index=True,
                                            how='outer',
                                            suffixes=('_TWISS', '')
                                            ).sort_values(by='S')
-        return self.__beamline
+        return line_with_twiss
 
     @property
     @beamline_is_defined
@@ -219,14 +222,13 @@ class Beamline:
                                                 how='left').sort_values(by='AT_CENTER')
         self.__beamline.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
         self.__beamline.sort_values(by='S', inplace=True)
-        return self.__beamline
-
+        return self.line
 
     def __build_from_files(self, names):
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
         try:
             sequences = [
-                pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col = 'NAME') for f in files
+                pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME') for f in files
             ]
         except OSError:
             print("One of the file has not been found.")
