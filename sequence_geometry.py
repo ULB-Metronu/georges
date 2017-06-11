@@ -58,14 +58,6 @@ def at_exit(r):
         return np.nan
 
 
-def length(r):
-    """Try to compute the element's physical length from other data."""
-    if not pd.isnull(r.get('AT_ENTRY')) and not pd.isnull(r.get('AT_EXIT')):
-        return np.abs(r['AT_EXIT'] - r['AT_ENTRY'])
-    else:
-        return 0.0
-
-
 def orbit_length(r):
     """Try to compute the element's orbit length from other data."""
     if pd.isnull(r.get('LENGTH')) and pd.isnull(r.get('RHO')):

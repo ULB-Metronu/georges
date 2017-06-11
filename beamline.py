@@ -41,7 +41,6 @@ class Beamline:
         self.__strengths = None
         self.__beamline = None
         self.__converted_from_survey = False
-        self.__context = {}
 
         # Process the beamline argument
         self.__process_args(args)
@@ -52,6 +51,10 @@ class Beamline:
         if self.__elements is not None:
             self.__process_elements()
             self.__expand_elements_data()
+
+        # Angle conversion
+        if 'ANGLE' in self.__beamline:
+            self.__beamline['ANGLE'] = self.__beamline['ANGLE'] / 180.0 * np.pi
 
         # Check before hand if the survey will need to be converted
         if 'AT_ENTRY' in self.__beamline or 'AT_CENTER' in self.__beamline or 'AT_EXIT' in self.__beamline:
@@ -74,10 +77,6 @@ class Beamline:
         # Compute the sequence length if needed
         if self.__length == 0 and self.__beamline.get('AT_EXIT') is not None:
             self.__length = self.__beamline.get('AT_EXIT').max()
-
-        # Angle conversion
-        if self.__beamline.get('ANGLE'):
-            self.__beamline['ANGLE'] = self.__beamline['ANGLE'] / 180.0 * np.pi
 
         # Flag to distinguish generated elements from physical beamline elements
         self.__beamline['PHYSICAL'] = True
@@ -156,26 +155,6 @@ class Beamline:
         self.__beamline.length = self.length
         return self.__beamline
 
-    @property
-    def context(self):
-        """The current state of the beamline."""
-        if self.__context.get('PARTICLE') is None and self.__beam is not None:
-            self.__context['PARTICLE'] = self.__beam.particle
-        if self.__context.get('PC') is None and self.__beam is not None:
-            self.__context['PC'] = self.__beam.pc
-        if self.__context.get('BETAREL') is None and self.__beam is not None:
-            self.__context['BETAREL'] = self.__beam.betarel
-        return self.__context
-
-    @context.setter
-    def context(self, c):
-        self.__context = c
-
-    def set(self, k, v):
-        """Set a single variable in the context. Allows method chaining."""
-        self.__context[k] = v
-        return self
-
     def __build_from_files(self, names):
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
         sequences = [
@@ -207,6 +186,8 @@ class Beamline:
 
     def __convert_survey_to_sequence(self):
         s = self.__beamline
+        if 'LENGTH' not in s:
+            s['LENGTH'] = np.nan
         offset = s['ORBIT_LENGTH'][0] / 2.0
         if pd.isnull(offset):
             offset = 0

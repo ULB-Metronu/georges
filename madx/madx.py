@@ -39,40 +39,6 @@ def sequence_to_mad(sequence):
     return input
 
 
-def read_madx_twiss(file):
-    """Read a MAD-X Twiss TFS file to a dataframe."""
-    headers = pd.read_csv(file, skiprows=45, nrows=0, delim_whitespace=True)
-    headers.drop(headers.columns[[0,1]], inplace=True, axis=1)
-    df = pd.read_csv(file, header=None, names=headers, na_filter=False, skiprows=47, delim_whitespace=True)
-    df.index.name = 'NAME'
-    return df
-
-
-def read_ptc_twiss(file):
-    """Read a MAD-X PTC Twiss TFS file to a dataframe."""
-    headers = pd.read_csv(file, skiprows=88, nrows=0, delim_whitespace=True)
-    headers.drop(headers.columns[[0,1]], inplace=True, axis=1)
-    df = pd.read_csv(file, header=None, names=headers, na_filter=False, skiprows=90, delim_whitespace=True)
-    df.index.name = 'NAME'
-    return df
-
-
-def read_madx_tracking(file):
-    """Read a MAD-X Tracking onetable=true file to a dataframe."""
-    column_names = ['ID','TURN','X','PX','Y','PY','T','PT','S','E']
-    data = pd.read_csv(file, skiprows=54, delim_whitespace=True, names=column_names)
-    return data.apply(pd.to_numeric, errors="ignore").dropna()
-
-
-def read_ptc_tracking(file):
-    """Read a PTC Tracking 'one' file to a dataframe."""
-    column_names = ['ID', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT', 'S', 'E']
-    data = pd.read_csv(file, skiprows=9, delim_whitespace=True,
-                       names=column_names) \
-              .apply(pd.to_numeric, errors="ignore").dropna()
-    return data[data['TURN'] == 1]
-
-
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
 
@@ -87,13 +53,17 @@ class Madx:
     """
     def __init__(self, **kwargs):
         self.__input = ""
-        self.__beamline = kwargs.get('beamline', None)
-        self.__path = kwargs.get('path', "")
+        self.__beamlines = kwargs.get('beamlines', [])
+        self.__path = kwargs.get('path', ".")
         self.__madx = kwargs.get('madx', None)
+        self.__context = kwargs.get('context', {})
+
         self.__warnings = []
         self.__fatals = []
         self.__output = ""
         self.__template_input = None
+        # Convert all sequences to MAD-X sequences
+        map(self.attach, self.__beamlines)
 
     def __get_madx_path(self):
         return self.__madx if self.__madx is not None else shutil.which("madx")
@@ -102,9 +72,8 @@ class Madx:
         self.__input += madx_syntax[keyword].format(*strings) + '\n'
 
     def attach(self, beamline):
-        self.__beamline = beamline
-        if self.__beamline:
-            self.__input = sequence_to_mad(self.__beamline.line)
+        self.__beamlines.append(beamline)
+        self.__input = sequence_to_mad(beamline.line)
 
     def run(self, context):
         """Run madx as a subprocess."""
@@ -124,9 +93,14 @@ class Madx:
         self.__fatals = [line for line in self.__output.split('\n') if re.search('fatal', line)]
         return self
 
-    def print_input(self, context):
+    def print_input(self):
         """Print the rendered MAD-X input."""
-        print(jinja2.Template(self.__input).render(context))
+        print(jinja2.Template(self.__input).render(self.context))
+
+    @property
+    def path(self):
+        """Current MAD-X path."""
+        return self.__path
 
     @property
     def warnings(self):
@@ -148,6 +122,25 @@ class Madx:
         """Return the output of the last MAD-X run."""
         return self.__output
 
+    @property
+    def beamlines(self):
+        """Return the list of beamlines attached to the instance of MAD-X."""
+        return self.__beamlines
+
+    @property
+    def context(self):
+        """The current state of the beamline."""
+        return self.__context
+
+    @context.setter
+    def context(self, c):
+        self.__context = c
+
+    def set(self, k, v):
+        """Set a single variable in the context. Allows method chaining."""
+        self.__context[k] = v
+        return sel
+
     def print_warnings(self):
         """Print warnings from the previous execution run."""
         [print(w) for w in self.__warnings]
@@ -167,10 +160,10 @@ class Madx:
         self.__add_input('call_file', (file,))
         return self
 
-    def beam(self):
+    def beam(self, line_name):
         """Add a MAD-X `beam` command."""
         self.__add_input('beam')
-        self.use_sequence(self.__beamline.name)
+        self.use_sequence(line_name)
         return self
 
     def use_sequence(self, sequence):
