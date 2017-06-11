@@ -1,5 +1,5 @@
 import numpy as np
-from georges.plotting.common import palette, filled_plot
+from plotting.common import palette, filled_plot
 
 
 def twiss(ax, bl, context, **kwargs):

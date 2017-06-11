@@ -2,9 +2,9 @@ import os.path
 import pandas as pd
 import numpy as np
 import numpy.linalg as npl
-import georges.beam as beam
-import georges.madx as madx
-from georges.sequence_geometry import compute_derived_data
+import beam as beam
+import madx as madx
+from sequence_geometry import compute_derived_data
 
 DEFAULT_EXT = 'csv'
 
@@ -39,9 +39,11 @@ class Beamline:
         self.__elements = kwargs.get('elements', None)
         self.__length = kwargs.get('length', 0)
         self.__strengths = None
+        # TODO __beam should go away
         self.__beam = kwargs.get('beam', None)
         self.__flag_ptc = kwargs.get('ptc', False)
         self.__flag_g4 = kwargs.get('g4', False)
+        # TODO __madx_input should go away
         self.__madx_input = None
         self.__beamline = None
         self.__context = {}

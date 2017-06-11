@@ -1,4 +1,4 @@
-from georges.plotting.common import palette, filled_plot
+from plotting.common import palette, filled_plot
 
 
 def track(ax, bl, plane):

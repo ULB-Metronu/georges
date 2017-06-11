@@ -3,7 +3,7 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
-from georges.madx.grammar import madx_syntax
+from madx.grammar import madx_syntax
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
@@ -72,6 +72,7 @@ def read_ptc_tracking(file):
               .apply(pd.to_numeric, errors="ignore").dropna()
     return data[data['TURN'] == 1]
 
+
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
 
@@ -85,14 +86,14 @@ class Madx:
     Sequence and command will be converted with the MAD-X grammar and pipe'd to the subprocess.
     """
     def __init__(self, **kwargs):
+        self.__input = ""
         self.__beamline = kwargs.get('beamline', None)
-        if self.__beamline:
-            self.__input = sequence_to_mad(self.__beamline.line)
-        self._path = kwargs.get('path', "")
+        self.__path = kwargs.get('path', "")
         self.__madx = kwargs.get('madx', None)
         self.__warnings = []
+        self.__fatals = []
         self.__output = ""
-        self.__template_input = ""
+        self.__template_input = None
 
     def __get_madx_path(self):
         return self.__madx if self.__madx is not None else shutil.which("madx")
@@ -100,15 +101,22 @@ class Madx:
     def __add_input(self, keyword, strings=()):
         self.__input += madx_syntax[keyword].format(*strings) + '\n'
 
+    def attach(self, beamline):
+        self.__beamline = beamline
+        if self.__beamline:
+            self.__input = sequence_to_mad(self.__beamline.line)
+
     def run(self, context):
         """Run madx as a subprocess."""
         self.__input += madx_syntax['stop']
         self.__template_input = jinja2.Template(self.__input).render(context)
+        if self.__get_madx_path() is None:
+            raise MadxException("Can't run MADX if no valid path and executable are defined.")
         p = sub.Popen([self.__get_madx_path()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
-                      cwd=self._path,
+                      cwd=self.__path,
                       shell=True
                       )
         self.__output = p.communicate(input=self.__template_input.encode())[0].decode()
@@ -133,7 +141,7 @@ class Madx:
     @property
     def input(self):
         """Return the current MAD-X input string."""
-        return self.__template_input
+        return self.__input
 
     @property
     def output(self):

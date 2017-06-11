@@ -1,7 +1,7 @@
 import pandas as pd
 import pandas.core.common
 import numpy as np
-import georges.physics as physics
+import physics as physics
 
 PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'position'}
 PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'DPP', 'DT']

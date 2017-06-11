@@ -1,4 +1,4 @@
-from georges.plotting.common import beamline_get_ticks_locations
+from plotting.common import beamline_get_ticks_locations
 
 
 def losses(ax, transmission):

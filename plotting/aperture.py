@@ -1,6 +1,6 @@
 import matplotlib
 import numpy as np
-from georges.plotting.common import palette
+from plotting.common import palette
 
 
 def xy_from_string(a, i):
