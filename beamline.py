@@ -2,8 +2,6 @@ import os.path
 import pandas as pd
 import numpy as np
 import numpy.linalg as npl
-import beam as beam
-import madx as madx
 from sequence_geometry import compute_derived_data
 
 DEFAULT_EXT = 'csv'
@@ -136,10 +134,6 @@ class Beamline:
         """Elements composing the beamline."""
         return self.__elements
 
-    def print_madx_input(self):
-        """Print the last flat input sent to MAD-X."""
-        print(self.__madx_input)
-
     @property
     @beamline_is_defined
     def line(self):
@@ -167,68 +161,6 @@ class Beamline:
         """Set a single variable in the context. Allows method chaining."""
         self.__context[k] = v
         return self
-
-    @property
-    @beamline_is_defined
-    def twiss(self, **kwargs):
-        """Compute the Twiss parameters of the beamline."""
-        #line = kwargs.get('line', None)
-        #m = kwargs.get('madx', None)
-
-        # self.__flag_ptc = kwargs.get('ptc', self.__flag_ptc)
-        #m.attach(line)
-        m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
-        m.beam()
-        m.twiss(ptc=False, centre=True)
-        errors = m.run(self.context).fatals
-        print(m.input)
-        self.__madx_input = m.input
-        if len(errors) > 0:
-            m.print_input()
-            print(errors)
-            raise "error"
-            # raise BeamlineException("MAD-X ended with fatal error.")
-        madx_twiss = madx.read_madx_twiss(os.path.join(self.__path, 'twiss.outx'))
-        line_with_twiss = madx_twiss.merge(line,
-                                           left_index=True,
-                                           right_index=True,
-                                           how='outer',
-                                           suffixes=('_TWISS', '')
-                                           ).sort_values(by='S')
-        return line_with_twiss
-
-    @property
-    @beamline_is_defined
-    def track(self, **kwargs):
-        """Compute the distribution of the beam as it propagates through the beamline."""
-        if kwargs.get('ptc', False):
-            self.__flag_ptc = True
-        m = madx.Madx(beamline=self, path=self.__path, madx='/usr/local/bin/madx-dev')
-        m.beam()
-        m.track(self.__beam.distribution, ptc=self.__flag_ptc)
-        errors = m.run(self.context).fatals
-        self.__madx_input = m.input
-        if len(errors) > 0:
-            print(m.input)
-            print(errors)
-            raise BeamlineException("MAD-X ended with fatal error.")
-        if self.__flag_ptc:
-            madx_track = madx.read_ptc_tracking(os.path.join(self.__path, ''))
-        else:
-            madx_track = madx.read_madx_tracking(os.path.join(self.__path, 'tracking.outxone')).dropna()
-            madx_track['PY'] = pd.to_numeric(madx_track['PY'])
-        madx_track['S'] = round(madx_track['S'], 8)
-        tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
-        self.__beamline['AT_CENTER_TRUNCATED'] = round(self.__beamline['AT_CENTER'], 8)
-        if 'BEAM' in self.__beamline:
-            self.__beamline.drop('BEAM', inplace=True, axis=1)
-        self.__beamline = self.__beamline.merge(pd.DataFrame(tmp, columns=['BEAM']),
-                                                left_on='AT_CENTER_TRUNCATED',
-                                                right_index=True,
-                                                how='left').sort_values(by='AT_CENTER')
-        self.__beamline.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
-        self.__beamline.sort_values(by='S', inplace=True)
-        return self.line
 
     def __build_from_files(self, names):
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
