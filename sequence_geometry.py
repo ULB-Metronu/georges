@@ -9,7 +9,6 @@ def compute_derived_data(row):
     # Corner case
     if pd.isnull(row.get('CLASS')):
         row['CLASS'] = row.get('TYPE', 'MARKER')
-
     # Apply transformations
     all_converters = [e[0].upper() for e in inspect.getmembers(sys.modules[__name__], inspect.isfunction)
                       if e[0] is not "compute_derived_data"]
@@ -57,6 +56,14 @@ def at_exit(r):
         return r['AT_CENTER'] + r['ORBIT_LENGTH']/2.0
     else:
         return np.nan
+
+
+def length(r):
+    """Try to compute the element's physical length from other data."""
+    if not pd.isnull(r.get('AT_ENTRY')) and not pd.isnull(r.get('AT_EXIT')):
+        return np.abs(r['AT_EXIT'] - r['AT_ENTRY'])
+    else:
+        return 0.0
 
 
 def orbit_length(r):

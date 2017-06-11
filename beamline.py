@@ -39,18 +39,9 @@ class Beamline:
         self.__elements = kwargs.get('elements', None)
         self.__length = kwargs.get('length', 0)
         self.__strengths = None
-        # TODO __beam should go away
-        self.__beam = kwargs.get('beam', None)
-        self.__flag_ptc = kwargs.get('ptc', False)
-        self.__flag_g4 = kwargs.get('g4', False)
-        # TODO __madx_input should go away
-        self.__madx_input = None
         self.__beamline = None
+        self.__converted_from_survey = False
         self.__context = {}
-
-        # A beam must be defined
-        if self.__beam is None:
-            print("No beam defined!")
 
         # Some type inference to get the elements right
         # Elements as a file name
@@ -59,6 +50,8 @@ class Beamline:
         # Elements as a list to be converted onto a DataFrame
         elif self.__elements and isinstance(self.__elements, list):
             self.__elements = pd.DataFrame(self.__elements)
+        elif self.__elements and not isinstance(self.__elements, pd.Dataframe):
+            raise BeamlineException("Invalid data type for 'elements'.")
 
         # Now let's process the args
         for i, arg in enumerate(args):
@@ -75,16 +68,22 @@ class Beamline:
             if isinstance(arg, pd.DataFrame) and i == 0:
                 self.__name = getattr(arg, 'name', 'BEAMLINE')
                 self.__beamline = arg
+                if self.__beamline.size == 0:
+                    raise BeamlineException("Empty dataframe.")
+            if isinstance(arg, pd.DataFrame) and i != 0:
+                raise BeamlineException("Only one beamline can be given as a dataframe.")
 
         if self.__beamline is None:
-            print("No beamline defined.")
-            return
+            raise BeamlineException("No beamline defined.")
 
         # Check before hand if the survey will need to be converted
-        survey = False
-        if self.__beamline.get(['AT_ENTRY', 'AT_CENTER', 'AT_EXIT']) is None:
-            if self.__beamline.get(['X', 'Y']) is not None:
+        if 'AT_ENTRY' in self.__beamline or 'AT_CENTER' in self.__beamline or 'AT_EXIT' in self.__beamline:
+            survey = False
+        else:
+            if 'X' in self.__beamline and 'Y' in self.__beamline:
                 survey = True
+            else:
+                raise BeamlineException("Trying to infer sequence from survey data: X and Y must be provided.")
 
         # Expand elements onto MAD-X native elements
         if self.__elements is not None and self.__beamline is not None:
@@ -100,10 +99,10 @@ class Beamline:
             self.__expand_sequence_data()
 
         # Compute the sequence length if needed
-        if self.__length == 0:
-            self.__length = self.__beamline['AT_EXIT'].values[-1]
+        if self.__length == 0 and self.__beamline.get('AT_EXIT') is not None:
+            self.__length = self.__beamline.get('AT_EXIT').max()
 
-        # Flag to distinguish MAD-X generated elements from beamline elements
+        # Flag to distinguish generated elements from physical beamline elements
         self.__beamline['PHYSICAL'] = True
 
     @property
@@ -115,6 +114,11 @@ class Beamline:
     def length(self):
         """The sequence length."""
         return self.__length
+
+    @property
+    def converted_from_survey(self):
+        """True if the sequence has been converted from survey data."""
+        return self.__converted_from_survey
 
     @property
     def strengths(self):
@@ -228,13 +232,9 @@ class Beamline:
 
     def __build_from_files(self, names):
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
-        try:
-            sequences = [
-                pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME') for f in files
-            ]
-        except OSError:
-            print("One of the file has not been found.")
-            return
+        sequences = [
+            pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME') for f in files
+        ]
         self.__beamline = pd.concat(sequences)
 
     def __expand_sequence_data(self):
@@ -280,3 +280,4 @@ class Beamline:
         ) + (
             s['LENGTH'].shift(1).fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].shift(1).fillna(0.0) / 2.0
         )).cumsum() / 1000.0 + offset
+        self.__converted_from_survey = True
