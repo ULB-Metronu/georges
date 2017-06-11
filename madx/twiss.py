@@ -41,7 +41,6 @@ def twiss(**kwargs):
     m.beam(line.name)
     m.twiss(ptc=kwargs.get('ptc', False), centre=True)
     errors = m.run(m.context).fatals
-    line.__madx_input = m.input
     if len(errors) > 0:
         m.print_input()
         print(errors)

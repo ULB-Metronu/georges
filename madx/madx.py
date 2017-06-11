@@ -226,9 +226,6 @@ class Madx:
             self.__track(particles, **kwargs)
 
     def __track(self, particles, **kwargs):
-        if self.__beamline is None:
-            print("No lattice defined.")
-            return
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
@@ -241,9 +238,6 @@ class Madx:
         return self
 
     def __ptc_track(self, particles, **kwargs):
-        if self.__beamline is None:
-            print("No lattice defined.")
-            return
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
