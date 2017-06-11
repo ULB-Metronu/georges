@@ -1,4 +1,3 @@
-from georges.beam import Beam
-from georges.beamline import Beamline
-from georges.madx.madx import Madx
-from georges.plotting import *
+from beam import Beam
+from beamline import Beamline
+from madx.madx import Madx

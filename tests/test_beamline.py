@@ -6,14 +6,18 @@ from context import beamline
 class TestBeamline(unittest.TestCase):
 
     def test_invalid_instanciation_empty(self):
-        with self.assertRaisesRegex(beamline.BeamlineException, 'No beamline defined.'):
+        with self.assertRaisesRegex(beamline.BeamlineException, 'Single argument expected.'):
             beamline.Beamline()
 
     def test_invalid_instanciation_no_beamline(self):
         with self.assertRaisesRegex(OSError, 'File .* does not exist'):
             beamline.Beamline('SOME_BEAMLINE_NOT_IN_PATH')
 
-    def test_invalid_instanciation_multiple_dataframes(self):
+    def test_invalid_instanciation_multiple_file_arguments(self):
+        with self.assertRaisesRegex(beamline.BeamlineException, "Single argument expected."):
+            beamline.Beamline("FILE1", "FILE2")
+
+    def test_invalid_instanciation_multiple_dataframes_arguments(self):
         with self.assertRaises(beamline.BeamlineException):
             beamline.Beamline(pd.DataFrame(), pd.DataFrame())
 
@@ -35,7 +39,15 @@ class TestBeamline(unittest.TestCase):
 
     def test_invalid_survey_data(self):
         with self.assertRaisesRegex(beamline.BeamlineException, "Trying to infer sequence from survey data: X and Y must be provided."):
-                beamline.Beamline('test_beamline_invalid_survey')
+            beamline.Beamline('test_beamline_invalid_survey')
+
+    def test_invalid_elements_data_empty_list(self):
+        with self.assertRaisesRegex(beamline.BeamlineException, "Invalid data type for 'elements'"):
+            beamline.Beamline('test_beamline', elements=[])
+
+    def test_invalid_elements_data_file(self):
+        with self.assertRaisesRegex(OSError, "File .* does not exist"):
+            beamline.Beamline('test_beamline', elements="nonexisting_file")
 
     def test_name(self):
         self.assertEqual(beamline.Beamline('test_beamline').name, 'TEST_BEAMLINE')

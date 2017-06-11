@@ -7,16 +7,6 @@ from sequence_geometry import compute_derived_data
 DEFAULT_EXT = 'csv'
 
 
-def beamline_is_defined(method):
-    def with_check_defined(self, *args, **kwargs):
-        if not hasattr(self, '_Beamline__beamline'):
-            print("Beamline is not defined.")
-            return
-        else:
-            return method(self, *args, **kwargs)
-    return with_check_defined
-
-
 class BeamlineException(Exception):
     """Exception raised for errors in the Beamline module."""
 
@@ -27,52 +17,41 @@ class BeamlineException(Exception):
 class Beamline:
     """A beamline or accelerator model.
 
-    The internal representation is essentially a set of pandas DataFrames.
+    The internal representation is essentially a pandas DataFrames.
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        :param args: defines the beamline to be created. It can be
+            - a single pandas Dataframe containing an existing beamline
+            - a csv file or a list of csv files (looked up in path/prefix)
+        :param kwargs: optional parameters include:
+            - path: filepath to the root directory of the beamline description files (default to '.')
+            - prefix: prefix for the beamline description files (default to '')
+            - elements: elements description file
+
+        """
         # We need the kwargs first to parse the args correctly
         self.__path = kwargs.get('path', '.')
         self.__prefix = kwargs.get('prefix', '')
         self.__elements = kwargs.get('elements', None)
-        self.__length = kwargs.get('length', 0)
+
+        # Default values
+        self.__length = 0
         self.__strengths = None
         self.__beamline = None
         self.__converted_from_survey = False
         self.__context = {}
 
-        # Some type inference to get the elements right
-        # Elements as a file name
-        if self.__elements and isinstance(self.__elements, str):
-            self.__build_elements_from_file(self.__elements)
-        # Elements as a list to be converted onto a DataFrame
-        elif self.__elements and isinstance(self.__elements, list):
-            self.__elements = pd.DataFrame(self.__elements)
-        elif self.__elements and not isinstance(self.__elements, pd.Dataframe):
-            raise BeamlineException("Invalid data type for 'elements'.")
-
-        # Now let's process the args
-        for i, arg in enumerate(args):
-            # Some type inference to get the sequence right
-            # Sequence from file name
-            if isinstance(arg, str) and i == 0:
-                self.__name = arg.upper()
-                self.__build_from_files([arg])
-            # Sequence from a list of files
-            if isinstance(arg, list) and len(arg) > 0 and i == 0:
-                self.__name = '_'.join(arg).upper()
-                self.__build_from_files(arg)
-            # Sequence from a pandas.DataFrame
-            if isinstance(arg, pd.DataFrame) and i == 0:
-                self.__name = getattr(arg, 'name', 'BEAMLINE')
-                self.__beamline = arg
-                if self.__beamline.size == 0:
-                    raise BeamlineException("Empty dataframe.")
-            if isinstance(arg, pd.DataFrame) and i != 0:
-                raise BeamlineException("Only one beamline can be given as a dataframe.")
-
+        # Process the beamline argument
+        self.__process_args(args)
         if self.__beamline is None:
             raise BeamlineException("No beamline defined.")
+
+        # Process the elements description
+        if self.__elements is not None:
+            self.__process_elements()
+            self.__expand_elements_data()
 
         # Check before hand if the survey will need to be converted
         if 'AT_ENTRY' in self.__beamline or 'AT_CENTER' in self.__beamline or 'AT_EXIT' in self.__beamline:
@@ -82,10 +61,6 @@ class Beamline:
                 survey = True
             else:
                 raise BeamlineException("Trying to infer sequence from survey data: X and Y must be provided.")
-
-        # Expand elements onto MAD-X native elements
-        if self.__elements is not None and self.__beamline is not None:
-            self.__expand_elements_data()
 
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
@@ -100,8 +75,48 @@ class Beamline:
         if self.__length == 0 and self.__beamline.get('AT_EXIT') is not None:
             self.__length = self.__beamline.get('AT_EXIT').max()
 
+        # Angle conversion
+        if self.__beamline.get('ANGLE'):
+            self.__beamline['ANGLE'] = self.__beamline['ANGLE'] / 180.0 * np.pi
+
         # Flag to distinguish generated elements from physical beamline elements
         self.__beamline['PHYSICAL'] = True
+
+        # Beamline must be defined
+        assert self.__beamline is not None
+
+    def __process_args(self, args):
+        """Process the arguments of the initializer."""
+        if len(args) == 0 or len(args) > 1:
+            raise BeamlineException("Single argument expected.")
+        arg = args[0]
+        # Some type inference to get the sequence right
+        # Sequence from file name
+        if isinstance(arg, str):
+            self.__name = arg.upper()
+            self.__build_from_files([arg])
+        # Sequence from a list of files
+        if isinstance(arg, list) and len(arg) > 0:
+            self.__name = '_'.join(arg).upper()
+            self.__build_from_files(arg)
+        # Sequence from a pandas.DataFrame
+        if isinstance(arg, pd.DataFrame):
+            self.__name = getattr(arg, 'name', 'BEAMLINE')
+            self.__beamline = arg
+            if self.__beamline.size == 0:
+                raise BeamlineException("Empty dataframe.")
+
+    def __process_elements(self):
+        """Process the elements description argument."""
+        # Some type inference to get the elements right
+        # Elements as a file name
+        if isinstance(self.__elements, str):
+            self.__build_elements_from_file(self.__elements)
+        # Elements as a list to be converted onto a DataFrame
+        elif isinstance(self.__elements, list) and len(self.__elements) > 0:
+            self.__elements = pd.DataFrame(self.__elements)
+        elif not isinstance(self.__elements, pd.DataFrame):
+            raise BeamlineException("Invalid data type for 'elements'.")
 
     @property
     def name(self):
@@ -135,7 +150,6 @@ class Beamline:
         return self.__elements
 
     @property
-    @beamline_is_defined
     def line(self):
         """The beamline representation."""
         self.__beamline.name = self.name
@@ -181,23 +195,15 @@ class Beamline:
 
     def __build_elements_from_file(self, file):
         file = os.path.splitext(file)[0] + '.' + (os.path.splitext(file)[1] or DEFAULT_EXT)
-        try:
-            self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
-        except OSError:
-            print("ERROR: File apparently not found")
-            self.__elements = pd.DataFrame()
+        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
 
     def __expand_elements_data(self):
-        if self.__elements is None:
-            return
         self.__beamline = self.__beamline.merge(self.__elements,
                                                 left_on='TYPE',
                                                 right_index=True,
                                                 how='left',
                                                 suffixes=('', '_ELEMENT')
                                                 )
-        # Angle conversion
-        self.__beamline['ANGLE'] = self.__beamline['ANGLE'] / 180.0 * np.pi
 
     def __convert_survey_to_sequence(self):
         s = self.__beamline
