@@ -218,6 +218,20 @@ class Madx:
             else:
                 self.__add_input('start_particle', tuple(r[1]))
 
+    def match(self, **kwargs):
+        seq = kwargs.get("sequence", None)
+        vary = kwargs.get("vary", None)
+        constraints = kwargs.get("constraints", None)
+        if seq is None:
+            raise MadxException("A sequence name must be provided.")
+        if vary is None or len(vary) < 1:
+            raise MadxException("A list of length > 0 of parameters must be provided.")
+        if constraints is None:
+            raise MadxException("A dictionary of constraints should be provided.")
+        self.__add_input('match', (sequence,))
+
+
+
     def track(self, particles, **kwargs):
         """Add a (ptc) `track` command."""
         if kwargs.get('ptc'):
