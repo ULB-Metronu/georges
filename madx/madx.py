@@ -3,7 +3,7 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
-from madx.grammar import madx_syntax
+from .grammar import madx_syntax
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
@@ -230,35 +230,33 @@ class Madx:
             raise MadxException("A dictionary of constraints should be provided.")
         self.__add_input('match', (sequence,))
 
-
-
-    def track(self, particles, **kwargs):
-        """Add a (ptc) `track` command."""
-        if kwargs.get('ptc'):
-            self.__ptc_track(particles, **kwargs)
+    def track(self, particles, beamline, **kwargs):
+        """Add a ptc `track` command."""
+        if kwargs.get('ptc', True):
+            self.__ptc_track(particles, beamline, **kwargs)
         else:
-            self.__track(particles, **kwargs)
+            self.__track(particles, beamline, **kwargs)
 
-    def __track(self, particles, **kwargs):
+    def __track(self, particles, beamline, **kwargs):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
-        self.makethin(self.__beamline.name, **kwargs)
+        self.makethin(beamline.name, **kwargs)
         self.__add_input('track_beamline')
         self.__add_particles_for_tracking(particles)
-        self.__beamline.line.apply(self.__generate_observation_points, axis=1)
+        beamline.line.apply(lambda e: self.__generate_observation_points(e, beamline.length), axis=1)
         self.__add_input('run_track_beamline')
         self.__add_input('end_track')
         return self
 
-    def __ptc_track(self, particles, **kwargs):
+    def __ptc_track(self, particles, beamline, **kwargs):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout', (False, 1, 4, 3, True))
         self.__add_particles_for_tracking(particles, True)
-        self.__beamline.line.apply(self.__generate_observation_points_ptc, axis=1)
+        beamline.line.apply(lambda e: self.__generate_observation_points_ptc(e, beamline.length), axis=1)
         self.__add_input('ptc_track', (
             5,
             0.0,
@@ -273,12 +271,12 @@ class Madx:
         self.__add_input('ptc_track_end')
         self.__add_input('ptc_end')
 
-    def __generate_observation_points(self, e):
-        if not e['AT_EXIT'] == self.__beamline.length:
+    def __generate_observation_points(self, e, length):
+        if not e['AT_EXIT'] == length:
             self.__add_input('observe', (e.name,))
 
-    def __generate_observation_points_ptc(self, e):
-        if not e['AT_EXIT'] == self.__beamline.length and e['CLASS'] == 'MARKER':
+    def __generate_observation_points_ptc(self, e, length):
+        if not e['AT_EXIT'] == length and e['CLASS'] == 'MARKER':
             self.__add_input('ptc_observe', (e.name,))
 
     def show_beam(self):

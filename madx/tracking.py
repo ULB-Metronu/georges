@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-import beamline
-import beam
+import georges.beamline as beamline
+import georges.beam as beam
 
 
 class TrackException(Exception):
@@ -35,33 +35,36 @@ def track(**kwargs):
     b = kwargs.get('beam', None)
     if line is None or m is None or b is None:
         raise TrackException("Beamline, Beam and MAD-X objects need to be defined.")
-    l = beamline.Beamline(line.line)
+
+    # Create a new beamline to include the results
+    l = line.line.copy()
+
     # Attach the new beamline to MAD-X if needed
     if line not in m.beamlines:
         m.attach(line)
     m.beam(line.name)
-    m.track(b.distribution, ptc=kwargs.get('ptc', True))
-    errors = m.run(self.context).fatals
+    m.track(b.distribution, line, ptc=kwargs.get('ptc', True))
+    errors = m.run(m.context).fatals
     if len(errors) > 0:
         m.print_input()
         print(errors)
         raise TrackException("MAD-X ended with fatal error.")
     if kwargs.get('ptc', True):
-        madx_track = read_ptc_tracking(os.path.join(m.path, 'tracking.outxone'))
+        madx_track = read_ptc_tracking(os.path.join(m.path, 'ptctrackone.tfs'))
     else:
         madx_track = read_madx_tracking(os.path.join(m.path, 'tracking.outxone')).dropna()
         madx_track['PY'] = pd.to_numeric(madx_track['PY'])
     madx_track['S'] = round(madx_track['S'], 8)
     tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
-    l.line['AT_CENTER_TRUNCATED'] = round(l.line['AT_CENTER'], 8)
-    if 'BEAM' in l.line:
+    l['AT_CENTER_TRUNCATED'] = round(l['AT_CENTER'], 8)
+    if 'BEAM' in l:
         l.line.drop('BEAM', inplace=True, axis=1)
-    l.line = l.line.merge(pd.DataFrame(tmp,
-                                       columns=['BEAM']),
-                                       left_on='AT_CENTER_TRUNCATED',
-                                       right_index=True,
-                                       how='left'
+    print(l)
+    l = l.merge(pd.DataFrame(tmp, columns=['BEAM']),
+                             left_on='AT_CENTER_TRUNCATED',
+                             right_index=True,
+                             how='left'
                           ).sort_values(by='AT_CENTER')
-    l.line.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
-    l.line.sort_values(by='S', inplace=True)
-    return l
+    l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
+    l.sort_values(by='S', inplace=True)
+    return beamline.Beamline(l)

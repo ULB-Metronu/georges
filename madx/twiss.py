@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-import beamline
+import georges.beamline as beamline
 
 
 class TwissException(Exception):
