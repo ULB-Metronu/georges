@@ -1,5 +1,5 @@
 import unittest
-from context import beamline
+import beam
 
 
 class TestBeam(unittest.TestCase):
