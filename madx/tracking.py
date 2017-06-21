@@ -59,12 +59,11 @@ def track(**kwargs):
     l['AT_CENTER_TRUNCATED'] = round(l['AT_CENTER'], 8)
     if 'BEAM' in l:
         l.line.drop('BEAM', inplace=True, axis=1)
-    print(l)
     l = l.merge(pd.DataFrame(tmp, columns=['BEAM']),
                              left_on='AT_CENTER_TRUNCATED',
                              right_index=True,
                              how='left'
                           ).sort_values(by='AT_CENTER')
     l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
-    l.sort_values(by='S', inplace=True)
+    l.sort_values(by='AT_CENTER', inplace=True)
     return beamline.Beamline(l)
