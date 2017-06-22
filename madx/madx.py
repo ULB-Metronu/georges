@@ -3,7 +3,7 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
-from georges.madx.grammar import madx_syntax
+from .grammar import madx_syntax
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
@@ -39,39 +39,6 @@ def sequence_to_mad(sequence):
     return input
 
 
-def read_madx_twiss(file):
-    """Read a MAD-X Twiss TFS file to a dataframe."""
-    headers = pd.read_csv(file, skiprows=45, nrows=0, delim_whitespace=True)
-    headers.drop(headers.columns[[0,1]], inplace=True, axis=1)
-    df = pd.read_csv(file, header=None, names=headers, na_filter=False, skiprows=47, delim_whitespace=True)
-    df.index.name = 'NAME'
-    return df
-
-
-def read_ptc_twiss(file):
-    """Read a MAD-X PTC Twiss TFS file to a dataframe."""
-    headers = pd.read_csv(file, skiprows=88, nrows=0, delim_whitespace=True)
-    headers.drop(headers.columns[[0,1]], inplace=True, axis=1)
-    df = pd.read_csv(file, header=None, names=headers, na_filter=False, skiprows=90, delim_whitespace=True)
-    df.index.name = 'NAME'
-    return df
-
-
-def read_madx_tracking(file):
-    """Read a MAD-X Tracking onetable=true file to a dataframe."""
-    column_names = ['ID','TURN','X','PX','Y','PY','T','PT','S','E']
-    data = pd.read_csv(file, skiprows=54, delim_whitespace=True, names=column_names)
-    return data.apply(pd.to_numeric, errors="ignore").dropna()
-
-
-def read_ptc_tracking(file):
-    """Read a PTC Tracking 'one' file to a dataframe."""
-    column_names = ['ID', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT', 'S', 'E']
-    data = pd.read_csv(file, skiprows=9, delim_whitespace=True,
-                       names=column_names) \
-              .apply(pd.to_numeric, errors="ignore").dropna()
-    return data[data['TURN'] == 1]
-
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
 
@@ -85,14 +52,18 @@ class Madx:
     Sequence and command will be converted with the MAD-X grammar and pipe'd to the subprocess.
     """
     def __init__(self, **kwargs):
-        self.__beamline = kwargs.get('beamline', None)
-        if self.__beamline:
-            self.__input = sequence_to_mad(self.__beamline.line)
-        self._path = kwargs.get('path', "")
+        self.__input = ""
+        self.__beamlines = kwargs.get('beamlines', [])
+        self.__path = kwargs.get('path', ".")
         self.__madx = kwargs.get('madx', None)
+        self.__context = kwargs.get('context', {})
+
         self.__warnings = []
+        self.__fatals = []
         self.__output = ""
-        self.__template_input = ""
+        self.__template_input = None
+        # Convert all sequences to MAD-X sequences
+        map(self.attach, self.__beamlines)
 
     def __get_madx_path(self):
         return self.__madx if self.__madx is not None else shutil.which("madx")
@@ -100,15 +71,21 @@ class Madx:
     def __add_input(self, keyword, strings=()):
         self.__input += madx_syntax[keyword].format(*strings) + '\n'
 
+    def attach(self, beamline):
+        self.__beamlines.append(beamline)
+        self.__input = sequence_to_mad(beamline.line)
+
     def run(self, context):
         """Run madx as a subprocess."""
         self.__input += madx_syntax['stop']
         self.__template_input = jinja2.Template(self.__input).render(context)
+        if self.__get_madx_path() is None:
+            raise MadxException("Can't run MADX if no valid path and executable are defined.")
         p = sub.Popen([self.__get_madx_path()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
-                      cwd=self._path,
+                      cwd=self.__path,
                       shell=True
                       )
         self.__output = p.communicate(input=self.__template_input.encode())[0].decode()
@@ -116,9 +93,14 @@ class Madx:
         self.__fatals = [line for line in self.__output.split('\n') if re.search('fatal', line)]
         return self
 
-    def print_input(self, context):
+    def print_input(self):
         """Print the rendered MAD-X input."""
-        print(jinja2.Template(self.__input).render(context))
+        print(jinja2.Template(self.__input).render(self.context))
+
+    @property
+    def path(self):
+        """Current MAD-X path."""
+        return self.__path
 
     @property
     def warnings(self):
@@ -133,12 +115,31 @@ class Madx:
     @property
     def input(self):
         """Return the current MAD-X input string."""
-        return self.__template_input
+        return self.__input
 
     @property
     def output(self):
         """Return the output of the last MAD-X run."""
         return self.__output
+
+    @property
+    def beamlines(self):
+        """Return the list of beamlines attached to the instance of MAD-X."""
+        return self.__beamlines
+
+    @property
+    def context(self):
+        """The current state of the beamline."""
+        return self.__context
+
+    @context.setter
+    def context(self, c):
+        self.__context = c
+
+    def set(self, k, v):
+        """Set a single variable in the context. Allows method chaining."""
+        self.__context[k] = v
+        return sel
 
     def print_warnings(self):
         """Print warnings from the previous execution run."""
@@ -159,10 +160,10 @@ class Madx:
         self.__add_input('call_file', (file,))
         return self
 
-    def beam(self):
+    def beam(self, line_name):
         """Add a MAD-X `beam` command."""
         self.__add_input('beam')
-        self.use_sequence(self.__beamline.name)
+        self.use_sequence(line_name)
         return self
 
     def use_sequence(self, sequence):
@@ -217,39 +218,49 @@ class Madx:
             else:
                 self.__add_input('start_particle', tuple(r[1]))
 
-    def track(self, particles, **kwargs):
-        """Add a (ptc) `track` command."""
-        if kwargs.get('ptc'):
-            self.__ptc_track(particles, **kwargs)
-        else:
-            self.__track(particles, **kwargs)
+    def match(self, **kwargs):
+        seq = kwargs.get("sequence", None)
+        vary = kwargs.get("vary", None)
+        constraints = kwargs.get("constraints", None)
+        if seq is None:
+            raise MadxException("A sequence name must be provided.")
+        if vary is None or len(vary) < 1:
+            raise MadxException("A list of length > 0 of parameters must be provided.")
+        if constraints is None:
+            raise MadxException("A dictionary of constraints should be provided.")
+        self.__add_input('match', (sequence,))
 
-    def __track(self, particles, **kwargs):
-        if self.__beamline is None:
-            print("No lattice defined.")
-            return
+    def survey(self, **kwargs):
+        """Add a MAD-X `survey` command."""
+        self.__add_input("survey")
+
+    def track(self, particles, beamline, **kwargs):
+        """Add a ptc `track` command."""
+        if kwargs.get('ptc', True):
+            self.__ptc_track(particles, beamline, **kwargs)
+        else:
+            self.__track(particles, beamline, **kwargs)
+
+    def __track(self, particles, beamline, **kwargs):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
-        self.makethin(self.__beamline.name, **kwargs)
+        self.makethin(beamline.name, **kwargs)
         self.__add_input('track_beamline')
         self.__add_particles_for_tracking(particles)
-        self.__beamline.line.apply(self.__generate_observation_points, axis=1)
+        beamline.line.apply(lambda e: self.__generate_observation_points(e, beamline.length), axis=1)
         self.__add_input('run_track_beamline')
         self.__add_input('end_track')
         return self
 
-    def __ptc_track(self, particles, **kwargs):
-        if self.__beamline is None:
-            print("No lattice defined.")
-            return
+    def __ptc_track(self, particles, beamline, **kwargs):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout', (False, 1, 4, 3, True))
         self.__add_particles_for_tracking(particles, True)
-        self.__beamline.line.apply(self.__generate_observation_points_ptc, axis=1)
+        beamline.line.apply(lambda e: self.__generate_observation_points_ptc(e, beamline.length), axis=1)
         self.__add_input('ptc_track', (
             5,
             0.0,
@@ -264,12 +275,12 @@ class Madx:
         self.__add_input('ptc_track_end')
         self.__add_input('ptc_end')
 
-    def __generate_observation_points(self, e):
-        if not e['AT_EXIT'] == self.__beamline.length:
+    def __generate_observation_points(self, e, length):
+        if not e['AT_EXIT'] == length:
             self.__add_input('observe', (e.name,))
 
-    def __generate_observation_points_ptc(self, e):
-        if not e['AT_EXIT'] == self.__beamline.length and e['CLASS'] == 'MARKER':
+    def __generate_observation_points_ptc(self, e, length):
+        if not e['AT_EXIT'] == length and e['CLASS'] == 'MARKER':
             self.__add_input('ptc_observe', (e.name,))
 
     def show_beam(self):
