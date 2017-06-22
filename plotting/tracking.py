@@ -3,9 +3,7 @@ from georges.plotting.common import palette, filled_plot
 
 def track(ax, bl, plane):
     bl = bl.line
-    print(bl['BEAM'])
-    filled_plot(ax, bl.index, 1000 * bl['BEAM'].apply(lambda x: x.std()))
-    pass
+    filled_plot(ax, bl.index, 1000 * bl['BEAM'].apply(lambda x: x.mean())['X'] + 1000 * bl['BEAM'].apply(lambda x: x.std())['X'])
 
 
 def tracking(ax, tracking, plane):
