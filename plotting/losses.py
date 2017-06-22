@@ -1,8 +1,9 @@
 from plotting.common import beamline_get_ticks_locations
+from matplotlib.ticker import *
+from georges.plotting.common import *
 
-
-def losses(ax, transmission):
-    ticks_locations = beamline_get_ticks_locations(bl)
+def losses(ax,transmission,bl):
+    ticks_locations = beamline_get_ticks_locations(bl.line)
     ax2 = ax.twinx()
 
     ax2.get_xaxis().set_tick_params(direction='out')

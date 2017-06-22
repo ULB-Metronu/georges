@@ -26,6 +26,7 @@ palette = PALETTE['solarized']
 # Define "logical" colors
 palette['quad'] = palette['blue']
 palette['bend'] = palette['red']
+palette['coll'] = palette['yellow']
 palette['X'] = palette['cyan']
 palette['Y'] = palette['orange']
 

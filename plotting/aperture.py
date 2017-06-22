@@ -51,6 +51,26 @@ def draw_quad(ax, e):
     draw_chamber(ax, e)
 
 
+def draw_coll(ax, e):
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            100,  # height
+            hatch='.', facecolor=palette['coll']
+        )
+    )
+
+    ax.add_patch(
+        matplotlib.patches.Rectangle(
+            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
+            e['ORBIT_LENGTH'],  # width
+            -100,  # height
+            hatch='.', facecolor=palette['coll']
+        )
+    )
+    draw_chamber(ax, e)
+	
 def draw_bend(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
@@ -90,3 +110,5 @@ def aperture(ax, bl, **kwargs):
     bl.query("CLASS == 'QUADRUPOLE'").apply(lambda e: draw_quad(ax, e), axis=1)
     bl.query("CLASS == 'SBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
     bl.query("CLASS == 'RBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
+    bl.query("CLASS == 'COLLIMATOR'").apply(lambda e: draw_coll(ax, e), axis=1)
+
