@@ -230,6 +230,10 @@ class Madx:
             raise MadxException("A dictionary of constraints should be provided.")
         self.__add_input('match', (sequence,))
 
+    def survey(self, **kwargs):
+        """Add a MAD-X `survey` command."""
+        self.__add_input("survey")
+
     def track(self, particles, beamline, **kwargs):
         """Add a ptc `track` command."""
         if kwargs.get('ptc', True):

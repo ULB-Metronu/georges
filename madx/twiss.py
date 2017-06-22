@@ -39,6 +39,7 @@ def twiss(**kwargs):
     if line not in m.beamlines:
         m.attach(line)
     m.beam(line.name)
+
     m.twiss(ptc=kwargs.get('ptc', False), centre=True)
     errors = m.run(m.context).fatals
     if len(errors) > 0:
