@@ -10,29 +10,30 @@ SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK'
 
 def element_to_bdsim(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
-    if not e['PHYSICAL'] or pd.isnull(e['PHYSICAL']):
-        return ""
-    mad = "{}: {}, ".format(e.name, e.CLASS)
-    mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e[p])])
-    if pd.notnull(e['ORBIT_LENGTH']):
-        mad += ", L={}".format(e['ORBIT_LENGTH'])
-    if pd.notnull(e['APERTYPE']):
-        mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
-    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
-        mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
-    mad += ", AT={}".format(e['AT_CENTER'])
-    mad += ";"
-    return mad
+    bdsim = ""
+    if e.KEYWORD in ['MARKER', 'INSTRUMENT']:
+        bdsim = "{}: {};".format(e.name.replace('$', ''), "marker")
+    if e.KEYWORD in ['DRIFT', 'QUADRUPOLE', 'RBEND', 'SBEND']:
+        bdsim = "{}: {}, l={}*m".format(e.name.replace('$', ''), e.KEYWORD.lower(), e.L)
+        if pd.notnull(e['ANGLE']):
+            bdsim += ", angle=-{}/DEGREE".format(e['ANGLE'])
+        #if pd.notnull(e['APERTYPE']):
+        #    bdsim += ", aperture={}*m".format(str(e['APERTURE']).strip('[]'))
+        bdsim += ';'
+    return bdsim
 
 
-def sequence_to_mad(sequence):
-    """Convert a pandas.DataFrame sequence onto a MAD-X input."""
+def sequence_to_bdsim(sequence):
+    """Convert a pandas.DataFrame sequence onto a BDSim input."""
     sequence.sort_values(by='AT_CENTER', inplace=True)
     if sequence is None:
         return ""
-    input = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
-    input += '\n'.join(sequence.apply(element_to_mad, axis=1)) + '\n'
-    input += "ENDSEQUENCE;\n"
+    input = "BRHO=2.3114; DEGREE=pi/180.0;"
+    input += " ".join(
+        sequence.reset_index().drop_duplicates(subset='index', keep='last').set_index('index').apply(
+            element_to_bdsim, axis=1))
+
+    input += "{}: line = ({});".format("ess", ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
     if 'CIRCUIT' in sequence:
         input += '\n'.join(sequence['CIRCUIT'].dropna().map(lambda c: "{}:={{{{ {} or '0.0' }}}};".format(c, c)))
         input += '\n'
@@ -55,14 +56,14 @@ class BDSim:
         self.__input = ""
         self.__beamlines = kwargs.get('beamlines', [])
         self.__path = kwargs.get('path', ".")
-        self.__bdsim = kwargs.get('madx', None)
+        self.__bdsim = kwargs.get('bdsim', None)
         self.__context = kwargs.get('context', {})
 
         self.__warnings = []
         self.__fatals = []
         self.__output = ""
         self.__template_input = None
-        # Convert all sequences to MAD-X sequences
+        # Convert all sequences to BDSim sequences
         map(self.attach, self.__beamlines)
 
     def __get_bdsim_path(self):
@@ -73,14 +74,14 @@ class BDSim:
 
     def attach(self, beamline):
         self.__beamlines.append(beamline)
-        self.__input = sequence_to_mad(beamline.line)
+        self.__input = sequence_to_bdsim(beamline.line)
 
     def run(self, context):
         """Run bdsim as a subprocess."""
         self.__template_input = jinja2.Template(self.__input).render(context)
-        if self.__get_madx_path() is None:
+        if self.__get_bdsim_path() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
-        p = sub.Popen([self.__get_madx_path()],
+        p = sub.Popen([self.__get_bdsim_path()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
@@ -135,120 +136,7 @@ class BDSim:
     def context(self, c):
         self.__context = c
 
-    def set(self, k, v):
-        """Set a single variable in the context. Allows method chaining."""
-        self.__context[k] = v
-        return sel
-
     def print_warnings(self):
         """Print warnings from the previous execution run."""
         [print(w) for w in self.__warnings]
 
-    def raw(self, raw):
-        """Add a raw MAD-X command to the input."""
-        self.__input += raw + "\n"
-        return self
-
-    def select_columns(self, flag, columns):
-        """Add a MAD-X `select` command."""
-        self.__add_input('select_columns', (flag, *columns))
-        return self
-
-    def call_file(self, file):
-        """Add a MAD-X `call` command."""
-        self.__add_input('call_file', (file,))
-        return self
-
-    def beam(self, line_name):
-        """Add a MAD-X `beam` command."""
-        self.__add_input('beam')
-        self.use_sequence(line_name)
-        return self
-
-    def use_sequence(self, sequence):
-        """Add a MAD-X `use sequence` command."""
-        self.__add_input('use_sequence', (sequence,))
-        return self
-
-    def rbarc(self):
-        """Add a (legacy) MAD-X `rbarc` option."""
-        self.__add_input('rbarc')
-        return self
-
-    def twiss(self, **kwargs):
-        """Add a (ptc) `twiss` MAD-X command."""
-        if kwargs.get('ptc'):
-            self.__ptc_twiss(**kwargs)
-        else:
-            self.__twiss(**kwargs)
-
-    def __ptc_twiss(self, **kwargs):
-        self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout',
-                         (False, 1, 4, 4, True))
-        self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
-        self.__add_input('ptc_end')
-
-    def __twiss(self, **kwargs):
-        options = ""
-        for k, v in kwargs.items():
-            if k not in ['ptc']:
-                options += ",%s=%s" % (k,v)
-        self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
-        return self
-
-    def makethin(self, sequence, **kwargs):
-        """Add a MAD-X `makethin` command."""
-        style = kwargs.get('style', 'TEAPOT')
-        dipole_slices = kwargs.get('dipole_slices', 4)
-        quadrupole_slices = kwargs.get('quadrupole_slices', 4)
-        self.__input += "SELECT, FLAG=makethin, CLASS=quadrupole, THICK=false, SLICE={};\n".format(quadrupole_slices)
-        self.__input += "SELECT, FLAG=makethin, CLASS=rbend, THICK=false, SLICE={};\n".format(dipole_slices)
-        self.__add_input('makethin', (sequence, style))
-        self.use_sequence(sequence)
-        return self
-
-    def __add_particles_for_tracking(self, particles, ptc=False):
-        if {'X', 'PX', 'Y', 'PY', 'DPP'} > set(particles):
-            return
-        for r in particles.iterrows():
-            if ptc:
-                self.__add_input('ptc_start', tuple(r[1]))
-            else:
-                self.__add_input('start_particle', tuple(r[1]))
-
-
-
-    def track(self, particles, beamline, **kwargs):
-        """Add a ptc `track` command."""
-        if kwargs.get('ptc', True):
-            self.__ptc_track(particles, beamline, **kwargs)
-        else:
-            self.__track(particles, beamline, **kwargs)
-
-    def __track(self, particles, beamline, **kwargs):
-        if len(particles) == 0:
-            print("No particles to track... Doing nothing.")
-            return
-        self.makethin(beamline.name, **kwargs)
-        self.__add_input('track_beamline')
-        self.__add_particles_for_tracking(particles)
-        beamline.line.apply(lambda e: self.__generate_observation_points(e, beamline.length), axis=1)
-        self.__add_input('run_track_beamline')
-        self.__add_input('end_track')
-        return self
-
-
-    def show_beam(self):
-        """Add a MAD-X `show beam` command."""
-        self.__add_input('show_beam')
-        return self
-
-    def save_beta(self, **kwargs):
-        """Add a MAD-X `save beta` command."""
-        self.__add_input('save_beta', (kwargs.get("name", "BETA0"), kwargs.get("place", "#s")))
-        return self
-
-    def stop(self):
-        """Add a MAD-X `stop` command (useful to act as a `break point`)."""
-        self.__add_input('stop')
