@@ -9,7 +9,6 @@ def compute_derived_data(row):
     # Corner case
     if pd.isnull(row.get('CLASS')):
         row['CLASS'] = row.get('TYPE', 'MARKER')
-
     # Apply transformations
     all_converters = [e[0].upper() for e in inspect.getmembers(sys.modules[__name__], inspect.isfunction)
                       if e[0] is not "compute_derived_data"]
@@ -22,6 +21,7 @@ def compute_derived_data(row):
     return row
 
 
+# TODO Move these methods to a class (static or something similar and remove ugly inspect statement
 def at_entry(r):
     """Try to compute the element's entry 's' position from other data."""
     if pd.isnull(r.get('ORBIT_LENGTH')):
@@ -63,8 +63,11 @@ def orbit_length(r):
     if pd.isnull(r.get('LENGTH')) and pd.isnull(r.get('RHO')):
         return 0.0
     if pd.isnull(r.get('ANGLE')):
+        # Straight element
         return r['LENGTH']
     if pd.isnull(r.get('RHO')):
+        # RBEND
         return r['ANGLE'] * r['LENGTH'] / (2.0 * np.sin(r['ANGLE'] / 2.0))
     else:
+        # SBEND
         return r['ANGLE'] * r['RHO'] / 1000.0

@@ -31,7 +31,6 @@ class Beam:
         if len(args) >= 1:
             self.__initialize_distribution(args[0])
 
-        self.__particle = None
         self.particle = kwargs.get('particle', 'proton')
         self.__energy = kwargs.get('energy', None)
 
