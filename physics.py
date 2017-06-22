@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import statistics as stat
 
 PROTON_MASS = 0.938272
 
@@ -68,7 +69,7 @@ def compute_ess_transmission(beam_sigma, slits, dispersion):
     return np.roll(np.convolve(slits, beam, mode="same"), -1)/np.trapz(beam)
 	
 	
-def compute_EnergyAndDivergence(ProfileTable):
+def compute_energy_divergence(ProfileTable):
     """ Compute the energy and divergence of dataframe obtained with G4BeamLine. """
     protonMass=PROTON_MASS*1000
     Px2 = ProfileTable.Px**2
@@ -78,26 +79,39 @@ def compute_EnergyAndDivergence(ProfileTable):
     ProfileTable['Energy'] = np.sqrt((protonMass*protonMass)+Px2+Py2+Pz2)-protonMass
     ProfileTable['xp'] = 1000*ProfileTable['Px']/ProfileTable['Ptot']
     ProfileTable['yp'] = 1000*ProfileTable['Py']/ProfileTable['Ptot']
-    ProfileTable['dP_P'] = (ProfileTable['Ptot']-energy_to_momentum(230)*1000)/(energy_to_momentum(230)*1000)	
+    
+    # Change here and take the mean of Ptot in place of energy_to_momentum()
+    Pmean=ProfileTable['Ptot'].mean()
+    ProfileTable['dP_P'] = (ProfileTable['Ptot']-Pmean)/(Pmean)	
+    return ProfileTable
 	
 def compute_meanAndsigma(Data):
     """ Compute useful parameters of the beam : mean, sigma, .... """
+    # For the std, use N-1 because it's an independent sample from a distributed population 
 	
     xmean=Data['x'].mean()
-    xpmean=Data['xp'].mean()
+    sigmax=Data['x'].std(ddof=1)
+    
     ymean=Data['x'].mean()
+    sigmay=Data['y'].std(ddof=1)
+    
+    xpmean=Data['xp'].mean()
+    sigmaxp=Data['xp'].std(ddof=1)
+    
     ypmean=Data['xp'].mean()
-
-    sigmax=Data['x'].std()
-    sigmay=Data['y'].std()
-    sigmaxp=Data['xp'].std()
-    sigmayp=Data['yp'].std()
+    sigmayp=Data['yp'].std(ddof=1)
+    
+    Pmean=Data['Ptot'].mean()
+    sigmaP=Data['Ptot'].std(ddof=1)
+    
+    Emean=Data['Energy'].mean()
+    sigmaE=Data['Energy'].std(ddof=1)
     
     dp_pmean=Data['dP_P'].mean()
-    dp_psigma=Data['dP_P'].std()
+    dp_psigma=Data['dP_P'].std(ddof=1)
     
-    columnsName=['xmean','ymean','xpmean','ypmean','sigmax','sigmay','sigmaxp','sigmayp','meandp_p','sigmadp_p']
-    DataBeam=[xmean,ymean,xpmean,ypmean,sigmax,sigmay,sigmaxp,sigmayp,dp_pmean,dp_psigma]
+    columnsName=['xmean','ymean','xpmean','ypmean','sigmax','sigmay','sigmaxp','sigmayp','Pmean','sigmaP','Emean','sigmaE','dp_pmean','dp_psigma']
+    DataBeam=[xmean,ymean,xpmean,ypmean,sigmax,sigmay,sigmaxp,sigmayp,Pmean,sigmaP,Emean,sigmaE,dp_pmean,dp_psigma]
     DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
     Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
     
