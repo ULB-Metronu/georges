@@ -4,6 +4,7 @@ import jinja2
 import re
 import pandas as pd
 from .grammar import madx_syntax
+from simulator import Simulator
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
@@ -46,7 +47,7 @@ class MadxException(Exception):
         self.message = m
 
 
-class Madx:
+class Madx(Simulator):
     """A Python wrapper around the MAD-X executable.
 
     Sequence and command will be converted with the MAD-X grammar and pipe'd to the subprocess.

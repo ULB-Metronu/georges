@@ -89,7 +89,7 @@ class BDSim:
         return self.__bdsim if self.__bdsim is not None else shutil.which("bdsim")
 
     def __add_input(self, keyword, strings=()):
-        self.__input += madx_syntax[keyword].format(*strings) + '\n'
+        self.__input += bdsim_syntax[keyword].format(*strings) + '\n'
 
     def attach(self, beamline):
         self.__beamlines.append(beamline)
@@ -97,6 +97,7 @@ class BDSim:
 
     def run(self, context):
         """Run bdsim as a subprocess."""
+        self.__add_input("options", ("proton", 32.5, "circular", "Aluminium"))
         self.__template_input = jinja2.Template(self.__input).render(context)
         if self.__get_bdsim_path() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
