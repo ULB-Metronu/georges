@@ -66,7 +66,7 @@ class BDSimException(Exception):
         self.message = m
 
 
-class BDSim:
+class BDSim(Simulator):
     """A Python wrapper around the BDSim software.
 
     Sequence and command will be converted with the BDSim grammar and pipe'd to the subprocess.
