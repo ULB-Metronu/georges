@@ -40,6 +40,6 @@ def survey(**kwargs):
                                        left_index=True,
                                        right_index=True,
                                        how='outer',
-                                       suffixes=('_TWISS', '')
+                                       suffixes=('_SURVEY', '')
                                        ).sort_values(by='S')
     return beamline.Beamline(line_with_survey)

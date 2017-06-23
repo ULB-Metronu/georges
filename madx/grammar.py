@@ -91,5 +91,5 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'match_vary': "VARY,NAME={};",
     'match_constraint': "CONSTRAINT,SEQUENCE={},RANGE={},{};",
     'end_match': "ENDMATCH;",
-    'survey': "SURVEY, file=/Users/chernals/survey.out;",
+    'survey': "SURVEY, file=survey.out;",
 }

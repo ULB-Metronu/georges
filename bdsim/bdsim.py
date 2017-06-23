@@ -8,6 +8,25 @@ from .grammar import bdsim_syntax
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
 
+def split_rbends(line, n=20):
+    split_line = pd.DataFrame()
+    for index, row in line.iterrows():
+        if row['CLASS'] == 'RBEND' and pd.isnull(row.get('SPLIT')):
+            angle = row['ANGLE'] / n
+            length = row['L'] / n
+            for i in range(0,n):
+                row = row.copy()
+                row.name = index + "_{}".format(i)
+                row['SPLIT'] = True
+                row['ANGLE'] = angle
+                row['L'] = length
+                split_line = split_line.append(row)
+        else:
+            split_line = split_line.append(row)
+    split_line[['THICK']] = split_line[['THICK']].applymap(bool)
+    return split_line
+
+
 def element_to_bdsim(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
     bdsim = ""
@@ -19,13 +38,16 @@ def element_to_bdsim(e):
             bdsim += ", angle=-{}/DEGREE".format(e['ANGLE'])
         #if pd.notnull(e['APERTYPE']):
         #    bdsim += ", aperture={}*m".format(str(e['APERTURE']).strip('[]'))
+        if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
+            bdsim += ", {}={{{{ {} or '0.0' }}}}".format(e['PLUG'].lower(), e['CIRCUIT'])
         bdsim += ';'
     return bdsim
 
 
 def sequence_to_bdsim(sequence):
     """Convert a pandas.DataFrame sequence onto a BDSim input."""
-    sequence.sort_values(by='AT_CENTER', inplace=True)
+    sequence.sort_values(by='S', inplace=True)
+    sequence = split_rbends(sequence)
     if sequence is None:
         return ""
     input = "BRHO=2.3114; DEGREE=pi/180.0;"
@@ -34,9 +56,6 @@ def sequence_to_bdsim(sequence):
             element_to_bdsim, axis=1))
 
     input += "{}: line = ({});".format("ess", ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
-    if 'CIRCUIT' in sequence:
-        input += '\n'.join(sequence['CIRCUIT'].dropna().map(lambda c: "{}:={{{{ {} or '0.0' }}}};".format(c, c)))
-        input += '\n'
     return input
 
 

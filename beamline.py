@@ -26,9 +26,9 @@ class Beamline:
             - a single pandas Dataframe containing an existing beamline
             - a csv file or a list of csv files (looked up in path/prefix)
         :param kwargs: optional parameters include:
-            - path: filepath to the root directory of the beamline description files (default to '.')
-            - prefix: prefix for the beamline description files (default to '')
-            - elements: elements description file
+            - path: filepath to the root directory of the beamline description files (defaults to '.')
+            - prefix: prefix for the beamline description files (defaults to '')
+            - elements: elements description file (looked up in path/)
 
         """
         # We need the kwargs first to parse the args correctly
@@ -55,6 +55,8 @@ class Beamline:
         # Angle conversion
         if 'ANGLE' in self.__beamline:
             self.__beamline['ANGLE'] = self.__beamline['ANGLE'] / 180.0 * np.pi
+        if 'ANGLE_ELEMENT' in self.__beamline:
+            self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
 
         # Check before hand if the survey will need to be converted
         if 'AT_ENTRY' in self.__beamline or 'AT_CENTER' in self.__beamline or 'AT_EXIT' in self.__beamline:
@@ -154,6 +156,11 @@ class Beamline:
         self.__beamline.name = self.name
         self.__beamline.length = self.length
         return self.__beamline
+
+    @line.setter
+    def line(self, line):
+        self.__beamline = line
+        self.__length = line.get('AT_EXIT').max()
 
     def __build_from_files(self, names):
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
