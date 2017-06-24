@@ -6,8 +6,6 @@ from .grammar import madx_syntax
 from ..simulator import Simulator
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
-MADX_SURVEY_HEADERS_SKIP_ROWS = 6
-MADX_SURVEY_DATA_SKIP_ROWS = 8
 
 
 def element_to_mad(e):
@@ -52,40 +50,33 @@ class Madx(Simulator):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+    def attach(self, beamline):
+        self._input += sequence_to_mad(beamline.line)
 
-        self.__template_input = None
-
-        # Convert all sequences to MAD-X sequences
-        map(self.attach, self.__beamlines)
+    def run(self, context):
+        """Run madx as a subprocess."""
+        self._input += madx_syntax['stop']
+        template_input = jinja2.Template(self._input).render(context)
+        if self._get_exec() is None:
+            raise MadxException("Can't run MADX if no valid path and executable are defined.")
+        p = sub.Popen([self._get_exec()],
+                      stdin=sub.PIPE,
+                      stdout=sub.PIPE,
+                      stderr=sub.STDOUT,
+                      cwd=self._path,
+                      shell=True
+                      )
+        self._output = p.communicate(input=template_input.encode())[0].decode()
+        self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
+        self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
+        return self
 
     def __add_input(self, keyword, strings=()):
         self.__input += madx_syntax[keyword].format(*strings) + '\n'
 
-    def attach(self, beamline):
-        self._beamlines.append(beamline)
-        self._input = sequence_to_mad(beamline.line)
-
-    def run(self, context):
-        """Run madx as a subprocess."""
-        self.__input += madx_syntax['stop']
-        self.__template_input = jinja2.Template(self.__input).render(context)
-        if self.__get_madx_path() is None:
-            raise MadxException("Can't run MADX if no valid path and executable are defined.")
-        p = sub.Popen([self.__get_madx_path()],
-                      stdin=sub.PIPE,
-                      stdout=sub.PIPE,
-                      stderr=sub.STDOUT,
-                      cwd=self.__path,
-                      shell=True
-                      )
-        self.__output = p.communicate(input=self.__template_input.encode())[0].decode()
-        self.__warnings = [line for line in self.__output.split('\n') if re.search('warning|fatal', line)]
-        self.__fatals = [line for line in self.__output.split('\n') if re.search('fatal', line)]
-        return self
-
     def raw(self, raw):
         """Add a raw MAD-X command to the input."""
-        self.__input += raw + "\n"
+        self._input += raw + "\n"
         return self
 
     def select_columns(self, flag, columns):
@@ -114,27 +105,19 @@ class Madx(Simulator):
         self.__add_input('rbarc')
         return self
 
-    def twiss(self, **kwargs):
-        """Add a (ptc) `twiss` MAD-X command."""
-        if kwargs.get('ptc'):
-            self.__ptc_twiss(**kwargs)
-        else:
-            self.__madx_twiss(**kwargs)
-
-    def __ptc_twiss(self, **kwargs):
-        self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout',
-                         (False, 1, 4, 4, True))
-        self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
-        self.__add_input('ptc_end')
-
-    def __madx_twiss(self, **kwargs):
-        options = ""
-        for k, v in kwargs.items():
-            if k not in ['ptc']:
-                options += ",%s=%s" % (k,v)
-        self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
+    def show_beam(self):
+        """Add a MAD-X `show beam` command."""
+        self.__add_input('show_beam')
         return self
+
+    def save_beta(self, **kwargs):
+        """Add a MAD-X `save beta` command."""
+        self.__add_input('save_beta', (kwargs.get("name", "BETA0"), kwargs.get("place", "#s")))
+        return self
+
+    def stop(self):
+        """Add a MAD-X `stop` command (useful to insert as a `break point`)."""
+        self.__add_input('stop')
 
     def makethin(self, sequence, **kwargs):
         """Add a MAD-X `makethin` command."""
@@ -147,6 +130,32 @@ class Madx(Simulator):
         self.use_sequence(sequence)
         return self
 
+    def survey(self, **kwargs):
+        """Add a MAD-X `survey` command."""
+        self.__add_input("survey")
+
+    def twiss(self, **kwargs):
+        """Add a (ptc) `twiss` MAD-X command."""
+        if kwargs.get('ptc'):
+            self.__ptc_twiss(**kwargs)
+        else:
+            self.__madx_twiss(**kwargs)
+
+    def __madx_twiss(self, **kwargs):
+        options = ""
+        for k, v in kwargs.items():
+            if k not in ['ptc']:
+                options += ",%s=%s" % (k,v)
+        self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
+        return self
+
+    def __ptc_twiss(self, **kwargs):
+        self.__add_input('ptc_create_universe')
+        self.__add_input('ptc_create_layout',
+                         (False, 1, 4, 4, True))
+        self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
+        self.__add_input('ptc_end')
+
     def __add_particles_for_tracking(self, particles, ptc=False):
         if {'X', 'PX', 'Y', 'PY', 'DPP'} > set(particles):
             return
@@ -156,30 +165,22 @@ class Madx(Simulator):
             else:
                 self.__add_input('start_particle', tuple(r[1]))
 
-    def match(self, **kwargs):
-        seq = kwargs.get("sequence", None)
-        vary = kwargs.get("vary", None)
-        constraints = kwargs.get("constraints", None)
-        if seq is None:
-            raise MadxException("A sequence name must be provided.")
-        if vary is None or len(vary) < 1:
-            raise MadxException("A list of length > 0 of parameters must be provided.")
-        if constraints is None:
-            raise MadxException("A dictionary of constraints should be provided.")
-        self.__add_input('match', (sequence,))
+    def __generate_observation_points(self, e, length):
+        if not e['AT_EXIT'] == length:
+            self.__add_input('observe', (e.name,))
 
-    def survey(self, **kwargs):
-        """Add a MAD-X `survey` command."""
-        self.__add_input("survey")
+    def __generate_observation_points_ptc(self, e, length):
+        if not e['AT_EXIT'] == length and e['CLASS'] == 'MARKER':
+            self.__add_input('ptc_observe', (e.name,))
 
     def track(self, particles, beamline, **kwargs):
         """Add a ptc `track` command."""
         if kwargs.get('ptc', True):
             self.__ptc_track(particles, beamline, **kwargs)
         else:
-            self.__track(particles, beamline, **kwargs)
+            self.__madx_track(particles, beamline, **kwargs)
 
-    def __track(self, particles, beamline, **kwargs):
+    def __madx_track(self, particles, beamline, **kwargs):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
@@ -213,24 +214,14 @@ class Madx(Simulator):
         self.__add_input('ptc_track_end')
         self.__add_input('ptc_end')
 
-    def __generate_observation_points(self, e, length):
-        if not e['AT_EXIT'] == length:
-            self.__add_input('observe', (e.name,))
-
-    def __generate_observation_points_ptc(self, e, length):
-        if not e['AT_EXIT'] == length and e['CLASS'] == 'MARKER':
-            self.__add_input('ptc_observe', (e.name,))
-
-    def show_beam(self):
-        """Add a MAD-X `show beam` command."""
-        self.__add_input('show_beam')
-        return self
-
-    def save_beta(self, **kwargs):
-        """Add a MAD-X `save beta` command."""
-        self.__add_input('save_beta', (kwargs.get("name", "BETA0"), kwargs.get("place", "#s")))
-        return self
-
-    def stop(self):
-        """Add a MAD-X `stop` command (useful to insert as a `break point`)."""
-        self.__add_input('stop')
+    def match(self, **kwargs):
+        seq = kwargs.get("sequence", None)
+        vary = kwargs.get("vary", None)
+        constraints = kwargs.get("constraints", None)
+        if seq is None:
+            raise MadxException("A sequence name must be provided.")
+        if vary is None or len(vary) < 1:
+            raise MadxException("A list of length > 0 of parameters must be provided.")
+        if constraints is None:
+            raise MadxException("A dictionary of constraints should be provided.")
+        self.__add_input('match', (sequence,))

@@ -20,6 +20,9 @@ class Simulator:
         self._path = kwargs.get('path', None)
         self._beamlines = kwargs.get('beamlines', [])
 
+        # Attach all beamlines to the simulator
+        map(self.attach, self._beamlines)
+
     def _get_exec(self):
         if self._path is not None:
             return self._path + self.EXECUTABLE_NAME
