@@ -53,10 +53,12 @@ class Madx(Simulator):
     def _attach(self, beamline):
         self._input += sequence_to_mad(beamline.line)
 
-    def run(self, context):
+    def run(self, **kwargs):
         """Run madx as a subprocess."""
         self._input += madx_syntax['stop']
-        template_input = jinja2.Template(self._input).render(context)
+        template_input = jinja2.Template(self._input).render(kwargs.get("context", {}))
+        if kwargs.get("debug", False) >= 2:
+            print(template_input)
         if self._get_exec() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
         p = sub.Popen([self._get_exec()],

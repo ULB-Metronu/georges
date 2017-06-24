@@ -3,11 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beam.py" afterPath="$PROJECT_DIR$/beam.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Example Georges.ipynb" afterPath="$PROJECT_DIR$/examples/Example Georges.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/madx.py" afterPath="$PROJECT_DIR$/madx/madx.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/survey.py" afterPath="$PROJECT_DIR$/madx/survey.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/tracking.py" afterPath="$PROJECT_DIR$/madx/tracking.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/twiss.py" afterPath="$PROJECT_DIR$/madx/twiss.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/simulator.py" afterPath="$PROJECT_DIR$/simulator.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -36,21 +37,9 @@
       <file leaf-file-name="survey.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/madx/survey.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="462">
-              <caret line="44" column="8" lean-forward="false" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
+            <state relative-caret-position="378">
+              <caret line="39" column="21" lean-forward="false" selection-start-line="39" selection-start-column="21" selection-end-line="39" selection-end-column="21" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding>
-                <marker date="1498304629000" expanded="true" signature="0:5" ph="import ..." />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -58,8 +47,8 @@
       <file leaf-file-name="simulator.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/simulator.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" column="22" lean-forward="false" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+            <state relative-caret-position="-296">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -75,28 +64,30 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="beamline.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/beamline.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="345">
-              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="33" selection-end-column="8" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="madx.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="madx.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/madx/madx.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-489">
+            <state relative-caret-position="-55">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="grammar.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/bdsim/grammar.py">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/__init__.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding>
+                <marker date="1498304629000" expanded="true" signature="0:5" ph="import ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/madx/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -105,11 +96,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="twiss.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="twiss.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/madx/twiss.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="73" column="66" lean-forward="false" selection-start-line="73" selection-start-column="66" selection-end-line="73" selection-end-column="66" />
+            <state relative-caret-position="269">
+              <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -117,6 +108,16 @@
       </file>
       <file leaf-file-name="tracking.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/madx/tracking.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="275">
+              <caret line="51" column="32" lean-forward="false" selection-start-line="51" selection-start-column="28" selection-end-line="51" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="beam.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/beam.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -156,15 +157,15 @@
         <option value="$PROJECT_DIR$/plotting/tracking.py" />
         <option value="$PROJECT_DIR$/tests/test_beamline.py" />
         <option value="$PROJECT_DIR$/examples/Example Georges.ipynb" />
-        <option value="$PROJECT_DIR$/beam.py" />
         <option value="$PROJECT_DIR$/beamline.py" />
-        <option value="$PROJECT_DIR$/madx/tracking.py" />
         <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/bdsim/bdsim.py" />
-        <option value="$PROJECT_DIR$/madx/madx.py" />
-        <option value="$PROJECT_DIR$/madx/survey.py" />
         <option value="$PROJECT_DIR$/simulator.py" />
+        <option value="$PROJECT_DIR$/beam.py" />
+        <option value="$PROJECT_DIR$/madx/madx.py" />
         <option value="$PROJECT_DIR$/madx/twiss.py" />
+        <option value="$PROJECT_DIR$/madx/survey.py" />
+        <option value="$PROJECT_DIR$/madx/tracking.py" />
       </list>
     </option>
   </component>
@@ -530,7 +531,14 @@
       <option name="project" value="LOCAL" />
       <updated>1498311195716</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Refactored so that MAD-X is instanciated when calling twiss or survey.">
+      <created>1498312244130</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1498312244130</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -640,7 +648,8 @@
     <MESSAGE value="Maybe the imports will finally be stable... also removing .pyc" />
     <MESSAGE value="Abstracting MADX and BDSIM in Simulator.py" />
     <MESSAGE value="Cleaning and more cleaning. This is good!" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cleaning and more cleaning. This is good!" />
+    <MESSAGE value="Refactored so that MAD-X is instanciated when calling twiss or survey." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored so that MAD-X is instanciated when calling twiss or survey." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -870,13 +879,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/madx/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="0" lean-forward="true" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plotting/losses.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -918,36 +920,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/beam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="213">
-          <caret line="122" column="25" lean-forward="false" selection-start-line="122" selection-start-column="25" selection-end-line="122" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="0" lean-forward="true" selection-start-line="2" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-          <folding>
-            <marker date="1498304629000" expanded="true" signature="0:5" ph="import ..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/Library/Caches/PyCharmCE2017.1/python_stubs/-1242624401/builtins.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="234">
           <caret line="5194" column="8" lean-forward="false" selection-start-line="5194" selection-start-column="8" selection-end-line="5194" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/madx/tracking.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -976,6 +952,64 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/beam.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <marker date="1498304629000" expanded="true" signature="0:5" ph="import ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madx/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/simulator.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-296">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madx/twiss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="269">
+          <caret line="56" column="0" lean-forward="false" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madx/survey.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="378">
+          <caret line="39" column="21" lean-forward="false" selection-start-line="39" selection-start-column="21" selection-end-line="39" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madx/tracking.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="51" column="32" lean-forward="false" selection-start-line="51" selection-start-column="28" selection-end-line="51" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/madx/match.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -984,34 +1018,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/madx/survey.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="462">
-          <caret line="44" column="8" lean-forward="false" selection-start-line="44" selection-start-column="8" selection-end-line="44" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/madx/madx.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-489">
+        <state relative-caret-position="-55">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/simulator.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="22" lean-forward="false" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/madx/twiss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
-          <caret line="73" column="66" lean-forward="false" selection-start-line="73" selection-start-column="66" selection-end-line="73" selection-end-column="66" />
           <folding />
         </state>
       </provider>

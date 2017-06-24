@@ -49,22 +49,19 @@ def read_ptc_twiss(file):
 def twiss(**kwargs):
     """Compute the Twiss parameters of the beamline.
     :param kwargs: parameters are:
-        - line: filepath to the root directory of the beamline description files (defaults to '.')
-        - madx: prefix for the beamline description files (defaults to '')
-        - elements: elements description file (looked up in path/)
-
+        - line: the beamline on which twiss will be run
+        - context: the associated context on which MAD-X is run
     """
     # Process arguments
     line = kwargs.get('line', None)
-    context = kwargs.get('context', {})
     if line is None:
         raise TwissException("Beamline and MAD-X objects need to be defined.")
     m = Madx(beamlines=line)
     m.beam(line.name)
     m.twiss(ptc=kwargs.get('ptc', False), centre=True)
-    errors = m.run(context).fatals
+    errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
-        m.print_input()
+        print(m.input)
     if len(errors) > 0:
         print(errors)
         raise TwissException("MAD-X ended with fatal error.")
