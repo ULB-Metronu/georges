@@ -50,7 +50,7 @@ class Madx(Simulator):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def attach(self, beamline):
+    def _attach(self, beamline):
         self._input += sequence_to_mad(beamline.line)
 
     def run(self, context):

@@ -18,10 +18,11 @@ class Simulator:
         self._fatals = []
         self._context = {}
         self._path = kwargs.get('path', None)
-        self._beamlines = kwargs.get('beamlines', [])
-
-        # Attach all beamlines to the simulator
-        map(self.attach, self._beamlines)
+        self._beamlines = kwargs.get('beamlines', None)
+        if isinstance(self._beamlines, list):
+            map(self._attach, self._beamlines)
+        else:
+            self._attach(self._beamlines)
 
     def _get_exec(self):
         if self._path is not None:

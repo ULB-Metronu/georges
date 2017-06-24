@@ -31,20 +31,17 @@ def read_survey(file):
 def survey(**kwargs):
     """Compute the survey of the beamline."""
     # Process arguments
-    line = kwargs.get('line', None)
+    line = kwargs.get("line", None)
+    if beamline is None:
+        raise SurveyException("A beamline is expected.")
     context = kwargs.get('context', {})
-    m = Madx()
-    if line is None or m is None:
-        raise SurveyException("Beamline and MAD-X objects need to be defined.")
-
-    # Attach the new beamline to MAD-X if needed
-    if line not in m.beamlines:
-        m.attach(line)
+    m = Madx(beamlines=line)
     m.beam(line.name)
     m.survey()
     errors = m.run(context).fatals
     if len(errors) > 0:
-        print(m.input)
+        if kwargs.get("debug", False):
+            print(m.input)
         print(errors)
         raise SurveyException("MAD-X ended with fatal error.")
     madx_survey = read_survey(os.path.join("/Users/chernals", 'survey.out'))
