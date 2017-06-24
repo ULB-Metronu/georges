@@ -23,6 +23,7 @@ PALETTE = {
 
 # Define default color palette
 palette = PALETTE['solarized']
+
 # Define "logical" colors
 palette['quad'] = palette['blue']
 palette['bend'] = palette['red']

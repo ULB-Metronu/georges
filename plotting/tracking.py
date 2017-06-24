@@ -1,6 +1,6 @@
-from plotting.common import palette, filled_plot
-from beam import Beam
-from plotting.common import palette, filled_plot
+from .common import palette, filled_plot
+from ..beam import Beam
+from .common import palette, filled_plot
 import numpy as np
 
 

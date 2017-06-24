@@ -1,8 +1,7 @@
 from matplotlib.ticker import *
-from plotting.common import beamline_get_ticks_locations
-from plotting.common import beamline_get_ticks_locations
+from .common import beamline_get_ticks_locations
 from matplotlib.ticker import *
-from plotting.common import *
+from .common import *
 
 
 def losses(ax, transmission, bl):

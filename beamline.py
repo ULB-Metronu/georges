@@ -35,6 +35,7 @@ class Beamline:
         self.__path = kwargs.get('path', '.')
         self.__prefix = kwargs.get('prefix', '')
         self.__elements = kwargs.get('elements', None)
+        self.__survey = kwargs.get('survey', False)
 
         # Default values
         self.__length = 0
@@ -58,30 +59,17 @@ class Beamline:
         if 'ANGLE_ELEMENT' in self.__beamline:
             self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
 
-        # Check before hand if the survey will need to be converted
-        if 'AT_ENTRY' in self.__beamline or 'AT_CENTER' in self.__beamline or 'AT_EXIT' in self.__beamline:
-            survey = False
-        else:
-            if 'X' in self.__beamline and 'Y' in self.__beamline:
-                survey = True
-            else:
-                raise BeamlineException("Trying to infer sequence from survey data: X and Y must be provided.")
-
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
 
         # If the sequence is given as a survey, convert to s-positions
-        if survey:
+        if self.__survey:
             self.__convert_survey_to_sequence()
-            # Re-expand
             self.__expand_sequence_data()
 
-        # Compute the sequence length if needed
+        # Compute the sequence length
         if self.__length == 0 and self.__beamline.get('AT_EXIT') is not None:
             self.__length = self.__beamline.get('AT_EXIT').max()
-
-        # Flag to distinguish generated elements from physical beamline elements
-        self.__beamline['PHYSICAL'] = True
 
         # Beamline must be defined
         assert self.__beamline is not None
@@ -168,6 +156,7 @@ class Beamline:
             pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME') for f in files
         ]
         self.__beamline = pd.concat(sequences)
+        self.__beamline['PHYSICAL'] = True
 
     def __expand_sequence_data(self):
         """Apply sequence transformation until a fixed point is reached."""

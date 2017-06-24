@@ -4,6 +4,7 @@ import re
 import pandas as pd
 from .grammar import madx_syntax
 from ..simulator import Simulator
+from ..simulator import SimulatorException
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
@@ -51,6 +52,8 @@ class Madx(Simulator):
         super().__init__(**kwargs)
 
     def _attach(self, beamline):
+        if beamline.length is None or pd.isnull(beamline.length):
+            raise SimulatorException("Beamline length not defined.")
         self._input += sequence_to_mad(beamline.line)
 
     def run(self, **kwargs):
@@ -71,6 +74,7 @@ class Madx(Simulator):
         self._output = p.communicate(input=template_input.encode())[0].decode()
         self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
         self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
+        self._last_context = kwargs.get("context", {})
         return self
 
     def __add_input(self, keyword, strings=()):

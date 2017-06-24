@@ -38,9 +38,9 @@ def survey(**kwargs):
     m.beam(line.name)
     m.survey()
     errors = m.run(**kwargs).fatals
+    if kwargs.get("debug", False):
+        print(m.input)
     if len(errors) > 0:
-        if kwargs.get("debug", False):
-            print(m.input)
         print(errors)
         raise SurveyException("MAD-X ended with fatal error.")
     madx_survey = read_survey(os.path.join("/Users/chernals", 'survey.out'))

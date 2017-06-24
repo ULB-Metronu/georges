@@ -17,6 +17,7 @@ class Simulator:
         self._warnings = []
         self._fatals = []
         self._context = {}
+        self._last_context = None
         self._path = kwargs.get('path', None)
         self._beamlines = kwargs.get('beamlines', None)
         if isinstance(self._beamlines, list):
@@ -46,8 +47,9 @@ class Simulator:
 
     @property
     def input(self, **kwargs):
-        context = kwargs.get("context", {})
-        return jinja2.Template(self._input).render(context)
+        if self._last_context is None:
+            raise SimulatorException("Asking for input but no context yet.")
+        return jinja2.Template(self._input).render(self._last_context)
 
     @property
     def raw_input(self):
