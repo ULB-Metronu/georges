@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from .. import beamline
+from .madx import Madx
 
 MADX_SURVEY_HEADERS_SKIP_ROWS = 6
 MADX_SURVEY_DATA_SKIP_ROWS = 8
@@ -31,8 +32,8 @@ def survey(**kwargs):
     """Compute the survey of the beamline."""
     # Process arguments
     line = kwargs.get('line', None)
-    m = kwargs.get('madx', None)
     context = kwargs.get('context', {})
+    m = Madx()
     if line is None or m is None:
         raise SurveyException("Beamline and MAD-X objects need to be defined.")
 
@@ -46,7 +47,7 @@ def survey(**kwargs):
         print(m.input)
         print(errors)
         raise SurveyException("MAD-X ended with fatal error.")
-    madx_survey = read_survey(os.path.join(m.path, 'survey.out'))
+    madx_survey = read_survey(os.path.join("/Users/chernals", 'survey.out'))
     line_with_survey = madx_survey.merge(line.line,
                                          left_index=True,
                                          right_index=True,

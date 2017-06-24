@@ -63,7 +63,7 @@ class Madx(Simulator):
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
-                      cwd=self._path,
+                      cwd="/Users/chernals/",
                       shell=True
                       )
         self._output = p.communicate(input=template_input.encode())[0].decode()
@@ -72,7 +72,7 @@ class Madx(Simulator):
         return self
 
     def __add_input(self, keyword, strings=()):
-        self.__input += madx_syntax[keyword].format(*strings) + '\n'
+        self._input += madx_syntax[keyword].format(*strings) + '\n'
 
     def raw(self, raw):
         """Add a raw MAD-X command to the input."""
