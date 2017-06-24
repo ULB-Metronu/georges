@@ -3,6 +3,7 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
+from simulator import Simulator
 from .grammar import bdsim_syntax
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']

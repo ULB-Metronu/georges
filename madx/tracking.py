@@ -1,7 +1,7 @@
 import os
 import pandas as pd
-import georges.beamline as beamline
-import georges.beam as beam
+import beamline as beamline
+import beam as beam
 
 
 class TrackException(Exception):

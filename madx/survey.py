@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-import georges.beamline as beamline
+import beamline as beamline
 
 
 class SurveyException(Exception):
