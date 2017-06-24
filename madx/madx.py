@@ -1,12 +1,10 @@
-import shutil
 import subprocess as sub
 import jinja2
 import re
 import pandas as pd
 from .grammar import madx_syntax
-from simulator import Simulator
+from ..simulator import Simulator
 
-MADX_EXECUTABLE_NAME = 'madx'
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 MADX_SURVEY_HEADERS_SKIP_ROWS = 6
 MADX_SURVEY_DATA_SKIP_ROWS = 8
@@ -43,42 +41,29 @@ def sequence_to_mad(sequence):
     return m
 
 
-class MadxException(Exception):
-    """Exception raised for errors in the Madx module."""
-
-    def __init__(self, m):
-        self.message = m
-
-
 class Madx(Simulator):
     """A Python wrapper around the MAD-X executable.
 
     Sequence and command will be converted with the MAD-X grammar and pipe'd to the subprocess.
     """
-    def __init__(self, **kwargs):
-        self.__input = ""
-        self.__beamlines = kwargs.get('beamlines', [])
-        self.__path = kwargs.get('path', ".")
-        self.__madx = kwargs.get('madx', None)
-        self.__context = kwargs.get('context', {})
 
-        self.__warnings = []
-        self.__fatals = []
-        self.__output = ""
+    EXECUTABLE_NAME = 'madx'
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
         self.__template_input = None
 
         # Convert all sequences to MAD-X sequences
         map(self.attach, self.__beamlines)
 
-    def __get_madx_path(self):
-        return self.__madx if self.__madx is not None else shutil.which(MADX_EXECUTABLE_NAME)
-
     def __add_input(self, keyword, strings=()):
         self.__input += madx_syntax[keyword].format(*strings) + '\n'
 
     def attach(self, beamline):
-        self.__beamlines.append(beamline)
-        self.__input = sequence_to_mad(beamline.line)
+        self._beamlines.append(beamline)
+        self._input = sequence_to_mad(beamline.line)
 
     def run(self, context):
         """Run madx as a subprocess."""
@@ -97,15 +82,6 @@ class Madx(Simulator):
         self.__warnings = [line for line in self.__output.split('\n') if re.search('warning|fatal', line)]
         self.__fatals = [line for line in self.__output.split('\n') if re.search('fatal', line)]
         return self
-
-    def set(self, k, v):
-        """Set a single variable in the context. Allows method chaining."""
-        self.__context[k] = v
-        return self
-
-    def print_warnings(self):
-        """Print warnings from the previous execution run."""
-        [print(w) for w in self.__warnings]
 
     def raw(self, raw):
         """Add a raw MAD-X command to the input."""

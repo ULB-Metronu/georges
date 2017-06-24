@@ -3,7 +3,7 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
-from simulator import Simulator
+from ..simulator import Simulator
 from .grammar import bdsim_syntax
 
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
@@ -58,13 +58,6 @@ def sequence_to_bdsim(sequence):
 
     input += "{}: line = ({});".format("ess", ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
     return input
-
-
-class BDSimException(Exception):
-    """Exception raised for errors in the BDSim module."""
-
-    def __init__(self, m):
-        self.message = m
 
 
 class BDSim(Simulator):

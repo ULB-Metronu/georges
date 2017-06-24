@@ -1,7 +1,6 @@
 import os
 import pandas as pd
-import beamline as beamline
-
+from .. import beamline
 
 class SurveyException(Exception):
     """Exception raised for errors in the Survey module."""

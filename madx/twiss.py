@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-import beamline as beamline
+from .. import beamline
 
 
 class TwissException(Exception):
@@ -29,7 +29,13 @@ def read_ptc_twiss(file):
 
 
 def twiss(**kwargs):
-    """Compute the Twiss parameters of the beamline."""
+    """Compute the Twiss parameters of the beamline.
+    :param kwargs: parameters are:
+        - line: filepath to the root directory of the beamline description files (defaults to '.')
+        - madx: prefix for the beamline description files (defaults to '')
+        - elements: elements description file (looked up in path/)
+
+    """
     # Process arguments
     line = kwargs.get('line', None)
     m = kwargs.get('madx', None)

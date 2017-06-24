@@ -2,7 +2,7 @@ import os.path
 import pandas as pd
 import numpy as np
 import numpy.linalg as npl
-from sequence_geometry import compute_derived_data
+from .sequence_geometry import compute_derived_data
 
 DEFAULT_EXT = 'csv'
 
