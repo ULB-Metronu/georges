@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Example Georges.ipynb" afterPath="$PROJECT_DIR$/examples/Example Georges.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/madx.py" afterPath="$PROJECT_DIR$/madx/madx.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/survey.py" afterPath="$PROJECT_DIR$/madx/survey.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/twiss.py" afterPath="$PROJECT_DIR$/madx/twiss.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -515,7 +511,14 @@
       <option name="project" value="LOCAL" />
       <updated>1498310554820</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Cleaning and more cleaning. This is good!">
+      <created>1498311192212</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1498311192212</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TestHistory">
