@@ -1,2 +1,8 @@
 __pycache__/*
 *.pyc
+.DS_Store
+.idea/shelf/
+__pycache__/
+bdsim/__pycache__/
+madx/__pycache__/
+plotting/__pycache__/

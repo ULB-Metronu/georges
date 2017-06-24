@@ -67,8 +67,8 @@ def compute_ess_transmission(beam_sigma, slits, dispersion):
     slits[np.where((error < slits_at) & (error > -slits_at))] = 1.0
     beam = np.exp(-(error/sigma)**2/2)
     return np.roll(np.convolve(slits, beam, mode="same"), -1)/np.trapz(beam)
-	
-	
+
+
 def compute_energy_divergence(ProfileTable):
     """ Compute the energy and divergence of dataframe obtained with G4BeamLine. """
     protonMass=PROTON_MASS*1000
