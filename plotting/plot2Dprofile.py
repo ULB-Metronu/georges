@@ -43,8 +43,10 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
 	
     # Make the three plots
     axBeam = fig.add_axes(rect_beam) # beam plot
-    axHistx = fig.add_axes(rect_histx) # x histogram
-    axHisty = fig.add_axes(rect_histy) # y histogram
+    axHistx = fig.add_axes(rect_histx,ylabel="Counts") # x histogram
+    axHistx.grid(True)
+    axHisty = fig.add_axes(rect_histy,xlabel="Counts") # y histogram
+    axHisty.grid(True)
 	
     # Remove the inner axes numbers of the histograms
     nullfmt = NullFormatter()
@@ -55,7 +57,7 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
     xmin = min(xlims)
     xmax = max(xlims)
     ymin = min(ylims)
-    ymax = max(y)
+    ymax = max(ylims)
 	
     # Make the 'main' beam plot
     # Define the number of bins
@@ -103,7 +105,10 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
     axBeam.annotate('$3\\sigma$', xy=(X[15], Y[15]), xycoords='data',xytext=(10, 10),
                        textcoords='offset points',horizontalalignment='right',
                        verticalalignment='bottom',fontsize=25, color = contourcolor)
- 
+
+    # Plot the axes labels
+    axBeam.set_xlabel(Data_BEAMX.name, fontsize=25)
+    axBeam.set_ylabel(Data_BEAMY.name, fontsize=25)
 
     #Make the tickmarks pretty
     ticklabels = axBeam.get_xticklabels()
@@ -125,9 +130,8 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
     ybins = np.arange(ymin, ymax, (ymax-ymin)/nbins)
 	
     #Plot the histograms
-    axHistx.hist(x, bins=xbins, color = 'blue')
-    axHisty.hist(y, bins=ybins, orientation='horizontal', color = 'red')
-	
+    axHistx.hist(x, bins=xbins, color = 'blue', histtype='step', normed=True)
+    axHisty.hist(y, bins=ybins, orientation='horizontal', color = 'red', histtype='step', normed=True)
     #Set up the histogram limits
     axHistx.set_xlim( min(x), max(x) )
     axHisty.set_ylim( min(y), max(y) )
