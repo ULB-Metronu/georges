@@ -81,5 +81,15 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                  "ONETABLE={},"
                  "FILE={},"
                  "EXTENSION={};",
-    'ptc_track_end': "PTC_TRACK_END;"
+    'ptc_track_end': "PTC_TRACK_END;",
+    'match': "MATCH,SEQUENCE={},"
+             "BETX={},ALFX={},MUX={},"
+             "BETY={},ALFY={},MUY={},"
+             "X={},PX={},Y={},PY={},"
+             "DX={},DY={},DPX={},DPY={},"
+             "DELTAP={};",
+    'match_vary': "VARY,NAME={};",
+    'match_constraint': "CONSTRAINT,SEQUENCE={},RANGE={},{};",
+    'end_match': "ENDMATCH;",
+    'survey': "SURVEY, file=survey.out;",
 }

@@ -1,21 +1,20 @@
-from georges.plotting.common import palette, filled_plot
+from .common import palette, filled_plot
+from ..beam import Beam
+from .common import palette, filled_plot
 import numpy as np
+
 
 def track(ax, bl, plane):
     bl = bl.line
-    print(bl['BEAM'])
-    filled_plot(ax, bl.index, 1000 * bl['BEAM'].apply(lambda x: x.std()))
-    pass
+    filled_plot(ax, bl.index, 1000 * bl['BEAM'].apply(lambda x: x.mean())['X'] + 1000 * bl['BEAM'].apply(lambda x: x.std())['X'])
 
 
-def tracking(ax, tracking, plane):
-    envelope = tracking['envelope']
-    envelope2 = tracking['envelope2']
-    trajectory = tracking['trajectory']
-    halo_sup = tracking['halo_sup']
-    halo_inf = tracking['halo_inf']
-    halo_sup_bis = tracking['halo_sup_bis']
-    halo_inf_bis = tracking['halo_inf_bis']
+def tracking(ax, bl, context, **kwargs):
+    """Plot the beam envelopes from tracking data."""
+    if kwargs.get("plane") is None:
+        raise Exception("Plane (plane='X' or plane='Y') must be specific.")
+
+
     filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * trajectory[plane] + 1000 * envelope[plane],
                        palette[plane], True, alpha=0.4)
     filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * trajectory[plane] - 1000 * envelope[plane],

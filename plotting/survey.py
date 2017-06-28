@@ -1,13 +1,5 @@
-from matplotlib.ticker import *
-from .common import beamline_get_ticks_locations
-from matplotlib.ticker import *
-from .common import *
-
-
-def losses(ax, transmission, bl):
-    ticks_locations = beamline_get_ticks_locations(bl.line)
-    ax2 = ax.twinx()
-
+def survey(ax, transmission):
+    """Draw a minimalistic survey overview of the beamline."""
     ax2.get_xaxis().set_tick_params(direction='out')
     ax2.yaxis.set_ticks_position('left')
     ax2.xaxis.set_ticks_position('bottom')
