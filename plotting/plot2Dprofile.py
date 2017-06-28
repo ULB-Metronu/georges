@@ -16,7 +16,7 @@ def ellipse(ra,rb,ang,x0,y0,Nb=100):
     return X,Y
 
 
-def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
+def make2Dplot(fig,Data_BEAMX,Data_BEAMY,Nbinx,Nbiny):
 
     # Define the x and y data 
     # For example just using random numbers
@@ -61,9 +61,8 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
 	
     # Make the 'main' beam plot
     # Define the number of bins
-    nxbins = 50
-    nybins = 50
-    nbins = 100
+    nxbins = Nbinx
+    nybins = Nbiny
 	
     xbins = linspace(start = xmin, stop = xmax, num = nxbins)
     ybins = linspace(start = ymin, stop = ymax, num = nybins)
@@ -126,8 +125,8 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
     axBeam.set_ylim(ylims)
  
     #Set up the histogram bins
-    xbins = np.arange(xmin, xmax, (xmax-xmin)/nbins)
-    ybins = np.arange(ymin, ymax, (ymax-ymin)/nbins)
+    xbins = np.arange(xmin, xmax, (xmax-xmin)/nxbins)
+    ybins = np.arange(ymin, ymax, (ymax-ymin)/nybins)
 	
     #Plot the histograms
     axHistx.hist(x, bins=xbins, color = 'blue', histtype='step', normed=True)
