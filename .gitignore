@@ -3,3 +3,7 @@ __pycache__/*
 *.suo
 *.sqlite
 *.json
+*.iml
+*.xml
+*.pyc
+*.iml
