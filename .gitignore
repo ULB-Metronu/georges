@@ -1,2 +1,9 @@
 __pycache__/*
 *.pyc
+*.suo
+*.sqlite
+*.json
+*.iml
+*.xml
+*.pyc
+*.iml
