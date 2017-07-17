@@ -92,6 +92,9 @@ class Beamline:
         if isinstance(arg, pd.DataFrame):
             self.__name = getattr(arg, 'name', 'BEAMLINE')
             self.__beamline = arg
+            self.__beamline['PHYSICAL'] = True
+            if self.__beamline.index.name is not 'NAME':
+                self.__beamline.set_index('NAME', inplace=True)
             if self.__beamline.size == 0:
                 raise BeamlineException("Empty dataframe.")
 

@@ -74,7 +74,7 @@ def prepare(ax, bl, **kwargs):
         ax.set_ylabel("{} beam size (mm)".format(kwargs['size_label']))
     else:
         ax.set_ylabel(r'Beam size (mm)')
-    ax.grid(True, alpha=0.25)
+    ax.grid(False, alpha=0.25)
 
     ax2 = ax.twiny()
     ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])

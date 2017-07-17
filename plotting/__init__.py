@@ -6,3 +6,4 @@ from .twiss import twiss
 from .twiss import beta, alpha, dispersion
 from .losses import losses
 from .tracking import tracking
+from .survey import survey

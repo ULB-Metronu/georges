@@ -1,4 +1,4 @@
-def survey(ax, transmission):
+def survey(ax):
     """Draw a minimalistic survey overview of the beamline."""
     ax2.get_xaxis().set_tick_params(direction='out')
     ax2.yaxis.set_ticks_position('left')

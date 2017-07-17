@@ -17,7 +17,7 @@ def element_to_mad(e):
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e[p])])
     if pd.notnull(e['ORBIT_LENGTH']):
         mad += ", L={}".format(e['ORBIT_LENGTH'])
-    if pd.notnull(e['APERTYPE']):
+    if pd.notnull(e.get('APERTYPE', None)):
         mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
     if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
         mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
@@ -159,7 +159,10 @@ class Madx(Simulator):
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout',
                          (False, 1, 4, 4, True))
-        self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
+        if kwargs.get('periodic', False):
+            self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
+        else:
+            self.__add_input('ptc_twiss', (kwargs.get('file', 'ptc_twiss.outx'),))
         self.__add_input('ptc_end')
 
     def __add_particles_for_tracking(self, particles, ptc=False):

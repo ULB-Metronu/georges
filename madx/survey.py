@@ -19,11 +19,11 @@ def read_survey(file):
     headers = pd.read_csv(file, skiprows=MADX_SURVEY_HEADERS_SKIP_ROWS, nrows=0, delim_whitespace=True)
     headers.drop(headers.columns[[0,1]], inplace=True, axis=1)
     df = pd.read_csv(file,
-                     header = None,
-                     names = headers,
-                     na_filter = False,
-                     delim_whitespace = True,
-                     skiprows = MADX_SURVEY_DATA_SKIP_ROWS
+                     header=None,
+                     names=headers,
+                     na_filter=False,
+                     delim_whitespace=True,
+                     skiprows=MADX_SURVEY_DATA_SKIP_ROWS
                      )
     return df
 
