@@ -16,7 +16,7 @@ def ellipse(ra,rb,ang,x0,y0,Nb=100):
     return X,Y
 
 
-def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
+def make2Dplot(fig,Data_BEAMX,Data_BEAMY,Nbinx,Nbiny):
 
     # Define the x and y data 
     # For example just using random numbers
@@ -43,8 +43,20 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
 	
     # Make the three plots
     axBeam = fig.add_axes(rect_beam) # beam plot
+    mean_DataX=str(round(Data_BEAMX.mean(),3))
+    std_DataX=str(round(Data_BEAMX.std(),3))
+    mean_DataY =str(round(Data_BEAMY.mean(),3))
+    std_DataY =str(round(Data_BEAMY.std(),3))
+
     axHistx = fig.add_axes(rect_histx) # x histogram
+    axHistx.set_ylabel("Counts")
+    axHistx.set_title('Mean : '+mean_DataX + ' std : '+std_DataX)
+    axHistx.grid(True)
+
     axHisty = fig.add_axes(rect_histy) # y histogram
+    axHisty.set_xlabel("Counts")
+    axHisty.set_title('Mean : '+mean_DataY + ' std : '+std_DataY,rotation=270,x=1.08,y=0.75)
+    axHisty.grid(True)
 	
     # Remove the inner axes numbers of the histograms
     nullfmt = NullFormatter()
@@ -55,13 +67,12 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
     xmin = min(xlims)
     xmax = max(xlims)
     ymin = min(ylims)
-    ymax = max(y)
+    ymax = max(ylims)
 	
     # Make the 'main' beam plot
     # Define the number of bins
-    nxbins = 50
-    nybins = 50
-    nbins = 100
+    nxbins = Nbinx
+    nybins = Nbiny
 	
     xbins = linspace(start = xmin, stop = xmax, num = nxbins)
     ybins = linspace(start = ymin, stop = ymax, num = nybins)
@@ -76,15 +87,16 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
  
     # Plot the beam data
     cax = (axBeam.imshow(H, extent=[xmin,xmax,ymin,ymax],
-    interpolation='nearest', origin='lower',aspect=aspectratio))
- 
+    interpolation='nearest', origin='lower',aspect='auto'))
+
+    print('xmin : '+str(xmin) +' xmax : ' +str(xmax) + ' ymin: ' + str(ymin) + ' ymax: '+str(ymax))
     # Plot the beam plot contours
     contourcolor = 'white'
     xcenter = np.mean(x)
     ycenter = np.mean(y)
     ra = np.std(x)
     rb = np.std(y)
-    ang = 0
+    ang = 0 ##To change for rotated ellipse : call georges.phys
 	
     X,Y=ellipse(ra,rb,ang,xcenter,ycenter)
     axBeam.plot(X,Y,"k:",ms=1,linewidth=2.0)
@@ -92,18 +104,21 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
 				textcoords='offset points', horizontalalignment='right',
 				verticalalignment='bottom',fontsize=25)
  
-    X,Y=ellipse(2*ra,2*rb,ang,xcenter,ycenter)
-    axBeam.plot(X,Y,"k:",color = contourcolor,ms=1,linewidth=2.0)
-    axBeam.annotate('$2\\sigma$', xy=(X[15], Y[15]), xycoords='data',xytext=(10, 10),
-                textcoords='offset points',horizontalalignment='right',
-                verticalalignment='bottom',fontsize=25, color = contourcolor)
+    # X,Y=ellipse(2*ra,2*rb,ang,xcenter,ycenter)
+    # axBeam.plot(X,Y,"k:",color = contourcolor,ms=1,linewidth=2.0)
+    # axBeam.annotate('$2\\sigma$', xy=(X[15], Y[15]), xycoords='data',xytext=(10, 10),
+    #             textcoords='offset points',horizontalalignment='right',
+    #             verticalalignment='bottom',fontsize=25, color = contourcolor)
  
     X,Y=ellipse(3*ra,3*rb,ang,xcenter,ycenter)
     axBeam.plot(X,Y,"k:",color = contourcolor, ms=1,linewidth=2.0)
     axBeam.annotate('$3\\sigma$', xy=(X[15], Y[15]), xycoords='data',xytext=(10, 10),
                        textcoords='offset points',horizontalalignment='right',
                        verticalalignment='bottom',fontsize=25, color = contourcolor)
- 
+
+    # Plot the axes labels
+    axBeam.set_xlabel(Data_BEAMX.name, fontsize=25)
+    axBeam.set_ylabel(Data_BEAMY.name, fontsize=25)
 
     #Make the tickmarks pretty
     ticklabels = axBeam.get_xticklabels()
@@ -119,15 +134,14 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
     #Set up the plot limits
     axBeam.set_xlim(xlims)
     axBeam.set_ylim(ylims)
- 
+
     #Set up the histogram bins
-    xbins = np.arange(xmin, xmax, (xmax-xmin)/nbins)
-    ybins = np.arange(ymin, ymax, (ymax-ymin)/nbins)
+    xbins = np.arange(xmin, xmax, (xmax-xmin)/nxbins)
+    ybins = np.arange(ymin, ymax, (ymax-ymin)/nybins)
 	
     #Plot the histograms
-    axHistx.hist(x, bins=xbins, color = 'blue')
-    axHisty.hist(y, bins=ybins, orientation='horizontal', color = 'red')
-	
+    axHistx.hist(x, bins=xbins, color = 'blue', histtype='step', normed=True)
+    axHisty.hist(y, bins=ybins, orientation='horizontal', color = 'red', histtype='step', normed=True)
     #Set up the histogram limits
     axHistx.set_xlim( min(x), max(x) )
     axHisty.set_ylim( min(y), max(y) )
@@ -147,7 +161,7 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY):
     #Cool trick that changes the number of tickmarks for the histogram axes
     axHisty.xaxis.set_major_locator(MaxNLocator(4))
     axHistx.yaxis.set_major_locator(MaxNLocator(4))
- 
+
     #Show the plot
     #ax.draw()
 
