@@ -1,6 +1,5 @@
 import numpy as np
 import pandas as pd
-import statistics as stat
 
 PROTON_MASS = 0.938272
 
@@ -84,7 +83,8 @@ def compute_energy_divergence(ProfileTable):
     Pmean=ProfileTable['Ptot'].mean()
     ProfileTable['dP_P'] = (ProfileTable['Ptot']-Pmean)/(Pmean)	
     return ProfileTable
-	
+
+
 def compute_meanAndsigma(Data):
     """ Compute useful parameters of the beam : mean, sigma, .... """
     # For the std, use N-1 because it's an independent sample from a distributed population 
