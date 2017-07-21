@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -627,7 +626,14 @@
       <option name="project" value="LOCAL" />
       <updated>1500620015194</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Writing a nice readmine file.">
+      <created>1500620400135</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1500620400135</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -742,7 +748,8 @@
     <MESSAGE value="Minor." />
     <MESSAGE value="Minor cleaning up while working on FFAG optics." />
     <MESSAGE value="Minor reformating and cleaning up while working on FFAGs." />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor reformating and cleaning up while working on FFAGs." />
+    <MESSAGE value="Writing a nice readmine file." />
+    <option name="LAST_COMMIT_MESSAGE" value="Writing a nice readmine file." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
