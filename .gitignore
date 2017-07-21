@@ -6,3 +6,6 @@ madx/__pycache__/
 plotting/__pycache__/
 .DS_Store
 .idea/shelf/
+/examples/.ipynb_checkpoints/
+examples/.ipynb_checkpoints/FFAG - -checkpoint.ipynb
+examples/.ipynb_checkpoints/Gantry FFAG-checkpoint.ipynb

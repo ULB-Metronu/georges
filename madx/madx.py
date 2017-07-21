@@ -6,7 +6,21 @@ from .grammar import madx_syntax
 from ..simulator import Simulator
 from ..simulator import SimulatorException
 
-SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
+SUPPORTED_PROPERTIES = ['ANGLE',
+                        'APERTYPE',
+                        'E1',
+                        'E2',
+                        'FINT',
+                        'HGAP',
+                        'THICK',
+                        'TILT',
+                        'K1',
+                        'K2',
+                        'K3',
+                        'K1S',
+                        'K2S',
+                        'K3S',
+                        ]
 
 
 def element_to_mad(e):
@@ -14,7 +28,7 @@ def element_to_mad(e):
     if not e['PHYSICAL'] or pd.isnull(e['PHYSICAL']):
         return ""
     mad = "{}: {}, ".format(e.name, e.CLASS)
-    mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e[p])])
+    mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
     if pd.notnull(e['ORBIT_LENGTH']):
         mad += ", L={}".format(e['ORBIT_LENGTH'])
     if pd.notnull(e.get('APERTYPE', None)):
@@ -75,6 +89,8 @@ class Madx(Simulator):
         self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
         self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
         self._last_context = kwargs.get("context", {})
+        if kwargs.get('debug', False):
+            print(self._output)
         return self
 
     def __add_input(self, keyword, strings=()):
@@ -158,11 +174,12 @@ class Madx(Simulator):
     def __ptc_twiss(self, **kwargs):
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout',
-                         (False, 1, 4, 4, True))
-        if kwargs.get('periodic', False):
-            self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
-        else:
+                         (False, 1, 6, 5, True))
+        if kwargs.get('line', False):
             self.__add_input('ptc_twiss', (kwargs.get('file', 'ptc_twiss.outx'),))
+        else:
+            self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
+
         self.__add_input('ptc_end')
 
     def __add_particles_for_tracking(self, particles, ptc=False):

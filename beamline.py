@@ -54,10 +54,10 @@ class Beamline:
             self.__expand_elements_data()
 
         # Angle conversion
-        if 'ANGLE' in self.__beamline:
-            self.__beamline['ANGLE'] = self.__beamline['ANGLE'] / 180.0 * np.pi
-        if 'ANGLE_ELEMENT' in self.__beamline:
-            self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
+        #if 'ANGLE' in self.__beamline:
+        #    self.__beamline['ANGLE'] *= np.pi / 180.0
+        #if 'ANGLE_ELEMENT' in self.__beamline:
+        #    self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
 
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
@@ -93,8 +93,6 @@ class Beamline:
             self.__name = getattr(arg, 'name', 'BEAMLINE')
             self.__beamline = arg
             self.__beamline['PHYSICAL'] = True
-            if self.__beamline.index.name is not 'NAME':
-                self.__beamline.set_index('NAME', inplace=True)
             if self.__beamline.size == 0:
                 raise BeamlineException("Empty dataframe.")
 
