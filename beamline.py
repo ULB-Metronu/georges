@@ -72,7 +72,9 @@ class Beamline:
             self.__length = self.__beamline.get('AT_EXIT').max()
 
         # Beamline must be defined
+        assert self.__length is not None
         assert self.__beamline is not None
+
 
     def __process_args(self, args):
         """Process the arguments of the initializer."""

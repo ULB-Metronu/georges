@@ -82,7 +82,7 @@ class Madx(Simulator):
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
-                      cwd="/Users/chernals/",
+                      cwd=".",
                       shell=True
                       )
         self._output = p.communicate(input=template_input.encode())[0].decode()
