@@ -24,6 +24,7 @@ class Beamline:
         """
         :param args: defines the beamline to be created. It can be
             - a single pandas Dataframe containing an existing beamline
+            - another beamline ('copy' operation)
             - a csv file or a list of csv files (looked up in path/prefix)
         :param kwargs: optional parameters include:
             - path: filepath to the root directory of the beamline description files (defaults to '.')
@@ -75,7 +76,6 @@ class Beamline:
         assert self.__length is not None
         assert self.__beamline is not None
 
-
     def __process_args(self, args):
         """Process the arguments of the initializer."""
         if len(args) == 0 or len(args) > 1:
@@ -97,6 +97,10 @@ class Beamline:
             self.__beamline['PHYSICAL'] = True
             if self.__beamline.size == 0:
                 raise BeamlineException("Empty dataframe.")
+        # Sequence from another Beamline
+        if isinstance(arg, Beamline):
+            self.__name = arg.name
+            self.__beamline = arg.line
 
     def __process_elements(self):
         """Process the elements description argument."""
