@@ -43,7 +43,7 @@ def survey(**kwargs):
     if len(errors) > 0:
         print(errors)
         raise SurveyException("MAD-X ended with fatal error.")
-    madx_survey = read_survey(os.path.join("/Users/chernals", 'survey.out'))
+    madx_survey = read_survey(os.path.join(".", 'survey.out'))
     line_with_survey = madx_survey.merge(line.line,
                                          left_index=True,
                                          right_index=True,

@@ -66,9 +66,9 @@ def twiss(**kwargs):
         print(errors)
         raise TwissException("MAD-X ended with fatal error.")
     if kwargs.get('ptc', False):
-        madx_twiss = read_ptc_twiss(os.path.join("/Users/chernals", 'ptc_twiss.outx'))
+        madx_twiss = read_ptc_twiss(os.path.join(".", 'ptc_twiss.outx'))
     else:
-        madx_twiss = read_madx_twiss(os.path.join("/Users/chernals", 'twiss.outx'))
+        madx_twiss = read_madx_twiss(os.path.join(".", 'twiss.outx'))
     line_with_twiss = madx_twiss.merge(line.line,
                                        left_index=True,
                                        right_index=True,

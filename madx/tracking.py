@@ -58,9 +58,9 @@ def track(**kwargs):
         print(errors)
         raise TrackException("MAD-X ended with fatal error.")
     if kwargs.get('ptc', True):
-        madx_track = read_ptc_tracking(os.path.join("/Users/chernals", 'ptctrackone.tfs'))
+        madx_track = read_ptc_tracking(os.path.join(".", 'ptctrackone.tfs'))
     else:
-        madx_track = read_madx_tracking(os.path.join("/Users/chernals", 'tracking.outxone')).dropna()
+        madx_track = read_madx_tracking(os.path.join(".", 'tracking.outxone')).dropna()
         madx_track['PY'] = pd.to_numeric(madx_track['PY'])
     madx_track['S'] = round(madx_track['S'], 8)
     tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
