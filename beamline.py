@@ -55,10 +55,11 @@ class Beamline:
             self.__expand_elements_data()
 
         # Angle conversion
-        #if 'ANGLE' in self.__beamline:
-        #    self.__beamline['ANGLE'] *= np.pi / 180.0
-        #if 'ANGLE_ELEMENT' in self.__beamline:
-        #    self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
+        if self.__survey:
+            if 'ANGLE' in self.__beamline:
+                self.__beamline['ANGLE'] *= np.pi / 180.0
+            if 'ANGLE_ELEMENT' in self.__beamline:
+                self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
 
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
