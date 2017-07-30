@@ -78,6 +78,7 @@ class Madx(Simulator):
             print(template_input)
         if self._get_exec() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
+        print(self._get_exec())
         p = sub.Popen([self._get_exec()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
@@ -146,8 +147,8 @@ class Madx(Simulator):
         style = kwargs.get('style', 'TEAPOT')
         dipole_slices = kwargs.get('dipole_slices', 4)
         quadrupole_slices = kwargs.get('quadrupole_slices', 4)
-        self.__input += "SELECT, FLAG=makethin, CLASS=quadrupole, THICK=false, SLICE={};\n".format(quadrupole_slices)
-        self.__input += "SELECT, FLAG=makethin, CLASS=rbend, THICK=false, SLICE={};\n".format(dipole_slices)
+        self._input += "SELECT, FLAG=makethin, CLASS=quadrupole, THICK=false, SLICE={};\n".format(quadrupole_slices)
+        self._input += "SELECT, FLAG=makethin, CLASS=rbend, THICK=false, SLICE={};\n".format(dipole_slices)
         self.__add_input('makethin', (sequence, style))
         self.use_sequence(sequence)
         return self

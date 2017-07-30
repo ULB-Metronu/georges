@@ -14,7 +14,6 @@ def tracking(ax, bl, context, **kwargs):
     if kwargs.get("plane") is None:
         raise Exception("Plane (plane='X' or plane='Y') must be specific.")
 
-
     filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * trajectory[plane] + 1000 * envelope[plane],
                        palette[plane], True, alpha=0.4)
     filled_plot(ax, envelope.index, 1000 * trajectory[plane], 1000 * trajectory[plane] - 1000 * envelope[plane],
@@ -42,8 +41,9 @@ def tracking(ax, bl, context, **kwargs):
              color=palette[plane],
              markeredgecolor=palette[plane],
              linewidth=1.0)
-			 
-def plotg4enveloppe(ax,DataPlot):
+
+
+def plotg4enveloppe(ax, DataPlot):
     """ plot the enveloppe wich is defined by E(z)=eps*beta(z)"""
     #DataPlot[0]=mean
     #DataPlot[1]=eps
