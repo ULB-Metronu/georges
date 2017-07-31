@@ -25,12 +25,10 @@ SUPPORTED_PROPERTIES = ['ANGLE',
 
 def element_to_mad(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
-    if not e['PHYSICAL'] or pd.isnull(e['PHYSICAL']):
-        return ""
     mad = "{}: {}, ".format(e.name, e.CLASS)
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
-    if pd.notnull(e['ORBIT_LENGTH']):
-        mad += ", L={}".format(e['ORBIT_LENGTH'])
+    if pd.notnull(e['LENGTH']):
+        mad += ", L={}".format(e['LENGTH'])
     if pd.notnull(e.get('APERTYPE', None)):
         mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
     if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
@@ -78,7 +76,6 @@ class Madx(Simulator):
             print(template_input)
         if self._get_exec() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
-        print(self._get_exec())
         p = sub.Popen([self._get_exec()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,

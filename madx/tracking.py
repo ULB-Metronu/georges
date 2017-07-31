@@ -64,15 +64,14 @@ def track(**kwargs):
         madx_track['PY'] = pd.to_numeric(madx_track['PY'])
     madx_track['S'] = round(madx_track['S'], 8)
     tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
-    print(tmp)
     l['AT_CENTER_TRUNCATED'] = round(l['AT_CENTER'], 8)
     if 'BEAM' in l:
         l.line.drop('BEAM', inplace=True, axis=1)
     l = l.merge(pd.DataFrame(tmp,
                              columns=['BEAM']),
-                left_on='AT_CENTER_TRUNCATED',
-                right_index=True,
-                how='left').sort_values(by='AT_CENTER')
+                             left_on='AT_CENTER_TRUNCATED',
+                             right_index=True,
+                             how='left').sort_values(by='AT_CENTER')
     l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
     l.sort_values(by='AT_CENTER', inplace=True)
     return beamline.Beamline(l)

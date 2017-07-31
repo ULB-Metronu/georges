@@ -204,3 +204,33 @@ class Beamline:
             s['LENGTH'].shift(1).fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].shift(1).fillna(0.0) / 2.0
         )).cumsum() / 1000.0 + offset
         self.__converted_from_survey = True
+
+    def add_markers(self):
+        s = self.__beamline
+        markers = []
+
+        def create_marker(r):
+            if r['CLASS'] is not 'MARKER':
+                m = pd.Series({
+                    'TYPE': 'MARKER',
+                    'CLASS': 'MARKER',
+                    'NAME': r.name + '_IN',
+                    'AT_CENTER': r['AT_ENTRY'],
+                    'PHYSICAL': False
+                })
+                markers.append(m)
+                m = pd.Series({
+                    'TYPE': 'MARKER',
+                    'CLASS': 'MARKER',
+                    'NAME': r.name + '_OUT',
+                    'AT_CENTER': r['AT_EXIT'],
+                    'PHYSICAL': False
+                })
+                markers.append(m)
+            return r
+
+        s.apply(create_marker, axis=1)
+        markers.pop(0);markers.pop(0)
+        self.__beamline = pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER')
+        return self
+

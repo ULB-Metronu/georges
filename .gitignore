@@ -9,3 +9,13 @@ plotting/__pycache__/
 /examples/.ipynb_checkpoints/
 examples/.ipynb_checkpoints/FFAG - -checkpoint.ipynb
 examples/.ipynb_checkpoints/Gantry FFAG-checkpoint.ipynb
+examples/FFAG - .ipynb
+examples/Gantry FFAG.ipynb
+examples/Maxwellian_bend_for_ptc.txt
+examples/Maxwellian_bend_for_ptc_electric.txt
+examples/internal_mag_pot.txt
+examples/ptc_twiss.outx
+examples/ptctrackone.tfs
+examples/survey.out
+examples/tracking.outxone
+examples/twiss.outx

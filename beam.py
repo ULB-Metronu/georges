@@ -27,6 +27,7 @@ class Beam:
             - particle: identifier for the particle type (default: proton).
             - energy:
         """
+
         self.__distribution = None
         if len(args) >= 1:
             self.__initialize_distribution(args[0])
@@ -86,7 +87,7 @@ class Beam:
     @property
     def std(self):
         """Return a dataframe containing the second order moments of each dimensions."""
-        return self.__distribution.dropna().std()
+        return self.__distribution.std()
 
     @property
     def halo(self):
@@ -108,9 +109,6 @@ class Beam:
             raise BeamException("Trying to access an invalid data from a beam.")
         return self.__distribution[item]
 
-    def __set_columns_names(self):
-        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
-
     def __initialize_distribution(self, distribution):
         """Try setting the internal pandas.DataFrame with a distribution."""
         try:
@@ -121,7 +119,7 @@ class Beam:
         self.__dims = self.__distribution.shape[1]
         if self.__dims < 2 or self.__dims > 6:
             raise BeamException("Trying to initialize a beam distribution with invalid dimensions.")
-        self.__set_columns_names()
+        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
 
     def from_5d_multigaussian_distribution(self, n, **kwargs):
         """Initialize a beam with a 5D particle distribution."""
@@ -143,5 +141,5 @@ class Beam:
                      ]) ** 2,
             n
         )))
-        self.__set_columns_names()
+        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
         return self
