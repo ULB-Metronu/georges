@@ -9,7 +9,7 @@ def tracking(ax, bl, context, **kwargs):
         raise Exception("Plane (plane='X' or plane='Y') must be specified.")
 
     plane = kwargs.get("plane")
-    bl.line=(bl.line[bl_track.line['TYPE'] == 'MARKER']) # To remove the NAN in beam
+    bl.line=(bl.line[bl.line['TYPE'] == 'MARKER']) # To remove the NAN in beam
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
         'S': r['AT_CENTER'],
         '1%': 1000 * r['BEAM'].halo['1%'][plane],
