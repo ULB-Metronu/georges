@@ -9,6 +9,7 @@ def tracking(ax, bl, context, **kwargs):
         raise Exception("Plane (plane='X' or plane='Y') must be specified.")
 
     plane = kwargs.get("plane")
+    bl.line=(bl.line[bl_track.line['TYPE'] == 'MARKER']) # To remove the NAN in beam
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
         'S': r['AT_CENTER'],
         '1%': 1000 * r['BEAM'].halo['1%'][plane],
@@ -46,6 +47,5 @@ def plotg4enveloppe(ax, DataPlot):
     DataPlot['Product']=np.sqrt(DataPlot['Emittance']*DataPlot['Beta'])
     enveloppe_Min=DataPlot['meanPos']-DataPlot['Product']
     enveloppe_Max=DataPlot['meanPos']+DataPlot['Product']
-    
-    ax.fill_between(DataPlot.index, DataPlot['meanPos']-enveloppe_Min, DataPlot['meanPos']+enveloppe_Max,color='blue', lw=1, alpha=0.5)
 
+    ax.fill_between(DataPlot.index, DataPlot['meanPos']-enveloppe_Min, DataPlot['meanPos']+enveloppe_Max,color='blue', lw=1, alpha=0.5)
