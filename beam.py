@@ -95,9 +95,11 @@ class Beam:
         return pd.concat([
             self.__distribution.quantile(0.01),
             self.__distribution.quantile(0.05),
+            self.__distribution.quantile(0.2),
+            self.__distribution.quantile(0.8),
             self.__distribution.quantile(0.95),
             self.__distribution.quantile(0.99)
-        ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '95%', 3: '99%'})
+        ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '20%', 3: '80%', 4: '95%', 5: '99%'})
 
     @property
     def coupling(self):

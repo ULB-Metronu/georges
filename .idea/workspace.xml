@@ -2,14 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beam.py" afterPath="$PROJECT_DIR$/beam.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beamline.py" afterPath="$PROJECT_DIR$/beamline.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/.ipynb_checkpoints/Example Georges-checkpoint.ipynb" afterPath="$PROJECT_DIR$/examples/.ipynb_checkpoints/Example Georges-checkpoint.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Example Georges.ipynb" afterPath="$PROJECT_DIR$/examples/Example Georges.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/madx.py" afterPath="$PROJECT_DIR$/madx/madx.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/tracking.py" afterPath="$PROJECT_DIR$/madx/tracking.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plotting/tracking.py" afterPath="$PROJECT_DIR$/plotting/tracking.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
@@ -25,16 +20,6 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="twiss.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/madx/twiss.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-552">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="tracking.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/madx/tracking.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -45,18 +30,48 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="beam.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="beam.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/beam.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="60" column="26" lean-forward="true" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
+            <state relative-caret-position="414">
+              <caret line="101" column="84" lean-forward="false" selection-start-line="101" selection-start-column="84" selection-end-line="101" selection-end-column="84" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="match.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/madx/match.py">
+      <file leaf-file-name="tracking.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/plotting/tracking.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="525">
+              <caret line="35" column="25" lean-forward="false" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="aperture.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/plotting/aperture.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/plotting/common.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-569">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="madx.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/madx/madx.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -69,7 +84,7 @@
         <entry file="file://$PROJECT_DIR$/examples/ptctrackone.tfs">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="360">
-              <caret line="5536" column="0" lean-forward="false" selection-start-line="5536" selection-start-column="0" selection-end-line="5536" selection-end-column="0" />
+              <caret line="68221" column="0" lean-forward="false" selection-start-line="68221" selection-start-column="0" selection-end-line="68221" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -85,8 +100,8 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="sequence_geometry.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/sequence_geometry.py">
+      <file leaf-file-name="twiss.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/plotting/twiss.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -95,32 +110,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tracking.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plotting/tracking.py">
+      <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/plotting/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding>
-                <marker date="1501495088000" expanded="true" signature="0:5" ph="import ..." />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="madx.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/madx/madx.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="208" column="17" lean-forward="false" selection-start-line="208" selection-start-column="12" selection-end-line="208" selection-end-column="17" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="tracking.outxone" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/examples/tracking.outxone">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-367">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -191,12 +184,12 @@
         <option value="$PROJECT_DIR$/madx/__init__.py" />
         <option value="$PROJECT_DIR$/tests/test_data/pcvue_bpm.txt" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/plotting/tracking.py" />
         <option value="$PROJECT_DIR$/beamline.py" />
         <option value="$PROJECT_DIR$/madx/madx.py" />
         <option value="$PROJECT_DIR$/examples/ptctrackone.tfs" />
         <option value="$PROJECT_DIR$/madx/tracking.py" />
         <option value="$PROJECT_DIR$/beam.py" />
+        <option value="$PROJECT_DIR$/plotting/tracking.py" />
       </list>
     </option>
   </component>
@@ -569,7 +562,14 @@
       <option name="project" value="LOCAL" />
       <updated>1501428090907</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Preparing everything for the 'tracking' with MAD-PTC and the plotting of the results (bug fixing and features).">
+      <created>1501520903709</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1501520903709</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -689,7 +689,8 @@
     <MESSAGE value="Beamline copy from another beamline" />
     <MESSAGE value="Minor." />
     <MESSAGE value="Angle conversion (rad/deg) and adding pcvue datafile." />
-    <option name="LAST_COMMIT_MESSAGE" value="Angle conversion (rad/deg) and adding pcvue datafile." />
+    <MESSAGE value="Preparing everything for the 'tracking' with MAD-PTC and the plotting of the results (bug fixing and features)." />
+    <option name="LAST_COMMIT_MESSAGE" value="Preparing everything for the 'tracking' with MAD-PTC and the plotting of the results (bug fixing and features)." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -822,13 +823,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plotting/aperture.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/context.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
@@ -861,20 +855,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="15" column="14" lean-forward="true" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plotting/twiss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plotting/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="26" lean-forward="false" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
         </state>
       </provider>
     </entry>
@@ -970,14 +950,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plotting/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/madx/match.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1002,14 +974,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/madx/madx.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="208" column="17" lean-forward="false" selection-start-line="208" selection-start-column="12" selection-end-line="208" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/madx/twiss.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-552">
@@ -1018,29 +982,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/beamline.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/examples/ptctrackone.tfs">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
-          <caret line="5536" column="0" lean-forward="false" selection-start-line="5536" selection-start-column="0" selection-end-line="5536" selection-end-column="0" />
+          <caret line="68221" column="0" lean-forward="false" selection-start-line="68221" selection-start-column="0" selection-end-line="68221" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plotting/tracking.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1501495088000" expanded="true" signature="0:5" ph="import ..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1054,8 +1000,64 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/beam.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="60" column="26" lean-forward="true" selection-start-line="60" selection-start-column="26" selection-end-line="60" selection-end-column="26" />
+        <state relative-caret-position="414">
+          <caret line="101" column="84" lean-forward="false" selection-start-line="101" selection-start-column="84" selection-end-line="101" selection-end-column="84" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotting/aperture.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotting/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-569">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotting/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotting/twiss.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beamline.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madx/madx.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plotting/tracking.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="35" column="25" lean-forward="false" selection-start-line="35" selection-start-column="25" selection-end-line="35" selection-end-column="25" />
           <folding />
         </state>
       </provider>
