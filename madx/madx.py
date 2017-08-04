@@ -159,16 +159,16 @@ class Madx(Simulator):
             raise MadxException("A beamline must be provided.")
 
         if kwargs.get("start"):
-            self.raw("SEQEDIT, SEQUENCE={};".format(kwargs.get('line').name))
+            self.raw("SEQEDIT, SEQUENCE={};".format(kwargs.get('name')))
             self.raw("CYCLE, START={};".format(kwargs.get("start")))
             self.raw("ENDEDIT;")
-            self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
+            self.raw("USE, SEQUENCE={};".format(kwargs.get('name')))
 
         for p in kwargs.get("places"):
             self.raw("SELECT, FLAG=sectormap, range='{}';".format(p))
         options = ""
         for k, v in kwargs.items():
-            if k not in ['ptc', 'start']:
+            if k not in ['ptc', 'start', 'places', 'name', 'line']:
                 options += ",%s=%s" % (k,v)
         self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
         return self
@@ -194,7 +194,7 @@ class Madx(Simulator):
         self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
-            if k not in ['ptc', 'start']:
+            if k not in ['ptc', 'start', 'line']:
                 options += ",%s=%s" % (k,v)
         self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
         return self
