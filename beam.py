@@ -99,6 +99,16 @@ class Beam:
     @property
     def halo(self):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
+
+        # return pd.concat([
+        #     self.__distribution.quantile(0.01),
+        #     self.__distribution.quantile(0.05),
+        #     self.__distribution.quantile(0.2),
+        #     self.__distribution.quantile(0.8),
+        #     self.__distribution.quantile(0.95),
+        #     self.__distribution.quantile(0.99)
+        # ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '20%', 3: '80%', 4: '95%', 5: '99%'})
+
         return pd.concat([
             self.__distribution.quantile(0.01),
             self.__distribution.quantile(0.05),
@@ -106,7 +116,8 @@ class Beam:
             self.__distribution.quantile(0.8),
             self.__distribution.quantile(0.95),
             self.__distribution.quantile(0.99)
-        ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '20%', 3: '80%', 4: '95%', 5: '99%'})
+        ], axis=1).rename(columns={0.01: '1%', 0.05: '5%', 0.2: '20%', 0.8: '80%', 0.95: '95%', 0.99: '99%'})
+
 
     @property
     def coupling(self):
