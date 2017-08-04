@@ -25,7 +25,8 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                       "T=0.0,"
                       "PT=0.0,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"
-                      "FILE={}"
+                      "FILE={},"
+                      "SECTORMAP,"
                       "{};",  # Note the optional args
     'track_beamline': "TRACK,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"
@@ -42,7 +43,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                  "DELTAP_DEPENDENCY=true,"
                  "SLICE_MAGNETS=true;",
     'ptc_twiss_beamline': "PTC_TWISS,ICASE=56,"
-                          "NO=4,"
+                          "NO=2,"
                           "DELTAP={{{{ DELTAP or '0.0' }}}},"
                           "FILE={},"
                           "BETX={{{{ BETAX or '1.0' }}}},"

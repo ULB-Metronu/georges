@@ -231,6 +231,5 @@ class Beamline:
 
         s.apply(create_marker, axis=1)
         markers.pop(0);markers.pop(0)
-        self.__beamline = pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER')
-        return self
+        return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
 

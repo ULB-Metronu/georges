@@ -154,6 +154,25 @@ class Madx(Simulator):
         """Add a MAD-X `survey` command."""
         self.__add_input("survey")
 
+    def sectormap(self, **kwargs):
+        if kwargs.get('line') is None:
+            raise MadxException("A beamline must be provided.")
+
+        if kwargs.get("start"):
+            self.raw("SEQEDIT, SEQUENCE={};".format(kwargs.get('line').name))
+            self.raw("CYCLE, START={};".format(kwargs.get("start")))
+            self.raw("ENDEDIT;")
+            self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
+
+        for p in kwargs.get("places"):
+            self.raw("SELECT, FLAG=sectormap, range='{}';".format(p))
+        options = ""
+        for k, v in kwargs.items():
+            if k not in ['ptc', 'start']:
+                options += ",%s=%s" % (k,v)
+        self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
+        return self
+
     def twiss(self, **kwargs):
         """Add a (ptc) `twiss` MAD-X command."""
         if kwargs.get('ptc'):
@@ -162,9 +181,20 @@ class Madx(Simulator):
             self.__madx_twiss(**kwargs)
 
     def __madx_twiss(self, **kwargs):
+        if kwargs.get('line') is None:
+            raise MadxException("A beamline must be provided.")
+
+        if kwargs.get("start"):
+            self.raw("SEQEDIT, SEQUENCE={};".format(kwargs.get('line').name))
+            self.raw("CYCLE, START={};".format(kwargs.get("start")))
+            self.raw("ENDEDIT;")
+            self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
+
+        self.raw("SELECT, FLAG=sectormap, range='Q3E';")
+        self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
-            if k not in ['ptc']:
+            if k not in ['ptc', 'start']:
                 options += ",%s=%s" % (k,v)
         self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
         return self
