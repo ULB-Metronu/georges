@@ -233,3 +233,12 @@ class Beamline:
         markers.pop(0);markers.pop(0)
         return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
 
+    def to_thin(self, element, value):
+        bl = self.__beamline
+        bl.set_value(element, 'LENGTH', 0.0)
+        bl.set_value(element, 'ORBIT_LENGTH', 0.0)
+        bl.set_value(element, 'AT_ENTRY', bl.loc[element]['AT_CENTER'])
+        bl.set_value(element, 'AT_EXIT', bl.loc[element]['AT_CENTER'])
+        bl.set_value(element, 'CLASS', 'MULTIPOLE')
+        bl.set_value(element, 'PLUG', 'KNL')
+        bl.set_value(element, 'VALUE', "{{0, {} }}".format(value))

@@ -27,12 +27,14 @@ def element_to_mad(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
     mad = "{}: {}, ".format(e.name, e.CLASS)
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
-    if pd.notnull(e['LENGTH']):
+    if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
         mad += ", L={}".format(e['LENGTH'])
     if pd.notnull(e.get('APERTYPE', None)):
         mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
-    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
+    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')) and pd.isnull(e.get('VALUE')):
         mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
+    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('VALUE')):
+        mad += ", {}={}".format(e['PLUG'], e['VALUE'])
     mad += ", AT={}".format(e['AT_CENTER'])
     mad += ";"
     return mad

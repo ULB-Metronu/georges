@@ -1,3 +1,4 @@
+from ..madx import sectormap
 import numpy as np
 from scipy.optimize import curve_fit
 
@@ -19,51 +20,56 @@ def variquad_fit(x, y):
     return [popt, np.sqrt(pcov.diagonal())]
 
 
-def variquad(**kargs):
+def variquad(**kwargs):
     """Implementation of the quadrupole scan 'variquad' method"""
-    with_plot = kwargs.get("plot", None)
     start = kwargs.get("start")
     end = kwargs.get("end")
     plane = kwargs.get("plane", 'X')
-    quad_length = kwargs.get("quad_length", 1.0)
+    ql = kwargs.get("quad_length", 1.0)
     bl = kwargs.get("line")
     context = kwargs.get("context")
+    debug = kwargs.get("debug", False)
     data = kwargs.get("data")
     if data is None:
         raise VariquadException("data must be provided as a numpy.array")
 
-    x = variquad[:,0]
-    y = variquad[:,1]**2
+    x = data[:, 0]
+    y = data[:, 1]**2
     popt, pcov = variquad_fit(x, y)
-    if with_plot is not None:
-        with_plot.plot(x, y**2, '*', label='data')
-        with_plot.plot(x, quadratic(x, *popt), '-', label='fit')
-        with_plot.legend()
 
-    bl_map = georges.madx.sectormap(line=bl, context=context, start=start, places=[start, end])
+    bl_map = sectormap(line=bl, context=context, start=start, places=[start, end], debug=debug)
     if plane == 'X':
-        r11 = bl_map.loc[end]['R33']
-        r12 = bl_map.loc[end]['R34']
-        r21 = bl_map.loc[end]['R43']
-        r22 = bl_map.loc[end]['R44']
+        r11 = bl_map.line.loc[end]['R11']
+        r12 = bl_map.line.loc[end]['R12']
     elif plane == 'Y':
-        r11 = bl_map.loc[end]['R33']
-        r12 = bl_map.loc[end]['R34']
-        r21 = bl_map.loc[end]['R43']
-        r22 = bl_map.loc[end]['R44']
+        r11 = bl_map.line.loc[end]['R33']
+        r12 = bl_map.line.loc[end]['R34']
     else:
         raise VariquadException("plane must be 'X' or 'Y'")
 
-    s11 = np.sqrt(popt[0] / (quad_length * (r12**2)))
-    s12 = 1
-    s22 = 1
-    eps = 1
+    a = popt[0]
+    b = popt[1]
+    c = popt[2]
+    s11 = a / (ql**2 * r12**2)
+    s12 = (b - 2 * s11 * ql * r11 * r12)/(2*ql*r12**2)
+    s21 = s12
+    s22 = (c-s11 * r11**2 - 2 * s12 * r11 * r12)/(r12**2)
+    emit = np.sqrt(np.linalg.det(np.array([[s11, s12], [s21, s22]])))
+    beta = s11/emit
+    alpha = -s12/emit
+    gamma = s22/emit
 
     return {
         's11': s11,
         's12': s12,
         's22': s22,
-        'eps': eps,
+        'emit': emit,
+        'beta': beta,
+        'alpha': alpha,
+        'gamma': gamma,
         'fit': [popt, pcov],
-        'map': bl_map
+        'map': bl_map,
+        'x': x,
+        'y': y,
+        'fit_function': (lambda u: quadratic(u, *popt))
     }

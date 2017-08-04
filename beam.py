@@ -90,6 +90,13 @@ class Beam:
         return self.__distribution.std()
 
     @property
+    def emit(self):
+        """Return the emittance of the beam in both planes"""
+        return {'X': np.sqrt(np.linalg.det(self.__distribution.head(len(self.__distribution))[['X', 'PX']].cov())),
+                'Y': np.sqrt(np.linalg.det(self.__distribution.head(len(self.__distribution))[['Y', 'PY']].cov()))
+                }
+
+    @property
     def halo(self):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
         return pd.concat([

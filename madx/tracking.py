@@ -59,11 +59,13 @@ def track(**kwargs):
         raise TrackException("MAD-X ended with fatal error.")
     if kwargs.get('ptc', True):
         madx_track = read_ptc_tracking(os.path.join(".", 'ptctrackone.tfs'))
+        madx_track['PY'] = pd.to_numeric(madx_track['PY'])
     else:
         madx_track = read_madx_tracking(os.path.join(".", 'tracking.outxone')).dropna()
         madx_track['PY'] = pd.to_numeric(madx_track['PY'])
     madx_track['S'] = round(madx_track['S'], 8)
     tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
+
     l['AT_CENTER_TRUNCATED'] = round(l['AT_CENTER'], 8)
     if 'BEAM' in l:
         l.line.drop('BEAM', inplace=True, axis=1)
@@ -73,5 +75,4 @@ def track(**kwargs):
                              right_index=True,
                              how='left').sort_values(by='AT_CENTER')
     l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
-    l.sort_values(by='AT_CENTER', inplace=True)
     return beamline.Beamline(l)
