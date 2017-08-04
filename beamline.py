@@ -242,3 +242,5 @@ class Beamline:
         bl.set_value(element, 'CLASS', 'MULTIPOLE')
         bl.set_value(element, 'PLUG', 'KNL')
         bl.set_value(element, 'VALUE', "{{0, {} }}".format(value))
+        bl.set_value(element, 'APERTYPE', np.nan)
+        bl.set_value(element, 'APERTURE', np.nan)

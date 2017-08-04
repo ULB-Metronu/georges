@@ -3,13 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/__init__.py" afterPath="$PROJECT_DIR$/__init__.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beam.py" afterPath="$PROJECT_DIR$/beam.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beamline.py" afterPath="$PROJECT_DIR$/beamline.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Example Georges.ipynb" afterPath="$PROJECT_DIR$/examples/Example Georges.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/madx.py" afterPath="$PROJECT_DIR$/madx/madx.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/tracking.py" afterPath="$PROJECT_DIR$/madx/tracking.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/measure/variquad.py" afterPath="$PROJECT_DIR$/measure/variquad.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,7 +84,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="468">
               <caret line="96" column="17" lean-forward="false" selection-start-line="96" selection-start-column="17" selection-end-line="96" selection-end-column="17" />
-              <folding />
+              <folding>
+                <marker date="1501872577000" expanded="true" signature="3014:3965" ph="..." />
+                <marker date="1501872577000" expanded="true" signature="4004:4141" ph="..." />
+                <marker date="1501872577000" expanded="true" signature="4175:4358" ph="..." />
+                <marker date="1501872577000" expanded="true" signature="4414:5025" ph="..." />
+                <marker date="1501872577000" expanded="true" signature="5482:5650" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -117,8 +118,8 @@
       <file leaf-file-name="beamline.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/beamline.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="231" column="38" lean-forward="true" selection-start-line="231" selection-start-column="38" selection-end-line="231" selection-end-column="38" />
+            <state relative-caret-position="443">
+              <caret line="236" column="28" lean-forward="true" selection-start-line="236" selection-start-column="28" selection-end-line="236" selection-end-column="28" />
               <folding />
             </state>
           </provider>
@@ -589,7 +590,14 @@
       <option name="project" value="LOCAL" />
       <updated>1501862826392</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="Variquad and 'to_thin' in Beamline. Also added a computation of emittance in Beam">
+      <created>1501872564890</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1501872564890</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -712,7 +720,8 @@
     <MESSAGE value="Preparing everything for the 'tracking' with MAD-PTC and the plotting of the results (bug fixing and features)." />
     <MESSAGE value="Sectormap functionality added for MADX." />
     <MESSAGE value="Variquad." />
-    <option name="LAST_COMMIT_MESSAGE" value="Variquad." />
+    <MESSAGE value="Variquad and 'to_thin' in Beamline. Also added a computation of emittance in Beam" />
+    <option name="LAST_COMMIT_MESSAGE" value="Variquad and 'to_thin' in Beamline. Also added a computation of emittance in Beam" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1073,7 +1082,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="468">
           <caret line="96" column="17" lean-forward="false" selection-start-line="96" selection-start-column="17" selection-end-line="96" selection-end-column="17" />
-          <folding />
+          <folding>
+            <marker date="1501872577000" expanded="true" signature="3014:3965" ph="..." />
+            <marker date="1501872577000" expanded="true" signature="4004:4141" ph="..." />
+            <marker date="1501872577000" expanded="true" signature="4175:4358" ph="..." />
+            <marker date="1501872577000" expanded="true" signature="4414:5025" ph="..." />
+            <marker date="1501872577000" expanded="true" signature="5482:5650" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1087,8 +1102,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/beamline.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="231" column="38" lean-forward="true" selection-start-line="231" selection-start-column="38" selection-end-line="231" selection-end-column="38" />
+        <state relative-caret-position="443">
+          <caret line="236" column="28" lean-forward="true" selection-start-line="236" selection-start-column="28" selection-end-line="236" selection-end-column="28" />
           <folding />
         </state>
       </provider>
