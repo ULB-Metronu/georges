@@ -255,7 +255,7 @@ class Madx(Simulator):
         if kwargs.get("fringe"):
             self.raw("PTC_SETSWITCH, FRINGE=True;")
         self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout', (False, 1, 4, 3, True))
+        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True))
         self.__add_particles_for_tracking(particles, True)
         beamline.line.apply(lambda e: self.__generate_observation_points_ptc(e, beamline.length), axis=1)
         self.__add_input('ptc_track', (
