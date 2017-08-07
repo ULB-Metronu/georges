@@ -3,10 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beam.py" afterPath="$PROJECT_DIR$/beam.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Example Georges.ipynb" afterPath="$PROJECT_DIR$/examples/Example Georges.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/madx.py" afterPath="$PROJECT_DIR$/madx/madx.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plotting/tracking.py" afterPath="$PROJECT_DIR$/plotting/tracking.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,8 +31,8 @@
       <file leaf-file-name="madx.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/madx/madx.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="96">
-              <caret line="231" column="47" lean-forward="false" selection-start-line="231" selection-start-column="47" selection-end-line="231" selection-end-column="47" />
+            <state relative-caret-position="420">
+              <caret line="205" column="51" lean-forward="false" selection-start-line="205" selection-start-column="51" selection-end-line="205" selection-end-column="51" />
               <folding />
             </state>
           </provider>
@@ -292,6 +289,29 @@
               <item name="lib" type="cbb8eebc:String" user="lib" />
               <item name="python3.5" type="cbb8eebc:String" user="python3.5" />
               <item name="site-packages" type="cbb8eebc:String" user="site-packages" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="External Dependencies" type="cbb8eebc:String" user="External Dependencies" />
+              <item name="/" type="cbb8eebc:String" user="/" />
+              <item name="usr" type="cbb8eebc:String" user="usr" />
+              <item name="local" type="cbb8eebc:String" user="local" />
+              <item name="lib" type="cbb8eebc:String" user="lib" />
+              <item name="python3.5" type="cbb8eebc:String" user="python3.5" />
+              <item name="site-packages" type="cbb8eebc:String" user="site-packages" />
+              <item name="pandas" type="cbb8eebc:String" user="pandas" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="External Dependencies" type="cbb8eebc:String" user="External Dependencies" />
+              <item name="/" type="cbb8eebc:String" user="/" />
+              <item name="usr" type="cbb8eebc:String" user="usr" />
+              <item name="local" type="cbb8eebc:String" user="local" />
+              <item name="lib" type="cbb8eebc:String" user="lib" />
+              <item name="python3.5" type="cbb8eebc:String" user="python3.5" />
+              <item name="site-packages" type="cbb8eebc:String" user="site-packages" />
+              <item name="pandas" type="cbb8eebc:String" user="pandas" />
+              <item name="core" type="cbb8eebc:String" user="core" />
             </path>
           </expand>
           <select />
@@ -648,7 +668,14 @@
       <option name="project" value="LOCAL" />
       <updated>1501872955864</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Adding a fringe field option for PTC track.">
+      <created>1502114648988</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1502114648988</updated>
+    </task>
+    <option name="localTasksCounter" value="34" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -772,7 +799,8 @@
     <MESSAGE value="Sectormap functionality added for MADX." />
     <MESSAGE value="Variquad." />
     <MESSAGE value="Variquad and 'to_thin' in Beamline. Also added a computation of emittance in Beam" />
-    <option name="LAST_COMMIT_MESSAGE" value="Variquad and 'to_thin' in Beamline. Also added a computation of emittance in Beam" />
+    <MESSAGE value="Adding a fringe field option for PTC track." />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding a fringe field option for PTC track." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1148,8 +1176,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/madx/madx.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="96">
-          <caret line="231" column="47" lean-forward="false" selection-start-line="231" selection-start-column="47" selection-end-line="231" selection-end-column="47" />
+        <state relative-caret-position="420">
+          <caret line="205" column="51" lean-forward="false" selection-start-line="205" selection-start-column="51" selection-end-line="205" selection-end-column="51" />
           <folding />
         </state>
       </provider>

@@ -202,6 +202,8 @@ class Madx(Simulator):
         return self
 
     def __ptc_twiss(self, **kwargs):
+        if kwargs.get("fringe"):
+            self.raw("PTC_SETSWITCH, FRINGE=True;")
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout',
                          (False, 1, 6, 5, True))
