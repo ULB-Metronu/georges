@@ -231,6 +231,16 @@ class Beamline:
 
         s.apply(create_marker, axis=1)
         markers.pop(0);markers.pop(0)
-        self.__beamline = pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER')
-        return self
+        return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
 
+    def to_thin(self, element, value):
+        bl = self.__beamline
+        bl.set_value(element, 'LENGTH', 0.0)
+        bl.set_value(element, 'ORBIT_LENGTH', 0.0)
+        bl.set_value(element, 'AT_ENTRY', bl.loc[element]['AT_CENTER'])
+        bl.set_value(element, 'AT_EXIT', bl.loc[element]['AT_CENTER'])
+        bl.set_value(element, 'CLASS', 'MULTIPOLE')
+        bl.set_value(element, 'PLUG', 'KNL')
+        bl.set_value(element, 'VALUE', "{{0, {} }}".format(value))
+        bl.set_value(element, 'APERTYPE', np.nan)
+        bl.set_value(element, 'APERTURE', np.nan)

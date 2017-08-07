@@ -11,8 +11,8 @@ def tracking(ax, bl, **kwargs):
     plane = kwargs.get("plane")
     halo = kwargs.get("halo", True)
     std = kwargs.get("std", False)
+    mean = kwargs.get("mean", True)
 
-    bl.line=(bl.line[bl.line['TYPE'] == 'MARKER']) # To remove the NAN in beam
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
         'S': r['AT_CENTER'],
         '1%': 1000 * r['BEAM'].halo['1%'][plane],
@@ -31,8 +31,8 @@ def tracking(ax, bl, **kwargs):
         filled_plot(ax,t['S'], -t['std'], t['std'],palette[plane], True, alpha=0.3)
 
     if std:
-        ax.plot(t['S'], t['std'], color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
-        ax.plot(t['S'], -t['std'], color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
+      ax.plot(t['S'], t['std'], '^-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
+      ax.plot(t['S'], -t['std'], 'v-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
 
-    # Mean
-    ax.plot(t['S'], t['mean'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0,label='mad-x')
+     if mean:
+          ax.plot(t['S'], t['mean'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)

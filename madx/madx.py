@@ -27,12 +27,14 @@ def element_to_mad(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
     mad = "{}: {}, ".format(e.name, e.CLASS)
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
-    if pd.notnull(e['LENGTH']):
+    if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
         mad += ", L={}".format(e['LENGTH'])
     if pd.notnull(e.get('APERTYPE', None)):
         mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
-    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
+    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')) and pd.isnull(e.get('VALUE')):
         mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
+    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('VALUE')):
+        mad += ", {}={}".format(e['PLUG'], e['VALUE'])
     mad += ", AT={}".format(e['AT_CENTER'])
     mad += ";"
     return mad
@@ -154,6 +156,25 @@ class Madx(Simulator):
         """Add a MAD-X `survey` command."""
         self.__add_input("survey")
 
+    def sectormap(self, **kwargs):
+        if kwargs.get('line') is None:
+            raise MadxException("A beamline must be provided.")
+
+        if kwargs.get("start"):
+            self.raw("SEQEDIT, SEQUENCE={};".format(kwargs.get('name')))
+            self.raw("CYCLE, START={};".format(kwargs.get("start")))
+            self.raw("ENDEDIT;")
+            self.raw("USE, SEQUENCE={};".format(kwargs.get('name')))
+
+        for p in kwargs.get("places"):
+            self.raw("SELECT, FLAG=sectormap, range='{}';".format(p))
+        options = ""
+        for k, v in kwargs.items():
+            if k not in ['ptc', 'start', 'places', 'name', 'line']:
+                options += ",%s=%s" % (k,v)
+        self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
+        return self
+
     def twiss(self, **kwargs):
         """Add a (ptc) `twiss` MAD-X command."""
         if kwargs.get('ptc'):
@@ -162,9 +183,20 @@ class Madx(Simulator):
             self.__madx_twiss(**kwargs)
 
     def __madx_twiss(self, **kwargs):
+        if kwargs.get('line') is None:
+            raise MadxException("A beamline must be provided.")
+
+        if kwargs.get("start"):
+            self.raw("SEQEDIT, SEQUENCE={};".format(kwargs.get('line').name))
+            self.raw("CYCLE, START={};".format(kwargs.get("start")))
+            self.raw("ENDEDIT;")
+            self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
+
+        self.raw("SELECT, FLAG=sectormap, range='Q3E';")
+        self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
-            if k not in ['ptc']:
+            if k not in ['ptc', 'start', 'line']:
                 options += ",%s=%s" % (k,v)
         self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
         return self
@@ -220,6 +252,8 @@ class Madx(Simulator):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
+        if kwargs.get("fringe"):
+            self.raw("PTC_SETSWITCH, FRINGE=True;")
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout', (False, 2, 6, 10, True))
         self.__add_particles_for_tracking(particles, True)

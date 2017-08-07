@@ -16,6 +16,21 @@ class TwissException(Exception):
         self.message = m
 
 
+def read_madx_sectormap(file):
+    """Read a MAD-X Sectormap TFS file to a dataframe."""
+    headers = pd.read_csv(file, skiprows=MADX_TWISS_HEADERS_SKIP_ROWS, nrows=0, delim_whitespace=True)
+    headers.drop(headers.columns[[0, 1]], inplace=True, axis=1)
+    df = pd.read_csv(file,
+                     header=None,
+                     names=headers,
+                     na_filter=False,
+                     skiprows=MADX_TWISS_DATA_SKIP_ROWS,
+                     delim_whitespace=True
+                     )
+    df.index.name = 'NAME'
+    return df
+
+
 def read_madx_twiss(file):
     """Read a MAD-X Twiss TFS file to a dataframe."""
     headers = pd.read_csv(file, skiprows=MADX_TWISS_HEADERS_SKIP_ROWS, nrows=0, delim_whitespace=True)
@@ -58,7 +73,11 @@ def twiss(**kwargs):
         raise TwissException("Beamline and MAD-X objects need to be defined.")
     m = Madx(beamlines=line)
     m.beam(line.name)
-    m.twiss(line=kwargs.get('periodic', False), ptc=kwargs.get('ptc', False), centre=True)
+    m.twiss(line=kwargs.get('periodic', False),
+            ptc=kwargs.get('ptc', False),
+            centre=True,
+            start=kwargs.get("start", None)
+            )
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
         print(m.input)
