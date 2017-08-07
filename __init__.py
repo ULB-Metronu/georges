@@ -3,6 +3,8 @@ from .beamline import Beamline
 from .context import Context
 from . import madx
 from . import bdsim
+from . import topas
+from . import g4beamline
 from . import measure
 from . import physics
 from . import statistics
