@@ -66,7 +66,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                           "MUZ=0.0,"
                           "PT=0.0,"
                           "SLICE_MAGNETS=true;",
-    'run_track_beamline': "RUN, TURNS=1, MAXAPER=0.1,1.0,0.1,0.1,100.0,10.0;",  # Beamline so OK to hardcode TURNS=1
+    'run_track_beamline': "RUN, TURNS=1, MAXAPER={0.1, 0.01, 0.1, 0.01, 1.0, 0.1};",  # Beamline so OK to hardcode TURNS=1
     'start_particle': "START, X={}, PX={}, Y={}, PY={}, T=0.0, PT={};",
     'observe': "OBSERVE, PLACE={};",
     'end_track': 'ENDTRACK;',
@@ -76,7 +76,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'eager_variable': "{} = {{{{ {} }}}};",  # Oops
     'lazy_variable': "{} := {{{{ {} }}}};",  # Oops
     'ptc_create_universe': "PTC_CREATE_UNIVERSE;",
-    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};",
+    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={}; PTC_SETSWITCH, FRINGE=true;",
     'ptc_align': "PTC_ALIGN;",
     'ptc_end': "PTC_END;",
     'ptc_observe': "PTC_OBSERVE, PLACE={};",
@@ -86,6 +86,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                  "CLOSED_ORBIT={},"
                  "ELEMENT_BY_ELEMENT={},"
                  "TURNS={},"
+                 "MAXAPER={{0.0315, 50, 0.0315,50,1,1}},"
                  "DUMP={},"
                  "ONETABLE={},"
                  "FILE={},"

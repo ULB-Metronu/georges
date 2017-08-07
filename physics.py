@@ -78,51 +78,51 @@ def compute_energy_divergence(ProfileTable):
     ProfileTable['Energy'] = np.sqrt((protonMass*protonMass)+Px2+Py2+Pz2)-protonMass
     ProfileTable['xp'] = 1000*ProfileTable['Px']/ProfileTable['Ptot']
     ProfileTable['yp'] = 1000*ProfileTable['Py']/ProfileTable['Ptot']
-    
+
     # Change here and take the mean of Ptot in place of energy_to_momentum()
     Pmean=ProfileTable['Ptot'].mean()
-    ProfileTable['dP_P'] = (ProfileTable['Ptot']-Pmean)/(Pmean)	
+    ProfileTable['dP_P'] = (ProfileTable['Ptot']-Pmean)/(Pmean)
     return ProfileTable
 
 
 def compute_meanAndsigma(Data):
     """ Compute useful parameters of the beam : mean, sigma, .... """
-    # For the std, use N-1 because it's an independent sample from a distributed population 
-	
+    # For the std, use N-1 because it's an independent sample from a distributed population
+
     xmean=Data['x'].mean()
     sigmax=Data['x'].std(ddof=1)
-    
-    ymean=Data['x'].mean()
+
+    ymean=Data['y'].mean()
     sigmay=Data['y'].std(ddof=1)
-    
+
     xpmean=Data['xp'].mean()
     sigmaxp=Data['xp'].std(ddof=1)
-    
+
     ypmean=Data['xp'].mean()
     sigmayp=Data['yp'].std(ddof=1)
-    
+
     Pmean=Data['Ptot'].mean()
     sigmaP=Data['Ptot'].std(ddof=1)
-    
+
     Emean=Data['Energy'].mean()
     sigmaE=Data['Energy'].std(ddof=1)
-    
+
     dp_pmean=Data['dP_P'].mean()
     dp_psigma=Data['dP_P'].std(ddof=1)
-    
+
     columnsName=['xmean','ymean','xpmean','ypmean','sigmax','sigmay','sigmaxp','sigmayp','Pmean','sigmaP','Emean','sigmaE','dp_pmean','dp_psigma']
     DataBeam=[xmean,ymean,xpmean,ypmean,sigmax,sigmay,sigmaxp,sigmayp,Pmean,sigmaP,Emean,sigmaE,dp_pmean,dp_psigma]
     DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
     Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
-    
+
     return Beamparameter
 
 
 def compute_twiss_parameter(Data):
-    """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """ 
-    
-    # Data for emittance calculation 
-    xmean=Data['x'].mean() 
+    """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """
+
+    # Data for emittance calculation
+    xmean=Data['x'].mean()
     xpmean=Data['xp'].mean()
     ymean=Data['x'].mean()
     ypmean=Data['xp'].mean()
@@ -142,12 +142,12 @@ def compute_twiss_parameter(Data):
     BetaVER=sigma_yy/EmitVER
     AlphaHOR=-1*sigma_xxp/EmitHOR
     AlphaVER=-1*sigma_yyp/EmitVER
-    #GammaHOR=sigma_xpxp/EmitHOR 
-    #GammaVER=sigma_ypyp/EmitVER 
-    
-    columnsName=['EmitHOR','EmitVER','BetaHOR','BetaVER','AlphaHOR','AlphaVER'] 
-    DataBeam=[EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER] 
-    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam)) 
-    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName) 
-    
-    return Beamparameter 
+    #GammaHOR=sigma_xpxp/EmitHOR
+    #GammaVER=sigma_ypyp/EmitVER
+
+    columnsName=['EmitHOR','EmitVER','BetaHOR','BetaVER','AlphaHOR','AlphaVER']
+    DataBeam=[EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]
+    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
+    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
+
+    return Beamparameter
