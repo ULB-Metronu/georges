@@ -100,24 +100,14 @@ class Beam:
     def halo(self):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
 
-        # return pd.concat([
-        #     self.__distribution.quantile(0.01),
-        #     self.__distribution.quantile(0.05),
-        #     self.__distribution.quantile(0.2),
-        #     self.__distribution.quantile(0.8),
-        #     self.__distribution.quantile(0.95),
-        #     self.__distribution.quantile(0.99)
-        # ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '20%', 3: '80%', 4: '95%', 5: '99%'})
-
         return pd.concat([
             self.__distribution.quantile(0.01),
             self.__distribution.quantile(0.05),
-            self.__distribution.quantile(0.2),
-            self.__distribution.quantile(0.8),
+            self.__distribution.quantile(1.0-0.842701),
+            self.__distribution.quantile(0.842701),
             self.__distribution.quantile(0.95),
             self.__distribution.quantile(0.99)
-        ], axis=1).rename(columns={0.01: '1%', 0.05: '5%', 0.2: '20%', 0.8: '80%', 0.95: '95%', 0.99: '99%'})
-
+        ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '20%', 3: '80%', 4: '95%', 5: '99%'})
 
     @property
     def coupling(self):
@@ -159,6 +149,29 @@ class Beam:
                      kwargs.get('PYRMS', 0),
                      kwargs.get('DPPRMS', 0)
                      ]) ** 2,
+            n
+        )))
+        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
+        return self
+
+    def from_5d_sigma_matrix(self, n, **kwargs):
+        """Initialize a beam with a 5D particle distribution."""
+        keys = {'X', 'PX', 'Y', 'PY', 'DPP', 'XRMS', 'PXRMS', 'YRMS', 'PYRMS', 'DPPRMS'}
+        if any([k not in keys for k in kwargs.keys()]):
+            raise BeamException("Invalid argument for a multigaussian distribution.")
+        self.__initialize_distribution(pd.DataFrame(np.random.multivariate_normal(
+            [kwargs.get('X', 0),
+             kwargs.get('PX', 0),
+             kwargs.get('Y', 0),
+             kwargs.get('PY', 0),
+             kwargs.get('DPP', 0)
+             ],
+            np.diag([kwargs.get('XRMS', 0),
+                     kwargs.get('PXRMS', 0),
+                     kwargs.get('YRMS', 0),
+                     kwargs.get('PYRMS', 0),
+                     kwargs.get('DPPRMS', 0)
+                     ]),
             n
         )))
         self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]

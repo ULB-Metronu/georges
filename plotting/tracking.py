@@ -9,7 +9,7 @@ def tracking(ax, bl, context, **kwargs):
         raise Exception("Plane (plane='X' or plane='Y') must be specified.")
 
     plane = kwargs.get("plane")
-    bl.line=(bl.line[bl_track.line['TYPE'] == 'MARKER']) # To remove the NAN in beam
+    #bl.line = (bl.line[bl.line['TYPE'] == 'MARKER']) # To remove the NAN in beam
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
         'S': r['AT_CENTER'],
         '1%': 1000 * r['BEAM'].halo['1%'][plane],
@@ -25,17 +25,9 @@ def tracking(ax, bl, context, **kwargs):
     filled_plot(ax, t['S'], t['1%'], t['99%'],palette[plane], True, alpha=0.3)
     filled_plot(ax, t['S'], t['5%'], t['95%'],palette[plane], True, alpha=0.3)
     filled_plot(ax, t['S'], t['20%'], t['80%'],palette[plane], True, alpha=0.3)
-
-    #ax.plot(t['S'], t['mean'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
-
-    ax.plot(t['S'], t['std'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
-
-
-
-    #ax.plot(trajectory.index, 1000 * trajectory[plane], '*-',
-     #        color=palette[plane],
-      #       markeredgecolor=palette[plane],
-       #      linewidth=1.0)
+    ax.plot(t['S'], t['mean'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
+    ax.plot(t['S'], t['std'], '^-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
+    ax.plot(t['S'], -t['std'], 'v-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
 
 
 def plotg4enveloppe(ax, DataPlot):
