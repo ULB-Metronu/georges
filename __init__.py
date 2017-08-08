@@ -6,3 +6,4 @@ from . import bdsim
 from . import measure
 from . import physics
 from . import statistics
+from . import plotting
