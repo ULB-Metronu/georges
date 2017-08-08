@@ -107,7 +107,7 @@ class Beam:
             self.__distribution.quantile(0.842701),
             self.__distribution.quantile(0.95),
             self.__distribution.quantile(0.99)
-        ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '20%', 3: '80%', 4: '95%', 5: '99%'})
+        ], axis=1).rename(columns={0.01: '1%', 0.05: '5%', 1.0-0.842701: '20%', 0.842701: '80%', 0.95: '95%', 0.99: '99%'})
 
     @property
     def coupling(self):

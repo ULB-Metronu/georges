@@ -34,5 +34,5 @@ def tracking(ax, bl, **kwargs):
       ax.plot(t['S'], t['std'], '^-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
       ax.plot(t['S'], -t['std'], 'v-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
 
-     if mean:
+    if mean:
           ax.plot(t['S'], t['mean'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
