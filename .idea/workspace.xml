@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bdsim/bdsim.py" afterPath="$PROJECT_DIR$/bdsim/bdsim.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/madx.py" afterPath="$PROJECT_DIR$/madx/madx.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beam.py" afterPath="$PROJECT_DIR$/beam.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <ignored mask="sectormap" />
@@ -50,21 +49,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plot2Dprofile.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plotting/plot2Dprofile.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="bdsim.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="bdsim.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/bdsim/bdsim.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="107" column="23" lean-forward="true" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
+            <state relative-caret-position="-996">
+              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -108,6 +97,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="beam.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/beam.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="473">
+              <caret line="184" column="34" lean-forward="false" selection-start-line="184" selection-start-column="34" selection-end-line="184" selection-end-column="34" />
               <folding />
             </state>
           </provider>
@@ -193,12 +192,12 @@
         <option value="$PROJECT_DIR$/measure/variquad.py" />
         <option value="$PROJECT_DIR$/beamline.py" />
         <option value="$PROJECT_DIR$/plotting/tracking.py" />
-        <option value="$PROJECT_DIR$/beam.py" />
         <option value="$PROJECT_DIR$/g4beamline/__init__.py" />
         <option value="$PROJECT_DIR$/topas/__init__.py" />
         <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/madx/madx.py" />
         <option value="$PROJECT_DIR$/bdsim/bdsim.py" />
+        <option value="$PROJECT_DIR$/beam.py" />
       </list>
     </option>
   </component>
@@ -248,11 +247,6 @@
               <item name="Root" type="cbb8eebc:String" user="Root" />
               <item name="georges" type="cbb8eebc:String" user="georges" />
               <item name="madx" type="cbb8eebc:String" user="madx" />
-            </path>
-            <path>
-              <item name="Root" type="cbb8eebc:String" user="Root" />
-              <item name="georges" type="cbb8eebc:String" user="georges" />
-              <item name="topas" type="cbb8eebc:String" user="topas" />
             </path>
           </expand>
           <select />
@@ -637,7 +631,14 @@
       <option name="project" value="LOCAL" />
       <updated>1502135166609</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="Added correct exception classes for madx and bdsim.">
+      <created>1502262503282</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1502262503282</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -739,7 +740,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Workspace file for PyCharm" />
     <MESSAGE value="BDSim is ready." />
     <MESSAGE value="Gitignore updated." />
     <MESSAGE value="Improvements to BDSim and abstraction of MAD and BDSim onto a 'simulator' class." />
@@ -764,7 +764,8 @@
     <MESSAGE value="Adding a fringe field option for PTC track." />
     <MESSAGE value="Adding a fringe field option for PTC twiss." />
     <MESSAGE value="Anticipated creation of the g4beamline and topas submodules." />
-    <option name="LAST_COMMIT_MESSAGE" value="Anticipated creation of the g4beamline and topas submodules." />
+    <MESSAGE value="Added correct exception classes for madx and bdsim." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added correct exception classes for madx and bdsim." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -890,6 +891,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1049,14 +1051,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/beam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2595">
-          <caret line="173" column="23" lean-forward="false" selection-start-line="173" selection-start-column="23" selection-end-line="173" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plotting/plot2Dprofile.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1140,8 +1134,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/bdsim/bdsim.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="107" column="23" lean-forward="true" selection-start-line="107" selection-start-column="23" selection-end-line="107" selection-end-column="23" />
+        <state relative-caret-position="-996">
+          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beam.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="473">
+          <caret line="184" column="34" lean-forward="false" selection-start-line="184" selection-start-column="34" selection-end-line="184" selection-end-column="34" />
           <folding />
         </state>
       </provider>

@@ -155,10 +155,21 @@ class Beam:
         return self
 
     def from_5d_sigma_matrix(self, n, **kwargs):
-        """Initialize a beam with a 5D particle distribution."""
-        keys = {'X', 'PX', 'Y', 'PY', 'DPP', 'XRMS', 'PXRMS', 'YRMS', 'PYRMS', 'DPPRMS'}
+        """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
+        keys = {'X', 'PX', 'Y', 'PY', 'DPP',
+                'sigma11', 'sigma12', 'sigma22', 'sigma33', 'sigma34', 'sigma44', 'DPPRMS'
+                }
         if any([k not in keys for k in kwargs.keys()]):
             raise BeamException("Invalid argument for a multigaussian distribution.")
+        s11 = kwargs.get('sigma11', 0)
+        s12 = kwargs.get('sigma12', 0)
+        s21 = s12
+        s22 = kwargs.get('sigma22', 0)
+        s33 = kwargs.get('sigma33', 0)
+        s34 = kwargs.get('sigma34', 0)
+        s43 = s34
+        s44 = kwargs.get('sigma44', 0)
+        sDPP = kwargs.get('DPPRMS', 0)
         self.__initialize_distribution(pd.DataFrame(np.random.multivariate_normal(
             [kwargs.get('X', 0),
              kwargs.get('PX', 0),
@@ -166,12 +177,13 @@ class Beam:
              kwargs.get('PY', 0),
              kwargs.get('DPP', 0)
              ],
-            np.diag([kwargs.get('XRMS', 0),
-                     kwargs.get('PXRMS', 0),
-                     kwargs.get('YRMS', 0),
-                     kwargs.get('PYRMS', 0),
-                     kwargs.get('DPPRMS', 0)
-                     ]),
+            np.array([
+                [s11, s12, 0, 0, 0],
+                [s21, s22, 0, 0, 0],
+                [0, 0, s33, s34, 0],
+                [0, 0, s43, s44, 0],
+                [0, 0, 0, 0, sDPP]
+            ]),
             n
         )))
         self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
