@@ -105,8 +105,8 @@
       <file leaf-file-name="beam.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/beam.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="473">
-              <caret line="184" column="34" lean-forward="false" selection-start-line="184" selection-start-column="34" selection-end-line="184" selection-end-column="34" />
+            <state relative-caret-position="365">
+              <caret line="150" column="59" lean-forward="false" selection-start-line="150" selection-start-column="59" selection-end-line="150" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -638,7 +638,14 @@
       <option name="project" value="LOCAL" />
       <updated>1502262503282</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="Adding a &quot;beam from sigma matrix&quot; functionality">
+      <created>1502265811793</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1502265811793</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -740,7 +747,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="BDSim is ready." />
     <MESSAGE value="Gitignore updated." />
     <MESSAGE value="Improvements to BDSim and abstraction of MAD and BDSim onto a 'simulator' class." />
     <MESSAGE value="Abstraction of MAD and BDSim onto a 'simulator' class." />
@@ -765,7 +771,8 @@
     <MESSAGE value="Adding a fringe field option for PTC twiss." />
     <MESSAGE value="Anticipated creation of the g4beamline and topas submodules." />
     <MESSAGE value="Added correct exception classes for madx and bdsim." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added correct exception classes for madx and bdsim." />
+    <MESSAGE value="Adding a &quot;beam from sigma matrix&quot; functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding a &quot;beam from sigma matrix&quot; functionality" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1142,8 +1149,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/beam.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="473">
-          <caret line="184" column="34" lean-forward="false" selection-start-line="184" selection-start-column="34" selection-end-line="184" selection-end-column="34" />
+        <state relative-caret-position="365">
+          <caret line="150" column="59" lean-forward="false" selection-start-line="150" selection-start-column="59" selection-end-line="150" selection-end-column="59" />
           <folding />
         </state>
       </provider>

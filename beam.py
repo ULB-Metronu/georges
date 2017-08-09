@@ -136,22 +136,20 @@ class Beam:
         keys = {'X', 'PX', 'Y', 'PY', 'DPP', 'XRMS', 'PXRMS', 'YRMS', 'PYRMS', 'DPPRMS'}
         if any([k not in keys for k in kwargs.keys()]):
             raise BeamException("Invalid argument for a multigaussian distribution.")
-        self.__initialize_distribution(pd.DataFrame(np.random.multivariate_normal(
-            [kwargs.get('X', 0),
-             kwargs.get('PX', 0),
-             kwargs.get('Y', 0),
-             kwargs.get('PY', 0),
-             kwargs.get('DPP', 0)
-             ],
-            np.diag([kwargs.get('XRMS', 0),
-                     kwargs.get('PXRMS', 0),
-                     kwargs.get('YRMS', 0),
-                     kwargs.get('PYRMS', 0),
-                     kwargs.get('DPPRMS', 0)
-                     ]) ** 2,
-            n
-        )))
-        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
+        self.from_5d_sigma_matrix(n,
+                                  X=kwargs.get('X', 0),
+                                  PX=kwargs.get('X', 0),
+                                  Y=kwargs.get('X', 0),
+                                  PY=kwargs.get('X', 0),
+                                  DPP=kwargs.get('X', 0),
+                                  DPPR=kwargs.get('X', 0),
+                                  sigma11=kwargs.get('XRMS', 0),
+                                  sigma12=0,
+                                  sigma22=kwargs.get('PXRMS', 0),
+                                  sigma33=kwargs.get('YRMS', 0),
+                                  sigma34=0,
+                                  sigma44=kwargs.get('PYRMS', 0)
+                                  )
         return self
 
     def from_5d_sigma_matrix(self, n, **kwargs):
