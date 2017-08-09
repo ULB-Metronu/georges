@@ -23,6 +23,13 @@ SUPPORTED_PROPERTIES = ['ANGLE',
                         ]
 
 
+class MadxException(Exception):
+    """Exception raised for errors in the Madx module."""
+
+    def __init__(self, m):
+        self.message = m
+
+
 def element_to_mad(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
     mad = "{}: {}, ".format(e.name, e.CLASS)

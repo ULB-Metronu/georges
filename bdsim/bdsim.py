@@ -9,6 +9,13 @@ from .grammar import bdsim_syntax
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
 
 
+class BdsimException(Exception):
+    """Exception raised for errors in the Twiss module."""
+
+    def __init__(self, m):
+        self.message = m
+
+
 def split_rbends(line, n=20):
     split_line = pd.DataFrame()
     for index, row in line.iterrows():
@@ -89,12 +96,12 @@ class BDSim(Simulator):
         self.__beamlines.append(beamline)
         self.__input = sequence_to_bdsim(beamline.line)
 
-    def run(self, context):
+    def run(self, **kwargs):
         """Run bdsim as a subprocess."""
         self.__add_input("options", ("proton", 32.5, "circular", "Aluminium"))
-        self.__template_input = jinja2.Template(self.__input).render(context)
+        self.__template_input = jinja2.Template(self.__input).render(kwargs.get('context', {}))
         if self.__get_bdsim_path() is None:
-            raise MadxException("Can't run MADX if no valid path and executable are defined.")
+            raise BdsimException("Can't run MADX if no valid path and executable are defined.")
         p = sub.Popen([self.__get_bdsim_path()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
@@ -105,5 +112,7 @@ class BDSim(Simulator):
         self.__output = p.communicate(input=self.__template_input.encode())[0].decode()
         self.__warnings = [line for line in self.__output.split('\n') if re.search('warning|fatal', line)]
         self.__fatals = [line for line in self.__output.split('\n') if re.search('fatal', line)]
+        if kwargs.get('debug', False):
+            print(self._output)
         return self
 
