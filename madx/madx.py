@@ -2,6 +2,7 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
+import numpy as np
 from .grammar import madx_syntax
 from ..simulator import Simulator
 from ..simulator import SimulatorException
@@ -177,6 +178,9 @@ class Madx(Simulator):
 
     def twiss(self, **kwargs):
         """Add a (ptc) `twiss` MAD-X command."""
+        if kwargs.get('misalignment', True):
+            self.misalign(self._beamlines)
+
         if kwargs.get('ptc'):
             self.__ptc_twiss(**kwargs)
         else:
@@ -231,8 +235,17 @@ class Madx(Simulator):
         if not e['AT_EXIT'] == length and e['CLASS'] == 'MARKER':
             self.__add_input('ptc_observe', (e.name,))
 
+    def misalign(self, beamline,**kwargs):
+        self.__add_input('misalign_option')
+        self.__add_misalignment_element(beamline)
+        self.raw("USE, SEQUENCE={};".format(beamline.name))
+
+
     def track(self, particles, beamline, **kwargs):
         """Add a ptc `track` command."""
+
+        if kwargs.get('misalignment', True):
+            self.misalign(beamline)
         if kwargs.get('ptc', True):
             self.__ptc_track(particles, beamline, **kwargs)
         else:
@@ -254,10 +267,15 @@ class Madx(Simulator):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
-        if kwargs.get("fringe"):
-            self.raw("PTC_SETSWITCH, FRINGE=True;")
+        # if kwargs.get("fringe"):
+        #     self.raw("PTC_SETSWITCH, FRINGE=True;")
+        # else:
+        #     self.raw("PTC_SETSWITCH, FRINGE=False;")
+
         self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True))
+        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True,kwargs.get('fringe', )))
+        if kwargs.get('misalignment', True):
+            self.__add_input('ptc_misalign')
         self.__add_particles_for_tracking(particles, True)
         beamline.line.apply(lambda e: self.__generate_observation_points_ptc(e, beamline.length), axis=1)
         self.__add_input('ptc_track', (
@@ -285,3 +303,15 @@ class Madx(Simulator):
         if constraints is None:
             raise MadxException("A dictionary of constraints should be provided.")
         self.__add_input('match', (sequence,))
+
+    def __add_misalignment_element(self,beamline):
+
+        beamline.line.query("TYPE != 'MARKER'").apply(
+            lambda r: self.__add_input('mad_misalign_setup',(r['TYPE'],
+                                                        np.nan_to_num(r.get('DELTAX',0)),
+                                                        np.nan_to_num(r.get('DELTAY',0)),
+                                                        np.nan_to_num(r.get('DELTAS',0)),
+                                                        np.nan_to_num(r.get('DELTAPHI',0)),
+                                                        np.nan_to_num(r.get('DELTATHETA',0))))
+                                                                                 ,axis=1)
+

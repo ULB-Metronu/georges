@@ -6,6 +6,14 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'call_file': "CALL, FILE='{}';",
     'use_sequence': "USE, SEQUENCE={};",
     'save_beta': "SAVEBETA, LABEL={}, PLACE={};",
+    'misalign_option':"EOPTION, ADD=False;",
+    'mad_misalign_setup': "SELECT, FLAG=ERROR,CLASS={};\n"
+                     "EALIGN, "
+                     "DX={},"
+                     "DY={},"
+                     "DS={},"
+                     "DPHI={},"
+                     "DTHETA={};",
     'makethin': "MAKETHIN, sequence={}, style={};",
     'twiss_beamline': "TWISS, "
                       "BETX={{{{ BETAX or '1.0' }}}},"
@@ -76,7 +84,8 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'eager_variable': "{} = {{{{ {} }}}};",  # Oops
     'lazy_variable': "{} := {{{{ {} }}}};",  # Oops
     'ptc_create_universe': "PTC_CREATE_UNIVERSE;",
-    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={}; PTC_SETSWITCH, FRINGE=true;",
+    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};\nPTC_SETSWITCH, FRINGE={};",
+    'ptc_misalign': "PTC_ALIGN;",
     'ptc_align': "PTC_ALIGN;",
     'ptc_end': "PTC_END;",
     'ptc_observe': "PTC_OBSERVE, PLACE={};",
