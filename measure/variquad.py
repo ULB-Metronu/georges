@@ -87,3 +87,39 @@ def variquad_plot(variquad_results, **kwargs):
 
     ax.plot(variquad_results['x'], variquad_results['y'], '*')
     ax.plot(variquad_results['x'], variquad_results['fit_function'](variquad_results['x']))
+
+
+def backtrack(**kwargs):
+    track_from = kwargs.get('track_from')
+    track_to = kwargs.get('track_to')
+    bl = kwargs.get("line")
+    context = kwargs.get("context")
+    plane = kwargs.get("plane")
+
+    bl_map = sectormap(line=bl, context=context, start=track_to, places=[track_to, track_from])
+
+    if plane == 'X':
+        sigma_matrix = np.array([[context['S11'], context['S12']], [context['S12'], context['S22']]])
+        tmp = bl_map.line.loc[track_from][['R11', 'R12', 'R21', 'R22']].values
+    elif plane == 'Y':
+        sigma_matrix = np.array([[context['S33'], context['S34']], [context['S34'], context['S44']]])
+        tmp = bl_map.line.loc[track_from][['R33', 'R34', 'R43', 'R44']].values
+    else:
+        raise Exception("Invalid plane. 'plane' must be 'X' or 'Y'.")
+    r_matrix = np.array([[tmp[0], tmp[1]], [tmp[2], tmp[3]]])
+    inv_r_matrix = np.linalg.inv(r_matrix)
+    res = np.matmul(inv_r_matrix, np.matmul(sigma_matrix, inv_r_matrix.transpose()))
+    emit = np.sqrt(np.linalg.det(res))
+    beta = res[0, 0] / emit
+    alpha = -res[0, 1] / emit
+    gamma = res[1, 1] / emit
+
+    return {
+        'emit': emit,
+        'beta': beta,
+        'alpha': alpha,
+        'gamma': gamma,
+        'S11': res[0, 0],
+        'S12': res[0, 1],
+        'S22': res[1, 1]
+    }

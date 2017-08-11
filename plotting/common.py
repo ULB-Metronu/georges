@@ -48,11 +48,11 @@ def style_boxplot(bp, color):
 
 
 def beamline_get_ticks_locations(o):
-    return list(o.line.query("PHYSICAL == True")['AT_CENTER'].values)
+    return list(o.query("PHYSICAL == True")['AT_CENTER'].values)
 
 
 def beamline_get_ticks_labels(o):
-    return list(o.line.query("PHYSICAL == True").index)
+    return list(o.query("PHYSICAL == True").index)
 
 
 def prepare(ax, bl, **kwargs):
