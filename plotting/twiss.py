@@ -32,25 +32,29 @@ def twiss(ax, bl, context, **kwargs):
         filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
 
 
-def beta(ax, bl, **kwargs):
+def beta(ax, bl):
     """Plot the Twiss beta functions."""
-    bl = bl.line
-
-    plt.plot(ax, bl['S'], bl['BETX'])
-    plt.plot(ax, bl['S'], bl['BETY'])
+    twiss_function_plot(ax, bl, ['BET'])
 
 
-def alpha(ax, bl, context, **kwargs):
+def alpha(ax, bl):
     """Plot the Twiss alpha functions."""
-    bl = bl.line
-
-    plt.plot(ax, bl['S'], bl['ALFX'])
-    plt.plot(ax, bl['S'], bl['ALFY'])
+    twiss_function_plot(ax, bl, ['ALF'])
 
 
-def dispersion(ax, bl, **kwargs):
+def dispersion(ax, bl):
     """Plot the dispersion functions."""
+    twiss_function_plot(ax, bl, ['DISP'])
+
+
+def phase_advance(ax, bl):
+    """Plot the phase advance."""
+    twiss_function_plot(ax, bl, ['MU'])
+
+
+def twiss_function_plot(ax, bl, functions):
     bl = bl.line
 
-    plt.plot(ax, bl['S'], bl['DISPX'])
-    plt.plot(ax, bl['S'], bl['DISPY'])
+    for f in functions:
+        ax.plot(bl['S'], bl[f+'X'], color=palette['X'])
+        ax.plot(bl['S'], bl[f+'Y'], color=palette['Y'])

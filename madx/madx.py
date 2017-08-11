@@ -247,7 +247,6 @@ class Madx(Simulator):
         self.__add_misalignment_element(beamline)
         self.raw("USE, SEQUENCE={};".format(beamline.name))
 
-
     def track(self, particles, beamline, **kwargs):
         """Add a ptc `track` command."""
 
@@ -274,13 +273,9 @@ class Madx(Simulator):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
-        # if kwargs.get("fringe"):
-        #     self.raw("PTC_SETSWITCH, FRINGE=True;")
-        # else:
-        #     self.raw("PTC_SETSWITCH, FRINGE=False;")
 
         self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True,kwargs.get('fringe', )))
+        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True, kwargs.get('fringe', )))
         if kwargs.get('misalignment', True):
             self.__add_input('ptc_misalign')
         self.__add_particles_for_tracking(particles, True)
