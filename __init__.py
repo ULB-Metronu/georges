@@ -8,3 +8,4 @@ from . import g4beamline
 from . import measure
 from . import physics
 from . import statistics
+from . import plotting

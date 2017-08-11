@@ -49,7 +49,7 @@ def track(**kwargs):
 
     # Run MAD-X
     m.beam(line.name)
-    m.track(b.distribution, line, ptc=kwargs.get('ptc', True))
+    m.track(b.distribution, line, fringe=kwargs.get('fringe',False),ptc=kwargs.get('ptc', True), misalignment=kwargs.get('misalignment', False))
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
         print(m.raw_input)
