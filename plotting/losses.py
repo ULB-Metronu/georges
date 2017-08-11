@@ -1,13 +1,21 @@
 from matplotlib.ticker import *
-from .common import beamline_get_ticks_locations
+from .common import beamline_get_ticks_locations, palette
 from matplotlib.ticker import *
-from .common import *
+import pandas as pd
 
 
-def losses(ax, transmission, bl):
-    ticks_locations = beamline_get_ticks_locations(bl.line)
+def losses(ax, bl, context, **kwargs):
+    """Plot the losses from a beamline tracking computation and a context."""
+
+    init = bl.line.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').iloc[0]['BEAM'].n_particles
+    transmission = bl.line.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').apply(lambda r: pd.Series({
+        'S': r['AT_CENTER'],
+        'T': r['BEAM'].n_particles/init
+    }), axis=1)
+
     ax2 = ax.twinx()
 
+    ticks_locations = beamline_get_ticks_locations(bl)
     ax2.get_xaxis().set_tick_params(direction='out')
     ax2.yaxis.set_ticks_position('left')
     ax2.xaxis.set_ticks_position('bottom')
@@ -21,15 +29,16 @@ def losses(ax, transmission, bl):
     ax2.yaxis.label.set_color(palette['green'])
     ax2.set_ylim([0, 100])
     ax2.grid(True)
-    ax2.plot(transmission, '^-', color=palette['green'])
-
+    ax2.plot(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.set_ylabel('Losses ($\%$)')
     ax.yaxis.label.set_color(palette['magenta'])
-    ax.bar(transmission.index-0.125, -transmission.diff(), 0.125,alpha=0.7,
-            edgecolor=palette['magenta'],
-            color=palette['magenta'],
-            #yerr=transmission.apply(compute_losses_error),
-            error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
-    ax.set_ylim([0, transmission.diff().abs().max()+5.0])
+    ax.bar(transmission['S']-0.125, -100*transmission['T'].diff(), 0.125, alpha=0.7,
+             edgecolor=palette['magenta'],
+             color=palette['magenta'],
+             #yerr=transmission.apply(compute_losses_error),
+             error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
+    ax.set_ylim([0, 100*transmission['T'].diff().abs().max()+5.0])
+
+    return transmission

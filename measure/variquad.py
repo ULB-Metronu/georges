@@ -64,9 +64,9 @@ def variquad(**kwargs):
     gamma = s22/emit
 
     return {
-        's11': s11,
-        's12': s12,
-        's22': s22,
+        'S11': s11,
+        'S12': s12,
+        'S22': s22,
         'emit': emit,
         'beta': beta,
         'alpha': alpha,

@@ -86,9 +86,6 @@ class Madx(Simulator):
             print(template_input)
         if self._get_exec() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
-
-        # ICI
-
         p = sub.Popen([self._get_exec()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
@@ -188,9 +185,8 @@ class Madx(Simulator):
 
     def twiss(self, **kwargs):
         """Add a (ptc) `twiss` MAD-X command."""
-        if kwargs.get('misalignment', True):
+        if kwargs.get('misalignment', False):
             self.misalign(self._beamlines)
-
         if kwargs.get('ptc'):
             self.__ptc_twiss(**kwargs)
         else:
@@ -220,7 +216,9 @@ class Madx(Simulator):
             self.raw("PTC_SETSWITCH, FRINGE=True;")
         self.__add_input('ptc_create_universe')
         self.__add_input('ptc_create_layout',
-                         (False, 1, 6, 5, True))
+                         (False, 1, 6, 5, True, kwargs.get('fringe', False)))
+        if kwargs.get('misalignment', False):
+            self.__add_input('ptc_misalign')
         if kwargs.get('line', False):
             self.__add_input('ptc_twiss', (kwargs.get('file', 'ptc_twiss.outx'),))
         else:
@@ -253,7 +251,7 @@ class Madx(Simulator):
     def track(self, particles, beamline, **kwargs):
         """Add a ptc `track` command."""
 
-        if kwargs.get('misalignment', True):
+        if kwargs.get('misalignment', False):
             self.misalign(beamline)
         if kwargs.get('ptc', True):
             self.__ptc_track(particles, beamline, **kwargs)
@@ -278,8 +276,8 @@ class Madx(Simulator):
             return
 
         self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True, kwargs.get('fringe', )))
-        if kwargs.get('misalignment', True):
+        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True, kwargs.get('fringe', False)))
+        if kwargs.get('misalignment', False):
             self.__add_input('ptc_misalign')
         self.__add_particles_for_tracking(particles, True)
         beamline.line.apply(lambda e: self.__generate_observation_points_ptc(e, beamline.length), axis=1)

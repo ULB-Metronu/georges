@@ -210,7 +210,7 @@ class Beamline:
         markers = []
 
         def create_marker(r):
-            if r['CLASS'] is not 'MARKER':
+            if r['CLASS'] != 'MARKER' and r['CLASS'] != 'INSTRUMENT':
                 m = pd.Series({
                     'TYPE': 'MARKER',
                     'CLASS': 'MARKER',
@@ -230,7 +230,6 @@ class Beamline:
             return r
 
         s.apply(create_marker, axis=1)
-        markers.pop(0);markers.pop(0)
         return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
 
     def to_thin(self, element, value):
