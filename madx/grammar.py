@@ -34,7 +34,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                       "PT=0.0,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"
                       "FILE={},"
-                      "SECTORMAP,"
+                      "SECTORMAP=true" # NO coma
                       "{};",  # Note the optional args
     'track_beamline': "TRACK,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"

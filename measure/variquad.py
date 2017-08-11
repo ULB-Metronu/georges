@@ -41,7 +41,7 @@ def variquad(**kwargs):
     y = data[:, 1]**2
     popt, pcov = variquad_fit(x, y)
 
-    bl_map = sectormap(line=bl, context=context, start=start, places=[start, end], debug=debug)
+    bl_map = sectormap(line=bl, context=context, start=start, places=[start, end], debug=debug, sectoracc=False)
     if plane == 'X':
         r11 = bl_map.line.loc[end]['R11']
         r12 = bl_map.line.loc[end]['R12']
@@ -96,7 +96,7 @@ def backtrack(**kwargs):
     context = kwargs.get("context")
     plane = kwargs.get("plane")
 
-    bl_map = sectormap(line=bl, context=context, start=track_to, places=[track_to, track_from])
+    bl_map = sectormap(line=bl, context=context, start=track_to, places=[track_to, track_from], SECTORACC=True)
 
     if plane == 'X':
         sigma_matrix = np.array([[context['S11'], context['S12']], [context['S12'], context['S22']]])

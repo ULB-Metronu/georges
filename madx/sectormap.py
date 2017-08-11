@@ -47,7 +47,8 @@ def sectormap(**kwargs):
     m.sectormap(name=line.name,
                 line=kwargs.get('periodic', False),
                 start=kwargs.get("start", None),
-                places=kwargs.get("places", [])
+                places=kwargs.get("places", []),
+                sectoracc=kwargs.get("sectoracc", False)
                 )
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):

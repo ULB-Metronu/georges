@@ -179,7 +179,7 @@ class Madx(Simulator):
         options = ""
         for k, v in kwargs.items():
             if k not in ['ptc', 'start', 'places', 'name', 'line']:
-                options += ",%s=%s" % (k,v)
+                options += ",%s=%s" % (k, v)
         self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
         return self
 
