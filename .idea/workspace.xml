@@ -3,8 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/madx/madx.py" afterPath="$PROJECT_DIR$/madx/madx.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/measure/__init__.py" afterPath="$PROJECT_DIR$/measure/__init__.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/measure/bpm.py" afterPath="$PROJECT_DIR$/measure/bpm.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/measure/variquad.py" afterPath="$PROJECT_DIR$/measure/variquad.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <ignored mask="sectormap" />
@@ -23,8 +25,8 @@
       <file leaf-file-name="madx.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/madx/madx.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="575">
-              <caret line="275" column="0" lean-forward="true" selection-start-line="274" selection-start-column="18" selection-end-line="275" selection-end-column="0" />
+            <state relative-caret-position="524">
+              <caret line="91" column="41" lean-forward="true" selection-start-line="86" selection-start-column="8" selection-end-line="91" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -80,21 +82,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="variquad.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="variquad.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/measure/variquad.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="516">
+              <caret line="56" column="30" lean-forward="true" selection-start-line="56" selection-start-column="30" selection-end-line="56" selection-end-column="30" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="bpm.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="bpm.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/measure/bpm.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="467">
-              <caret line="93" column="44" lean-forward="true" selection-start-line="93" selection-start-column="44" selection-end-line="93" selection-end-column="44" />
+            <state relative-caret-position="664">
+              <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="108" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -103,8 +105,8 @@
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/measure/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="30" lean-forward="false" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+            <state relative-caret-position="0">
+              <caret line="0" column="45" lean-forward="false" selection-start-line="0" selection-start-column="45" selection-end-line="0" selection-end-column="45" />
               <folding />
             </state>
           </provider>
@@ -184,7 +186,6 @@
         <option value="$PROJECT_DIR$/madx/twiss.py" />
         <option value="$PROJECT_DIR$/madx/__init__.py" />
         <option value="$PROJECT_DIR$/madx/tracking.py" />
-        <option value="$PROJECT_DIR$/measure/variquad.py" />
         <option value="$PROJECT_DIR$/beamline.py" />
         <option value="$PROJECT_DIR$/g4beamline/__init__.py" />
         <option value="$PROJECT_DIR$/topas/__init__.py" />
@@ -193,12 +194,13 @@
         <option value="$PROJECT_DIR$/plotting/tracking.py" />
         <option value="$PROJECT_DIR$/beam.py" />
         <option value="$PROJECT_DIR$/madx/sectormap.py" />
-        <option value="$PROJECT_DIR$/madx/madx.py" />
         <option value="$PROJECT_DIR$/plotting/__init__.py" />
         <option value="$PROJECT_DIR$/plotting/twiss.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
-        <option value="$PROJECT_DIR$/measure/__init__.py" />
         <option value="$PROJECT_DIR$/measure/bpm.py" />
+        <option value="$PROJECT_DIR$/measure/__init__.py" />
+        <option value="$PROJECT_DIR$/measure/variquad.py" />
+        <option value="$PROJECT_DIR$/madx/madx.py" />
       </list>
     </option>
   </component>
@@ -793,7 +795,14 @@
       <option name="project" value="LOCAL" />
       <updated>1502456885389</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="PCVue BPM data processing.">
+      <created>1502459710998</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1502459710998</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -895,7 +904,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Abstraction of MAD and BDSim onto a 'simulator' class." />
     <MESSAGE value="Maybe the imports will finally be stable... also removing .pyc" />
     <MESSAGE value="Abstracting MADX and BDSIM in Simulator.py" />
     <MESSAGE value="Cleaning and more cleaning. This is good!" />
@@ -920,7 +928,8 @@
     <MESSAGE value="Adding a &quot;beam from sigma matrix&quot; functionality" />
     <MESSAGE value="Finally a version of 'tracking' plot that should work. Minor modifications in beam." />
     <MESSAGE value="Twiss plotting functions and BPM data processing." />
-    <option name="LAST_COMMIT_MESSAGE" value="Twiss plotting functions and BPM data processing." />
+    <MESSAGE value="PCVue BPM data processing." />
+    <option name="LAST_COMMIT_MESSAGE" value="PCVue BPM data processing." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1240,14 +1249,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/madx/madx.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="575">
-          <caret line="275" column="0" lean-forward="true" selection-start-line="274" selection-start-column="18" selection-end-line="275" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plotting/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
@@ -1288,26 +1289,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/measure/bpm.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="664">
+          <caret line="105" column="0" lean-forward="false" selection-start-line="105" selection-start-column="0" selection-end-line="108" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/measure/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="30" lean-forward="false" selection-start-line="1" selection-start-column="30" selection-end-line="1" selection-end-column="30" />
+        <state relative-caret-position="0">
+          <caret line="0" column="45" lean-forward="false" selection-start-line="0" selection-start-column="45" selection-end-line="0" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/madx/madx.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="524">
+          <caret line="91" column="41" lean-forward="true" selection-start-line="86" selection-start-column="8" selection-end-line="91" selection-end-column="41" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/measure/variquad.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/measure/bpm.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="467">
-          <caret line="93" column="44" lean-forward="true" selection-start-line="93" selection-start-column="44" selection-end-line="93" selection-end-column="44" />
+        <state relative-caret-position="516">
+          <caret line="56" column="30" lean-forward="true" selection-start-line="56" selection-start-column="30" selection-end-line="56" selection-end-column="30" />
           <folding />
         </state>
       </provider>

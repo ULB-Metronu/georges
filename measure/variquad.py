@@ -1,5 +1,6 @@
 from ..madx import sectormap
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
 
@@ -29,10 +30,13 @@ def variquad(**kwargs):
     bl = kwargs.get("line")
     context = kwargs.get("context")
     debug = kwargs.get("debug", False)
-    data = kwargs.get("data")
-    if data is None:
+    if kwargs.get("data") is None:
         raise VariquadException("data must be provided as a numpy.array")
 
+    data = np.array([
+        kwargs.get("data")[start].apply(lambda v: kwargs.get("i2k", lambda i: i)(v)).values,
+        kwargs.get("data")["{}_fit_sigma_{}".format(end, plane)]/1000.0
+    ]).transpose()
     x = data[:, 0]
     y = data[:, 1]**2
     popt, pcov = variquad_fit(x, y)
@@ -73,3 +77,13 @@ def variquad(**kwargs):
         'y': y,
         'fit_function': (lambda u: quadratic(u, *popt))
     }
+
+
+def variquad_plot(variquad_results, **kwargs):
+    if kwargs.get("ax"):
+        ax = kwargs.get("ax")
+    else:
+        ax = plt.figure().add_subplot(111)
+
+    ax.plot(variquad_results['x'], variquad_results['y'], '*')
+    ax.plot(variquad_results['x'], variquad_results['fit_function'](variquad_results['x']))

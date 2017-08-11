@@ -86,6 +86,9 @@ class Madx(Simulator):
             print(template_input)
         if self._get_exec() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
+
+        # ICI
+
         p = sub.Popen([self._get_exec()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,

@@ -117,4 +117,3 @@ def bpm_plot(r, bpm_name, **kwargs):
 
     ax.plot(x, y, 'b+:', label='data')
     ax.plot(x, gaussian(x, *r["{}_fit_{}".format(bpm_name, axis)][0]), 'ro:', label='fit')
-    ax.legend()
