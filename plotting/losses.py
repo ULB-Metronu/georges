@@ -8,7 +8,7 @@ def losses(ax, bl, context, **kwargs):
     """Plot the losses from a beamline tracking computation and a context."""
     bl = bl.line
     init = bl.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').iloc[0]['BEAM'].n_particles
-    transmission = bl.line.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').apply(lambda r: pd.Series({
+    transmission = bl.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').apply(lambda r: pd.Series({
         'S': r['AT_CENTER'],
         'T': r['BEAM'].n_particles/init
     }), axis=1)
