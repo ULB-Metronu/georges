@@ -9,6 +9,8 @@ def tracking(ax, bl, **kwargs):
         raise Exception("Plane (plane='X' or plane='Y') must be specified.")
 
     plane = kwargs.get("plane")
+    if plane is None:
+        raise Exception("The 'plane' keyword argument must be set to 'X' or 'Y'.")
     halo = kwargs.get("halo", True)
     std = kwargs.get("std", False)
     mean = kwargs.get("mean", True)
@@ -17,7 +19,7 @@ def tracking(ax, bl, **kwargs):
         'S': r['AT_CENTER'],
         '1%': 1000 * r['BEAM'].halo['1%'][plane],
         '5%': 1000 * r['BEAM'].halo['5%'][plane],
-        '20%': 1000 * r['BEAM'].halo['20%'][plane],
+        '2%': 1000 * r['BEAM'].halo['20%'][plane],
         '80%': 1000 * r['BEAM'].halo['80%'][plane],
         '95%': 1000 * r['BEAM'].halo['95%'][plane],
         '99%': 1000 * r['BEAM'].halo['99%'][plane],
@@ -31,8 +33,8 @@ def tracking(ax, bl, **kwargs):
         filled_plot(ax,t['S'], -t['std'], t['std'],palette[plane], True, alpha=0.3)
 
     if std:
-      ax.plot(t['S'], t['std'], '^-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
-      ax.plot(t['S'], -t['std'], 'v-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
+        ax.plot(t['S'], t['std'], '^-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
+        ax.plot(t['S'], -t['std'], 'v-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
 
-     if mean:
-          ax.plot(t['S'], t['mean'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)
+    if mean:
+        ax.plot(t['S'], t['mean'], '*-', color=palette[plane], markeredgecolor=palette[plane], linewidth=1.0)

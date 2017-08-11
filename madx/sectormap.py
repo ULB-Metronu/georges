@@ -34,6 +34,9 @@ def sectormap(**kwargs):
     :param kwargs: parameters are:
         - line: the beamline on which twiss will be run
         - context: the associated context on which MAD-X is run
+        - periodic: ring (True) or beamline (False)
+        - start: RANGE at which the twiss/sectormap shoudl start
+        - places: where to extract the sector map from
     """
     # Process arguments
     line = kwargs.get('line', None)

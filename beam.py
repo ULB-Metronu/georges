@@ -107,7 +107,7 @@ class Beam:
             self.__distribution.quantile(0.842701),
             self.__distribution.quantile(0.95),
             self.__distribution.quantile(0.99)
-        ], axis=1).rename(columns={0: '1%', 1: '5%', 2: '20%', 3: '80%', 4: '95%', 5: '99%'})
+        ], axis=1).rename(columns={0.01: '1%', 0.05: '5%', 1.0-0.842701: '20%', 0.842701: '80%', 0.95: '95%', 0.99: '99%'})
 
     @property
     def coupling(self):
@@ -138,11 +138,11 @@ class Beam:
             raise BeamException("Invalid argument for a multigaussian distribution.")
         self.from_5d_sigma_matrix(n,
                                   X=kwargs.get('X', 0),
-                                  PX=kwargs.get('X', 0),
-                                  Y=kwargs.get('X', 0),
-                                  PY=kwargs.get('X', 0),
-                                  DPP=kwargs.get('X', 0),
-                                  DPPR=kwargs.get('X', 0),
+                                  PX=kwargs.get('PX', 0),
+                                  Y=kwargs.get('Y', 0),
+                                  PY=kwargs.get('PY', 0),
+                                  DPP=kwargs.get('DPP', 0),
+                                  DPPRMS=kwargs.get('DPPRMS', 0),
                                   sigma11=kwargs.get('XRMS', 0),
                                   sigma12=0,
                                   sigma22=kwargs.get('PXRMS', 0),
@@ -154,20 +154,15 @@ class Beam:
 
     def from_5d_sigma_matrix(self, n, **kwargs):
         """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
-        keys = {'X', 'PX', 'Y', 'PY', 'DPP',
-                'sigma11', 'sigma12', 'sigma22', 'sigma33', 'sigma34', 'sigma44', 'DPPRMS'
-                }
-        if any([k not in keys for k in kwargs.keys()]):
-            raise BeamException("Invalid argument for a multigaussian distribution.")
-        s11 = kwargs.get('sigma11', 0)
-        s12 = kwargs.get('sigma12', 0)
+        s11 = kwargs.get('s11', 0)
+        s12 = kwargs.get('s12', 0)
         s21 = s12
-        s22 = kwargs.get('sigma22', 0)
-        s33 = kwargs.get('sigma33', 0)
-        s34 = kwargs.get('sigma34', 0)
+        s22 = kwargs.get('s22', 0)
+        s33 = kwargs.get('s33', 0)
+        s34 = kwargs.get('s34', 0)
         s43 = s34
-        s44 = kwargs.get('sigma44', 0)
-        sDPP = kwargs.get('DPPRMS', 0)
+        s44 = kwargs.get('s44', 0)
+        sdpp = kwargs.get('DPPRMS', 0)
         self.__initialize_distribution(pd.DataFrame(np.random.multivariate_normal(
             [kwargs.get('X', 0),
              kwargs.get('PX', 0),
@@ -180,7 +175,7 @@ class Beam:
                 [s21, s22, 0, 0, 0],
                 [0, 0, s33, s34, 0],
                 [0, 0, s43, s44, 0],
-                [0, 0, 0, 0, sDPP]
+                [0, 0, 0, 0, sdpp]
             ]),
             n
         )))

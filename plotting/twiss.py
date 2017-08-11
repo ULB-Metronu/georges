@@ -9,12 +9,27 @@ def twiss(ax, bl, context, **kwargs):
     bl['XMAXMONO'] = np.sqrt(bl['BETX']*context['EMITX'])
     bl['XMAX'] = np.sqrt(bl['XMAXMONO']**2+(context['DPP']*bl['DX'])**2)
     bl['YMAX'] = np.sqrt(bl['BETY']*context['EMITY'])
-
-    filled_plot(ax, bl['S'], 0, -1000 * bl['XMAXMONO'], palette['X'], True, alpha=0.8)
-    filled_plot(ax, bl['S'], 0, -1000 * bl['XMAX'], palette['X'], True, alpha=0.4)
-    filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['XMAX'], palette['X'], True, alpha=0.2)
-    filled_plot(ax, bl['S'], 0, 1000 * bl['YMAX'], palette['Y'], True, alpha=0.4)
-    filled_plot(ax, bl['S'], 0, 2 * 1000 * bl['YMAX'], palette['Y'], True, alpha=0.2)
+    p = kwargs.get('plane', None)
+    cx = kwargs.get('color', 'X')
+    cy = kwargs.get('color', 'Y')
+    if p is None:
+        filled_plot(ax, bl['S'], 0, -1000 * bl['XMAXMONO'], palette[cx], True, alpha=0.8)
+        filled_plot(ax, bl['S'], 0, -1000 * bl['XMAX'], palette[cx], True, alpha=0.4)
+        filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['XMAX'], palette[cx], True, alpha=0.2)
+        filled_plot(ax, bl['S'], 0, 1000 * bl['YMAX'], palette[cy], True, alpha=0.4)
+        filled_plot(ax, bl['S'], 0, 2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
+    elif p == 'X':
+        filled_plot(ax, bl['S'], 0, -1000 * bl['XMAXMONO'], palette[cx], True, alpha=0.8)
+        filled_plot(ax, bl['S'], 0, -1000 * bl['XMAX'], palette[cx], True, alpha=0.4)
+        filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['XMAX'], palette[cx], True, alpha=0.2)
+        filled_plot(ax, bl['S'], 0, 1000 * bl['XMAXMONO'], palette[cx], True, alpha=0.8)
+        filled_plot(ax, bl['S'], 0, 1000 * bl['XMAX'], palette[cx], True, alpha=0.4)
+        filled_plot(ax, bl['S'], 0, 2 * 1000 * bl['XMAX'], palette[cx], True, alpha=0.2)
+    else:
+        filled_plot(ax, bl['S'], 0, 1000 * bl['YMAX'], palette[cy], True, alpha=0.4)
+        filled_plot(ax, bl['S'], 0, 2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
+        filled_plot(ax, bl['S'], 0, -1000 * bl['YMAX'], palette[cy], True, alpha=0.4)
+        filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
 
 
 def beta(ax, bl, **kwargs):
