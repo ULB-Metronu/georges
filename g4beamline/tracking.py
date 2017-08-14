@@ -50,7 +50,7 @@ def track(**kwargs):
          print(errors)
          raise TrackException("G4Beamline ended with fatal error.")
 
-    ## Do the function whixh reads the file
+    ## Do the function which reads the file
     # g4_track = read_g4beamline_tracking(os.path.join(".", 'tracking.outxone')).dropna()
 
     # g4_track['PY'] = pd.to_numeric(madx_track['PY'])
