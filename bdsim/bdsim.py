@@ -36,7 +36,7 @@ def split_rbends(line, n=20):
 
 
 def element_to_bdsim(e):
-    """Convert a pandas.Series representation onto a MAD-X sequence element."""
+    """Convert a pandas.Series representation onto a BDSim sequence element."""
     bdsim = ""
     if e.KEYWORD in ['MARKER', 'INSTRUMENT']:
         bdsim = "{}: {};".format(e.name.replace('$', ''), "marker")
@@ -101,7 +101,7 @@ class BDSim(Simulator):
         self.__add_input("options", ("proton", 32.5, "circular", "Aluminium"))
         self.__template_input = jinja2.Template(self.__input).render(kwargs.get('context', {}))
         if self.__get_bdsim_path() is None:
-            raise BdsimException("Can't run MADX if no valid path and executable are defined.")
+            raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
         p = sub.Popen([self.__get_bdsim_path()],
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
