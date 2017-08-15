@@ -3,6 +3,7 @@ import pandas as pd
 from .. import beamline
 from .. import beam
 from .g4beamline import G4Beamline
+import numpy as np
 
 G4BEAMLINE_SKIP_ROWS = 3
 
@@ -16,10 +17,18 @@ class TrackException(Exception):
 
 def read_g4beamline_tracking(file):
     """Read a G4Beamline Tracking 'one' file to a dataframe."""
+
     column_names = ['X','Y','S','PX','PY','PZ','t','PDGid','EventID','TrackID','ParentID','Weight']
-    data = pd.read_csv(file, skiprows=G4BEAMLINE_SKIP_ROWS,delimiter=' ',header=None,
-                       names=column_names)
-    return data
+    tmp=np.nan
+    if(os.path.isfile(file)):
+        data = pd.read_csv(file, skiprows=G4BEAMLINE_SKIP_ROWS,delimiter=' ',header=None,
+                            names=column_names)
+
+        data['PT']=np.sqrt(data['PX']**2+data['PY']**2+data['PZ']**2) ## CORRECT ??
+        tmp=beam.Beam(data[['X', 'PX', 'Y', 'PY', 'PT']])
+        os.remove(file)
+
+    return tmp
 
 
 def track(**kwargs):
@@ -50,20 +59,8 @@ def track(**kwargs):
          print(errors)
          raise TrackException("G4Beamline ended with fatal error.")
 
-    ## Do the function which reads the file
-    # g4_track = read_g4beamline_tracking(os.path.join(".", 'tracking.outxone')).dropna()
+    # Add columns which contains datas
+    l['BEAM']=l.apply(lambda g: read_g4beamline_tracking('Detector'+g.name+'.txt'), axis=1)
 
-    # g4_track['PY'] = pd.to_numeric(madx_track['PY'])
-    # g4_track['S'] = round(madx_track['S'], 8)
-    # tmp = g4_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
 
-    # l['AT_CENTER_TRUNCATED'] = round(l['AT_CENTER'], 8)
-    # if 'BEAM' in l:
-    #     l.line.drop('BEAM', inplace=True, axis=1)
-    # l = l.merge(pd.DataFrame(tmp,
-    #                          columns=['BEAM']),
-    #                          left_on='AT_CENTER_TRUNCATED',
-    #                          right_index=True,
-    #                          how='left').sort_values(by='AT_CENTER')
-    # l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
     return beamline.Beamline(l)

@@ -123,7 +123,7 @@ class G4Beamline(Simulator):
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)
-        #os.remove('input_g4beamline.g4bl')
+        os.remove('input_g4beamline.g4bl')
         return self
 
 
