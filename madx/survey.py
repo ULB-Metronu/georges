@@ -36,7 +36,7 @@ def survey(**kwargs):
         raise SurveyException("A beamline is expected.")
     m = Madx(beamlines=line)
     m.beam(line.name)
-    m.survey()
+    m.survey(start=kwargs.get('start', False))
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
         print(m.input)

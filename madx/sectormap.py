@@ -29,7 +29,7 @@ def read_madx_sectormap(file):
     return df
 
 
-def sectormap(**kwargs):
+def     sectormap(**kwargs):
     """Compute the transfer matrices of the beamline.
     :param kwargs: parameters are:
         - line: the beamline on which twiss will be run
@@ -48,7 +48,8 @@ def sectormap(**kwargs):
                 line=kwargs.get('periodic', False),
                 start=kwargs.get("start", None),
                 places=kwargs.get("places", []),
-                sectoracc=kwargs.get("sectoracc", False)
+                sectoracc=kwargs.get("sectoracc", False),
+                reflect=kwargs.get("reflect", False),
                 )
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):

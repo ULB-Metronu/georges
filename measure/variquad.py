@@ -42,12 +42,13 @@ def variquad(**kwargs):
     popt, pcov = variquad_fit(x, y)
 
     bl_map = sectormap(line=bl, context=context, start=start, places=[start, end], debug=debug, sectoracc=False)
+    print(bl_map.line[['R11', 'R12', 'R21', 'R22', 'R33', 'R34', 'R43', 'R44']])
     if plane == 'X':
         r11 = bl_map.line.loc[end]['R11']
-        r12 = bl_map.line.loc[end]['R12']
+        r12 = bl_map.line.loc[end]['R12']  # Is this the correct sign?
     elif plane == 'Y':
         r11 = bl_map.line.loc[end]['R33']
-        r12 = bl_map.line.loc[end]['R34']
+        r12 = bl_map.line.loc[end]['R34']  # Is this the correct sign?
     else:
         raise VariquadException("plane must be 'X' or 'Y'")
 
@@ -96,7 +97,14 @@ def backtrack(**kwargs):
     context = kwargs.get("context")
     plane = kwargs.get("plane")
 
-    bl_map = sectormap(line=bl, context=context, start=track_to, places=[track_to, track_from], SECTORACC=True)
+    bl_map = sectormap(line=bl,
+                       context=context,
+                       reflect=False,
+                       debug=kwargs.get("debug", False),
+                       start=track_to,
+                       places=[track_to, track_from],
+                       SECTORACC=False
+                       )
 
     if plane == 'X':
         sigma_matrix = np.array([[context['S11'], context['S12']], [context['S12'], context['S22']]])
@@ -108,18 +116,28 @@ def backtrack(**kwargs):
         raise Exception("Invalid plane. 'plane' must be 'X' or 'Y'.")
     r_matrix = np.array([[tmp[0], tmp[1]], [tmp[2], tmp[3]]])
     inv_r_matrix = np.linalg.inv(r_matrix)
-    res = np.matmul(inv_r_matrix, np.matmul(sigma_matrix, inv_r_matrix.transpose()))
-    emit = np.sqrt(np.linalg.det(res))
-    beta = res[0, 0] / emit
-    alpha = -res[0, 1] / emit
-    gamma = res[1, 1] / emit
+    print("Inverse R matrix:")
+    print(inv_r_matrix)
+    print("Sigma matrix:")
+    print(sigma_matrix)
+    sigma_matrix_backtracked = np.matmul(inv_r_matrix, np.matmul(sigma_matrix, inv_r_matrix.transpose()))
+    print("sigma matrix backtracked:")
+    print(sigma_matrix_backtracked)
+
+    print(np.matmul(r_matrix, np.matmul(sigma_matrix_backtracked, r_matrix.transpose())))
+
+    emit = np.sqrt(np.linalg.det(sigma_matrix_backtracked))
+    s11 = sigma_matrix_backtracked[0, 0]
+    s12 = sigma_matrix_backtracked[0, 1]
+    s22 = sigma_matrix_backtracked[1, 1]
 
     return {
         'emit': emit,
-        'beta': beta,
-        'alpha': alpha,
-        'gamma': gamma,
-        'S11': res[0, 0],
-        'S12': res[0, 1],
-        'S22': res[1, 1]
+        'beta': s11/emit,
+        'alpha': -s12/emit,
+        'gamma': s22/emit,
+        'S11': s11,
+        'S12': s12,
+        'S22': s22,
+        'map': bl_map
     }

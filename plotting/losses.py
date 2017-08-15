@@ -24,7 +24,7 @@ def losses(ax, bl, context, **kwargs):
     ax2.tick_params(axis='x', labelsize=6)
     ax2.xaxis.set_major_formatter(FixedFormatter([]))
     ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
-    ax2.yaxis.set_major_locator(MultipleLocator(25))
+    ax2.yaxis.set_major_locator(MultipleLocator(10))
     ax2.set_ylabel('T ($\%$)')
     ax2.yaxis.label.set_color(palette['green'])
     ax2.set_ylim([0, 100])

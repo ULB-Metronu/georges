@@ -49,7 +49,13 @@ def track(**kwargs):
 
     # Run MAD-X
     m.beam(line.name)
-    m.track(b.distribution, line, fringe=kwargs.get('fringe',False),ptc=kwargs.get('ptc', True), misalignment=kwargs.get('misalignment', False))
+    m.track(b.distribution,
+            line,
+            fringe=kwargs.get('fringe', False),
+            ptc=kwargs.get('ptc', True),
+            misalignment=kwargs.get('misalignment', False),
+            start=kwargs.get('start', False)
+            )
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
         print(m.raw_input)
@@ -74,5 +80,5 @@ def track(**kwargs):
                              left_on='AT_CENTER_TRUNCATED',
                              right_index=True,
                              how='left').sort_values(by='AT_CENTER')
-    l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
+    #l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
     return beamline.Beamline(l)
