@@ -18,15 +18,18 @@ class TrackException(Exception):
 def read_g4beamline_tracking(file):
     """Read a G4Beamline Tracking 'one' file to a dataframe."""
 
-    column_names = ['X','Y','S','PX','PY','PZ','t','PDGid','EventID','TrackID','ParentID','Weight']
+    column_names = ['X', 'Y', 'S', 'PX', 'PY', 'PZ', 't', 'PDGid', 'EventID', 'TrackID', 'ParentID', 'Weight']
     tmp=np.nan
-    if(os.path.isfile(file)):
-        data = pd.read_csv(file, skiprows=G4BEAMLINE_SKIP_ROWS,delimiter=' ',header=None,
-                            names=column_names)
+    if os.path.isfile(file):
+        data = pd.read_csv(file, skiprows=G4BEAMLINE_SKIP_ROWS, delimiter=' ', header=None, names=column_names)
 
-        data['PT']=np.sqrt(data['PX']**2+data['PY']**2+data['PZ']**2) ## CORRECT ??
-        tmp=beam.Beam(data[['X', 'PX', 'Y', 'PY', 'PT']])
-        os.remove(file)
+        if len(data) == 0:
+            return tmp
+        data['X'] /= 1000
+        data['Y'] /= 1000
+        data['S'] /= 1000
+        data['P']=np.sqrt(data['PX']**2+data['PY']**2+data['PZ']**2)
+        tmp=beam.Beam(data[['X', 'PX', 'Y', 'PY', 'P']])
 
     return tmp
 
@@ -45,6 +48,9 @@ def track(**kwargs):
         raise TrackException("Beamline, Beam, context and G4Beamline objects need to be defined.")
     g4 = G4Beamline(beamlines=line)
 
+    # Convert m in mm for G4Beamline
+    b.distribution['X'] *= 1000
+    b.distribution['Y'] *= 1000
     # Create a new beamline to include the results
     l = line.line.copy()
 
@@ -57,10 +63,12 @@ def track(**kwargs):
          print(g4.input)
     if len(errors) > 0:
          print(errors)
-         raise TrackException("G4Beamline ended with fatal error.")
+         #raise TrackException("G4Beamline ended with fatal error.")
 
     # Add columns which contains datas
     l['BEAM']=l.apply(lambda g: read_g4beamline_tracking('Detector'+g.name+'.txt'), axis=1)
-
+    # l.apply(lambda g:
+    #         os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
+    #         axis=1)
 
     return beamline.Beamline(l)
