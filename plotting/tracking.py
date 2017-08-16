@@ -1,5 +1,4 @@
 from .common import palette, filled_plot
-import numpy as np
 import pandas as pd
 
 
@@ -26,6 +25,9 @@ def tracking(ax, bl, **kwargs):
         'mean': 1000 * r['BEAM'].mean[plane],
         'std': 1000 * r['BEAM'].std[plane],
     }), axis=1)
+
+    if t['S'].count == 0:
+        return
 
     if halo:
         filled_plot(ax, t['S'], t['1%'], t['99%'],palette[plane], True, alpha=0.3)
