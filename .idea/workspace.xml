@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="Cleaned up the examples directory.">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/.ipynb_checkpoints/Example Georges-checkpoint.ipynb" afterPath="$PROJECT_DIR$/examples/.ipynb_checkpoints/Example Georges-checkpoint.ipynb" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Example Georges.ipynb" afterPath="$PROJECT_DIR$/examples/Example Georges.ipynb" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plotting/survey.py" afterPath="$PROJECT_DIR$/plotting/survey.py" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <ignored mask="sectormap" />
@@ -41,11 +41,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="survey.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="survey.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plotting/survey.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="431">
-              <caret line="38" column="44" lean-forward="true" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
+            <state relative-caret-position="405">
+              <caret line="27" column="10" lean-forward="true" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -53,16 +63,6 @@
       </file>
       <file leaf-file-name="__init__.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plotting/__init__.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="_General.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/lib/pymadx/_General.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -182,7 +182,6 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/simulator.py" />
         <option value="$PROJECT_DIR$/tests/test_data/pcvue_bpm.txt" />
-        <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/examples/ptctrackone.tfs" />
         <option value="$PROJECT_DIR$/madx/twiss.py" />
         <option value="$PROJECT_DIR$/madx/__init__.py" />
@@ -207,6 +206,7 @@
         <option value="$PROJECT_DIR$/plotting/tracking.py" />
         <option value="$PROJECT_DIR$/beam.py" />
         <option value="$PROJECT_DIR$/plotting/survey.py" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -242,6 +242,11 @@
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
               <item name="georges" type="cbb8eebc:String" user="georges" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="georges" type="cbb8eebc:String" user="georges" />
+              <item name=".idea" type="cbb8eebc:String" user=".idea" />
             </path>
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
@@ -512,26 +517,12 @@
     <configuration>$USER_HOME$/.subversion</configuration>
   </component>
   <component name="TaskManager">
-    <task id="LOCAL-00003" summary="Gitignore updated.">
-      <created>1498237149318</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1498237149318</updated>
-    </task>
     <task active="true" id="Default" summary="Default task">
       <changelist id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="" />
       <created>1498238010403</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1498238010403</updated>
-    </task>
-    <task id="LOCAL-00004" summary="Improvements to BDSim and abstraction of MAD and BDSim onto a 'simulator' class.">
-      <created>1498252717466</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1498252717466</updated>
     </task>
     <task id="LOCAL-00005" summary="Abstraction of MAD and BDSim onto a 'simulator' class.">
       <created>1498253376579</created>
@@ -862,7 +853,21 @@
       <option name="project" value="LOCAL" />
       <updated>1502953603180</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Quick implementation of the plotting of a bl survey.">
+      <created>1502955237289</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1502955237289</updated>
+    </task>
+    <task id="LOCAL-00053" summary="Cleaned up the examples directory.">
+      <created>1502955473623</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1502955473623</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -964,8 +969,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Creating a context class (set range files)" />
-    <MESSAGE value="Minor cleaning up while working on FFAG optics." />
     <MESSAGE value="Minor reformating and cleaning up while working on FFAGs." />
     <MESSAGE value="Writing a nice readmine file." />
     <MESSAGE value="Writing a nice readme file." />
@@ -989,7 +992,9 @@
     <MESSAGE value="Losses plotting is back!" />
     <MESSAGE value="Minor bug fixing." />
     <MESSAGE value="Minor correction in plotting/tracking." />
-    <option name="LAST_COMMIT_MESSAGE" value="Minor correction in plotting/tracking." />
+    <MESSAGE value="Quick implementation of the plotting of a bl survey." />
+    <MESSAGE value="Cleaned up the examples directory." />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleaned up the examples directory." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1011,13 +1016,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="840">
           <caret line="56" column="22" lean-forward="false" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -1401,8 +1399,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/plotting/survey.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="431">
-          <caret line="38" column="44" lean-forward="true" selection-start-line="38" selection-start-column="44" selection-end-line="38" selection-end-column="44" />
+        <state relative-caret-position="405">
+          <caret line="27" column="10" lean-forward="true" selection-start-line="27" selection-start-column="10" selection-end-line="27" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
           <folding />
         </state>
       </provider>
