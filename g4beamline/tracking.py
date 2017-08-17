@@ -44,8 +44,11 @@ def track(**kwargs):
     line = kwargs.get('line', None)
     b = kwargs.get('beam', None)
     context = kwargs.get('context', None)
+
     if line is None or b is None or context is None:
         raise TrackException("Beamline, Beam, context and G4Beamline objects need to be defined.")
+
+
     g4 = G4Beamline(beamlines=line, **kwargs)
 
     # Convert m in mm for G4Beamline

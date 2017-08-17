@@ -2,7 +2,7 @@ import shutil
 import subprocess as sub
 import jinja2
 import re
-import os
+import numpy as np
 import pandas as pd
 from ..simulator import Simulator
 from .grammar import g4beamline_syntax
@@ -17,7 +17,7 @@ class G4BeamlineException(Exception):
         self.message = m
 
 
-def element_to_g4beamline(e, **kwargs):
+def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
     """Convert a pandas.Series representation onto a G4Beamline sequence element."""
     g4bl = ""
     # For each element place a detector
@@ -28,7 +28,7 @@ def element_to_g4beamline(e, **kwargs):
                                                        e['LENGTH'] * 1000,
                                                        e['APERTURE'] * 1000,
                                                        "{{{{ {} or '0.0' }}}}".format(e['CIRCUIT']))
-        if not kwargs.get('fringe'):
+        if not fringe:
             g4bl += "fringe=0"
 
         # if(kwargs.get("misalignment")):
@@ -50,7 +50,32 @@ def element_to_g4beamline(e, **kwargs):
             g4bl += "\n place {} z={} {}={} rename={}_2\n".format(e.name, e['AT_CENTER'] * 1000,
                                                                e['SLITS_PLANE'].lower(),
                                                                -0.5 * e['APERTURE'] * 1000-60/2, # do not forget the width of the slits
-                                                               e.name)
+                                                              e.name)
+
+    if e['TYPE'] == 'SOLIDS' and build_solids:
+
+        print('Construct Solids')
+
+        if e['SOLIDS_FILE'] is None and e['SOLIDS_FILE'] is np.nan:
+            raise G4BeamlineException(f"No files are provided for solids {e.name}.")
+
+
+        solids_data = pd.read_csv(e['SOLIDS_FILE'])
+        solidsinput = solids_data.apply(lambda b: g4beamline_syntax['tesselatedsolids'].format(b['NAME'],
+                                                                                          b['MATERIAL'],
+                                                                                          b['FILE']), axis=1)
+        g4bl+='\n'.join(str(x) for x in solidsinput)
+
+        soldisplacement=solids_data.apply(lambda b: g4beamline_syntax['place_solids'].format(b['NAME'],
+                                                                                        b['POSX'],
+                                                                                        b['POSY']*1000,
+                                                                                        (b['POSZ']+e['AT_CENTER']) * 1000,
+                                                                                        b['ROTX'],
+                                                                                        b['ROTY'],
+                                                                                        f"{{{{{e.name}_ROTATION or '0.0' }}}}"), axis=1)
+        g4bl += '\n'
+        g4bl += '\n'.join(str(x) for x in soldisplacement)
+
     return g4bl
 
 
@@ -75,6 +100,9 @@ class G4Beamline(Simulator):
     EXECUTABLE_NAME = 'g4bl'
 
     def __init__(self, **kwargs):
+
+        self._build_degrader = kwargs.get('build_degrader', False)
+        self.build_solids = kwargs.get('build_solids', None)
         super().__init__(**kwargs)
 
     def _attach(self, beamline):
@@ -86,7 +114,8 @@ class G4Beamline(Simulator):
         self.__add_input('keep_protons')
         self.__add_input('define_brho')
         self.__add_input('define_detector')
-        self._input += sequence_to_g4beamline(beamline.line, fringe=self._fringe)
+        self._input += sequence_to_g4beamline(beamline.line, fringe=self._fringe,
+                                              build_solids=self.build_solids)
 
     def _add__detector(self,e):
         self.__add_input('add_detector', (e['AT_CENTER'],e.name))
@@ -129,8 +158,8 @@ class G4Beamline(Simulator):
                       shell=True
                       )
         self._output = p.communicate(input=template_input.encode())[0].decode()
-        self._warnings = [line for line in self._output.split('\n') if re.search('Warning|Error', line)]
-        self._fatals = [line for line in self._output.split('\n') if re.search('Error', line)]
+        self._warnings = [line for line in self._output.split('\n') if re.search('Warning|Fatal Exception', line)]
+        self._fatals = [line for line in self._output.split('\n') if re.search('Fatal Exception', line)]
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)

@@ -40,4 +40,7 @@ g4beamline_syntax = {
             "material=Ni "
             "color=1,1,0 "
             "kill=1",
+
+    'tesselatedsolids': "tessellatedsolid {} kill=0 material={} file={}",
+    'place_solids':"place {} x={} y={} z={} rotation=X{},Y{},Z{}",
 }
