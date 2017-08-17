@@ -21,7 +21,7 @@ def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
     """Convert a pandas.Series representation onto a G4Beamline sequence element."""
     g4bl = ""
     # For each element place a detector
-    g4bl = "place detector z={} rename=Detector{}\n".format(e['AT_CENTER']*1000, e.name)
+    g4bl = "place detector z={} rename=Detector{}\n".format(e['AT_CENTER'] * 1000, e.name)
     if e['TYPE'] in ['QUADRUPOLE']:
         g4bl += g4beamline_syntax['quadrupole'].format(e.name,
                                                        e['LENGTH'] * 1000,
@@ -37,20 +37,25 @@ def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
 
     if e['TYPE'] in ['COLLIMATOR', 'SLITS']:
         if e['APERTYPE'] == 'CIRCLE':
-            g4bl += g4beamline_syntax['ccoll'].format(e.name,e['APERTURE']*1000,e['LENGTH']*1000)
+            g4bl += g4beamline_syntax['ccoll'].format(e.name, e['APERTURE'] * 1000, e['LENGTH'] * 1000)
             g4bl += "\n place {} z={}\n".format(e.name, e['AT_CENTER'] * 1000)
 
         if e['APERTYPE'] == 'RECTANGLE':
-            g4bl += g4beamline_syntax['rcoll'].format(e.name,e['LENGTH']*1000)
+            g4bl += g4beamline_syntax['rcoll'].format(e.name, e['LENGTH'] * 1000)
+
             g4bl += "\n place {} z={} {}={} rename={}_1\n".format(e.name, e['AT_CENTER'] * 1000,
-                                                               e['SLITS_PLANE'].lower(),
-                                                               0.5 * e['APERTURE'] * 1000+60/2, # do not forget the width of the slits
-                                                               e.name)
+                                                                  e['SLITS_PLANE'].lower(),
+                                                                  f"(0.5*{{{{{e.name}_APERTURE or '0.1' }}}}*1000)+60/2",
+                                                                  # do not forget the width of the slits
+                                                                  e.name)
+
+
 
             g4bl += "\n place {} z={} {}={} rename={}_2\n".format(e.name, e['AT_CENTER'] * 1000,
-                                                               e['SLITS_PLANE'].lower(),
-                                                               -0.5 * e['APERTURE'] * 1000-60/2, # do not forget the width of the slits
-                                                              e.name)
+                                                                  e['SLITS_PLANE'].lower(),
+                                                                  f"(-0.5*{{{{{e.name}_APERTURE or '0.1' }}}}*1000)-60/2",
+                                                                  # do not forget the width of the slits
+                                                                  e.name)
 
     if e['TYPE'] == 'SOLIDS' and build_solids:
 
@@ -59,20 +64,21 @@ def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
         if e['SOLIDS_FILE'] is None and e['SOLIDS_FILE'] is np.nan:
             raise G4BeamlineException(f"No files are provided for solids {e.name}.")
 
-
         solids_data = pd.read_csv(e['SOLIDS_FILE'])
         solidsinput = solids_data.apply(lambda b: g4beamline_syntax['tesselatedsolids'].format(b['NAME'],
-                                                                                          b['MATERIAL'],
-                                                                                          b['FILE']), axis=1)
-        g4bl+='\n'.join(str(x) for x in solidsinput)
+                                                                                               b['MATERIAL'],
+                                                                                               b['FILE']), axis=1)
+        g4bl += '\n'.join(str(x) for x in solidsinput)
 
-        soldisplacement=solids_data.apply(lambda b: g4beamline_syntax['place_solids'].format(b['NAME'],
-                                                                                        b['POSX'],
-                                                                                        b['POSY']*1000,
-                                                                                        (b['POSZ']+e['AT_CENTER']) * 1000,
-                                                                                        b['ROTX'],
-                                                                                        b['ROTY'],
-                                                                                        f"{{{{{e.name}_ROTATION or '0.0' }}}}"), axis=1)
+        soldisplacement = solids_data.apply(lambda b: g4beamline_syntax['place_solids'].format(b['NAME'],
+                                                                                               b['POSX'],
+                                                                                               b['POSY'] * 1000,
+                                                                                               (b['POSZ'] + e[
+                                                                                                   'AT_CENTER']) * 1000,
+                                                                                               b['ROTX'],
+                                                                                               b['ROTY'],
+                                                                                               f"{{{{{e.name}_ROTATION or '0.0' }}}}"),
+                                            axis=1)
         g4bl += '\n'
         g4bl += '\n'.join(str(x) for x in soldisplacement)
 
@@ -117,10 +123,10 @@ class G4Beamline(Simulator):
         self._input += sequence_to_g4beamline(beamline.line, fringe=self._fringe,
                                               build_solids=self.build_solids)
 
-    def _add__detector(self,e):
-        self.__add_input('add_detector', (e['AT_CENTER'],e.name))
+    def _add__detector(self, e):
+        self.__add_input('add_detector', (e['AT_CENTER'], e.name))
 
-    def __add_particles_for_tracking(self,particles):
+    def __add_particles_for_tracking(self, particles):
         if {'X', 'PX', 'Y', 'PY', 'DPP'} > set(particles):
             return
         for r in particles.iterrows():
@@ -163,5 +169,5 @@ class G4Beamline(Simulator):
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)
-        #os.remove(INPUT_FILENAME)
+        # os.remove(INPUT_FILENAME)
         return self
