@@ -46,16 +46,19 @@ def track(**kwargs):
     context = kwargs.get('context', None)
     if line is None or b is None or context is None:
         raise TrackException("Beamline, Beam, context and G4Beamline objects need to be defined.")
-    g4 = G4Beamline(beamlines=line)
+    g4 = G4Beamline(beamlines=line, **kwargs)
 
     # Convert m in mm for G4Beamline
-    b.distribution['X'] *= 1000
-    b.distribution['Y'] *= 1000
+    g4_beam = b.distribution.copy()
+
+    g4_beam['X'] *= 1000
+    g4_beam['Y'] *= 1000
+
     # Create a new beamline to include the results
     l = line.line.copy()
 
     # Run G4Beamline
-    g4.track(b.distribution)
+    g4.track(g4_beam)
     errors = g4.run(**kwargs).fatals
 
     if kwargs.get("debug", False):
@@ -67,8 +70,8 @@ def track(**kwargs):
 
     # Add columns which contains datas
     l['BEAM']=l.apply(lambda g: read_g4beamline_tracking('Detector'+g.name+'.txt'), axis=1)
-    # l.apply(lambda g:
-    #         os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
-    #         axis=1)
+    l.apply(lambda g:
+            os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
+            axis=1)
 
     return beamline.Beamline(l)

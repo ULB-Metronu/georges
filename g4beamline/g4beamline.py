@@ -17,45 +17,51 @@ class G4BeamlineException(Exception):
         self.message = m
 
 
-def element_to_g4beamline(e):
+def element_to_g4beamline(e, **kwargs):
     """Convert a pandas.Series representation onto a G4Beamline sequence element."""
     g4bl = ""
-
     # For each element place a detector
     g4bl = "place detector z={} rename=Detector{}\n".format(e['AT_CENTER']*1000, e.name)
     if e['TYPE'] in ['QUADRUPOLE']:
-        g4bl+="genericquad {} " \
-              "fieldLength={} " \
-              "ironLength={} " \
-              "ironRadius=238 " \
-              "apertureRadius={} " \
-              "gradient={}*$Brho " \
-              "ironMaterial=Fe " \
-              "fieldMaterial=Vacuum " \
-              "ironColor=1,0,0 " \
-              "kill=1 " \
-              "fringe={} " \
-              "openAperture=1\n".format(e.name,
-                                      e['LENGTH']*1000,
-                                      e['LENGTH']*1000,
-                                      e['APERTURE']*1000,
-                                      "{{{{ {} or '0.0' }}}}".format(e['CIRCUIT']), ## To change for generic case
-                                      0) ##kwargs.get("fringe")
+        g4bl += g4beamline_syntax['quadrupole'].format(e.name,
+                                                       e['LENGTH'] * 1000,
+                                                       e['LENGTH'] * 1000,
+                                                       e['APERTURE'] * 1000,
+                                                       "{{{{ {} or '0.0' }}}}".format(e['CIRCUIT']))
+        if not kwargs.get('fringe'):
+            g4bl += "fringe=0"
 
-        #if(kwargs.get("misalignment")):
-        g4bl+="place {} z={}\n".format(e.name,e['AT_CENTER']*1000)
+        # if(kwargs.get("misalignment")):
+        # else:
+        g4bl += "\n place {} z={}\n".format(e.name, e['AT_CENTER'] * 1000)
 
+    if e['TYPE'] in ['COLLIMATOR', 'SLITS']:
+        if e['APERTYPE'] == 'CIRCLE':
+            g4bl += g4beamline_syntax['ccoll'].format(e.name,e['APERTURE']*1000,e['LENGTH']*1000)
+            g4bl += "\n place {} z={}\n".format(e.name, e['AT_CENTER'] * 1000)
+
+        if e['APERTYPE'] == 'RECTANGLE':
+            g4bl += g4beamline_syntax['rcoll'].format(e.name,e['LENGTH']*1000)
+            g4bl += "\n place {} z={} {}={} rename={}_1\n".format(e.name, e['AT_CENTER'] * 1000,
+                                                               e['SLITS_PLANE'].lower(),
+                                                               0.5 * e['APERTURE'] * 1000+60/2, # do not forget the width of the slits
+                                                               e.name)
+
+            g4bl += "\n place {} z={} {}={} rename={}_2\n".format(e.name, e['AT_CENTER'] * 1000,
+                                                               e['SLITS_PLANE'].lower(),
+                                                               -0.5 * e['APERTURE'] * 1000-60/2, # do not forget the width of the slits
+                                                               e.name)
     return g4bl
 
 
-def sequence_to_g4beamline(sequence):
+def sequence_to_g4beamline(sequence, **kwargs):
     """Convert a pandas.DataFrame sequence onto a G4Beamline input."""
     sequence.sort_values(by='AT_CENTER', inplace=True)
     input = ""
     if sequence is None:
         return ""
 
-    input += '\n'.join(sequence.apply(element_to_g4beamline, axis=1)) + '\n'
+    input += '\n'.join(sequence.apply(lambda e: element_to_g4beamline(e, **kwargs), axis=1)) + '\n'
 
     return input
 
@@ -80,7 +86,7 @@ class G4Beamline(Simulator):
         self.__add_input('keep_protons')
         self.__add_input('define_brho')
         self.__add_input('define_detector')
-        self._input += sequence_to_g4beamline(beamline.line)
+        self._input += sequence_to_g4beamline(beamline.line, fringe=self._fringe)
 
     def _add__detector(self,e):
         self.__add_input('add_detector', (e['AT_CENTER'],e.name))
@@ -123,8 +129,8 @@ class G4Beamline(Simulator):
                       shell=True
                       )
         self._output = p.communicate(input=template_input.encode())[0].decode()
-        self._warnings = [line for line in self._output.split('\n') if re.search('warning|error', line)]
-        self._fatals = [line for line in self._output.split('\n') if re.search('error', line)]
+        self._warnings = [line for line in self._output.split('\n') if re.search('Warning|Error', line)]
+        self._fatals = [line for line in self._output.split('\n') if re.search('Error', line)]
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)

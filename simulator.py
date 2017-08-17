@@ -20,6 +20,7 @@ class Simulator:
         self._last_context = None
         self._path = kwargs.get('path', None)
         self._beamlines = kwargs.get('beamlines', None)
+        self._fringe = kwargs.get('fringe', False)
         if isinstance(self._beamlines, list):
             map(self._attach, self._beamlines)
         else:
