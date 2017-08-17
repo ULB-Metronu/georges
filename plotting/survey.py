@@ -1,27 +1,52 @@
-def survey(ax):
-    """Draw a minimalistic survey overview of the beamline."""
-    ax2.get_xaxis().set_tick_params(direction='out')
-    ax2.yaxis.set_ticks_position('left')
-    ax2.xaxis.set_ticks_position('bottom')
-    ax2.yaxis.set_ticks_position('right')
-    ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])
-    ax2.tick_params(axis='x', labelsize=6)
-    ax2.xaxis.set_major_formatter(FixedFormatter([]))
-    ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
-    ax2.yaxis.set_major_locator(MultipleLocator(25))
-    ax2.set_ylabel('T ($\%$)')
-    ax2.yaxis.label.set_color(palette['green'])
-    ax2.set_ylim([0, 100])
-    ax2.grid(True)
-    ax2.plot(transmission, '^-', color=palette['green'])
+import matplotlib.patches as patches
+import numpy as np
+import pandas as pd
 
-    ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
-    ax.yaxis.set_major_locator(MultipleLocator(10))
-    ax.set_ylabel('Losses ($\%$)')
-    ax.yaxis.label.set_color(palette['magenta'])
-    ax.bar(transmission.index-0.125, -transmission.diff(), 0.125,alpha=0.7,
-            edgecolor=palette['magenta'],
-            color=palette['magenta'],
-            #yerr=transmission.apply(compute_losses_error),
-            error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
-    ax.set_ylim([0, transmission.diff().abs().max()+5.0])
+def survey(ax, bl):
+    ax.set_xlabel("X (m)")
+    ax.set_ylabel("Y (m)")
+    ax.set_xlim([0, np.max(bl.line['X']) / 1000])
+    ax.set_ylim([0, np.max(bl.line['Y']) / 1000])
+    for index, row in bl.line.iterrows():
+        if pd.notnull(row['X']) and pd.notnull(row['Y']):
+            # ax1.annotate(index, xy=(row['X'] / 1000, row['Y'] / 1000), xytext=(row['X'] / 1000+0.5, row['Y'] / 1000 + 0.5),
+            #    arrowprops=dict(arrowstyle="->",
+            #                    facecolor='black',
+            #                    shrinkA = 50,
+            #                    shrinkB = 5000,
+            #                   ),
+            #    size = 3,
+            #    horizontalalignment='left',
+            #    verticalalignment='bottom',
+            #    clip_on=True
+            # )
+            if row['CLASS'] == 'QUADRUPOLE':
+                ax.add_patch(
+                    patches.Rectangle(
+                        (row['X'] / 1000, row['Y'] / 1000),  # (x,y)
+                        0.20,  # width
+                        0.20,  # height
+                        facecolor='#268bd2',
+                        edgecolor='#268bd2'
+                    )
+                )
+            elif row['CLASS'] == 'RBEND' or row['CLASS'] == 'SBEND':
+                ax.add_patch(
+                    patches.Rectangle(
+                        (row['X'] / 1000, row['Y'] / 1000),  # (x,y)
+                        0.250,  # width
+                        0.250,  # height
+                        facecolor='#dc322f',
+                        edgecolor='#dc322f'
+                    )
+                )
+            else:
+                ax.add_patch(
+                    patches.Rectangle(
+                        (row['X'] / 1000, row['Y'] / 1000),  # (x,y)
+                        0.250,  # width
+                        0.250,  # height
+                        facecolor='#657b83',
+                        edgecolor='#657b83'
+                    )
+                )
