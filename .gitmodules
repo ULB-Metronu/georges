@@ -4,3 +4,6 @@
 [submodule "lib/pymadx"]
 	path = lib/pymadx
 	url = https://bitbucket.org/jairhul/pymadx.git
+[submodule "lib/pytransport"]
+	path = lib/pytransport
+	url = https://bitbucket.org/jairhul/pytransport.git
