@@ -23,6 +23,16 @@ SUPPORTED_PROPERTIES = ['ANGLE',
                         'K3S',
                         ]
 
+SUPPORTED_CLASSES = ['QUADRUPOLE',
+                     'RBEND',
+                     'SBEND',
+                     'SEXTUPOLE',
+                     'OCTUPOLE',
+                     'MARKER',
+                     'COLLIMATOR',
+                     'INSTRUMENT',
+                     ]
+
 
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
@@ -33,6 +43,8 @@ class MadxException(Exception):
 
 def element_to_mad(e):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
+    if e.CLASS not in SUPPORTED_CLASSES:
+        return ""
     mad = "{}: {}, ".format(e.name, e.CLASS)
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
     if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
