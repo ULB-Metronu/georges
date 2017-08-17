@@ -11,7 +11,7 @@ def tracking(ax, bl, **kwargs):
     if plane is None:
         raise Exception("The 'plane' keyword argument must be set to 'X' or 'Y'.")
     halo = kwargs.get("halo", True)
-    std = kwargs.get("std", False)
+    std = kwargs.get("std", True)
     mean = kwargs.get("mean", True)
 
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({

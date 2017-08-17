@@ -148,12 +148,12 @@ class Beam:
                                   PY=kwargs.get('PY', 0),
                                   DPP=kwargs.get('DPP', 0),
                                   DPPRMS=kwargs.get('DPPRMS', 0),
-                                  sigma11=kwargs.get('XRMS', 0),
-                                  sigma12=0,
-                                  sigma22=kwargs.get('PXRMS', 0),
-                                  sigma33=kwargs.get('YRMS', 0),
-                                  sigma34=0,
-                                  sigma44=kwargs.get('PYRMS', 0)
+                                  s11=kwargs.get('XRMS', 0),
+                                  s12=0,
+                                  s22=kwargs.get('PXRMS', 0),
+                                  s33=kwargs.get('YRMS', 0),
+                                  s34=0,
+                                  s44=kwargs.get('PYRMS', 0)
                                   )
         return self
 

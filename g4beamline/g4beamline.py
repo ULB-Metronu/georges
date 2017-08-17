@@ -7,6 +7,8 @@ import pandas as pd
 from ..simulator import Simulator
 from .grammar import g4beamline_syntax
 
+INPUT_FILENAME = 'input.g4bl'
+
 
 class G4BeamlineException(Exception):
     """Exception raised for errors in the G4Beamline module."""
@@ -20,7 +22,7 @@ def element_to_g4beamline(e):
     g4bl = ""
 
     # For each element place a detector
-    g4bl = "place detector z={} rename=Detector{}\n".format(e['AT_CENTER'], e.name)
+    g4bl = "place detector z={} rename=Detector{}\n".format(e['AT_CENTER']*1000, e.name)
     if e['TYPE'] in ['QUADRUPOLE']:
         g4bl+="genericquad {} " \
               "fieldLength={} " \
@@ -45,14 +47,15 @@ def element_to_g4beamline(e):
 
     return g4bl
 
+
 def sequence_to_g4beamline(sequence):
     """Convert a pandas.DataFrame sequence onto a G4Beamline input."""
     sequence.sort_values(by='AT_CENTER', inplace=True)
-    input=""
+    input = ""
     if sequence is None:
         return ""
 
-    input+= '\n'.join(sequence.apply(element_to_g4beamline, axis=1)) + '\n'
+    input += '\n'.join(sequence.apply(element_to_g4beamline, axis=1)) + '\n'
 
     return input
 
@@ -72,7 +75,10 @@ class G4Beamline(Simulator):
         if beamline.length is None or pd.isnull(beamline.length):
             raise G4BeamlineException("Beamline length not defined.")
 
-        self.__add_input('define_Brho')
+        self.__add_input('define_physics')
+        self.__add_input('define_world')
+        self.__add_input('keep_protons')
+        self.__add_input('define_brho')
         self.__add_input('define_detector')
         self._input += sequence_to_g4beamline(beamline.line)
 
@@ -89,7 +95,6 @@ class G4Beamline(Simulator):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
-
         self.__add_particles_for_tracking(particles)
 
     def __add_input(self, keyword, strings=()):
@@ -105,12 +110,12 @@ class G4Beamline(Simulator):
             raise ("Can't run G4Beamline if no valid path and executable are defined.")
 
         # Write the file for g4beamline
-        file = open('input_g4beamline.g4bl', 'w')
+        file = open(INPUT_FILENAME, 'w')
         file.write(template_input)
         file.flush()
         file.close()
-        g4cmd=self._get_exec()+' input_g4beamline.g4bl'
-        p = sub.Popen([g4cmd],
+        cmd = " ".join([self._get_exec(), INPUT_FILENAME])
+        p = sub.Popen(cmd,
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
@@ -118,12 +123,10 @@ class G4Beamline(Simulator):
                       shell=True
                       )
         self._output = p.communicate(input=template_input.encode())[0].decode()
-        self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
-        self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
+        self._warnings = [line for line in self._output.split('\n') if re.search('warning|error', line)]
+        self._fatals = [line for line in self._output.split('\n') if re.search('error', line)]
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)
-        #os.remove('input_g4beamline.g4bl')
+        #os.remove(INPUT_FILENAME)
         return self
-
-
