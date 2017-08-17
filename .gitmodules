@@ -1,0 +1,6 @@
+[submodule "lib/pybdsim"]
+	path = lib/pybdsim
+	url = https://bitbucket.org/jairhul/pybdsim.git
+[submodule "lib/pymadx"]
+	path = lib/pymadx
+	url = https://bitbucket.org/jairhul/pymadx.git
