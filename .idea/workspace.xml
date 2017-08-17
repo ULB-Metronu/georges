@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="">
+    <list default="true" id="dde8a340-1672-44c2-b551-e2896a45d2e7" name="Default" comment="Minor correction in plotting/tracking.">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/beam.py" afterPath="$PROJECT_DIR$/beam.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/examples/Essen - Variquad.ipynb" afterPath="$PROJECT_DIR$/examples/Essen - Variquad.ipynb" />
     </list>
     <ignored path="$PROJECT_DIR$/.idea/shelf/" />
     <ignored mask="sectormap" />
@@ -68,21 +70,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tracking.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="tracking.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/plotting/tracking.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="435">
               <caret line="29" column="14" lean-forward="false" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/plotting/common.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-688">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -93,6 +85,16 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1510">
               <caret line="123" column="38" lean-forward="false" selection-start-line="123" selection-start-column="38" selection-end-line="123" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="beam.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/beam.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="513">
+              <caret line="134" column="41" lean-forward="false" selection-start-line="134" selection-start-column="41" selection-end-line="134" selection-end-column="41" />
               <folding />
             </state>
           </provider>
@@ -183,7 +185,6 @@
         <option value="$PROJECT_DIR$/topas/__init__.py" />
         <option value="$PROJECT_DIR$/__init__.py" />
         <option value="$PROJECT_DIR$/bdsim/bdsim.py" />
-        <option value="$PROJECT_DIR$/beam.py" />
         <option value="$PROJECT_DIR$/plotting/__init__.py" />
         <option value="$PROJECT_DIR$/requirements.txt" />
         <option value="$PROJECT_DIR$/measure/bpm.py" />
@@ -199,6 +200,7 @@
         <option value="$PROJECT_DIR$/plotting/twiss.py" />
         <option value="$PROJECT_DIR$/measure/variquad.py" />
         <option value="$PROJECT_DIR$/plotting/tracking.py" />
+        <option value="$PROJECT_DIR$/beam.py" />
       </list>
     </option>
   </component>
@@ -239,6 +241,11 @@
               <item name="Root" type="cbb8eebc:String" user="Root" />
               <item name="georges" type="cbb8eebc:String" user="georges" />
               <item name="bdsim" type="cbb8eebc:String" user="bdsim" />
+            </path>
+            <path>
+              <item name="Root" type="cbb8eebc:String" user="Root" />
+              <item name="georges" type="cbb8eebc:String" user="georges" />
+              <item name="lib" type="cbb8eebc:String" user="lib" />
             </path>
             <path>
               <item name="Root" type="cbb8eebc:String" user="Root" />
@@ -494,13 +501,6 @@
     <configuration>$USER_HOME$/.subversion</configuration>
   </component>
   <component name="TaskManager">
-    <task id="LOCAL-00001" summary="Workspace file for PyCharm">
-      <created>1498155779428</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1498155779428</updated>
-    </task>
     <task id="LOCAL-00002" summary="BDSim is ready.">
       <created>1498237040359</created>
       <option name="number" value="00002" />
@@ -844,7 +844,14 @@
       <option name="project" value="LOCAL" />
       <updated>1502868140973</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Minor correction in plotting/tracking.">
+      <created>1502870196102</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1502870196103</updated>
+    </task>
+    <option name="localTasksCounter" value="51" />
     <servers />
   </component>
   <component name="TestHistory">
@@ -1168,14 +1175,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/beam.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-660">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/madx/twiss.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1375,6 +1374,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="435">
           <caret line="29" column="14" lean-forward="false" selection-start-line="29" selection-start-column="14" selection-end-line="29" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/beam.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="134" column="41" lean-forward="false" selection-start-line="134" selection-start-column="41" selection-end-line="134" selection-end-column="41" />
           <folding />
         </state>
       </provider>

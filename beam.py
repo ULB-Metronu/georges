@@ -97,6 +97,11 @@ class Beam:
                 }
 
     @property
+    def sigma(self):
+        """Return the sigma matrix of the beam"""
+        return self.__distribution.cov()
+
+    @property
     def halo(self):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
 
