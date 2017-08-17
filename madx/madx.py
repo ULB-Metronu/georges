@@ -7,8 +7,7 @@ from .grammar import madx_syntax
 from ..simulator import Simulator
 from ..simulator import SimulatorException
 
-SUPPORTED_PROPERTIES = ['ANGLE',
-                        'APERTYPE',
+SUPPORTED_PROPERTIES = ['APERTYPE',
                         'E1',
                         'E2',
                         'FINT',
@@ -46,6 +45,13 @@ def element_to_mad(e):
     if e.CLASS not in SUPPORTED_CLASSES:
         return ""
     mad = "{}: {}, ".format(e.name, e.CLASS)
+    if e.get('BENDING_ANGLE') is not None and not np.isnan(e['BENDING_ANGLE']):
+        mad += f"ANGLE={e['BENDING_ANGLE']},"
+    elif e.get('ANGLE') is not None and not np.isnan(e['ANGLE']):
+        mad += f"ANGLE={e.get('ANGLE', 0)},"
+    else:
+        # Angle property not supported by the element or absent
+        mad += ""
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
     if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
         mad += ", L={}".format(e['LENGTH'])

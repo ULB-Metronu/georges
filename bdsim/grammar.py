@@ -2,10 +2,11 @@
 
 bdsim_syntax = {  # Do not forget the trailing ';' for each command!
     'sample': "sample, all;",
-    'beam': "beam, particle={}",
-    'options': """option, beampipeRadius = {} * mm,
-        apertureType ="{}",
-        beampipeThickness = {} * cm,
-        beampipeMaterial = "{}",
+    'use': "use, period={line};",
+    'beam': "beam, energy={energy}*MeV, particle=\"{particle}\";",
+    'options': """option, beampipeRadius = {beampiperadius} * mm,
+        apertureType ="{aperturetype}",
+        beampipeThickness = {beampipethickness} * cm,
+        beampipeMaterial = "{beampipematerial}",
         physicsList="em";"""
 }

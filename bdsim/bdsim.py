@@ -3,10 +3,36 @@ import subprocess as sub
 import jinja2
 import re
 import pandas as pd
+import numpy as np
 from ..simulator import Simulator
 from .grammar import bdsim_syntax
 
+SUPPORTED_CLASSES = ['DRIFT',
+                     'RBEND',
+                     'SBEND',
+                     'QUADRUPOLE',
+                     'SEXTUPOLE',
+                     'OCTUPOLE',
+                     'DECAPOLE',
+                     'MULTIPOLE',
+                     'THINMULTIPOLE',
+                     'VKICKER',
+                     'HKICKER',
+                     'KICKER',
+                     'RF',
+                     'RCOL',
+                     'ECOL',
+                     'DEGRADER',
+                     'MUSPOILER',
+                     'SHIELD',
+                     'SOLENOID',
+                     'LASER',
+                     'TRANSFORM3D',
+                     'ELEMENT',
+                     'MARKER'
+                     ]
 SUPPORTED_PROPERTIES = ['ANGLE', 'APERTYPE', 'E1', 'E2', 'FINT', 'HGAP', 'THICK', 'TILT']
+INPUT_FILENAME = 'input.bdsim'
 
 
 class BdsimException(Exception):
@@ -42,8 +68,13 @@ def element_to_bdsim(e):
         bdsim = "{}: {};".format(e.name.replace('$', ''), "marker")
     if e.KEYWORD in ['DRIFT', 'QUADRUPOLE', 'RBEND', 'SBEND']:
         bdsim = "{}: {}, l={}*m".format(e.name.replace('$', ''), e.KEYWORD.lower(), e.L)
-        if pd.notnull(e['ANGLE']):
-            bdsim += ", angle=-{}/DEGREE".format(e['ANGLE'])
+        if e.get('BENDING_ANGLE') is not None and not np.isnan(e['BENDING_ANGLE']):
+            bdsim += f",angle=-{e['BENDING_ANGLE']}"
+        elif e.get('ANGLE') is not None and not np.isnan(e['ANGLE']):
+            bdsim += f",angle=-{e.get('ANGLE', 0)}"
+        else:
+            # Angle property not supported by the element or absent
+            bdsim += ""
         #if pd.notnull(e['APERTYPE']):
         #    bdsim += ", aperture={}*m".format(str(e['APERTURE']).strip('[]'))
         if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
@@ -55,15 +86,15 @@ def element_to_bdsim(e):
 def sequence_to_bdsim(sequence):
     """Convert a pandas.DataFrame sequence onto a BDSim input."""
     sequence.sort_values(by='S', inplace=True)
-    sequence = split_rbends(sequence)
+    #sequence = split_rbends(sequence)
     if sequence is None:
         return ""
     input = "BRHO=2.3114; DEGREE=pi/180.0;"
-    input += " ".join(
+    input += "\n".join(
         sequence.reset_index().drop_duplicates(subset='index', keep='last').set_index('index').apply(
             element_to_bdsim, axis=1))
 
-    input += "{}: line = ({});".format("ess", ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
+    input += "\n{}: line = ({});\n".format("ess", ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
     return input
 
 
@@ -73,6 +104,7 @@ class BDSim(Simulator):
     Sequence and command will be converted with the BDSim grammar and pipe'd to the subprocess.
     """
     def __init__(self, **kwargs):
+        self._grammar = bdsim_syntax
         self.__input = ""
         self.__beamlines = kwargs.get('beamlines', [])
         self.__path = kwargs.get('path', ".")
@@ -89,30 +121,44 @@ class BDSim(Simulator):
     def __get_bdsim_path(self):
         return self.__bdsim if self.__bdsim is not None else shutil.which("bdsim")
 
-    def __add_input(self, keyword, strings=()):
-        self.__input += bdsim_syntax[keyword].format(*strings) + '\n'
+    def __add_input(self, keyword, *args, **kwargs):
+        self._input += self._grammar[keyword].format(*args, **kwargs) + "\n"
 
     def attach(self, beamline):
         self.__beamlines.append(beamline)
-        self.__input = sequence_to_bdsim(beamline.line)
+        self._input = sequence_to_bdsim(beamline.line)
 
     def run(self, **kwargs):
         """Run bdsim as a subprocess."""
-        self.__add_input("options", ("proton", 32.5, "circular", "Aluminium"))
-        self.__template_input = jinja2.Template(self.__input).render(kwargs.get('context', {}))
+        self.__add_input("options",
+                         beampiperadius=32.5,
+                         aperturetype="circular",
+                         beampipethickness=1.0,
+                         beampipematerial="Aluminium"
+                         )
+        self.__add_input("beam",
+                         particle='proton',
+                         energy=230+938.272,
+                         )
+        self.__add_input("use", line='ess')
+
+        template_input = jinja2.Template(self._input).render(kwargs.get('context', {}))
         if self.__get_bdsim_path() is None:
             raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
-        p = sub.Popen([self.__get_bdsim_path()],
+        with open(INPUT_FILENAME, 'w') as f:
+            f.write(template_input)
+        p = sub.Popen(" ".join([self.__get_bdsim_path(), f"--file={INPUT_FILENAME}"]),
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
-                      cwd=self.__path,
+                      cwd=".",
                       shell=True
                       )
-        self.__output = p.communicate(input=self.__template_input.encode())[0].decode()
+        self._output = p.communicate(input=template_input.encode())[0].decode()
         self.__warnings = [line for line in self.__output.split('\n') if re.search('warning|fatal', line)]
         self.__fatals = [line for line in self.__output.split('\n') if re.search('fatal', line)]
+        self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)
+        #os.remove(INPUT_FILENAME)
         return self
-

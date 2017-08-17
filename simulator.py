@@ -46,7 +46,7 @@ class Simulator:
         return self._fatals
 
     @property
-    def input(self, **kwargs):
+    def input(self):
         if self._last_context is None:
             raise SimulatorException("Asking for input but no context yet.")
         return jinja2.Template(self._input).render(self._last_context)
