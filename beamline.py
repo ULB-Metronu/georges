@@ -120,6 +120,10 @@ class Beamline:
         """The sequence name."""
         return self.__name
 
+    @name.setter
+    def name(self, n):
+        self.__name = n
+
     @property
     def length(self):
         """The sequence length."""

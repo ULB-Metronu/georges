@@ -83,19 +83,19 @@ def element_to_bdsim(e):
     return bdsim
 
 
-def sequence_to_bdsim(sequence):
+def sequence_to_bdsim(seq):
     """Convert a pandas.DataFrame sequence onto a BDSim input."""
+    sequence = seq.line
     sequence.sort_values(by='S', inplace=True)
     #sequence = split_rbends(sequence)
     if sequence is None:
         return ""
-    input = "BRHO=2.3114; DEGREE=pi/180.0;"
-    input += "\n".join(
+    i = "\n".join(
         sequence.reset_index().drop_duplicates(subset='index', keep='last').set_index('index').apply(
             element_to_bdsim, axis=1))
 
-    input += "\n{}: line = ({});\n".format("ess", ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
-    return input
+    i += "\n{}: line = ({});\n".format(seq.name, ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
+    return i
 
 
 class BDSim(Simulator):
@@ -124,9 +124,13 @@ class BDSim(Simulator):
     def __add_input(self, keyword, *args, **kwargs):
         self._input += self._grammar[keyword].format(*args, **kwargs) + "\n"
 
-    def attach(self, beamline):
+    def attach(self, beamline, secondary):
         self.__beamlines.append(beamline)
-        self._input = sequence_to_bdsim(beamline.line)
+        self._input = "BRHO=2.3114; DEGREE=pi/180.0;"
+
+        self._input += sequence_to_bdsim(beamline)
+        secondary.line.index = 'SEC' + secondary.line.index
+        self._input += sequence_to_bdsim(secondary)
 
     def run(self, **kwargs):
         """Run bdsim as a subprocess."""
@@ -140,7 +144,12 @@ class BDSim(Simulator):
                          particle='proton',
                          energy=230+938.272,
                          )
-        self.__add_input("use", line='ess')
+        self.__add_input("use", line='BEAMLINE')
+        self.__add_input("placement",
+                         line='ROOM1',
+                         reference_element='Q',
+                         reference_element_number=0
+                         )
 
         template_input = jinja2.Template(self._input).render(kwargs.get('context', {}))
         if self.__get_bdsim_path() is None:

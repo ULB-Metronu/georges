@@ -8,5 +8,15 @@ bdsim_syntax = {  # Do not forget the trailing ';' for each command!
         apertureType ="{aperturetype}",
         beampipeThickness = {beampipethickness} * cm,
         beampipeMaterial = "{beampipematerial}",
-        physicsList="em";"""
+        physicsList="em";""",
+    'placement': """
+    {line}Place: placement, sequence="{line}",
+                 referenceElement = "{reference_element}",
+                 referenceElementNumber = {reference_element_number},
+                 x = -10*cm,
+                 z = -1*m,
+                 axisAngle = 1,
+                 axisY = 1.,
+                 angle = 0.52;
+    """,
 }
