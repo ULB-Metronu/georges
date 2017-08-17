@@ -13,10 +13,10 @@ bdsim_syntax = {  # Do not forget the trailing ';' for each command!
     {line}Place: placement, sequence="{line}",
                  referenceElement = "{reference_element}",
                  referenceElementNumber = {reference_element_number},
-                 x = -10*cm,
-                 z = -1*m,
+                 x = {x_placement}*cm,
+                 z = {z_placement}*m,
                  axisAngle = 1,
                  axisY = 1.,
-                 angle = 0.52;
+                 angle = 0.0;
     """,
 }

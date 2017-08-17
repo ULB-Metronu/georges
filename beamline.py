@@ -163,6 +163,7 @@ class Beamline:
         self.__length = line.get('AT_EXIT').max()
 
     def __build_from_files(self, names):
+        """Build a sequence DataFrame from a list of .csv files."""
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
         sequences = [
             pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME') for f in files

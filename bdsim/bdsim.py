@@ -87,11 +87,16 @@ def sequence_to_bdsim(seq):
     """Convert a pandas.DataFrame sequence onto a BDSim input."""
     sequence = seq.line
     sequence.sort_values(by='S', inplace=True)
-    #sequence = split_rbends(sequence)
+    sequence = split_rbends(sequence)
     if sequence is None:
         return ""
+    sequence = sequence.query("L > 5e-6 or KEYWORD != 'DRIFT'")
     i = "\n".join(
-        sequence.reset_index().drop_duplicates(subset='index', keep='last').set_index('index').apply(
+        sequence
+                .reset_index()
+                .drop_duplicates(subset='index', keep='last')
+                .set_index('index')
+                .apply(
             element_to_bdsim, axis=1))
 
     i += "\n{}: line = ({});\n".format(seq.name, ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
@@ -124,13 +129,23 @@ class BDSim(Simulator):
     def __add_input(self, keyword, *args, **kwargs):
         self._input += self._grammar[keyword].format(*args, **kwargs) + "\n"
 
-    def attach(self, beamline, secondary):
+    def attach(self, beamline, *args, **kwargs):
         self.__beamlines.append(beamline)
         self._input = "BRHO=2.3114; DEGREE=pi/180.0;"
 
         self._input += sequence_to_bdsim(beamline)
-        secondary.line.index = 'SEC' + secondary.line.index
-        self._input += sequence_to_bdsim(secondary)
+        self.__add_input("use", line=beamline.name)
+
+        for b in args:
+            b.line.index = b.name + b.line.index
+            self._input += sequence_to_bdsim(b)
+            self.__add_input("placement",
+                             line=b.name,
+                             reference_element=kwargs.get("placement").get(b.name),
+                             reference_element_number=0,
+                             x_placement=0,
+                             z_placement=1
+                             )
 
     def run(self, **kwargs):
         """Run bdsim as a subprocess."""
@@ -143,12 +158,6 @@ class BDSim(Simulator):
         self.__add_input("beam",
                          particle='proton',
                          energy=230+938.272,
-                         )
-        self.__add_input("use", line='BEAMLINE')
-        self.__add_input("placement",
-                         line='ROOM1',
-                         reference_element='Q',
-                         reference_element_number=0
                          )
 
         template_input = jinja2.Template(self._input).render(kwargs.get('context', {}))
