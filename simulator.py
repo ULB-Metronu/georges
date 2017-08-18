@@ -24,7 +24,8 @@ class Simulator:
         self._beamlines = []
         if kwargs.get("beamlines") and not isinstance(kwargs.get("beamlines"), list):
             raise SimulatorException("The 'beamlines' argument must be a list.")
-        map(self._attach, kwargs.get('beamlines', []))
+        for b in kwargs.get('beamlines', []):
+            self._attach(b)
 
     def _attach(self, beamline):
         self._beamlines.append(beamline)

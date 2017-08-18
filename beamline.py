@@ -77,6 +77,12 @@ class Beamline:
         assert self.__length is not None
         assert self.__beamline is not None
 
+    def __str__(self):
+        return str(self.__beamline)
+
+    def __repr__(self):
+        return self.__beamline.to_html()
+
     def __process_args(self, args):
         """Process the arguments of the initializer."""
         if len(args) == 0 or len(args) > 1:
