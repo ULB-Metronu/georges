@@ -71,10 +71,13 @@ def bpm(**kwargs):
         - instrument: the specific parsing data for the instrument
     """
     path = kwargs.get("path", ".")
-    file = kwargs.get("file") if kwargs.get("file", "").endswith(".csv") else kwargs.get("file") + '.csv'
+    file = kwargs.get("file")
     bpm_name = kwargs.get("bpm", "BPM")
     instrument = kwargs.get("instrument", DATA_BPM_PCVUE)
-    bpm_data = pd.read_csv(os.path.join(path, file), skiprows=0, encoding="utf-8-sig")
+    try:
+        bpm_data = pd.read_csv(os.path.join(path, file), skiprows=0, encoding="utf-8-sig")
+    except:
+        bpm_data = pd.read_excel(os.path.join(path, file), skiprows=0, encoding="utf-8-sig")
     bpm_data["{}_data".format(bpm_name)] = bpm_data[bpm_name].apply(
         lambda x: read_data_file(
             "{0:04d}.txt".format(x),
@@ -107,7 +110,7 @@ def bpm_plot(r, bpm_name, **kwargs):
         ax = kwargs.get("ax")
     else:
         ax = plt.figure().add_subplot(111)
-    if kwargs.get("axis"):
+    if kwargs.get("axis") == 'X' or kwargs.get("axis") == 'Y':
         axis = kwargs.get("axis")
     else:
         raise Exception("'axis' keyword argument must be 'X' or 'Y'.")

@@ -41,8 +41,13 @@ def variquad(**kwargs):
     y = data[:, 1]**2
     popt, pcov = variquad_fit(x, y)
 
-    bl_map = sectormap(line=bl, context=context, start=start, places=[start, end], debug=debug, sectoracc=False)
-    print(bl_map.line[['R11', 'R12', 'R21', 'R22', 'R33', 'R34', 'R43', 'R44']])
+    bl_map = sectormap(line=bl,
+                       context=context,
+                       start=start,
+                       places=[start, end],
+                       debug=debug,
+                       sectoracc=False
+                       )
     if plane == 'X':
         r11 = bl_map.line.loc[end]['R11']
         r12 = bl_map.line.loc[end]['R12']  # Is this the correct sign?
@@ -50,7 +55,7 @@ def variquad(**kwargs):
         r11 = bl_map.line.loc[end]['R33']
         r12 = bl_map.line.loc[end]['R34']  # Is this the correct sign?
     else:
-        raise VariquadException("plane must be 'X' or 'Y'")
+        raise VariquadException("Plane must be 'X' or 'Y'")
 
     a = popt[0]
     b = popt[1]
