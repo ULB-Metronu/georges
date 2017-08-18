@@ -1,5 +1,6 @@
 import shutil
 import jinja2
+import os
 
 
 class SimulatorException(Exception):
@@ -30,7 +31,7 @@ class Simulator:
 
     def _get_exec(self):
         if self._path is not None:
-            return self._path + self._exec
+            return os.path.join(self._path, self._exec)
         else:
             return shutil.which(self._exec, path=".:/usr/local/bin:/usr/bin:/bin")
 
