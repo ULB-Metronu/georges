@@ -258,9 +258,9 @@ class Madx(Simulator):
             return
         for r in particles.iterrows():
             if ptc:
-                self._add_input('ptc_start', r[1])
+                self._add_input('ptc_start', *r[1])
             else:
-                self._add_input('start_particle', r[1])
+                self._add_input('start_particle', *r[1])
 
     def __generate_observation_points(self, e, length):
         if not e['AT_EXIT'] == length:

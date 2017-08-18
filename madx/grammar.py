@@ -8,12 +8,12 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'save_beta': "SAVEBETA, LABEL={}, PLACE={};",
     'misalign_option':"EOPTION, ADD=False;",
     'mad_misalign_setup': "SELECT, FLAG=ERROR,CLASS={};\n"
-                     "EALIGN, "
-                     "DX={},"
-                     "DY={},"
-                     "DS={},"
-                     "DPHI={},"
-                     "DTHETA={};",
+                          "EALIGN, "
+                          "DX={},"
+                          "DY={},"
+                          "DS={},"
+                          "DPHI={},"
+                          "DTHETA={};",
     'makethin': "MAKETHIN, sequence={}, style={};",
     'twiss_beamline': "TWISS, "
                       "BETX={{{{ BETAX or '1.0' }}}},"
