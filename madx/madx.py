@@ -89,6 +89,7 @@ class Madx(Simulator):
     EXECUTABLE_NAME = 'madx'
 
     def __init__(self, **kwargs):
+        self._syntax = madx_syntax
         super().__init__(**kwargs)
 
     def _attach(self, beamline):
@@ -98,7 +99,7 @@ class Madx(Simulator):
 
     def run(self, **kwargs):
         """Run madx as a subprocess."""
-        self._input += madx_syntax['stop']
+        self._input += self._syntax['stop']
         template_input = jinja2.Template(self._input).render(kwargs.get("context", {}))
         if kwargs.get("debug", False) >= 2:
             print(template_input)
@@ -118,9 +119,6 @@ class Madx(Simulator):
         if kwargs.get('debug', False):
             print(self._output)
         return self
-
-    def __add_input(self, keyword, strings=()):
-        self._input += madx_syntax[keyword].format(*strings) + '\n'
 
     def raw(self, raw):
         """Add a raw MAD-X command to the input."""

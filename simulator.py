@@ -31,6 +31,10 @@ class Simulator:
         else:
             return shutil.which(self.EXECUTABLE_NAME, path=".:/usr/local/bin:/usr/bin:/bin")
 
+    def __add_input(self, keyword, *args, **kwargs):
+        """Uses the simulator syntax to add to the input"""
+        self._input += self._syntax[keyword].format(*args, **kwargs) + '\n'
+
     def print_warnings(self):
         """Print warnings from the previous execution run."""
         [print(w) for w in self._warnings]

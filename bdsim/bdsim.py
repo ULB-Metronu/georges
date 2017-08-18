@@ -90,6 +90,7 @@ def sequence_to_bdsim(seq):
     sequence = split_rbends(sequence)
     if sequence is None:
         return ""
+    # Drift smaller than 5 microns are discarded
     sequence = sequence.query("L > 5e-6 or KEYWORD != 'DRIFT'")
     i = "\n".join(
         sequence
@@ -108,26 +109,21 @@ class BDSim(Simulator):
 
     Sequence and command will be converted with the BDSim grammar and pipe'd to the subprocess.
     """
+
+    EXECUTABLE_NAME = 'bdsim'
+
     def __init__(self, **kwargs):
+        self._syntax = bdsim_syntax
+
         self._grammar = bdsim_syntax
-        self.__input = ""
         self.__beamlines = kwargs.get('beamlines', [])
         self.__path = kwargs.get('path', ".")
         self.__bdsim = kwargs.get('bdsim', None)
         self.__context = kwargs.get('context', {})
 
-        self.__warnings = []
-        self.__fatals = []
-        self.__output = ""
         self.__template_input = None
         # Convert all sequences to BDSim sequences
         map(self.attach, self.__beamlines)
-
-    def __get_bdsim_path(self):
-        return self.__bdsim if self.__bdsim is not None else shutil.which("bdsim")
-
-    def __add_input(self, keyword, *args, **kwargs):
-        self._input += self._grammar[keyword].format(*args, **kwargs) + "\n"
 
     def attach(self, beamline, *args, **kwargs):
         self.__beamlines.append(beamline)
@@ -161,11 +157,11 @@ class BDSim(Simulator):
                          )
 
         template_input = jinja2.Template(self._input).render(kwargs.get('context', {}))
-        if self.__get_bdsim_path() is None:
+        if self._get_exec() is None:
             raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
         with open(INPUT_FILENAME, 'w') as f:
             f.write(template_input)
-        p = sub.Popen(" ".join([self.__get_bdsim_path(), f"--file={INPUT_FILENAME}"]),
+        p = sub.Popen(f"{self._get_exec()} --file={INPUT_FILENAME}",
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
@@ -173,8 +169,8 @@ class BDSim(Simulator):
                       shell=True
                       )
         self._output = p.communicate(input=template_input.encode())[0].decode()
-        self.__warnings = [line for line in self.__output.split('\n') if re.search('warning|fatal', line)]
-        self.__fatals = [line for line in self.__output.split('\n') if re.search('fatal', line)]
+        self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
+        self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)
