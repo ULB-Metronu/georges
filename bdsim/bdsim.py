@@ -1,4 +1,3 @@
-import shutil
 import subprocess as sub
 import jinja2
 import re
@@ -83,22 +82,23 @@ def element_to_bdsim(e):
     return bdsim
 
 
-def sequence_to_bdsim(seq):
+def sequence_to_bdsim(seq, **kwargs):
     """Convert a pandas.DataFrame sequence onto a BDSim input."""
+    if seq is None:
+        return ""
     sequence = seq.line
     sequence.sort_values(by='S', inplace=True)
-    sequence = split_rbends(sequence)
-    if sequence is None:
-        return ""
+    if kwargs.get("split_rbend", False):
+        sequence = split_rbends(sequence)
     # Drift smaller than 5 microns are discarded
     sequence = sequence.query("L > 5e-6 or KEYWORD != 'DRIFT'")
     i = "\n".join(
-        sequence
-                .reset_index()
+        sequence.reset_index()
                 .drop_duplicates(subset='index', keep='last')
                 .set_index('index')
                 .apply(
-            element_to_bdsim, axis=1))
+            element_to_bdsim, axis=1)
+    )
 
     i += "\n{}: line = ({});\n".format(seq.name, ",".join(sequence.index.map(lambda x: x.replace('$', ''))))
     return i
@@ -121,12 +121,12 @@ class BDSim(Simulator):
         super()._attach(beamline)
         self._input = "BRHO=2.3114; DEGREE=pi/180.0;"
 
-        self._input += sequence_to_bdsim(beamline)
+        self._input += sequence_to_bdsim(beamline, split_rbend=False)
         self._add_input("use", line=beamline.name)
 
         for b in args:
             b.line.index = b.name + b.line.index
-            self._input += sequence_to_bdsim(b)
+            self._input += sequence_to_bdsim(b, split_rbend=False)
             self._add_input("placement",
                             line=b.name,
                             reference_element=kwargs.get("placement").get(b.name),
