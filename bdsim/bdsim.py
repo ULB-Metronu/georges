@@ -113,48 +113,40 @@ class BDSim(Simulator):
     EXECUTABLE_NAME = 'bdsim'
 
     def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self._syntax = bdsim_syntax
-
-        self._grammar = bdsim_syntax
-        self.__beamlines = kwargs.get('beamlines', [])
-        self.__path = kwargs.get('path', ".")
-        self.__bdsim = kwargs.get('bdsim', None)
-        self.__context = kwargs.get('context', {})
-
-        self.__template_input = None
-        # Convert all sequences to BDSim sequences
-        map(self.attach, self.__beamlines)
+        self._exec = BDSim.EXECUTABLE_NAME
 
     def attach(self, beamline, *args, **kwargs):
-        self.__beamlines.append(beamline)
+        super()._attach(beamline)
         self._input = "BRHO=2.3114; DEGREE=pi/180.0;"
 
         self._input += sequence_to_bdsim(beamline)
-        self.__add_input("use", line=beamline.name)
+        self._add_input("use", line=beamline.name)
 
         for b in args:
             b.line.index = b.name + b.line.index
             self._input += sequence_to_bdsim(b)
-            self.__add_input("placement",
-                             line=b.name,
-                             reference_element=kwargs.get("placement").get(b.name),
-                             reference_element_number=0,
-                             x_placement=0,
-                             z_placement=1
-                             )
+            self._add_input("placement",
+                            line=b.name,
+                            reference_element=kwargs.get("placement").get(b.name),
+                            reference_element_number=0,
+                            x_placement=0,
+                            z_placement=1
+                            )
 
     def run(self, **kwargs):
         """Run bdsim as a subprocess."""
-        self.__add_input("options",
-                         beampiperadius=32.5,
-                         aperturetype="circular",
-                         beampipethickness=1.0,
-                         beampipematerial="Aluminium"
-                         )
-        self.__add_input("beam",
-                         particle='proton',
-                         energy=230+938.272,
-                         )
+        self._add_input("options",
+                        beampiperadius=32.5,
+                        aperturetype="circular",
+                        beampipethickness=1.0,
+                        beampipematerial="Aluminium"
+                        )
+        self._add_input("beam",
+                        particle='proton',
+                        energy=230 + 938.272,
+                        )
 
         template_input = jinja2.Template(self._input).render(kwargs.get('context', {}))
         if self._get_exec() is None:

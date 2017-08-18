@@ -42,7 +42,7 @@ def     sectormap(**kwargs):
     line = kwargs.get('line', None)
     if line is None:
         raise TwissException("Beamline and MAD-X objects need to be defined.")
-    m = Madx(beamlines=line)
+    m = Madx(beamlines=[line])
     m.beam(line.name)
     m.sectormap(name=line.name,
                 line=kwargs.get('periodic', False),

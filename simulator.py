@@ -13,25 +13,28 @@ class Simulator:
 
     def __init__(self, **kwargs):
         self._input = ""
+        self._exec = ""
         self._output = None
         self._warnings = []
         self._fatals = []
         self._context = {}
         self._last_context = None
         self._path = kwargs.get('path', None)
-        self._beamlines = kwargs.get('beamlines', None)
-        if isinstance(self._beamlines, list):
-            map(self._attach, self._beamlines)
-        else:
-            self._attach(self._beamlines)
+        self._beamlines = []
+        if kwargs.get("beamlines") and not isinstance(kwargs.get("beamlines"), list):
+            raise SimulatorException("The 'beamlines' argument must be a list.")
+        map(self._attach, kwargs.get('beamlines', []))
+
+    def _attach(self, beamline):
+        self._beamlines.append(beamline)
 
     def _get_exec(self):
         if self._path is not None:
-            return self._path + self.EXECUTABLE_NAME
+            return self._path + self._exec
         else:
-            return shutil.which(self.EXECUTABLE_NAME, path=".:/usr/local/bin:/usr/bin:/bin")
+            return shutil.which(self._exec, path=".:/usr/local/bin:/usr/bin:/bin")
 
-    def __add_input(self, keyword, *args, **kwargs):
+    def _add_input(self, keyword, *args, **kwargs):
         """Uses the simulator syntax to add to the input"""
         self._input += self._syntax[keyword].format(*args, **kwargs) + '\n'
 

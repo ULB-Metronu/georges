@@ -89,10 +89,12 @@ class Madx(Simulator):
     EXECUTABLE_NAME = 'madx'
 
     def __init__(self, **kwargs):
-        self._syntax = madx_syntax
         super().__init__(**kwargs)
+        self._syntax = madx_syntax
+        self._exec = Madx.EXECUTABLE_NAME
 
     def _attach(self, beamline):
+        super()._attach(beamline)
         if beamline.length is None or pd.isnull(beamline.length):
             raise SimulatorException("Beamline length not defined.")
         self._input += sequence_to_mad(beamline.line)
@@ -127,43 +129,43 @@ class Madx(Simulator):
 
     def select_columns(self, flag, columns):
         """Add a MAD-X `select` command."""
-        self.__add_input('select_columns', (flag, *columns))
+        self._add_input('select_columns', (flag, *columns))
         return self
 
     def call_file(self, file):
         """Add a MAD-X `call` command."""
-        self.__add_input('call_file', (file,))
+        self._add_input('call_file', (file,))
         return self
 
     def beam(self, line_name):
         """Add a MAD-X `beam` command."""
-        self.__add_input('beam')
+        self._add_input('beam')
         self.use_sequence(line_name)
         return self
 
     def use_sequence(self, sequence):
         """Add a MAD-X `use sequence` command."""
-        self.__add_input('use_sequence', (sequence,))
+        self._add_input('use_sequence', sequence)
         return self
 
     def rbarc(self):
         """Add a (legacy) MAD-X `rbarc` option."""
-        self.__add_input('rbarc')
+        self._add_input('rbarc')
         return self
 
     def show_beam(self):
         """Add a MAD-X `show beam` command."""
-        self.__add_input('show_beam')
+        self._add_input('show_beam')
         return self
 
     def save_beta(self, **kwargs):
         """Add a MAD-X `save beta` command."""
-        self.__add_input('save_beta', (kwargs.get("name", "BETA0"), kwargs.get("place", "#s")))
+        self._add_input('save_beta', kwargs.get("name", "BETA0"), kwargs.get("place", "#s"))
         return self
 
     def stop(self):
         """Add a MAD-X `stop` command (useful to insert as a `break point`)."""
-        self.__add_input('stop')
+        self._add_input('stop')
 
     def makethin(self, sequence, **kwargs):
         """Add a MAD-X `makethin` command."""
@@ -172,7 +174,7 @@ class Madx(Simulator):
         quadrupole_slices = kwargs.get('quadrupole_slices', 4)
         self._input += "SELECT, FLAG=makethin, CLASS=quadrupole, THICK=false, SLICE={};\n".format(quadrupole_slices)
         self._input += "SELECT, FLAG=makethin, CLASS=rbend, THICK=false, SLICE={};\n".format(dipole_slices)
-        self.__add_input('makethin', (sequence, style))
+        self._add_input('makethin', sequence, style)
         self.use_sequence(sequence)
         return self
 
@@ -184,7 +186,7 @@ class Madx(Simulator):
             self.raw("ENDEDIT;")
             self.raw("USE, SEQUENCE={};".format("BEAMLINE"))
 
-        self.__add_input("survey")
+        self._add_input("survey")
 
     def sectormap(self, **kwargs):
         if kwargs.get('line') is None:
@@ -205,7 +207,7 @@ class Madx(Simulator):
         for k, v in kwargs.items():
             if k not in ['ptc', 'start', 'places', 'name', 'line', 'reflect']:
                 options += ",%s=%s" % (k, v)
-        self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
+        self._add_input('twiss_beamline', kwargs.get('file', 'twiss.outx'), options)
         return self
 
     def twiss(self, **kwargs):
@@ -233,43 +235,43 @@ class Madx(Simulator):
         for k, v in kwargs.items():
             if k not in ['ptc', 'start', 'line']:
                 options += ",%s=%s" % (k,v)
-        self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
+        self._add_input('twiss_beamline', kwargs.get('file', 'twiss.outx'), options)
         return self
 
     def __ptc_twiss(self, **kwargs):
         if kwargs.get("fringe"):
             self.raw("PTC_SETSWITCH, FRINGE=True;")
-        self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout',
-                         (False, 1, 6, 5, True, kwargs.get('fringe', False)))
+        self._add_input('ptc_create_universe')
+        self._add_input('ptc_create_layout',
+                         False, 1, 6, 5, True, kwargs.get('fringe', False))
         if kwargs.get('misalignment', False):
-            self.__add_input('ptc_misalign')
+            self._add_input('ptc_misalign')
         if kwargs.get('line', False):
-            self.__add_input('ptc_twiss', (kwargs.get('file', 'ptc_twiss.outx'),))
+            self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'),)
         else:
-            self.__add_input('ptc_twiss_beamline', (kwargs.get('file', 'ptc_twiss.outx'),))
+            self._add_input('ptc_twiss_beamline', kwargs.get('file', 'ptc_twiss.outx'),)
 
-        self.__add_input('ptc_end')
+        self._add_input('ptc_end')
 
     def __add_particles_for_tracking(self, particles, ptc=False):
         if {'X', 'PX', 'Y', 'PY', 'DPP'} > set(particles):
             return
         for r in particles.iterrows():
             if ptc:
-                self.__add_input('ptc_start', tuple(r[1]))
+                self._add_input('ptc_start', r[1])
             else:
-                self.__add_input('start_particle', tuple(r[1]))
+                self._add_input('start_particle', r[1])
 
     def __generate_observation_points(self, e, length):
         if not e['AT_EXIT'] == length:
-            self.__add_input('observe', (e.name,))
+            self._add_input('observe', e.name)
 
     def __generate_observation_points_ptc(self, e, length):
         if not e['AT_EXIT'] == length and e['CLASS'] == 'MARKER':
-            self.__add_input('ptc_observe', (e.name,))
+            self._add_input('ptc_observe', e.name)
 
     def misalign(self, beamline,**kwargs):
-        self.__add_input('misalign_option')
+        self._add_input('misalign_option')
         self.__add_misalignment_element(beamline)
         self.raw("USE, SEQUENCE={};".format(beamline.name))
 
@@ -294,11 +296,11 @@ class Madx(Simulator):
             print("No particles to track... Doing nothing.")
             return
         self.makethin(beamline.name, **kwargs)
-        self.__add_input('track_beamline')
-        self.__add_particles_for_tracking(particles)
+        self._add_input('track_beamline')
+        self._add_particles_for_tracking(particles)
         beamline.line.apply(lambda e: self.__generate_observation_points(e, beamline.length), axis=1)
-        self.__add_input('run_track_beamline')
-        self.__add_input('end_track')
+        self._add_input('run_track_beamline')
+        self._add_input('end_track')
         return self
 
     def __ptc_track(self, particles, beamline, **kwargs):
@@ -306,25 +308,25 @@ class Madx(Simulator):
             print("No particles to track... Doing nothing.")
             return
 
-        self.__add_input('ptc_create_universe')
-        self.__add_input('ptc_create_layout', (False, 2, 6, 10, True, kwargs.get('fringe', False)))
+        self._add_input('ptc_create_universe')
+        self._add_input('ptc_create_layout', False, 2, 6, 10, True, kwargs.get('fringe', False))
         if kwargs.get('misalignment', False):
-            self.__add_input('ptc_misalign')
+            self._add_input('ptc_misalign')
         self.__add_particles_for_tracking(particles, True)
         beamline.line.apply(lambda e: self.__generate_observation_points_ptc(e, beamline.length), axis=1)
-        self.__add_input('ptc_track', (
-            5,
-            0.0,
-            False,
-            True,
-            1,
-            True,
-            True,
-            'ptctrack',
-            '.tfs'
-        ))
-        self.__add_input('ptc_track_end')
-        self.__add_input('ptc_end')
+        self._add_input('ptc_track',
+                        5,
+                        0.0,
+                        False,
+                        True,
+                        1,
+                        True,
+                        True,
+                        'ptctrack',
+                        '.tfs'
+                        )
+        self._add_input('ptc_track_end')
+        self._add_input('ptc_end')
 
     def match(self, **kwargs):
         seq = kwargs.get("sequence", None)
@@ -336,16 +338,15 @@ class Madx(Simulator):
             raise MadxException("A list of length > 0 of parameters must be provided.")
         if constraints is None:
             raise MadxException("A dictionary of constraints should be provided.")
-        self.__add_input('match', (sequence,))
+        self._add_input('match', sequence)
 
     def __add_misalignment_element(self,beamline):
-
+        """MAD-X misalignement of elements."""
         beamline.line.query("TYPE != 'MARKER'").apply(
-            lambda r: self.__add_input('mad_misalign_setup',(r['TYPE'],
-                                                        np.nan_to_num(r.get('DELTAX',0)),
-                                                        np.nan_to_num(r.get('DELTAY',0)),
-                                                        np.nan_to_num(r.get('DELTAS',0)),
-                                                        np.nan_to_num(r.get('DELTAPHI',0)),
-                                                        np.nan_to_num(r.get('DELTATHETA',0))))
-                                                                                 ,axis=1)
-
+            lambda r: self._add_input('mad_misalign_setup', r['TYPE'],
+                                      np.nan_to_num(r.get('DELTAX', 0)),
+                                      np.nan_to_num(r.get('DELTAY', 0)),
+                                      np.nan_to_num(r.get('DELTAS', 0)),
+                                      np.nan_to_num(r.get('DELTAPHI', 0)),
+                                      np.nan_to_num(r.get('DELTATHETA', 0)))
+            , axis=1)

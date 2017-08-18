@@ -34,7 +34,7 @@ def survey(**kwargs):
     line = kwargs.get("line", None)
     if beamline is None:
         raise SurveyException("A beamline is expected.")
-    m = Madx(beamlines=line)
+    m = Madx(beamlines=[line])
     m.beam(line.name)
     m.survey(start=kwargs.get('start', False))
     errors = m.run(**kwargs).fatals
