@@ -34,9 +34,9 @@ def make2Dplot(fig,Data_BEAMX,Data_BEAMY,Nbinx,Nbiny):
     bottom_h = left_h = left+width+0.02
  
     # Set up the geometry of the three plots
-    rect_beam = [left, bottom, width, height] # dimensions of temp plot
-    rect_histx = [left, bottom_h, width, 0.25] # dimensions of x-histogram
-    rect_histy = [left_h, bottom, 0.25, height] # dimensions of y-histogram
+    rect_beam = [left, bottom, width, height]  # dimensions of temp plot
+    rect_histx = [left, bottom_h, width, 0.25]  # dimensions of x-histogram
+    rect_histy = [left_h, bottom, 0.25, height]  # dimensions of y-histogram
  
     # Set up the size of the figure
     #fig = plt.figure(1, figsize=(9.5,9))
