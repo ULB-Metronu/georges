@@ -51,6 +51,7 @@ def element_to_mad(e):
 def sequence_to_mad(sequence):
     """Convert a pandas.DataFrame sequence onto a MAD-X input."""
     sequence.sort_values(by='AT_CENTER', inplace=True)
+    sequence.query("TYPE != 'SOLIDS' and TYPE != 'SLITS'", inplace=True)
     if sequence is None:
         return ""
     m = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
@@ -208,7 +209,7 @@ class Madx(Simulator):
         options = ""
         for k, v in kwargs.items():
             if k not in ['ptc', 'start', 'line']:
-                options += ",%s=%s" % (k,v)
+                options += ",%s=%s" % (k, v)
         self.__add_input('twiss_beamline', (kwargs.get('file', 'twiss.outx'), options))
         return self
 
@@ -242,11 +243,10 @@ class Madx(Simulator):
         if not e['AT_EXIT'] == length and e['CLASS'] == 'MARKER':
             self.__add_input('ptc_observe', (e.name,))
 
-    def misalign(self, beamline,**kwargs):
+    def misalign(self, beamline, **kwargs):
         self.__add_input('misalign_option')
         self.__add_misalignment_element(beamline)
         self.raw("USE, SEQUENCE={};".format(beamline.name))
-
 
     def track(self, particles, beamline, **kwargs):
         """Add a ptc `track` command."""
@@ -315,10 +315,10 @@ class Madx(Simulator):
 
         beamline.line.query("TYPE != 'MARKER'").apply(
             lambda r: self.__add_input('mad_misalign_setup',(r['TYPE'],
-                                                        np.nan_to_num(r.get('DELTAX',0)),
-                                                        np.nan_to_num(r.get('DELTAY',0)),
-                                                        np.nan_to_num(r.get('DELTAS',0)),
-                                                        np.nan_to_num(r.get('DELTAPHI',0)),
-                                                        np.nan_to_num(r.get('DELTATHETA',0))))
-                                                                                 ,axis=1)
+                                                        np.nan_to_num(r.get('DELTAX', 0)),
+                                                        np.nan_to_num(r.get('DELTAY', 0)),
+                                                        np.nan_to_num(r.get('DELTAS', 0)),
+                                                        np.nan_to_num(r.get('DELTAPHI', 0)),
+                                                        np.nan_to_num(r.get('DELTATHETA', 0))))
+                                                                                 , axis=1)
 
