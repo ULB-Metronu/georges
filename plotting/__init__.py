@@ -8,3 +8,4 @@ from .losses import losses
 from .tracking import tracking
 from .g4blprofile import g4blprofile
 from .survey import survey
+from .histogram2d import draw2d_histo
