@@ -210,12 +210,12 @@ class Beamline:
         markers = []
 
         def create_marker(r):
-            if r['CLASS'] is not 'MARKER':
+            if r['TYPE'] != 'MARKER': # function is not doesn't work
                 m = pd.Series({
                     'TYPE': 'MARKER',
                     'CLASS': 'MARKER',
                     'NAME': r.name + '_IN',
-                    'AT_CENTER': r['AT_ENTRY'],
+                    'AT_CENTER': r['AT_ENTRY']-0.001,  # Shift the entry to avoid problem with collimator
                     'PHYSICAL': False
                 })
                 markers.append(m)
@@ -223,14 +223,14 @@ class Beamline:
                     'TYPE': 'MARKER',
                     'CLASS': 'MARKER',
                     'NAME': r.name + '_OUT',
-                    'AT_CENTER': r['AT_EXIT'],
+                    'AT_CENTER': r['AT_EXIT']+0.001,
                     'PHYSICAL': False
                 })
                 markers.append(m)
             return r
 
         s.apply(create_marker, axis=1)
-        markers.pop(0);markers.pop(0)
+        #markers.pop(0);markers.pop(0)
         return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
 
     def to_thin(self, element, value):
