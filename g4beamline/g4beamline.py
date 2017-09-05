@@ -1,4 +1,4 @@
-import shutil
+import os
 import subprocess as sub
 import jinja2
 import re
@@ -21,7 +21,7 @@ def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
     """Convert a pandas.Series representation onto a G4Beamline sequence element."""
     g4bl = ""
     # For each element place a detector
-    g4bl = "place detector z={} rename=Detector{}\n".format(e['AT_CENTER'] * 1000, e.name)
+    g4bl = "zntuple z={} file='Detector{}' format=ascii \n".format(e['AT_CENTER'] * 1000, e.name)
     if e['TYPE'] in ['QUADRUPOLE']:
         g4bl += g4beamline_syntax['quadrupole'].format(e.name,
                                                        e['LENGTH'] * 1000,
@@ -48,8 +48,6 @@ def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
                                                                   f"(0.5*{{{{{e.name}_APERTURE or '0.1' }}}}*1000)+60/2",
                                                                   # do not forget the width of the slits
                                                                   e.name)
-
-
 
             g4bl += "\n place {} z={} {}={} rename={}_2\n".format(e.name, e['AT_CENTER'] * 1000,
                                                                   e['SLITS_PLANE'].lower(),
@@ -119,24 +117,30 @@ class G4Beamline(Simulator):
         self.__add_input('define_world')
         self.__add_input('keep_protons')
         self.__add_input('define_brho')
-        self.__add_input('define_detector')
+        self.__add_input('start_command')
         self._input += sequence_to_g4beamline(beamline.line, fringe=self._fringe,
                                               build_solids=self.build_solids)
 
     def _add__detector(self, e):
         self.__add_input('add_detector', (e['AT_CENTER'], e.name))
 
-    def __add_particles_for_tracking(self, particles):
-        if {'X', 'PX', 'Y', 'PY', 'DPP'} > set(particles):
-            return
-        for r in particles.iterrows():
-            self.__add_input('beam_start', tuple(r[1]))
-
     def track(self, particles):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
-        self.__add_particles_for_tracking(particles)
+
+        # Create the input file
+        self.__add_input('beam_input', (len(particles),))
+        if os.path.exists('input_beam.dat'):
+            os.remove('input_beam.dat')
+        with open('input_beam.dat', 'w') as f:
+            f.write('#BLTrackFile\n')
+            f.write('# x y z Px Py Pz t PDGid EventID TrackID ParentID Weight\n')
+            f.write('# mm mm mm MeV/c MeV/c MeV/c ns - - - - -\n')
+            particles.to_csv(f, header=False, sep=' ', index=None
+                             , columns=['X', 'Y', 'Z', 'PX', 'PY', 'PZ',
+                                     't', 'PDGid', 'EventId', 'TrackId',
+                                     'ParentId', 'Weight'])
 
     def __add_input(self, keyword, strings=()):
         self._input += g4beamline_syntax[keyword].format(*strings) + '\n'
