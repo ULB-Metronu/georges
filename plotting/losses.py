@@ -2,10 +2,18 @@ from matplotlib.ticker import *
 from .common import beamline_get_ticks_locations
 from matplotlib.ticker import *
 from .common import *
+import pandas as pd
 
 
-def losses(ax, transmission, bl):
+def losses(ax, bl, nparticles):
+
+    transmission = bl.line.query("BEAM == BEAM").apply(lambda p: pd.Series({'S': p['AT_CENTER'],
+                                                                           'Transmission': p['BEAM'].n_particles})
+                                                       , axis=1)
+    transmission['Transmission'] = 100*transmission['Transmission']/nparticles
+
     ticks_locations = beamline_get_ticks_locations(bl.line)
+    # print(ticks_locations)
     ax2 = ax.twinx()
 
     ax2.get_xaxis().set_tick_params(direction='out')
@@ -15,21 +23,22 @@ def losses(ax, transmission, bl):
     ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax2.tick_params(axis='x', labelsize=6)
     ax2.xaxis.set_major_formatter(FixedFormatter([]))
-    ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
+    # ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
     ax2.yaxis.set_major_locator(MultipleLocator(25))
     ax2.set_ylabel('T ($\%$)')
     ax2.yaxis.label.set_color(palette['green'])
     ax2.set_ylim([0, 100])
     ax2.grid(True)
-    ax2.plot(transmission, '^-', color=palette['green'])
+    ax2.plot(transmission['S'], transmission['Transmission'], '^-', color=palette['green'], markersize=2, linewidth=1)
 
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
+    ax.xaxis.set_major_formatter(FormatStrFormatter('%.3f'))
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.set_ylabel('Losses ($\%$)')
     ax.yaxis.label.set_color(palette['magenta'])
-    ax.bar(transmission.index-0.125, -transmission.diff(), 0.125,alpha=0.7,
-            edgecolor=palette['magenta'],
-            color=palette['magenta'],
-            #yerr=transmission.apply(compute_losses_error),
-            error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
-    ax.set_ylim([0, transmission.diff().abs().max()+5.0])
+    ax.bar(transmission['S']-0.125, -transmission['Transmission'].diff(), 0.125, alpha=0.7,
+           edgecolor=palette['magenta'],
+           color=palette['magenta'],
+           #yerr=transmission.apply(compute_losses_error),
+           error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
+    ax.set_ylim([0, transmission['Transmission'].diff().abs().max()+5.0])
