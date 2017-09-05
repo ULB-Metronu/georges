@@ -11,6 +11,7 @@ def xy_from_string(a, i):
     else:
         return np.inf
 
+
 def draw_chamber(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
@@ -54,7 +55,7 @@ def draw_quad(ax, e):
 def draw_coll(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)
+            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']*0.5),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             100,  # height
             hatch='.', facecolor=palette['coll']
@@ -63,14 +64,15 @@ def draw_coll(ax, e):
 
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
+            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']*0.5),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             -100,  # height
             hatch='.', facecolor=palette['coll']
         )
     )
     draw_chamber(ax, e)
-	
+
+
 def draw_bend(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
@@ -88,11 +90,13 @@ def draw_bend(ax, e):
             hatch='/', facecolor=palette['bend']
         )
     )
-    draw_chamber(ax ,e)
+    draw_chamber(ax, e)
 
 
 def aperture(ax, bl, **kwargs):
+
     bl = bl.line
+
     if 'APERTURE' not in bl:
         return
 
