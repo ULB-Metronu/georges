@@ -119,12 +119,22 @@ class Beam:
             raise BeamException("Trying to access an invalid data from a beam.")
         return self.__distribution[item]
 
-    def __initialize_distribution(self, distribution):
+    def from_file(self,filename):
+        ##
+        print('Open file : ', filename)
+         #beam=
+
+        return self
+
+    def __initialize_distribution(self, distribution, **kwargs):
         """Try setting the internal pandas.DataFrame with a distribution."""
         try:
             self.__distribution = pd.DataFrame(distribution)
         except pd.core.common.PandasError:
-            raise BeamException("Trying to initialize a beam from an invalid type.")
+            if kwargs.get("filename"):
+                self._from_file(kwargs.get("filename"))
+            else:
+                raise BeamException("Trying to initialize a beam from an invalid type.")
         self.__n_particles = self.__distribution.shape[0]
         self.__dims = self.__distribution.shape[1]
         if self.__dims < 2 or self.__dims > 6:
@@ -143,12 +153,12 @@ class Beam:
                                   PY=kwargs.get('PY', 0),
                                   DPP=kwargs.get('DPP', 0),
                                   DPPRMS=kwargs.get('DPPRMS', 0),
-                                  s11=kwargs.get('XRMS', 0),
+                                  s11=kwargs.get('XRMS', 0)**2,
                                   s12=0,
-                                  s22=kwargs.get('PXRMS', 0),
-                                  s33=kwargs.get('YRMS', 0),
+                                  s22=kwargs.get('PXRMS', 0)**2,
+                                  s33=kwargs.get('YRMS', 0)**2,
                                   s34=0,
-                                  s44=kwargs.get('PYRMS', 0)
+                                  s44=kwargs.get('PYRMS', 0)**2
                                   )
         return self
 
@@ -156,13 +166,30 @@ class Beam:
         """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
         s11 = kwargs.get('s11', 0)
         s12 = kwargs.get('s12', 0)
+        s13 = kwargs.get('s13', 0)
+        s14 = kwargs.get('s14', 0)
+        s15 = kwargs.get('s15', 0)
         s21 = s12
         s22 = kwargs.get('s22', 0)
+        s23 = kwargs.get('s23', 0)
+        s24 = kwargs.get('s24', 0)
+        s25 = kwargs.get('s25', 0)
+        s31 = s13
+        s32 = s23
         s33 = kwargs.get('s33', 0)
         s34 = kwargs.get('s34', 0)
+        s35 = kwargs.get('s35', 0)
+        s41 = s14
+        s42 = s24
         s43 = s34
         s44 = kwargs.get('s44', 0)
-        sdpp = kwargs.get('DPPRMS', 0)
+        s45 = kwargs.get('s45', 0)
+        s51 = s15
+        s52 = s25
+        s53 = s35
+        s54 = s45
+        s55 = kwargs.get('DPPRMS', 0)
+
         self.__initialize_distribution(pd.DataFrame(np.random.multivariate_normal(
             [kwargs.get('X', 0),
              kwargs.get('PX', 0),
@@ -171,11 +198,11 @@ class Beam:
              kwargs.get('DPP', 0)
              ],
             np.array([
-                [s11, s12, 0, 0, 0],
-                [s21, s22, 0, 0, 0],
-                [0, 0, s33, s34, 0],
-                [0, 0, s43, s44, 0],
-                [0, 0, 0, 0, sdpp]
+                [s11, s12, s13, s14, s15],
+                [s21, s22, s23, s24, s25],
+                [s31, s32, s33, s34, s35],
+                [s41, s42, s43, s44, s45],
+                [s51, s52, s53, s54, s55]
             ]),
             n
         )))
