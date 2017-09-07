@@ -30,6 +30,9 @@ def read_g4beamline_tracking(file):
         data['Y'] /= 1000
         data['S'] /= 1000
         data['P'] = np.sqrt(data['PX']**2+data['PY']**2+data['PZ']**2)
+        data['PX'] /= data['P']
+        data['PY'] /= data['P']
+
         tmp = beam.Beam(data[['X', 'PX', 'Y', 'PY', 'P']])
 
     return tmp
@@ -81,7 +84,6 @@ def track(**kwargs):
     if len(errors) > 0:
         print(errors)
         # raise TrackException("G4Beamline ended with fatal error.")
-
 
     # Add columns which contains datas
     l['BEAM']=l.apply(lambda g: read_g4beamline_tracking('Detector'+g.name+'.txt'), axis=1)
