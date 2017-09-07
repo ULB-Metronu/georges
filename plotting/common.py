@@ -75,10 +75,7 @@ def prepare(ax, bl, **kwargs):
     ax.set_ylim([-45, 45])
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax.set_xlabel('s (m)')
-    if kwargs.get("size_label"):
-        ax.set_ylabel("{} beam size (mm)".format(kwargs['size_label']))
-    else:
-        ax.set_ylabel(r'Beam size (mm)')
+    ax.set_ylabel(r'Beam size (mm)')
     ax.grid(False, alpha=0.25)
 
     if kwargs.get('print_label', True):
