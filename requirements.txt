@@ -2,4 +2,3 @@ numpy
 pandas
 matplotlib
 jinja2
-lmfit
