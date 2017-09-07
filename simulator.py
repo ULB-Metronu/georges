@@ -8,7 +8,6 @@ class SimulatorException(Exception):
     def __init__(self, m):
         self.message = m
 
-
 class Simulator:
 
     def __init__(self, **kwargs):
@@ -30,7 +29,10 @@ class Simulator:
         if self._path is not None:
             return self._path + self.EXECUTABLE_NAME
         else:
+            #if os == UNIX:
             return shutil.which(self.EXECUTABLE_NAME, path=".:/usr/local/bin:/usr/bin:/bin")
+            #else os :
+            #return ...
 
     def print_warnings(self):
         """Print warnings from the previous execution run."""
