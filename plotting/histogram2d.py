@@ -3,8 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import NullFormatter
 from matplotlib import patches
 from numpy import linspace
-from scipy.optimize import curve_fit
-
+import georges.statistics as stat
 
 plt.ion()
 
@@ -40,11 +39,6 @@ def ellipse(ra, rb, ang, x0, y0):
                          edgecolor='black')
 
     return e1
-
-
-def gauss(x, *p):
-    a, mu, sigma = p
-    return a*np.exp(-(x-mu)**2/(2.*sigma**2))
 
 
 def draw2d_histo(fig, data, twiss_parameter, **kwargs):
@@ -166,23 +160,41 @@ def draw2d_histo(fig, data, twiss_parameter, **kwargs):
 
     if kwargs.get('gaussian_fit', False):
 
-        bincenter = (binsx[:-1] + binsx[1:])/2
-        coeff_x, var_matrix_x = curve_fit(gauss, bincenter, nx, p0=[1., x.mean(), x.std()])
-        hist_fit = gauss(bincenter, *coeff_x)
-        ax_histx.plot(bincenter, hist_fit, 'k--', linewidth=1)
+        limx = np.arange(xlims[0], xlims[1], (xlims[1]-xlims[0])/nxbins)
+        bin_centerx, fitresults_x = stat.gaussian_fit(x, default_lim=False, lim=limx)
+        ax_histx.plot(bin_centerx, fitresults_x.best_fit, 'k--', linewidth=1)
 
-        bincenter = (binsy[:-1] + binsy[1:]) / 2
-        coeff_y, var_matrix_y = curve_fit(gauss, bincenter, ny, p0=[1., y.mean(), y.std()])
-        hist_fit = gauss(bincenter, *coeff_y)
-        ax_histy.plot(hist_fit, bincenter, 'k--', linewidth=1)
+        limy = np.arange(ylims[0], ylims[1], (ylims[1] - ylims[0]) / nybins)
+        bin_centery, fitresults_y = stat.gaussian_fit(y, default_lim=False, lim=limy)
+        ax_histy.plot(fitresults_y.best_fit, bin_centery, 'k--', linewidth=1)
 
-        error_x = np.sqrt(np.diag(var_matrix_x))
-        error_y = np.sqrt(np.diag(var_matrix_y))
+        gaussian_meanx = float(fitresults_x.params['cen'].value)
+        gaussian_meany = float(fitresults_y.params['cen'].value)
+        gaussian_stdx = float(fitresults_x.params['wid'].value)
+        gaussian_stdy = float(fitresults_y.params['wid'].value)
 
-        print(f"GAUSSIAN MEAN X: {coeff_x[1]:{10}.{3}}+-{error_x[1]:{10}.{3}}\n"
-              f"GAUSSIAN STD X: {coeff_x[2]:{10}.{3}}+- {error_x[2]:{10}.{3}}\n"
-              f"GAUSSIAN MEAN Y: {coeff_y[1]:{10}.{3}}+- {error_y[1]:{10}.{3}} \n"
-              f"GAUSSIAN STD Y: {coeff_y[2]:{10}.{3}}+- {error_y[2]:{10}.{3}}\n"
+        gaussian_errormeanx = float(fitresults_x.params['cen'].stderr)
+        gaussian_errormeany = float(fitresults_y.params['cen'].stderr)
+        gaussian_errorstdx = float(fitresults_x.params['wid'].stderr)
+        gaussian_errorstdy = float(fitresults_y.params['wid'].stderr)
+
+        relative_error_meanx = 100 * gaussian_errormeanx/gaussian_meanx
+        relative_error_meany = 100 * gaussian_errormeany / gaussian_meany
+        relative_error_stdx = 100 * gaussian_errorstdx / gaussian_stdx
+        relative_error_stdy = 100 * gaussian_errorstdy / gaussian_stdy
+
+        print(f"GAUSSIAN MEAN X: {gaussian_meanx:{10}.{3}}"
+              f"+/- {gaussian_errormeanx:{10}.{3}}"
+              f"({relative_error_meanx:{10}.{3}}%)\n"
+              f"GAUSSIAN STD X: {gaussian_stdx:{10}.{3}}"
+              f"+/- {gaussian_errorstdx:{10}.{3}}"
+              f"({relative_error_stdx:{10}.{3}}%)\n"
+              f"GAUSSIAN MEAN Y: {gaussian_meany:{10}.{3}}"
+              f"+/- {gaussian_errormeany:{10}.{3}}"
+              f"({relative_error_meany:{10}.{3}}%)\n"
+              f"GAUSSIAN STD Y: {gaussian_stdy:{10}.{3}}"
+              f"+/- {gaussian_errorstdy:{10}.{3}}"
+              f"({relative_error_stdy:{10}.{3}}%)\n"
               )
 
     if kwargs.get('draw_tab', False):
