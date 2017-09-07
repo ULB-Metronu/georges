@@ -10,12 +10,12 @@ def gauss(x, *p):
 
 def gaussian(x, amp, cen, wid):
     """1-d gaussian: gaussian(x, amp, cen, wid)"""
-    return (amp/(np.sqrt(2*np.pi)*wid)) * np.exp(-(x-cen)**2 /(2*wid**2))
+    return (amp/(np.sqrt(2*np.pi)*wid)) * np.exp(-(x-cen)**2 / (2*wid**2))
 
 
 def gaussian_fit(data, **kwargs):
 
-    if kwargs.get('default_lim',True):
+    if kwargs.get('default_lim', True):
         lim = np.arange(-40, 40, 80/50)
 
     else:

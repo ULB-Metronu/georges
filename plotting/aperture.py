@@ -52,25 +52,28 @@ def draw_quad(ax, e):
     draw_chamber(ax, e)
 
 
-def draw_coll(ax, e):
-    ax.add_patch(
-        matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']*0.5),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
-            100,  # height
-            hatch='.', facecolor=palette['coll']
-        )
-    )
+def draw_coll(ax, e, plane):
 
-    ax.add_patch(
-        matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']*0.5),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
-            -100,  # height
-            hatch='.', facecolor=palette['coll']
+    if e['SLITS_PLANE'] == plane or e['SLITS_PLANE'] != e['SLITS_PLANE']:  # Pas top comme notation
+
+        ax.add_patch(
+            matplotlib.patches.Rectangle(
+                (e['AT_ENTRY'], 1000 * e['APERTURE_UP']*0.5),  # (x,y)
+                e['ORBIT_LENGTH'],  # width
+                100,  # height
+                hatch='.', facecolor=palette['coll']
+            )
         )
-    )
-    draw_chamber(ax, e)
+
+        ax.add_patch(
+            matplotlib.patches.Rectangle(
+                (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']*0.5),  # (x,y)
+                e['ORBIT_LENGTH'],  # width
+                -100,  # height
+                hatch='.', facecolor=palette['coll']
+            )
+        )
+        draw_chamber(ax, e)
 
 
 def draw_bend(ax, e):
@@ -93,10 +96,16 @@ def draw_bend(ax, e):
     draw_chamber(ax, e)
 
 
+def fill_aperture(element, context):
+
+    if element.name+'_APERTURE' in context and element['TYPE'] == 'SLITS':
+        element['APERTURE'] = context[element.name+'_APERTURE']
+    return element
+
+
 def aperture(ax, bl, **kwargs):
 
-    bl = bl.line
-
+    bl = bl.line.apply(lambda e: fill_aperture(e, bl.context), axis=1)
     if 'APERTURE' not in bl:
         return
 
@@ -114,5 +123,4 @@ def aperture(ax, bl, **kwargs):
     bl.query("CLASS == 'QUADRUPOLE'").apply(lambda e: draw_quad(ax, e), axis=1)
     bl.query("CLASS == 'SBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
     bl.query("CLASS == 'RBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
-    bl.query("CLASS == 'COLLIMATOR'").apply(lambda e: draw_coll(ax, e), axis=1)
-
+    bl.query("CLASS == 'COLLIMATOR'").apply(lambda e: draw_coll(ax, e, planes), axis=1)

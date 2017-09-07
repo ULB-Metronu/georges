@@ -92,6 +92,10 @@ def sequence_to_g4beamline(sequence, **kwargs):
 
     input += '\n'.join(sequence.apply(lambda e: element_to_g4beamline(e, **kwargs), axis=1)) + '\n'
 
+    if sequence.iloc[-1]['TYPE'] == 'MARKER':  # If it is a marker : place a virtual detector to have results
+
+        input += g4beamline_syntax['virtual_det'].format(sequence.iloc[-1]['AT_CENTER'] * 1000,
+                                                         sequence.iloc[-1].name)
     return input
 
 
@@ -139,8 +143,8 @@ class G4Beamline(Simulator):
             f.write('# mm mm mm MeV/c MeV/c MeV/c ns - - - - -\n')
             particles.to_csv(f, header=False, sep=' ', index=None
                              , columns=['X', 'Y', 'Z', 'PX', 'PY', 'PZ',
-                                     't', 'PDGid', 'EventId', 'TrackId',
-                                     'ParentId', 'Weight'])
+                                        't', 'PDGid', 'EventId', 'TrackId',
+                                        'ParentId', 'Weight'])
 
     def __add_input(self, keyword, strings=()):
         self._input += g4beamline_syntax[keyword].format(*strings) + '\n'

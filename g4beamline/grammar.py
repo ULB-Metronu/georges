@@ -45,4 +45,5 @@ g4beamline_syntax = {
 
     'tesselatedsolids': "tessellatedsolid {} kill=0 material={} file={}",
     'place_solids': "place {} x={} y={} z={} rotation=X{},Y{},Z{}",
+    'virtual_det': " virtualdetector det \n place det z={} rename=det_{} format=ascii \n"
 }
