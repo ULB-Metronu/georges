@@ -89,65 +89,95 @@ def compute_meanAndsigma(Data):
     """ Compute useful parameters of the beam : mean, sigma, .... """
     # For the std, use N-1 because it's an independent sample from a distributed population
 
-    xmean=Data['x'].mean()
-    sigmax=Data['x'].std(ddof=1)
+    xmean = Data['x'].mean()
+    sigmax = Data['x'].std(ddof=1)
 
-    ymean=Data['y'].mean()
-    sigmay=Data['y'].std(ddof=1)
+    ymean = Data['y'].mean()
+    sigmay = Data['y'].std(ddof=1)
 
-    xpmean=Data['xp'].mean()
-    sigmaxp=Data['xp'].std(ddof=1)
+    xpmean = Data['xp'].mean()
+    sigmaxp = Data['xp'].std(ddof=1)
 
-    ypmean=Data['xp'].mean()
-    sigmayp=Data['yp'].std(ddof=1)
+    ypmean = Data['xp'].mean()
+    sigmayp = Data['yp'].std(ddof=1)
 
-    Pmean=Data['Ptot'].mean()
-    sigmaP=Data['Ptot'].std(ddof=1)
+    Pmean = Data['Ptot'].mean()
+    sigmaP = Data['Ptot'].std(ddof=1)
 
-    Emean=Data['Energy'].mean()
-    sigmaE=Data['Energy'].std(ddof=1)
+    Emean = Data['Energy'].mean()
+    sigmaE = Data['Energy'].std(ddof=1)
 
-    dp_pmean=Data['dP_P'].mean()
-    dp_psigma=Data['dP_P'].std(ddof=1)
+    dp_pmean = Data['dP_P'].mean()
+    dp_psigma = Data['dP_P'].std(ddof=1)
 
-    columnsName=['xmean','ymean','xpmean','ypmean','sigmax','sigmay','sigmaxp','sigmayp','Pmean','sigmaP','Emean','sigmaE','dp_pmean','dp_psigma']
-    DataBeam=[xmean,ymean,xpmean,ypmean,sigmax,sigmay,sigmaxp,sigmayp,Pmean,sigmaP,Emean,sigmaE,dp_pmean,dp_psigma]
-    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
-    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
+    columnsName = ['xmean','ymean','xpmean','ypmean','sigmax','sigmay','sigmaxp','sigmayp','Pmean','sigmaP','Emean','sigmaE','dp_pmean','dp_psigma']
+    DataBeam = [xmean,ymean,xpmean,ypmean,sigmax,sigmay,sigmaxp,sigmayp,Pmean,sigmaP,Emean,sigmaE,dp_pmean,dp_psigma]
+    DataBeam = np.array(DataBeam).reshape(1,len(DataBeam))
+    Beamparameter = pd.DataFrame(DataBeam, columns=columnsName)
 
     return Beamparameter
 
 
-def compute_twiss_parameter(Data):
+def compute_twiss_parameter(data):
     """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """
 
     # Data for emittance calculation
-    xmean=Data['x'].mean()
-    xpmean=Data['xp'].mean()
-    ymean=Data['x'].mean()
-    ypmean=Data['xp'].mean()
+
+    x = data[data.columns[0]]
+    y = data[data.columns[1]]
+
+    xmean = x.mean()
+    ymean = y.mean()
+
     # Diagonal elements
-    sigma_xx = ((Data['x']-xmean)*(Data['x']-xmean)).mean()
-    sigma_yy = ((Data['y']-ymean)*(Data['y']-ymean)).mean()
-    sigma_xpxp = ((Data['xp']-xpmean)*(Data['xp']-xpmean)).mean()
-    sigma_ypyp = ((Data['yp']-ypmean)*(Data['yp']-ypmean)).mean()
+    sigma_xx = ((x-xmean)*(x-xmean)).mean()
+    sigma_yy = ((y-ymean)*(y-ymean)).mean()
+
     # Off-diagonal elements
-    sigma_xxp=((Data['x']-xmean)*(Data['xp']-xpmean)).mean()
-    sigma_yyp=((Data['y']-ymean)*(Data['yp']-ypmean)).mean()
-    # Compute the emittance
-    EmitHOR=np.sqrt(sigma_xx*sigma_xpxp-sigma_xxp**2)
-    EmitVER=np.sqrt(sigma_yy*sigma_ypyp-sigma_yyp**2)
+    sigma_xy = ((x-xmean)*(y-ymean)).mean()
+
     # Twiss parameter
-    BetaHOR=sigma_xx/EmitHOR
-    BetaVER=sigma_yy/EmitVER
-    AlphaHOR=-1*sigma_xxp/EmitHOR
-    AlphaVER=-1*sigma_yyp/EmitVER
-    #GammaHOR=sigma_xpxp/EmitHOR
-    #GammaVER=sigma_ypyp/EmitVER
+    emittance = np.sqrt(sigma_xx*sigma_yy-sigma_xy**2)
+    alpha = -1 * sigma_xy/emittance
+    beta = sigma_xx/emittance
+    gamma = sigma_yy/emittance
+    phi = 0.5*np.rad2deg(np.arctan(2*alpha/(gamma-beta)))
 
-    columnsName=['EmitHOR','EmitVER','BetaHOR','BetaVER','AlphaHOR','AlphaVER']
-    DataBeam=[EmitHOR,EmitVER,BetaHOR,BetaVER,AlphaHOR,AlphaVER]
-    DataBeam=np.array(DataBeam).reshape(1,len(DataBeam))
-    Beamparameter=pd.DataFrame(DataBeam,columns=columnsName)
+    twiss_parameter = pd.Series(data=[alpha, beta, gamma, phi, emittance],
+                                index=['ALPHA', 'BETA', 'GAMMA', 'PHI', 'EMITTANCE'])
 
-    return Beamparameter
+    return twiss_parameter
+
+# def compute_twiss_parameter(data):
+#     """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """
+#
+#     # Data for emittance calculation
+#     xmean = data['x'].mean()
+#     xpmean = data['xp'].mean()
+#     ymean = data['x'].mean()
+#     ypmean = data['xp'].mean()
+#     # Diagonal elements
+#     sigma_xx = ((data['x']-xmean)*(data['x']-xmean)).mean()
+#     sigma_yy = ((data['y']-ymean)*(data['y']-ymean)).mean()
+#     sigma_xpxp = ((data['xp']-xpmean)*(data['xp']-xpmean)).mean()
+#     sigma_ypyp = ((data['yp']-ypmean)*(data['yp']-ypmean)).mean()
+#     # Off-diagonal elements
+#     sigma_xxp = ((data['x']-xmean)*(data['xp']-xpmean)).mean()
+#     sigma_yyp = ((data['y']-ymean)*(data['yp']-ypmean)).mean()
+#     # Compute the emittance
+#     emit_hor = np.sqrt(sigma_xx*sigma_xpxp-sigma_xxp**2)
+#     emit_ver = np.sqrt(sigma_yy*sigma_ypyp-sigma_yyp**2)
+#     # Twiss parameter
+#     beta_hor = sigma_xx/emit_hor
+#     beta_ver = sigma_yy/emit_ver
+#     alpha_hor = -1*sigma_xxp/emit_hor
+#     alpha_ver = -1*sigma_yyp/emit_ver
+#     # Gamma_hor = sigma_xpxp/Emit_hor
+#     # Gamma_ver = sigma_ypyp/Emit_ver
+#
+#     columnsname = ['EmitHOR', 'EmitVER', 'BetaHOR', 'BetaVER', 'AlphaHOR', 'AlphaVER']
+#     data_beam = [emit_hor, emit_ver, beta_hor, beta_ver, alpha_hor, alpha_ver]
+#     data_beam = np.array(data_beam).reshape(1, len(data_beam))
+#     beamparameter=pd.DataFrame(data_beam, columns=columnsname)
+#
+#     return beamparameter

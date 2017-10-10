@@ -30,6 +30,10 @@ palette['bend'] = palette['red']
 palette['coll'] = palette['yellow']
 palette['X'] = palette['cyan']
 palette['Y'] = palette['orange']
+palette['X_MADX'] = palette['cyan']
+palette['Y_MADX'] = palette['orange']
+palette['X_G4BL'] = palette['magenta']
+palette['Y_G4BL'] = palette['green']
 
 
 def style_boxplot(bp, color):
@@ -69,28 +73,27 @@ def prepare(ax, bl, **kwargs):
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.yaxis.set_minor_locator(MultipleLocator(5))
     ax.set_ylim([-45, 45])
+    ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax.set_xlabel('s (m)')
-    if kwargs.get("size_label"):
-        ax.set_ylabel("{} beam size (mm)".format(kwargs['size_label']))
-    else:
-        ax.set_ylabel(r'Beam size (mm)')
+    ax.set_ylabel(r'Beam size (mm)')
     ax.grid(False, alpha=0.25)
 
-    ax2 = ax.twiny()
-    ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])
-    ax2.get_xaxis().set_tick_params(direction='out')
-    plt.setp(ax2.xaxis.get_majorticklabels(), rotation=-90)
-    ax2.tick_params(axis='both', which='major')
-    ax2.tick_params(axis='x', labelsize=6)
-    ax2.xaxis.set_major_formatter(FixedFormatter(ticks_labels))
-    ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
+    if kwargs.get('print_label', True):
+        ax2 = ax.twiny()
+        ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])
+        ax2.get_xaxis().set_tick_params(direction='out')
+        ax2.tick_params(axis='both', which='major')
+        ax2.tick_params(axis='x', labelsize=6)
+        plt.setp(ax2.xaxis.get_majorticklabels(), rotation=-90)
+        ax2.xaxis.set_major_formatter(FixedFormatter(ticks_labels))
+        ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
 
     if kwargs.get("size_arrows", False):
         ax.set_yticklabels([str(abs(x)) for x in ax.get_yticks()])
         ax.annotate('', xy=(-0.103, 0.97), xytext=(-0.103, 0.75),
-                     arrowprops=dict(arrowstyle="->", color='k'), xycoords=ax.transAxes)
+                    arrowprops=dict(arrowstyle="->", color='k'), xycoords=ax.transAxes)
         ax.annotate('', xy=(-0.103, 0.25), xycoords='axes fraction', xytext=(-0.103, 0.03),
-                     arrowprops=dict(arrowstyle="<-", color='k'))
+                    arrowprops=dict(arrowstyle="<-", color='k'))
         ax.text(-0.126, 0.86, "Vertical", fontsize=7, rotation=90, transform=ax.transAxes)
         ax.text(-0.126, 0.22, "Horizontal", fontsize=7, rotation=90, transform=ax.transAxes)
 
