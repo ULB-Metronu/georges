@@ -21,3 +21,5 @@ examples/tracking.outxone
 examples/twiss.outx
 /.project
 .idea/**
+
+examples/sectormap
