@@ -3,11 +3,6 @@ import numpy as np
 from lmfit import Model
 
 
-def gauss(x, *p):
-    a, mu, sigma = p
-    return a*np.exp(-(x-mu)**2/(2.*sigma**2))
-
-
 def gaussian(x, amp, cen, wid):
     """1-d gaussian: gaussian(x, amp, cen, wid)"""
     return (amp/(np.sqrt(2*np.pi)*wid)) * np.exp(-(x-cen)**2 / (2*wid**2))
@@ -15,9 +10,8 @@ def gaussian(x, amp, cen, wid):
 
 def gaussian_fit(data, **kwargs):
 
-    if kwargs.get('default_lim', True):
-        lim = np.arange(-40, 40, 80/50)
-
+    if kwargs.get('lim') is None:
+        lim = 50
     else:
         lim = kwargs.get('lim')
 
@@ -25,7 +19,7 @@ def gaussian_fit(data, **kwargs):
     x = (bin_edges[:-1] + bin_edges[1:]) / 2
 
     gmodel = Model(gaussian)
-    result = gmodel.fit(y, x=x, amp=1, cen=x.mean(), wid=x.std())
+    result = gmodel.fit(y, x=x, amp=1, cen=x.mean(), wid=x.var())
 
     if kwargs.get('fit_report', False):
         print(result.fit_report())
