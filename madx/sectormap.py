@@ -7,14 +7,29 @@ MADX_SECTORMAP_HEADERS_SKIP_ROWS = 6
 MADX_SECTORMAP_DATA_SKIP_ROWS = 8
 
 
-class MatchException(Exception):
-    """Exception raised for errors in the Match module."""
+class SectormapException(Exception):
+    """Exception raised for errors in the Sectormap module."""
 
     def __init__(self, m):
         self.message = m
 
 
-def match(**kwargs):
+def read_madx_sectormap(file):
+    """Read a MAD-X Sectormap TFS file to a dataframe."""
+    headers = pd.read_csv(file, skiprows=MADX_SECTORMAP_HEADERS_SKIP_ROWS, nrows=0, delim_whitespace=True)
+    headers.drop(headers.columns[[0, 1]], inplace=True, axis=1)
+    df = pd.read_csv(file,
+                     header=None,
+                     names=headers,
+                     na_filter=False,
+                     skiprows=MADX_SECTORMAP_DATA_SKIP_ROWS,
+                     delim_whitespace=True
+                     )
+    df.index.name = 'NAME'
+    return df
+
+
+def sectormap(**kwargs):
     """Compute the transfer matrices of the beamline.
     :param kwargs: parameters are:
         - line: the beamline on which twiss will be run

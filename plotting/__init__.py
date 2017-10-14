@@ -1,8 +1,11 @@
 import matplotlib.pyplot as plt
 
-from plotting.common import prepare
-from plotting.aperture import aperture
-from plotting.twiss import twiss
-from plotting.twiss import beta, alpha, dispersion
-from plotting.losses import losses
-from plotting.tracking import tracking
+from .common import prepare
+from .aperture import aperture
+from .twiss import twiss
+from .twiss import beta, alpha, dispersion, phase_advance
+from .losses import losses
+from .tracking import tracking
+from .g4blprofile import g4blprofile
+from .survey import survey
+from .histogram2d import draw2d_histo

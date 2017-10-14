@@ -1,0 +1,57 @@
+Beam Profile
+Id : E0.E1.BPA02
+Date and time : Sun Jul 23 12:30:35 2017
+
+Average Integrated Current : 183.15 nA
+
+X-Wire data
+
+Max. current :  24.25 nA/mm
+
+Channel		Status		Position (mm)	Current density (nA/mm)
+01		TRUE		-26.3		  0.137
+02		TRUE		-18.0		  0.359
+03		TRUE		-14.0		  0.585
+04		TRUE		-10.0		  0.957
+05		TRUE		-7.0		  2.735
+06		TRUE		-5.0		  8.074
+07		TRUE		-3.0		 14.118
+08		TRUE		-1.0		 18.160
+09		TRUE		 1.0		 22.278
+10		TRUE		 3.0		 24.245
+11		TRUE		 5.0		 18.432
+12		TRUE		 7.0		  4.661
+13		TRUE		10.0		  1.070
+14		TRUE		14.0		  0.567
+15		TRUE		18.0		  0.284
+16		TRUE		26.3		  0.099
+
+chisqr :      0.00530
+centroid (mm) :      1.36
+sigma (mm) :      3.93
+
+Y-Wire data
+
+Max. current :   4.65 nA/mm
+
+Channel		Status		Position (mm)	Current density (nA/mm)
+01		TRUE		-26.3		  0.093
+02		TRUE		-18.0		  0.643
+03		TRUE		-14.0		  1.150
+04		TRUE		-10.0		  1.900
+05		TRUE		-7.0		  2.533
+06		TRUE		-5.0		  3.005
+07		TRUE		-3.0		  3.640
+08		TRUE		-1.0		  3.657
+09		TRUE		 1.0		  3.969
+10		TRUE		 3.0		  4.646
+11		TRUE		 5.0		  4.568
+12		TRUE		 7.0		  4.379
+13		TRUE		10.0		  4.204
+14		TRUE		14.0		  3.599
+15		TRUE		18.0		  2.489
+16		TRUE		26.3		  0.381
+
+chisqr :      0.00165
+centroid (mm) :      5.29
+sigma (mm) :     11.35

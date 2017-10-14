@@ -1,5 +1,11 @@
-from georges.beam import Beam
-from georges.beamline import Beamline
-import georges.madx
-import georges.bdsim
-import georges.physics
+from .beam import Beam
+from .beamline import Beamline
+from .context import Context
+from . import madx
+from . import bdsim
+from . import topas
+from . import g4beamline
+from . import measure
+from . import physics
+from . import statistics
+from . import plotting
