@@ -7,7 +7,7 @@ plotting/__pycache__/
 .DS_Store
 .idea/**
 .idea/shelf/
-/examples/.ipynb_checkpoints/
+/examples/.ipynb_checkpoints/**
 examples/.ipynb_checkpoints/FFAG - -checkpoint.ipynb
 examples/.ipynb_checkpoints/Gantry FFAG-checkpoint.ipynb
 examples/FFAG - .ipynb
@@ -21,6 +21,5 @@ examples/ptctrackone.tfs
 examples/survey.out
 examples/tracking.outxone
 examples/twiss.outx
-/.project
 
 
