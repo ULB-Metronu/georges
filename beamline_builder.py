@@ -1,18 +1,17 @@
 import pandas as pd
 
-def replicate(a, n=2):
-    # return n*a
-    pass
-
-def join(a, b):
-    # return a + b
-    pass
-
-
 ## TODO Move read_csv etc. from beamline to beamline_builder
 
 
 class BeamlineBuilder:
+
+    def replicate(a, n=2):
+        # return n*a
+        pass
+
+    def join(a, b):
+        # return a + b
+        pass
 
     def __init__(self):
         self._beamline = []

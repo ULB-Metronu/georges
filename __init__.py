@@ -8,7 +8,7 @@ from . import madx
 from . import bdsim
 from . import topas
 from . import g4beamline
-from . import measure
+from . import experimental
 from . import physics
 from . import statistics
 from . import plotting
