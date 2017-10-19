@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 
 
+# TODO Move these methods to a class (static or something similar and remove ugly inspect statement
 def compute_derived_data(row):
     """Compute derived data for a beamline element."""
     # Corner case
@@ -21,7 +22,6 @@ def compute_derived_data(row):
     return row
 
 
-# TODO Move these methods to a class (static or something similar and remove ugly inspect statement
 def at_entry(r):
     """Try to compute the element's entry 's' position from other data."""
     if pd.isnull(r.get('ORBIT_LENGTH')):
