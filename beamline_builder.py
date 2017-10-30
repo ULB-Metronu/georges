@@ -17,12 +17,11 @@ class BeamlineBuilder:
         self._beamline = []
         pass
 
-
     def add_bend(self, **kwargs):
         bend = {
-            name: kwargs.get('name', 'bend'),
-            angle: kwargs.get('angle', 0),
-            K1: kwargs,get('K1', 0),
+            'name': kwargs.get('name', 'bend'),
+            'angle': kwargs.get('angle', 0),
+            'K1': kwargs.get('K1', 0),
         }
         self._beamline.append(bend)
         return self
@@ -35,8 +34,6 @@ class BeamlineBuilder:
         return pd.DataFrame(self._beamline)
 
 
-
-
-builder = BeamlineBUilder()
+builder = BeamlineBuilder()
 builder.add_bend(name="bend", a=1, b=2)
 builder.line

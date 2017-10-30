@@ -4,7 +4,6 @@ from .. import beamline
 from .. import beam
 from .g4beamline import G4Beamline
 import numpy as np
-import georges.physics as beamphys
 
 G4BEAMLINE_SKIP_ROWS = 3
 
@@ -57,7 +56,7 @@ def track(**kwargs):
     # Convert m in mm for G4Beamline and rad in MeV/c
     g4_beam = b.distribution.copy()
 
-    momentum = beamphys.energy_to_momentum(b.energy)*1000
+    momentum = physics.energy_to_momentum(b.energy)*1000
     g4_beam['X'] *= 1000
     g4_beam['Y'] *= 1000
     g4_beam['Z'] = 0.0
