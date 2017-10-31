@@ -4,7 +4,6 @@ import re
 import pandas as pd
 import numpy as np
 from ..simulator import Simulator
-from .grammar import bdsim_syntax
 
 SUPPORTED_CLASSES = ['DRIFT',
                      'RBEND',
