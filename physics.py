@@ -42,7 +42,7 @@ def compute_beta(x, px):
 
 
 def range_to_energy(r):
-    """Return the range [g/cm^2] from the kinetic energy [MeV]."""
+    """Return the kinetic energy [MeV] from the range [g/cm^2]."""
     a = 0.00169; b = -0.00490; c = 0.56137; d = 3.46405
     return np.exp(
         a * np.log(r)**3 + b * np.log(r)**2 + c * np.log(r) + d
@@ -50,7 +50,7 @@ def range_to_energy(r):
 
 
 def energy_to_range(e):
-    """Return the kinetic energy [MeV] from the range [g/cm^2]."""
+    """Return the range [g/cm^2] from the kinetic energy [MeV]."""
     b = 0.008539; c = 0.5271; d = 3.4917
     return np.exp((-c + np.sqrt(c**2 - 4 * b * (d - np.log(e))))/(2*b))
 
@@ -143,8 +143,9 @@ def compute_twiss_parameter(data):
     gamma = sigma_yy/emittance
     phi = 0.5*np.rad2deg(np.arctan(2*alpha/(gamma-beta)))
 
-    twiss_parameter = pd.Series(data=[alpha, beta, gamma, phi, emittance],
-                                index=['ALPHA', 'BETA', 'GAMMA', 'PHI', 'EMITTANCE'])
+    twiss_parameter = pd.Series(data=[alpha, beta, gamma, phi, emittance, sigma_xx, sigma_yy, sigma_xy],
+                                index=['ALPHA', 'BETA', 'GAMMA', 'PHI', 'EMITTANCE', 'SIGMA11'
+                                , 'SIGMA22', 'SIGMA12'])
 
     return twiss_parameter
 
