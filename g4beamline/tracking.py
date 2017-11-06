@@ -4,6 +4,7 @@ from .. import beamline
 from .. import beam
 from .g4beamline import G4Beamline
 import numpy as np
+from .. import physics
 
 G4BEAMLINE_SKIP_ROWS = 3
 
@@ -51,7 +52,7 @@ def track(**kwargs):
     if line is None or b is None or context is None:
         raise TrackException("Beamline, Beam, context and G4Beamline objects need to be defined.")
 
-    g4 = G4Beamline(beamlines=line, **kwargs)
+    g4 = G4Beamline(beamlines=[line], **kwargs)
 
     # Convert m in mm for G4Beamline and rad in MeV/c
     g4_beam = b.distribution.copy()
@@ -85,7 +86,7 @@ def track(**kwargs):
         # raise TrackException("G4Beamline ended with fatal error.")
 
     # Add columns which contains datas
-    l['BEAM']=l.apply(lambda g: read_g4beamline_tracking('Detector'+g.name+'.txt'), axis=1)
+    l['BEAM'] = l.apply(lambda g: read_g4beamline_tracking('Detector'+g.name+'.txt'), axis=1)
     l.apply(lambda g:
             os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
             axis=1)

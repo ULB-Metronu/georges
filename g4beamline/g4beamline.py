@@ -109,9 +109,13 @@ class G4Beamline(Simulator):
 
     def __init__(self, **kwargs):
 
+        self._fringe = kwargs.get('fringe', False)
         self._build_degrader = kwargs.get('build_degrader', False)
         self.build_solids = kwargs.get('build_solids', None)
+
         super().__init__(**kwargs)
+
+        self._exec = G4Beamline.EXECUTABLE_NAME
 
     def _attach(self, beamline):
         if beamline.length is None or pd.isnull(beamline.length):
@@ -120,7 +124,6 @@ class G4Beamline(Simulator):
         self.__add_input('define_physics')
         self.__add_input('define_world')
         self.__add_input('keep_protons')
-        self.__add_input('define_brho')
         self.__add_input('start_command')
         self._input += sequence_to_g4beamline(beamline.line, fringe=self._fringe,
                                               build_solids=self.build_solids)
@@ -155,15 +158,17 @@ class G4Beamline(Simulator):
         template_input = jinja2.Template(self._input).render(kwargs.get("context", {}))
         if kwargs.get("debug", False) >= 2:
             print(template_input)
-        if self._get_exec() is None:
-            raise ("Can't run G4Beamline if no valid path and executable are defined.")
+        if self._exec is None:
+            raise G4BeamlineException("Can't run G4Beamline if no valid path and executable are defined.")
 
         # Write the file for g4beamline
         file = open(INPUT_FILENAME, 'w')
         file.write(template_input)
         file.flush()
         file.close()
-        cmd = " ".join([self._get_exec(), INPUT_FILENAME])
+
+        cmd = " ".join([self._exec, INPUT_FILENAME])
+
         p = sub.Popen(cmd,
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
@@ -177,5 +182,5 @@ class G4Beamline(Simulator):
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)
-        # os.remove(INPUT_FILENAME)
+        os.remove(INPUT_FILENAME)
         return self

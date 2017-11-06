@@ -3,7 +3,6 @@
 
 g4beamline_syntax = {
 
-    'define_brho': "param Brho={{{{BRHO}}}}",
     'define_detector': "sample detector radius=31.5 format=ascii",
     'define_physics': "physics QGSP_BIC",
     'define_world': "param worldMaterial=Vacuum",
@@ -22,7 +21,7 @@ g4beamline_syntax = {
                   "ironLength={} " 
                   "ironRadius=238 " 
                   "apertureRadius={} " 
-                  "gradient={}*$Brho " 
+                  "gradient={} " 
                   "ironMaterial=Fe " 
                   "fieldMaterial=Vacuum " 
                   "ironColor=1,0,0 " 
@@ -45,5 +44,5 @@ g4beamline_syntax = {
 
     'tesselatedsolids': "tessellatedsolid {} kill=0 material={} file={}",
     'place_solids': "place {} x={} y={} z={} rotation=X{},Y{},Z{}",
-    'virtual_det': " virtualdetector det \n place det z={} rename=det_{} format=ascii \n"
+    'virtual_det': " virtualdetector det radius=31.5 innerRadius=0 \n place det z={} rename=det_{} format=ascii \n"
 }
