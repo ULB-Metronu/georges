@@ -1,32 +1,59 @@
 import numpy as np
 import pandas as pd
 
-PROTON_MASS = 0.938272
+PROTON_MASS = 938.2720813
+
+
+def kinematics(**kwargs):
+    """Return a dictionary with all kinematics parameters from a given input."""
+    r = 0
+    e = 0
+    pc = 0
+    brho = 0
+    if len(kwargs) > 1:
+        raise Exception("A single keyword argument is expected: range, energy, momentum, brho).")
+    if kwargs.get("range"):
+        r = kwargs.get('range')
+        e = range_to_energy(r)
+        pc = energy_to_momentum(e)
+        brho = momentum_to_brho(pc)
+    elif kwargs.get('energy'):
+        e = kwargs.get('energy')
+        r = energy_to_range(e)
+        pc = energy_to_momentum(e)
+        brho = momentum_to_brho(pc)
+
+    return {
+        'range': r,
+        'energy': e,
+        'momentum': pc,
+        'brho': brho
+    }
 
 
 def momentum_to_energy(p):
-    """Return E [GeV/c^2] from P [GeV/c] (proton)."""
-    return 1000*(np.sqrt(p**2+PROTON_MASS**2)-PROTON_MASS)
+    """Return E [MeV/c^2] from P [MeV/c] (proton)."""
+    return np.sqrt(p**2+PROTON_MASS**2)-PROTON_MASS
 
 
 def momentum_to_brho(p):
-    """Return BRHO [T.m] from P [GeV/c] (proton)."""
-    return 3.33564 * p
+    """Return BRHO [T.m] from P [MeV/c] (proton)."""
+    return 3.33564E-3 * p
 
 
 def energy_to_brho(e):
-    """Return BRHO [T.m] from E [GeV] (proton)."""
-    return 3.33564 * energy_to_momentum(e)
+    """Return BRHO [T.m] from E [MeV] (proton)."""
+    return 3.33564E-3 * energy_to_momentum(e)
 
 
 def energy_to_momentum(ekin):
-    """Return P [GeV] from E [GeV/c^2] (proton)."""
-    E = PROTON_MASS + ekin/1000
+    """Return P [MeV/c] from E [MeV/c^2] (proton)."""
+    E = PROTON_MASS + ekin
     return np.sqrt(E**2-PROTON_MASS**2)
 
 
 def energy_to_beta(ekin):
-    """Return beta relativistic from E [GeV/c^2] (proton)."""
+    """Return beta relativistic from E [MeV/c^2] (proton)."""
     gamma = (PROTON_MASS + ekin) / PROTON_MASS
     return np.sqrt((gamma ** 2 - 1) / gamma ** 2)
 
