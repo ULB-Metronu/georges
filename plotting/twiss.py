@@ -2,8 +2,9 @@ import numpy as np
 from .common import palette, filled_plot
 
 
-def twiss(ax, bl, context, **kwargs):
+def twiss(ax, bl, **kwargs):
     """Plot the Twiss beam envelopes from a beamline Twiss computation and a context."""
+    context = kwargs.get('context', {})
     bl = bl.line
 
     bl['XMAXMONO'] = np.sqrt(bl['BETX']*context['EMITX'])

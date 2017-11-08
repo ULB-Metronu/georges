@@ -35,11 +35,11 @@ def tracking(ax, bl, **kwargs):
         filled_plot(ax, t['S'], -t['std'], t['std'], palette[plane], True, alpha=0.3)
 
     if std:
-        ax.plot(t['S'], t['std'], '^-', color=palette[kwargs.get("palette")],
-                markeredgecolor=palette[kwargs.get("palette")], markersize=2, linewidth=1)
-        ax.plot(t['S'], -t['std'], 'v-', color=palette[kwargs.get("palette")],
-                markeredgecolor=palette[kwargs.get("palette")], markersize=2, linewidth=1)
+        ax.plot(t['S'], t['std'], '^-', color=palette[plane],
+                markeredgecolor=palette[plane], markersize=2, linewidth=1)
+        ax.plot(t['S'], -t['std'], 'v-', color=palette[plane],
+                markeredgecolor=palette[plane], markersize=2, linewidth=1)
 
     if mean:
-        ax.plot(t['S'], t['mean'], '*-', color=palette[kwargs.get("palette")],
-                markeredgecolor=palette[kwargs.get("palette")], markersize=2, linewidth=1, label=kwargs.get("label"))
+        ax.plot(t['S'], t['mean'], '*-', color=palette[plane],
+                markeredgecolor=palette[plane], markersize=2, linewidth=1, label=kwargs.get("label"))

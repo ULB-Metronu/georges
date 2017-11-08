@@ -72,7 +72,7 @@ def prepare(ax, bl, **kwargs):
     plt.setp(ax.xaxis.get_majorticklabels(), rotation=-45)
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.yaxis.set_minor_locator(MultipleLocator(5))
-    ax.set_ylim([-45, 45])
+    ax.set_ylim(kwargs.get('ylim', [-60, 60]))
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax.set_xlabel('s (m)')
     ax.set_ylabel(r'Beam size (mm)')

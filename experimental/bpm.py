@@ -115,8 +115,8 @@ def bpm_plot(r, bpm_name, **kwargs):
     else:
         raise Exception("'axis' keyword argument must be 'X' or 'Y'.")
 
-    x = r["{}_data".format(bpm_name)]['channel']['data'][axis][:, 1]
-    y = r["{}_data".format(bpm_name)]['channel']['data'][axis][:, 2]
+    x = r[f"{bpm_name}_data"]['channel']['data'][axis][:, 1]
+    y = r[f"{bpm_name}_data"]['channel']['data'][axis][:, 2]
 
     ax.plot(x, y, 'b+:', label='data')
     ax.plot(x, gaussian(x, *r["{}_fit_{}".format(bpm_name, axis)][0]), 'ro:', label='fit')

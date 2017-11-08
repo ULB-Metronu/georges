@@ -167,6 +167,34 @@ class Beam:
                                   )
         return self
 
+    def from_twiss_parameters(self, n, **kwargs):
+        """Initialize a beam with a 5D particle distribution from Twiss parameters."""
+        keys = {'X', 'PX', 'Y', 'PY', 'DPP', 'DPPRMS', 'BETAX', 'ALPHAX', 'BETAY', 'ALPHAY', 'EMITX', 'EMITY'}
+        if any([k not in keys for k in kwargs.keys()]):
+            raise BeamException("Invalid argument for a twiss distribution.")
+        betax = kwargs.get('BETAX', 1)
+        alphax = kwargs.get('ALPHAX', 0)
+        gammax = (1+alphax**2)/betax
+        betay = kwargs.get('BETAY', 1)
+        alphay = kwargs.get('ALPHAY', 0)
+        gammay = (1 + alphay ** 2) / betay
+
+        self.from_5d_sigma_matrix(n,
+                                  X=kwargs.get('X', 0),
+                                  PX=kwargs.get('PX', 0),
+                                  Y=kwargs.get('Y', 0),
+                                  PY=kwargs.get('PY', 0),
+                                  DPP=kwargs.get('DPP', 0),
+                                  DPPRMS=kwargs.get('DPPRMS', 0),
+                                  s11=betax * kwargs['EMITX'],
+                                  s12=-alphax * kwargs['EMITX'],
+                                  s22=gammax * kwargs['EMITX'],
+                                  s33=betay * kwargs['EMITY'],
+                                  s34=-alphay * kwargs['EMITY'],
+                                  s44=gammay * kwargs['EMITY']
+                                  )
+        return self
+
     def from_5d_sigma_matrix(self, n, **kwargs):
         """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
         s11 = kwargs.get('s11', 0)
@@ -193,7 +221,7 @@ class Beam:
         s52 = s25
         s53 = s35
         s54 = s45
-        s55 = kwargs.get('DPPRMS', 0)
+        s55 = kwargs.get('DPPRMS', 0)**2
 
         self.__initialize_distribution(pd.DataFrame(np.random.multivariate_normal(
             [kwargs.get('X', 0),

@@ -1,7 +1,7 @@
 """A dictionnary for the translation of the MAD-X grammar."""
 
 madx_syntax = {  # Do not forget the trailing ';' for each command!
-    'beam': "BEAM, PARTICLE={{{{PARTICLE}}}}, PC={{{{PC}}}};",
+    'beam': "BEAM, PARTICLE={{{{PARTICLE}}}}, PC={{{{PC/1000.0}}}};",
     'show_beam': "SHOW, BEAM;",
     'call_file': "CALL, FILE='{}';",
     'use_sequence': "USE, SEQUENCE={};",
@@ -95,7 +95,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                  "CLOSED_ORBIT={},"
                  "ELEMENT_BY_ELEMENT={},"
                  "TURNS={},"
-                 "MAXAPER={{0.035, 100, 0.035,100,100,100}},"
+                 "MAXAPER={{1.0, 100, 1.0,100,100,100}},"
                  "DUMP={},"
                  "ONETABLE={},"
                  "FILE={},"

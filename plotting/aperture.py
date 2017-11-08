@@ -15,7 +15,7 @@ def xy_from_string(a, i):
 def draw_chamber(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], 1000 * (e['APERTURE_UP'] - e['CHAMBER_UP'])),  # (x,y)
+            (e['AT_ENTRY'], 1000 * (e['APERTURE_UP'])),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             1000 * e['CHAMBER_UP'],  # height
             hatch='', facecolor=palette['base01']
@@ -23,7 +23,7 @@ def draw_chamber(ax, e):
     )
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], 1000 * (-e['APERTURE_DOWN'] + e['CHAMBER_UP'])),  # (x,y)
+            (e['AT_ENTRY'], 1000 * (-e['APERTURE_DOWN'])),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             -1000 * e['CHAMBER_UP'],  # height
             hatch='', facecolor=palette['base01']
@@ -34,7 +34,7 @@ def draw_chamber(ax, e):
 def draw_quad(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)
+            (e['AT_ENTRY'], 1000 * e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             100,  # height
             hatch='.', facecolor=palette['quad']
@@ -43,7 +43,7 @@ def draw_quad(ax, e):
 
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
+            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             -100,  # height
             hatch='.', facecolor=palette['quad']
@@ -79,7 +79,7 @@ def draw_coll(ax, e, plane):
 def draw_bend(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)
+            (e['AT_ENTRY'], 1000 * e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             100,  # height
             hatch='/', facecolor=palette['bend']
@@ -87,7 +87,7 @@ def draw_bend(ax, e):
     )
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
+            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             -100,  # height
             hatch='/', facecolor=palette['bend']
@@ -97,19 +97,18 @@ def draw_bend(ax, e):
 
 
 def fill_aperture(element, context):
-
     if element.name+'_APERTURE' in context and element['TYPE'] == 'SLITS':
         element['APERTURE'] = context[element.name+'_APERTURE']
     return element
 
 
 def aperture(ax, bl, **kwargs):
-
-    bl = bl.line.apply(lambda e: fill_aperture(e, bl.context), axis=1)
+    context = kwargs.get('context', {})
+    bl = bl.line.apply(lambda e: fill_aperture(e, context), axis=1)
     if 'APERTURE' not in bl:
         return
 
-    planes = kwargs.get('planes', 'both')
+    planes = kwargs.get('plane', 'both')
 
     bl['APERTURE_UP'] = bl['APERTURE'].apply(lambda a: xy_from_string(a, planes == 'both' or planes == 'Y'))
     bl['APERTURE_DOWN'] = bl['APERTURE'].apply(lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X')))
