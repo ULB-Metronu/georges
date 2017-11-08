@@ -339,7 +339,58 @@ class Madx(Simulator):
             raise MadxException("A list of length > 0 of parameters must be provided.")
         if constraints is None:
             raise MadxException("A dictionary of constraints should be provided.")
-        self._add_input('match', sequence)
+        if kwargs.get('line', False):
+            self._match_line(**kwargs)
+        else:
+            self._match_ring(**kwargs)
+
+    def _match_line(self, **kwargs):
+        if kwargs.get('context') is None:
+            raise MadxException("A context must be provided.")
+        context = kwargs['context']
+        betx = context.get('BETAX', 1.0)
+        alfx = context.get('ALPHAX', 0.0)
+        mux = context.get('MUX', 0.0)
+        bety = context.get('BETAY', 1.0)
+        alfy = context.get('ALPHAY', 0.0)
+        muy = context.get('MUY', 0.0)
+        x = context.get('X', 0.0)
+        px = context.get('PX', 0.0)
+        y = context.get('Y', 0.0)
+        py = context.get('PY', 0.0)
+        dx = context.get('DX', 0.0)
+        dy = context.get('DY', 0.0)
+        dpx = context.get('DPX', 0.0)
+        dpy = context.get('DPY', 0.0)
+        deltap = context.get('DELTAP', 0.0)
+
+        self._add_input('match_line',
+                        kwargs['sequence'],
+                        betx,
+                        alfx,
+                        mux,
+                        bety,
+                        alfy,
+                        muy,
+                        x,
+                        px,
+                        y,
+                        py,
+                        dx,
+                        dy,
+                        dpx,
+                        dpy,
+                        deltap
+                        )
+        for v in kwargs['vary']:
+            self._add_input('match_vary', v)
+        for r, c in kwargs['constraints'].items():
+            self._add_input('match_constraint', r, f"{c[0]}={c[1]}")
+        self._add_input('match_jacobian')
+        self._add_input('end_match')
+
+    def _match_ring(self, **kwargs):
+        pass
 
     def __add_misalignment_element(self,beamline):
         """MAD-X misalignement of elements."""
