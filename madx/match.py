@@ -1,10 +1,9 @@
-import os
-import pandas as pd
-from .. import beamline
+import re
+import numpy as np
 from .madx import Madx
 
-MADX_SECTORMAP_HEADERS_SKIP_ROWS = 6
-MADX_SECTORMAP_DATA_SKIP_ROWS = 8
+MADX_MATCH_START_SUMMARY_STRING = 'MATCH SUMMARY'
+MADX_MATCH_END_SUMMARY_STRING = 'END MATCH SUMMARY'
 
 
 class MatchException(Exception):
@@ -15,38 +14,57 @@ class MatchException(Exception):
 
 
 def match(**kwargs):
-    """Compute the transfer matrices of the beamline.
-    :param kwargs: parameters are:
-        - line: the beamline on which twiss will be run
-        - context: the associated context on which MAD-X is run
-        - periodic: ring (True) or beamline (False)
-        - start: RANGE at which the twiss/sectormap shoudl start
-        - places: where to extract the sector map from
+    """TODO
     """
     # Process arguments
     line = kwargs.get('line', None)
     if line is None:
-        raise TwissException("Beamline and MAD-X objects need to be defined.")
+        raise MatchException("Beamline and MAD-X objects need to be defined.")
     m = Madx(beamlines=[line])
     m.beam(line.name)
-    m.sectormap(name=line.name,
-                line=kwargs.get('periodic', False),
-                start=kwargs.get("start", None),
-                places=kwargs.get("places", []),
-                sectoracc=kwargs.get("sectoracc", False),
-                reflect=kwargs.get("reflect", False),
-                )
+    m.match(sequence=line.name, line=True, vary=['IQ1E', 'IQ2E'],
+            constraints={'B1B1': ('BETX', 1.0), 'B1B2': ('ALFX', 1.0)}, context=context)
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
         print(m.input)
     if len(errors) > 0:
         print(errors)
-        raise SectormapException("MAD-X ended with fatal error.")
-    madx_sectormap = read_madx_sectormap(os.path.join(".", 'sectormap')).rename(columns={'POS': 'S'})
-    line_with_sectormap = madx_sectormap.merge(line.line,
-                                               left_index=True,
-                                               right_index=True,
-                                               how='outer',
-                                               suffixes=('_SECTORMAP', '')
-                                               ).sort_values(by='S')
-    return beamline.Beamline(line_with_sectormap)
+        raise MatchException("MAD-X ended with fatal error during matching.")
+    return process_match_output(m.output)
+
+
+def process_match_output(output):
+    regex_target = re.compile("Final Penalty Function =   (.*)")
+    regex_variable = re.compile("(.+)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)")
+    regex_constraints = re.compile(
+        "(.+):?\d?\s+(betx)\s+(\d)\s+(-?\d\.\d*E.\d\d)\s+(-?\d\.\d*E.\d\d)\s+(-?\d\.\d*E.\d\d)")
+
+    match_flag = False
+    match_variables = {}
+    match_constraints = {}
+    match_penalty = np.inf
+    match_summary = []
+    for line in output.splitlines():
+        if line.startswith(MADX_MATCH_START_SUMMARY_STRING):
+            match_flag = True
+        if match_flag:
+            match_summary.append(line)
+            for m in re.finditer(regex_constraints, line):
+                v = list(map(str.strip, m.groups()))
+                if not match_constraints.get(v[0]):
+                    match_constraints[v[0]] = {}
+                match_constraints[v[0]][v[1]] = {'target': v[3], 'final': v[4]}
+            for m in re.finditer(regex_variable, line):
+                v = list(map(str.strip, m.groups()))
+                match_variables[v[0]] = {'initial': v[2], 'final': v[1]}
+            for m in re.finditer(regex_target, line):
+                v = list(map(str.strip, m.groups()))
+                match_penalty = v[0]
+        if line.startswith(MADX_MATCH_END_SUMMARY_STRING):
+            match_flag = False
+    return {
+        'constraints': match_constraints,
+        'variables': match_variables,
+        'penalty': match_penalty,
+        'summary': filter(None, match_summary)
+    }
