@@ -20,7 +20,7 @@ def read_madx_sectormap(file):
     headers.drop(headers.columns[[0, 1]], inplace=True, axis=1)
     df = pd.read_csv(file,
                      header=None,
-                     names=headers,
+                     names=headers.columns.values,
                      na_filter=False,
                      skiprows=MADX_SECTORMAP_DATA_SKIP_ROWS,
                      delim_whitespace=True

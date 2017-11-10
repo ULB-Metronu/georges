@@ -69,6 +69,9 @@ def variquad(**kwargs):
     alpha = -s12/emit
     gamma = s22/emit
 
+    if not kwargs.get("with_map", False):
+        bl_map = None
+
     return {
         'S11': s11,
         'S12': s12,
@@ -111,11 +114,10 @@ def backtrack(**kwargs):
                        SECTORACC=False
                        )
 
+    sigma_matrix = np.array([[kwargs['S11'], kwargs['S12']], [kwargs['S12'], kwargs['S22']]])
     if plane == 'X':
-        sigma_matrix = np.array([[context['S11'], context['S12']], [context['S12'], context['S22']]])
         tmp = bl_map.line.loc[track_from][['R11', 'R12', 'R21', 'R22']].values
     elif plane == 'Y':
-        sigma_matrix = np.array([[context['S33'], context['S34']], [context['S34'], context['S44']]])
         tmp = bl_map.line.loc[track_from][['R33', 'R34', 'R43', 'R44']].values
     else:
         raise Exception("Invalid plane. 'plane' must be 'X' or 'Y'.")
@@ -127,6 +129,9 @@ def backtrack(**kwargs):
     s11 = sigma_matrix_backtracked[0, 0]
     s12 = sigma_matrix_backtracked[0, 1]
     s22 = sigma_matrix_backtracked[1, 1]
+
+    if not kwargs.get("with_map", False):
+        bl_map = None
 
     return {
         'emit': emit,
