@@ -22,15 +22,25 @@ def match(**kwargs):
         raise MatchException("Beamline and MAD-X objects need to be defined.")
     m = Madx(beamlines=[line])
     m.beam(line.name)
-    m.match(sequence=line.name, line=True, vary=['IQ1E', 'IQ2E'],
-            constraints={'B1B1': ('BETX', 1.0), 'B1B2': ('ALFX', 1.0)}, context=context)
+    m.match(sequence=line.name,
+            line=True,
+            vary=kwargs.get('vary', {}),
+            constraints=kwargs.get('constraints', []),
+            context=kwargs.get('context', {}),
+            method=kwargs.get('method', 'jacobian')
+            )
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
         print(m.input)
     if len(errors) > 0:
         print(errors)
         raise MatchException("MAD-X ended with fatal error during matching.")
-    return process_match_output(m.output)
+    data = process_match_output(m.output)
+    matched_context = kwargs.get('context', {}).copy()
+    for k, v in data['variables'].items():
+        matched_context[k.upper()] = v['final']
+    data['context'] = matched_context
+    return data
 
 
 def process_match_output(output):

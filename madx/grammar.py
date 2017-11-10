@@ -107,10 +107,12 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
              "X={},PX={},Y={},PY={},"
              "DX={},DY={},DPX={},DPY={},"
              "DELTAP={};",
-    'match_vary': "VARY,NAME={};",
-    'match_constraint': "CONSTRAINT,RANGE={},{};",
-    'match_jacobian': "JACOBIAN, CALLS=30, TOLERANCE=1E-6, REPEAT=1,"
+    'match_vary': "VARY,NAME={}, LOWER={}, UPPER={};",
+    'match_constraint': "CONSTRAINT,RANGE='{}',{};",
+    'match_jacobian': "JACOBIAN, CALLS=5000, TOLERANCE=1E-6, REPEAT=1,"
                       "STRATEGY=1;",
+    'match_lmdif': "LMDIF, CALLS=1000, TOLERANCE=1E-6;",
+    'match_migrad': "MIGRAD, CALLS=1000, TOLERANCE=1E-6, STRATEGY=1;",
     'end_match': "ENDMATCH;",
     'survey': "SURVEY, file=survey.out;",
 }

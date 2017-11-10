@@ -11,6 +11,7 @@ def tracking(ax, bl, **kwargs):
     if plane is None:
         raise Exception("The 'plane' keyword argument must be set to 'X' or 'Y'.")
     halo = kwargs.get("halo", True)
+    halo_99 = kwargs.get("halo99", halo)
     std = kwargs.get("std", True)
     mean = kwargs.get("mean", True)
 
@@ -30,7 +31,8 @@ def tracking(ax, bl, **kwargs):
         return
 
     if halo:
-        filled_plot(ax, t['S'], t['1%'], t['99%'], palette[plane], True, alpha=0.3)
+        if halo_99:
+            filled_plot(ax, t['S'], t['1%'], t['99%'], palette[plane], True, alpha=0.3)
         filled_plot(ax, t['S'], t['5%'], t['95%'], palette[plane], True, alpha=0.3)
         filled_plot(ax, t['S'], -t['std'], t['std'], palette[plane], True, alpha=0.3)
 

@@ -120,17 +120,9 @@ def backtrack(**kwargs):
     else:
         raise Exception("Invalid plane. 'plane' must be 'X' or 'Y'.")
     r_matrix = np.array([[tmp[0], tmp[1]], [tmp[2], tmp[3]]])
+
     inv_r_matrix = np.linalg.inv(r_matrix)
-    print("Inverse R matrix:")
-    print(inv_r_matrix)
-    print("Sigma matrix:")
-    print(sigma_matrix)
-    sigma_matrix_backtracked = np.matmul(inv_r_matrix, np.matmul(sigma_matrix, inv_r_matrix.transpose()))
-    print("sigma matrix backtracked:")
-    print(sigma_matrix_backtracked)
-
-    print(np.matmul(r_matrix, np.matmul(sigma_matrix_backtracked, r_matrix.transpose())))
-
+    sigma_matrix_backtracked = np.matmul(inv_r_matrix.transpose(), np.matmul(sigma_matrix, inv_r_matrix))
     emit = np.sqrt(np.linalg.det(sigma_matrix_backtracked))
     s11 = sigma_matrix_backtracked[0, 0]
     s12 = sigma_matrix_backtracked[0, 1]

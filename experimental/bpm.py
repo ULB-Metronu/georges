@@ -28,6 +28,8 @@ DATA_BPM_PCVUE = {
 
 
 def read_data_file(file, regex_data, flag, path='', dtype=float):
+    if file.endswith('nan.txt'):
+        return None
     data = {}
     for k in regex_data:
         data[k] = {'data': {}, 'regex': regex_data[k]['regex']}
@@ -52,7 +54,11 @@ def gaussian(x, a, mu, sigma):
     return a * np.exp(-(x - mu) ** 2 / (2 * sigma ** 2))
 
 
-def bpm_fit(x, y):
+def bpm_fit(a, p):
+    if a is None:
+        return None
+    x = a['channel']['data'][p][:, 1]
+    y = a['channel']['data'][p][:, 2]
     ar = np.trapz(y / np.sum(y) * len(y), x)
     mean = np.mean(x * y / np.sum(y) * len(y))
     rms = np.std(x * y / np.sum(y) * len(y))
@@ -80,26 +86,24 @@ def bpm(**kwargs):
         bpm_data = pd.read_excel(os.path.join(path, file), skiprows=0, encoding="utf-8-sig")
     bpm_data["{}_data".format(bpm_name)] = bpm_data[bpm_name].apply(
         lambda x: read_data_file(
-            "{0:04d}.txt".format(x),
+            "{}.txt".format(x),
             instrument,
             {'init': 'Y', 'next': 'X', 'trigger': "Y-Wire data"},
             path
         )
     )
     bpm_data["{}_fit_X".format(bpm_name)] = bpm_data["{}_data".format(bpm_name)].apply(
-        lambda x: bpm_fit(
-            x['channel']['data']['X'][:, 1],
-            x['channel']['data']['X'][:, 2]
-        )
+        lambda x: bpm_fit(x, 'X')
     )
     bpm_data["{}_fit_Y".format(bpm_name)] = bpm_data["{}_data".format(bpm_name)].apply(
-        lambda x: bpm_fit(
-            x['channel']['data']['Y'][:, 1],
-            x['channel']['data']['Y'][:, 2]
-        )
+        lambda x: bpm_fit(x, 'Y')
     )
-    bpm_data["{}_fit_sigma_X".format(bpm_name)] = bpm_data["{}_fit_X".format(bpm_name)].apply(lambda x: np.abs(x[0][2]))
-    bpm_data["{}_fit_sigma_Y".format(bpm_name)] = bpm_data["{}_fit_Y".format(bpm_name)].apply(lambda x: np.abs(x[0][2]))
+    bpm_data["{}_fit_sigma_X".format(bpm_name)] = bpm_data["{}_fit_X".format(bpm_name)].apply(
+        lambda x: np.abs(x[0][2]) if x is not None else None
+    )
+    bpm_data["{}_fit_sigma_Y".format(bpm_name)] = bpm_data["{}_fit_Y".format(bpm_name)].apply(
+        lambda x: np.abs(x[0][2]) if x is not None else None
+    )
 
     return bpm_data
 

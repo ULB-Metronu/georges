@@ -383,10 +383,17 @@ class Madx(Simulator):
                         deltap
                         )
         for v in kwargs['vary']:
-            self._add_input('match_vary', v)
-        for r, c in kwargs['constraints'].items():
-            self._add_input('match_constraint', r, f"{c[0]}={c[1]}")
-        self._add_input('match_jacobian')
+            self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
+        for c in kwargs['constraints']:
+            self._add_input('match_constraint', c['range'], f"{c['constraint']}")
+        if kwargs['method'] is 'jacobian':
+            self._add_input('match_jacobian')
+        elif kwargs['method'] is 'lmdif':
+            self._add_input('match_lmdif')
+        elif kwargs['method'] is 'migrad':
+            self._add_input('match_migrad')
+        else:
+            raise MadxException("Invalid 'method' for matching. Please provide a valid entry.")
         self._add_input('end_match')
 
     def _match_ring(self, **kwargs):
