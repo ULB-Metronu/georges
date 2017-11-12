@@ -13,6 +13,7 @@ def tracking(ax, bl, **kwargs):
     halo = kwargs.get("halo", True)
     halo_99 = kwargs.get("halo99", halo)
     std = kwargs.get("std", True)
+    std_bpm = kwargs.get("std_bpm", False)
     mean = kwargs.get("mean", True)
 
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
@@ -25,6 +26,7 @@ def tracking(ax, bl, **kwargs):
         '99%': 1000 * r['BEAM'].halo['99%'][plane],
         'mean': 1000 * r['BEAM'].mean[plane],
         'std': 1000 * r['BEAM'].std[plane],
+        'std_bpm': 1000 * r['BEAM'].std_bpm[plane] if r['CLASS'] == 'MARKER' else 0.0,
     }), axis=1)
 
     if t['S'].count == 0:
@@ -41,6 +43,12 @@ def tracking(ax, bl, **kwargs):
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
         ax.plot(t['S'], -t['std'], 'v-', color=palette[plane],
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
+
+    if std_bpm:
+        ax.plot(t['S'], t['std_bpm'], '^', color=palette['green'],
+                markeredgecolor=palette['green'], markersize=2, linewidth=1)
+        ax.plot(t['S'], -t['std_bpm'], 'v', color=palette['green'],
+                markeredgecolor=palette['green'], markersize=2, linewidth=1)
 
     if mean:
         ax.plot(t['S'], t['mean'], '*-', color=palette[plane],

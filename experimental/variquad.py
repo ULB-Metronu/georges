@@ -50,20 +50,22 @@ def variquad(**kwargs):
                        )
     if plane == 'X':
         r11 = bl_map.line.loc[end]['R11']
-        r12 = bl_map.line.loc[end]['R12']  # Is this the correct sign?
+        r12 = bl_map.line.loc[end]['R12']
     elif plane == 'Y':
         r11 = bl_map.line.loc[end]['R33']
-        r12 = bl_map.line.loc[end]['R34']  # Is this the correct sign?
+        r12 = bl_map.line.loc[end]['R34']
     else:
         raise VariquadException("Plane must be 'X' or 'Y'")
-
     a = popt[0]
     b = popt[1]
     c = popt[2]
-    s11 = a / (ql**2 * r12**2)
+    # From http://accelconf.web.cern.ch/AccelConf/IPAC2015/papers/mopma052.pdf
+    # Looks dimensionnally correct
+    s11 = a / (ql**2 * r12**2) # Verified correct
     s12 = (b - 2 * s11 * ql * r11 * r12)/(2*ql*r12**2)
     s21 = s12
     s22 = (c-s11 * r11**2 - 2 * s12 * r11 * r12)/(r12**2)
+
     emit = np.sqrt(np.linalg.det(np.array([[s11, s12], [s21, s22]])))
     beta = s11/emit
     alpha = -s12/emit
@@ -122,9 +124,8 @@ def backtrack(**kwargs):
     else:
         raise Exception("Invalid plane. 'plane' must be 'X' or 'Y'.")
     r_matrix = np.array([[tmp[0], tmp[1]], [tmp[2], tmp[3]]])
-
     inv_r_matrix = np.linalg.inv(r_matrix)
-    sigma_matrix_backtracked = np.matmul(inv_r_matrix.transpose(), np.matmul(sigma_matrix, inv_r_matrix))
+    sigma_matrix_backtracked = np.matmul(inv_r_matrix, np.matmul(sigma_matrix, inv_r_matrix.transpose()))
     emit = np.sqrt(np.linalg.det(sigma_matrix_backtracked))
     s11 = sigma_matrix_backtracked[0, 0]
     s12 = sigma_matrix_backtracked[0, 1]
@@ -138,6 +139,9 @@ def backtrack(**kwargs):
         'beta': s11/emit,
         'alpha': -s12/emit,
         'gamma': s22/emit,
+        'alpha_init': -kwargs['S12']/emit,
+        'beta_init': kwargs['S11']/emit,
+        'gamma_init': kwargs['S22']/emit,
         'S11': s11,
         'S12': s12,
         'S22': s22,

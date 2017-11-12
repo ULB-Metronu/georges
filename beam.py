@@ -102,6 +102,34 @@ class Beam:
         return self.__distribution.cov()
 
     @property
+    def twiss(self):
+        """Return the Twiss parameters of the beam"""
+        s11 = self.sigma['X']['X']
+        s12 = self.sigma['X']['PX']
+        s22 = self.sigma['PX']['PX']
+        s33 = self.sigma['Y']['Y']
+        s34 = self.sigma['Y']['PY']
+        s44 = self.sigma['PY']['PY']
+        return {
+            'beta_x': s11 / self.emit['X'],
+            'alpha_x': -s12 / self.emit['X'],
+            'gamma_x': s22 / self.emit['X'],
+            'beta_y': s33 / self.emit['Y'],
+            'alpha_y': -s34 / self.emit['Y'],
+            'gamma_y': s44 / self.emit['Y'],
+        }
+
+    @property
+    def std_bpm(self):
+        """TODO"""
+        def fit_bpm(d):
+            from scipy.stats import norm
+            bs = np.array([-26, -18, -14, -10, -7, -5, -3, -1, 1, 3, 5, 7, 10, 14, 18, 26]) / 1000
+            hist, _ = np.histogram(d, bs, normed=True)
+            return norm.fit(hist)[1]/1000
+        return {'X': fit_bpm(self.__distribution['X']), 'Y': fit_bpm(self.__distribution['Y'])}
+
+    @property
     def halo(self):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
 
