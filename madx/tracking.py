@@ -36,12 +36,12 @@ def read_ptc_tracking(file):
             data[location] = data[location].append(
                 {
                     x[0]: x[1] for x in zip(['NUMBER', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT'],
-                                        map(lambda x: float(x), re.findall("(-?\+?\d\.?\d*E?e?-?\+?\d*)", line)))
+                                            map(lambda x: float(x), re.findall("(-?\+?\d\.?\d*E?e?-?\+?\d*)", line)))
                 },
                 ignore_index=True,
             )
-    df = tmp = pd.DataFrame.from_dict(
-        {k: georges.beam.Beam(v[['X', 'PX', 'Y', 'PY', 'PT']]) for k, v in tmp.items()}, orient='index'
+    df = pd.DataFrame.from_dict(
+        {k: beam.Beam(v[['X', 'PX', 'Y', 'PY', 'PT']]) for k, v in data.items()}, orient='index'
     ).rename(columns={0: "BEAM"})
     df.index.name = 'NAME'
     return df
@@ -81,18 +81,18 @@ def track(**kwargs):
         raise TrackException("MAD-X ended with fatal error.")
     if kwargs.get('ptc', True):
         madx_track = read_ptc_tracking(os.path.join(".", 'ptctrackone.tfs'))
-        line_tracking = line_tracking.merge(madx_track)
+        line_tracking = line_tracking.merge(madx_track, left_index=True, right_index=True, how='left')
         return beamline.Beamline(line_tracking)
     else:
         madx_track = read_madx_tracking(os.path.join(".", 'tracking.outxone')).dropna()
         madx_track['PY'] = pd.to_numeric(madx_track['PY'])
-    tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
+        tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
 
-    if 'BEAM' in line_tracking:
-        line_tracking.line.drop('BEAM', inplace=True, axis=1)
-    line_tracking = line_tracking.merge(pd.DataFrame(tmp,
-                                                     columns=['BEAM']),
-                                        left_on='AT_CENTER_TRUNCATED',
-                                        right_index=True,
-                                        how='left').sort_values(by='AT_CENTER')
-    return beamline.Beamline(l)
+        if 'BEAM' in line_tracking:
+            line_tracking.line.drop('BEAM', inplace=True, axis=1)
+        line_tracking = line_tracking.merge(pd.DataFrame(tmp,
+                                                         columns=['BEAM']),
+                                            left_on='AT_CENTER_TRUNCATED',
+                                            right_index=True,
+                                            how='left').sort_values(by='AT_CENTER')
+        return beamline.Beamline(l)
