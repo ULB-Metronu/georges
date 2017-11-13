@@ -310,19 +310,26 @@ class Madx(Simulator):
             return
 
         self._add_input('ptc_create_universe')
-        self._add_input('ptc_create_layout', False, 2, 6, 10, True, kwargs.get('fringe', False))
+        self._add_input('ptc_create_layout',
+                        False,
+                        kwargs.get('model', 2),
+                        kwargs.get('method', 6),
+                        kwargs.get('nst', 10),
+                        kwargs.get('exact', True),
+                        kwargs.get('fringe', False)
+                        )
         if kwargs.get('misalignment', False):
             self._add_input('ptc_misalign')
         self.__add_particles_for_tracking(particles, True)
         beamline.line.apply(lambda e: self.__generate_observation_points_ptc(e, beamline.length), axis=1)
         self._add_input('ptc_track',
-                        5,
-                        0.0,
-                        False,
+                        kwargs.get('icase', 5),
+                        kwargs.get('deltap', 0.0),
+                        kwargs.get('closed_orbit', False),
+                        kwargs.get('element_by_element', True),
+                        kwargs.get('turns', 1),
                         True,
-                        1,
-                        True,
-                        True,
+                        kwargs.get('onetable', True),
                         'ptctrack',
                         '.tfs'
                         )
