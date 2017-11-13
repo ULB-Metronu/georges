@@ -1,4 +1,4 @@
-import os
+import os, re
 import pandas as pd
 from .. import beamline
 from .. import beam
@@ -24,11 +24,27 @@ def read_madx_tracking(file):
 
 def read_ptc_tracking(file):
     """Read a PTC Tracking 'one' file to a dataframe."""
-    column_names = ['ID', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT', 'S', 'E']
-    data = pd.read_csv(file, skiprows=PTC_TRACKING_SKIP_ROWS, delim_whitespace=True,
-                       names=column_names) \
-             .apply(pd.to_numeric, errors="ignore").dropna()
-    return data[data['TURN'] == 1]
+    data = {}
+    collect_particles = False
+    location = None
+    for line in open(file):
+        if line.startswith("#segment"):
+            location = re.findall("^#segment\s[\d\s]*\s(.*)$", line)[0].strip()
+            data[location] = pd.DataFrame([], columns=['NUMBER', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT'])
+            collect_particles = True
+        elif collect_particles:
+            data[location] = data[location].append(
+                {
+                    x[0]: x[1] for x in zip(['NUMBER', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT'],
+                                        map(lambda x: float(x), re.findall("(-?\+?\d\.?\d*E?e?-?\+?\d*)", line)))
+                },
+                ignore_index=True,
+            )
+    df = tmp = pd.DataFrame.from_dict(
+        {k: georges.beam.Beam(v[['X', 'PX', 'Y', 'PY', 'PT']]) for k, v in tmp.items()}, orient='index'
+    ).rename(columns={0: "BEAM"})
+    df.index.name = 'NAME'
+    return df
 
 
 def track(**kwargs):
@@ -45,7 +61,7 @@ def track(**kwargs):
     m = Madx(beamlines=[line])
 
     # Create a new beamline to include the results
-    l = line.line.copy()
+    line_tracking = line.line.copy()
 
     # Run MAD-X
     m.beam(line.name)
@@ -65,20 +81,18 @@ def track(**kwargs):
         raise TrackException("MAD-X ended with fatal error.")
     if kwargs.get('ptc', True):
         madx_track = read_ptc_tracking(os.path.join(".", 'ptctrackone.tfs'))
-        madx_track['PY'] = pd.to_numeric(madx_track['PY'])
+        line_tracking = line_tracking.merge(madx_track)
+        return beamline.Beamline(line_tracking)
     else:
         madx_track = read_madx_tracking(os.path.join(".", 'tracking.outxone')).dropna()
         madx_track['PY'] = pd.to_numeric(madx_track['PY'])
-    madx_track['S'] = round(madx_track['S'], 8)
     tmp = madx_track.query('TURN == 1').groupby('S').apply(lambda g: beam.Beam(g[['X', 'PX', 'Y', 'PY', 'PT']]))
 
-    l['AT_CENTER_TRUNCATED'] = round(l['AT_CENTER'], 8)
-    if 'BEAM' in l:
-        l.line.drop('BEAM', inplace=True, axis=1)
-    l = l.merge(pd.DataFrame(tmp,
-                             columns=['BEAM']),
-                             left_on='AT_CENTER_TRUNCATED',
-                             right_index=True,
-                             how='left').sort_values(by='AT_CENTER')
-    #l.drop('AT_CENTER_TRUNCATED', axis=1, inplace=True)
+    if 'BEAM' in line_tracking:
+        line_tracking.line.drop('BEAM', inplace=True, axis=1)
+    line_tracking = line_tracking.merge(pd.DataFrame(tmp,
+                                                     columns=['BEAM']),
+                                        left_on='AT_CENTER_TRUNCATED',
+                                        right_index=True,
+                                        how='left').sort_values(by='AT_CENTER')
     return beamline.Beamline(l)
