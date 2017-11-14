@@ -1,4 +1,4 @@
-import os, re
+import os, re, io
 import pandas as pd
 from .. import beamline
 from .. import beam
@@ -24,22 +24,29 @@ def read_madx_tracking(file):
 
 def read_ptc_tracking(file):
     """Read a PTC Tracking 'one' file to a dataframe."""
+
+    def process_data_lines(lines):
+        return pd.read_csv(io.StringIO("\n".join(lines)),
+                           names=['NUMBER', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT', 'S', 'E'],
+                           delim_whitespace=True)
+
+    regex_header = re.compile("^#segment\s[\d\s]*\s(.*)$")
     data = {}
     collect_particles = False
     location = None
     for line in open(file):
         if line.startswith("#segment"):
-            location = re.findall("^#segment\s[\d\s]*\s(.*)$", line)[0].strip()
-            data[location] = pd.DataFrame([], columns=['NUMBER', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT'])
+            if collect_particles:
+                # Process previous data collection before moving on to the next
+                data[location] = process_data_lines(tmp)
+            location = re.findall(regex_header, line)[0].strip()
+            tmp = []
             collect_particles = True
         elif collect_particles:
-            data[location] = data[location].append(
-                {
-                    x[0]: x[1] for x in zip(['NUMBER', 'TURN', 'X', 'PX', 'Y', 'PY', 'T', 'PT'],
-                                            map(lambda x: float(x), re.findall("(-?\+?\d\.?\d*E?e?-?\+?\d*)", line)))
-                },
-                ignore_index=True,
-            )
+            tmp.append(line) if tmp is not None else None
+    if collect_particles:
+        # Process previous data collection
+        data[location] = process_data_lines(tmp)
     df = pd.DataFrame.from_dict(
         {k: beam.Beam(v[['X', 'PX', 'Y', 'PY', 'PT']]) for k, v in data.items()}, orient='index'
     ).rename(columns={0: "BEAM"})
