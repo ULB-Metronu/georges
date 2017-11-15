@@ -4,7 +4,7 @@ from matplotlib.ticker import *
 import pandas as pd
 
 
-def losses(ax, bl, context, **kwargs):
+def losses(ax, bl, **kwargs):
     """Plot the losses from a beamline tracking computation and a context."""
     bl = bl.line
     init = bl.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').iloc[0]['BEAM'].n_particles
@@ -29,16 +29,18 @@ def losses(ax, bl, context, **kwargs):
     ax2.yaxis.label.set_color(palette['green'])
     ax2.set_ylim([0, 100])
     ax2.grid(True)
-    ax2.plot(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
+    if kwargs.get('log', False):
+        ax2.semilogy(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
+    else:
+        ax2.plot(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.set_ylabel('Losses ($\%$)')
     ax.yaxis.label.set_color(palette['magenta'])
-    ax.bar(transmission['S']-0.125, -100*transmission['T'].diff(), 0.125, alpha=0.7,
-             edgecolor=palette['magenta'],
-             color=palette['magenta'],
-             #yerr=transmission.apply(compute_losses_error),
-             error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
-    ax.set_ylim([0, 100*transmission['T'].diff().abs().max()+5.0])
+    ax.bar(transmission['S'] - 0.125, -100 * transmission['T'].diff(), 0.125, alpha=0.7,
+           edgecolor=palette['magenta'],
+           color=palette['magenta'],
+           error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
+    ax.set_ylim([0, 100 * transmission['T'].diff().abs().max() + 5.0])
 
     return transmission
