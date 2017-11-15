@@ -14,7 +14,6 @@ def losses(ax, bl, **kwargs):
     }), axis=1)
 
     ax2 = ax.twinx()
-
     ticks_locations = beamline_get_ticks_locations(bl)
     ax2.get_xaxis().set_tick_params(direction='out')
     ax2.yaxis.set_ticks_position('left')
@@ -24,14 +23,14 @@ def losses(ax, bl, **kwargs):
     ax2.tick_params(axis='x', labelsize=6)
     ax2.xaxis.set_major_formatter(FixedFormatter([]))
     ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
-    ax2.yaxis.set_major_locator(MultipleLocator(10))
     ax2.set_ylabel('T ($\%$)')
     ax2.yaxis.label.set_color(palette['green'])
-    ax2.set_ylim([0, 100])
     ax2.grid(True)
     if kwargs.get('log', False):
         ax2.semilogy(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
     else:
+        ax2.yaxis.set_major_locator(MultipleLocator(10))
+        ax2.set_ylim([0, 100])
         ax2.plot(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax.yaxis.set_major_locator(MultipleLocator(10))
