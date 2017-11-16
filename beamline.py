@@ -245,12 +245,10 @@ class Beamline:
 
     def to_thin(self, element, value):
         bl = self.__beamline
-        bl.set_value(element, 'LENGTH', 0.0)
-        bl.set_value(element, 'ORBIT_LENGTH', 0.0)
-        bl.set_value(element, 'AT_ENTRY', bl.loc[element]['AT_CENTER'])
-        bl.set_value(element, 'AT_EXIT', bl.loc[element]['AT_CENTER'])
-        bl.set_value(element, 'CLASS', 'QUADRUPOLE')
-       # bl.set_value(element, 'PLUG', 'K1')
-       # bl.set_value(element, 'VALUE', "{{0, {} }}".format(value))
-        bl.set_value(element, 'APERTYPE', np.nan)
-        bl.set_value(element, 'APERTURE', np.nan)
+        bl.at[element, 'LENGTH'] = 0.0
+        bl.at[element, 'ORBIT_LENGTH'] = 0.0
+        bl.at[element, 'AT_ENTRY'] = bl.loc[element]['AT_CENTER']
+        bl.at[element, 'AT_EXIT'] = bl.loc[element]['AT_CENTER']
+        bl.at[element, 'CLASS'] = 'QUADRUPOLE'
+        bl.at[element, 'APERTYPE'] = np.nan
+        bl.at[element, 'APERTURE'] = np.nan

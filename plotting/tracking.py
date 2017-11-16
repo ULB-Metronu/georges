@@ -1,5 +1,6 @@
 from .common import palette, filled_plot
 import pandas as pd
+import numpy as np
 
 
 def tracking(ax, bl, **kwargs):
@@ -26,7 +27,8 @@ def tracking(ax, bl, **kwargs):
         '99%': 1000 * r['BEAM'].halo['99%'][plane],
         'mean': 1000 * r['BEAM'].mean[plane],
         'std': 1000 * r['BEAM'].std[plane],
-        'std_bpm': 1000 * r['BEAM'].std_bpm[plane] if r['CLASS'] == 'MARKER' else 0.0,
+        'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] if r['BPM'] is True else -10000.0,
+        'std_bpm_err': np.max([1.0, r['BEAM'].std_bpm[plane][1] if r['BPM'] is True else 0.0]),
     }), axis=1)
 
     if t['S'].count == 0:
@@ -45,10 +47,13 @@ def tracking(ax, bl, **kwargs):
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
 
     if std_bpm:
-        ax.plot(t['S'], t['std_bpm'], '^', color=palette['green'],
-                markeredgecolor=palette['green'], markersize=2, linewidth=1)
-        ax.plot(t['S'], -t['std_bpm'], 'v', color=palette['green'],
-                markeredgecolor=palette['green'], markersize=2, linewidth=1)
+        ax.errorbar(t['S'], t['std_bpm'], xerr=0.01, yerr=t['std_bpm_err'], fmt='.', linewidth=0.0, color=palette['green'])
+        ax.errorbar(t['S'], -t['std_bpm'], xerr=0.01, yerr=t['std_bpm_err'], fmt='.', linewidth=0.0, color=palette['green'])
+
+        #ax.plot(t['S'], t['std_bpm'], '^', color=palette['green'],
+         #       markeredgecolor=palette['green'], markersize=4, linewidth=1)
+        #ax.plot(t['S'], -t['std_bpm'], 'v', color=palette['green'],
+        #        markeredgecolor=palette['green'], markersize=4, linewidth=1)
 
     if mean:
         ax.plot(t['S'], t['mean'], '*-', color=palette[plane],

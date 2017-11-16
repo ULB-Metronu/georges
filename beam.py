@@ -2,6 +2,7 @@ import pandas as pd
 import pandas.core.common
 import numpy as np
 from . import physics
+from scipy.optimize import curve_fit
 
 PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'position'}
 PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'DPP', 'DT']
@@ -122,11 +123,35 @@ class Beam:
     @property
     def std_bpm(self):
         """TODO"""
+        def gaussian(x, a, mu, sigma):
+            return a * np.exp(-(x - mu) ** 2 / (2 * sigma ** 2)) / (np.sqrt(2*np.pi)*sigma)
+        import matplotlib.pyplot as plt
         def fit_bpm(d):
-            from scipy.stats import norm
-            bs = np.array([-26, -18, -14, -10, -7, -5, -3, -1, 1, 3, 5, 7, 10, 14, 18, 26]) / 1000
-            hist, _ = np.histogram(d, bs, normed=True)
-            return norm.fit(hist)[1]/1000
+            bs = np.array(
+                [-31, -19.8, -15.8, -11.8, -7.8, -5.8, -3.8, -1.8, 0.0, 1.8, 3.8, 5.8, 7.8, 11.8, 15.8, 19.8, 31]) / 1000
+            bsp = (bs[1:] + bs[:-1]) / 2
+            w = 1.0 / (bs[1:] - bs[:-1])
+            w[0] *= 0.8
+            w[-1] *= 0.8
+            hist = np.histogram(d, bs)
+            x = bsp
+            y = w * hist[0]
+            ar = np.trapz(y / np.sum(y) * len(y), x)
+            mean = np.mean(x * y / np.sum(y) * len(y))
+            rms = np.std(x * y / np.sum(y) * len(y))
+            popt, pcov = curve_fit(gaussian, x, y, p0=[ar, 0.0, 0.001], maxfev=10000)
+            if  popt[2] > 0.1:
+                popt, pcov = curve_fit(gaussian, x, y, p0=[ar, 0.0, 0.005], maxfev=10000)
+            #print(popt)
+            plt.plot(bsp, w * hist[0], '*-')
+            #plt.plot(x, gaussian(x, *popt), 'ro:', label='fit')
+            #print(d.std())
+
+            return [
+                np.abs(popt[2]),
+                np.sqrt(pcov[2, 2])
+            ]
+
         return {'X': fit_bpm(self.__distribution['X']), 'Y': fit_bpm(self.__distribution['Y'])}
 
     @property
@@ -140,7 +165,14 @@ class Beam:
             self.__distribution.quantile(0.842701),
             self.__distribution.quantile(0.95),
             self.__distribution.quantile(0.99)
-        ], axis=1).rename(columns={0.01: '1%', 0.05: '5%', 1.0-0.842701: '20%', 0.842701: '80%', 0.95: '95%', 0.99: '99%'})
+        ], axis=1).rename(columns={0.01: '1%',
+                                   0.05: '5%',
+                                   1.0-0.842701: '20%',
+                                   0.842701: '80%',
+                                   0.95: '95%',
+                                   0.99: '99%'
+                                   }
+                          )
 
     @property
     def coupling(self):
