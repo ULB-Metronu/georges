@@ -122,34 +122,42 @@ class Beam:
 
     @property
     def std_bpm(self):
+        return self._std_bpm()
+
+    def _std_bpm(self, **kwargs):
         """TODO"""
         def gaussian(x, a, mu, sigma):
             return a * np.exp(-(x - mu) ** 2 / (2 * sigma ** 2)) / (np.sqrt(2*np.pi)*sigma)
-        import matplotlib.pyplot as plt
+
         def fit_bpm(d):
             bs = np.array(
                 [-31, -19.8, -15.8, -11.8, -7.8, -5.8, -3.8, -1.8, 0.0, 1.8, 3.8, 5.8, 7.8, 11.8, 15.8, 19.8, 31]) / 1000
             bsp = (bs[1:] + bs[:-1]) / 2
             w = 1.0 / (bs[1:] - bs[:-1])
-            w[0] *= 0.8
-            w[-1] *= 0.8
+            w[0] *= 0.7
+            w[-1] *= 0.7
             hist = np.histogram(d, bs)
             x = bsp
             y = w * hist[0]
             ar = np.trapz(y / np.sum(y) * len(y), x)
             mean = np.mean(x * y / np.sum(y) * len(y))
             rms = np.std(x * y / np.sum(y) * len(y))
-            popt, pcov = curve_fit(gaussian, x, y, p0=[ar, 0.0, 0.001], maxfev=10000)
-            if  popt[2] > 0.1:
-                popt, pcov = curve_fit(gaussian, x, y, p0=[ar, 0.0, 0.005], maxfev=10000)
-            #print(popt)
-            plt.plot(bsp, w * hist[0], '*-')
-            #plt.plot(x, gaussian(x, *popt), 'ro:', label='fit')
-            #print(d.std())
+            popt, pcov = curve_fit(gaussian, x, y,
+                                   p0=[ar, mean, rms],
+                                   maxfev=10000,
+                                   bounds=(
+                                       (-np.inf, mean - 0.1 * np.abs(mean), 0.5 * rms),
+                                       (np.inf, mean + 0.1 * np.abs(mean), 2 * rms)
+                                   )
+                                   )
+
+            if kwargs.get('ax'):
+                kwargs['ax'].plot(bsp, w * hist[0], '*-')
+                kwargs['ax'].plot(x, gaussian(x, *popt), 'ro:', label='fit')
 
             return [
                 np.abs(popt[2]),
-                np.sqrt(pcov[2, 2])
+                np.sqrt(pcov[2, 2]) if pcov[2, 2] > 0 else 0.0
             ]
 
         return {'X': fit_bpm(self.__distribution['X']), 'Y': fit_bpm(self.__distribution['Y'])}

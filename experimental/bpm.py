@@ -86,22 +86,22 @@ def bpm(**kwargs):
         bpm_data = pd.read_excel(os.path.join(path, file), skiprows=0, encoding="utf-8-sig")
     bpm_data["{}_data".format(bpm_name)] = bpm_data[bpm_name].apply(
         lambda x: read_data_file(
-            "{}.txt".format(x),
+            f"{x:04}.txt",
             instrument,
-            {'init': 'Y', 'next': 'X', 'trigger': "Y-Wire data"},
+            {'init': 'Y', 'next': 'X', 'trigger': "Y-Wire data"}, # Note the inversion
             path
         )
     )
-    bpm_data["{}_fit_X".format(bpm_name)] = bpm_data["{}_data".format(bpm_name)].apply(
+    bpm_data[f"{bpm_name}_fit_X"] = bpm_data["{}_data".format(bpm_name)].apply(
         lambda x: bpm_fit(x, 'X')
     )
-    bpm_data["{}_fit_Y".format(bpm_name)] = bpm_data["{}_data".format(bpm_name)].apply(
+    bpm_data[f"{bpm_name}_fit_Y"] = bpm_data["{}_data".format(bpm_name)].apply(
         lambda x: bpm_fit(x, 'Y')
     )
-    bpm_data["{}_fit_sigma_X".format(bpm_name)] = bpm_data["{}_fit_X".format(bpm_name)].apply(
+    bpm_data[f"{bpm_name}_fit_sigma_X"] = bpm_data["{}_fit_X".format(bpm_name)].apply(
         lambda x: np.abs(x[0][2]) if x is not None else None
     )
-    bpm_data["{}_fit_sigma_Y".format(bpm_name)] = bpm_data["{}_fit_Y".format(bpm_name)].apply(
+    bpm_data[f"{bpm_name}_fit_sigma_Y"] = bpm_data["{}_fit_Y".format(bpm_name)].apply(
         lambda x: np.abs(x[0][2]) if x is not None else None
     )
 

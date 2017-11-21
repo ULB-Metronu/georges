@@ -42,4 +42,7 @@ def losses(ax, bl, **kwargs):
            error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
     ax.set_ylim([0, 100 * transmission['T'].diff().abs().max() + 5.0])
 
+    if kwargs.get('with_current'):
+        ax2.plot(bl['AT_CENTER'], bl['CURRENT'], 'k-')
+
     return transmission

@@ -17,7 +17,7 @@ def bpm(ax, bl, **kwargs):
     """TODO."""
     if kwargs.get('plane') is None:
         raise Exception("'plane' argument must be provided.")
-    bl.line[bl.line['BPM_X'].notnull()].apply(
-        lambda x: draw_bpm_size(ax, x['AT_CENTER'], x[f"BPM_{kwargs.get('plane')}"]),
+    bl.line[bl.line[f"BPM_STD_{kwargs.get('plane')}"].notnull()].apply(
+        lambda x: draw_bpm_size(ax, x['AT_CENTER'], x[f"BPM_STD_{kwargs.get('plane')}"]),
         axis=1
     )

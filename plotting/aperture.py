@@ -53,28 +53,24 @@ def draw_quad(ax, e):
 
 
 def draw_coll(ax, e, plane):
-
-    if e['SLITS_PLANE'] == plane or e['SLITS_PLANE'] != e['SLITS_PLANE']:  # Pas top comme notation
-
+    if e['SLITS_PLANE'] == plane:
         ax.add_patch(
             matplotlib.patches.Rectangle(
-                (e['AT_ENTRY'], 1000 * e['APERTURE_UP']*0.5),  # (x,y)
-                e['ORBIT_LENGTH'],  # width
+                (e['AT_ENTRY'], 1000 * e['APERTURE_UP'] * 0.5),  # (x,y)
+                e['LENGTH'],  # width
                 100,  # height
-                hatch='.', facecolor=palette['coll']
+              #  hatch='.', facecolor=palette['coll']
             )
         )
 
         ax.add_patch(
             matplotlib.patches.Rectangle(
-                (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']*0.5),  # (x,y)
-                e['ORBIT_LENGTH'],  # width
+                (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN'] * 0.5),  # (x,y)
+                e['LENGTH'],  # width
                 -100,  # height
                 hatch='.', facecolor=palette['coll']
             )
         )
-        draw_chamber(ax, e)
-
 
 def draw_bend(ax, e):
     ax.add_patch(
@@ -122,4 +118,4 @@ def aperture(ax, bl, **kwargs):
     bl.query("CLASS == 'QUADRUPOLE'").apply(lambda e: draw_quad(ax, e), axis=1)
     bl.query("CLASS == 'SBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
     bl.query("CLASS == 'RBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
-    bl.query("CLASS == 'COLLIMATOR'").apply(lambda e: draw_coll(ax, e, planes), axis=1)
+    #bl.query("CLASS == 'COLLIMATOR'").apply(lambda e: draw_coll(ax, e, planes), axis=1)
