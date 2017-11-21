@@ -86,7 +86,7 @@ def bpm(**kwargs):
         bpm_data = pd.read_excel(os.path.join(path, file), skiprows=0, encoding="utf-8-sig")
     bpm_data["{}_data".format(bpm_name)] = bpm_data[bpm_name].apply(
         lambda x: read_data_file(
-            f"{x:04}.txt",
+            f"{x}.txt" if str(x)[:1].isalpha() else f"{x:04}.txt",
             instrument,
             {'init': 'Y', 'next': 'X', 'trigger': "Y-Wire data"}, # Note the inversion
             path
