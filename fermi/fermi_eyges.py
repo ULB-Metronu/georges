@@ -4,9 +4,11 @@ from .stopping import residual_energy
 
 
 def fermi_eyges_integrals(u, initial_energy, thickness, material, db, T, n):
-    return (thickness-u)**n * T(
+    return (thickness-u)**n * T.t(
         energy_to_pv(residual_energy(material, u, initial_energy, db=db)),
-        energy_to_pv(initial_energy)
+        energy_to_pv(initial_energy),
+        db=db,
+        material=material
     )
 
 
