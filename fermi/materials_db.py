@@ -45,3 +45,17 @@ class MaterialsDB:
             'graphite': 1.7,
         }
         return density[material]
+
+    @staticmethod
+    def z(material):
+        z = {
+            'graphite': 6
+        }
+        return z[material]
+
+    @staticmethod
+    def a(material):
+        a = {
+            'graphite': 12
+        }
+        return a[material]

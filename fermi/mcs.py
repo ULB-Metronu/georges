@@ -1,10 +1,16 @@
 import numpy as np
 
 
-def inverse_scattering_length(**kwargs):
+def scattering_length(**kwargs):
     db = kwargs.get('db')
     material = kwargs['material']
-    return 1.0/0.03372681281618887
+    alpha = 0.0072973525664  # Fine structure constant
+    avogadro = 6.02e23  # Avogadro's number
+    re = 2.817940e-15 * 100  # Classical electron radius (in cm)
+    a = db.a(material)
+    z = db.z(material)
+    rho = db.density(material)
+    return 1 / (rho * alpha * avogadro * re**2 * z**2 * (2 * np.log(33219 * (a*z)**(-1/3)) - 1) / a)
 
 
 class FermiRossi:
@@ -16,6 +22,24 @@ class FermiRossi:
         return (es/pv) ** 2 * (1/chi_0)
 
 
+class ICRU:
+    """"""
+    @staticmethod
+    def t(pv, p1v1, **kwargs):
+        pass
+
+
+class ICRUProtons:
+    """"""
+    @staticmethod
+    def t(pv, p1v1, **kwargs):
+        db = kwargs.get('db')
+        material = kwargs['material']
+        es = 15.0  # MeV
+        chi_s = scattering_length(material=material, db=db)
+        return (es / pv) ** 2 * (1 / chi_s)
+
+
 class DifferentialMoliere:
     """"""
     @staticmethod
@@ -23,7 +47,7 @@ class DifferentialMoliere:
         db = kwargs.get('db')
         material = kwargs['material']
         es = 15.0  # MeV
-        chi_s = inverse_scattering_length(material=material, db=db)
+        chi_s = scattering_length(material=material, db=db)
         return DifferentialMoliere.f_dm(p1v1, pv) * (es / pv) ** 2 * (1 / chi_s)
 
     @staticmethod
