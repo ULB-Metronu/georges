@@ -4,3 +4,5 @@ from .stopping import get_range_from_energy, \
     residual_energy, \
     residual_range, \
     necessary_thickness
+from .fermi_eyges import compute_fermi_eyges
+from .mcs import t_dm

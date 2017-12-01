@@ -30,9 +30,11 @@ class MaterialsDB:
         # data.index.name = 'K'
         return data
 
+    @property
     def csda_ranges(self):
         return self.__materials_db['csda_ranges']
 
+    @property
     def projected_ranges(self):
         return self.__materials_db['projected_ranges']
 
