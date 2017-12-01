@@ -129,7 +129,7 @@ class Beam:
         def gaussian(x, a, mu, sigma):
             return a * np.exp(-(x - mu) ** 2 / (2 * sigma ** 2)) / (np.sqrt(2*np.pi)*sigma)
 
-        def fit_bpm(d):
+        def fit_bpm(d, ax=None):
             bs = np.array(
                 [-31, -19.8, -15.8, -11.8, -7.8, -5.8, -3.8, -1.8, 0.0, 1.8, 3.8, 5.8, 7.8, 11.8, 15.8, 19.8, 31]) / 1000
             bsp = (bs[1:] + bs[:-1]) / 2
@@ -151,7 +151,7 @@ class Beam:
                                    )
                                    )
 
-            if kwargs.get('ax'):
+            if ax is not None:
                 kwargs['ax'].plot(bsp, w * hist[0], '*-')
                 kwargs['ax'].plot(x, gaussian(x, *popt), 'ro:', label='fit')
 
@@ -160,7 +160,19 @@ class Beam:
                 np.sqrt(pcov[2, 2]) if pcov[2, 2] > 0 else 0.0
             ]
 
-        return {'X': fit_bpm(self.__distribution['X']), 'Y': fit_bpm(self.__distribution['Y'])}
+        # Simulate orbit trajectory shifts of 1mm to get statistical error on beam size
+        data_x = np.array([fit_bpm(self.__distribution['X'], kwargs.get('ax')),
+                           fit_bpm(self.__distribution['X'] + 0.002),
+                           fit_bpm(self.__distribution['X'] - 0.002)])
+        mean_x = np.mean(data_x[:, 0])
+        error_x = np.sqrt(np.std(data_x[:, 0])**2 + np.max(data_x[:, 1])**2)
+        data_y = np.array([fit_bpm(self.__distribution['Y'], kwargs.get('ax')),
+                           fit_bpm(self.__distribution['Y'] + 0.002),
+                           fit_bpm(self.__distribution['Y'] - 0.002)])
+        mean_y = np.mean(data_y[:, 0])
+        error_y = np.sqrt(np.std(data_y[:, 0])**2 + np.max(data_y[:, 1])**2)
+
+        return {'X': [mean_x, error_x], 'Y': [mean_y, error_y]}
 
     @property
     def halo(self):

@@ -58,6 +58,12 @@ def energy_to_beta(ekin):
     return np.sqrt((gamma ** 2 - 1) / gamma ** 2)
 
 
+def energy_to_pv(energy):
+    """Return relativistic factor 'pv' from kinetic energy (MeV)."""
+    E = energy + PROTON_MASS
+    return (E**2 - PROTON_MASS**2) / E
+
+
 def compute_emittance(x, px):
     """Return the beam emittance [mm.mrad] from x [mm] and px [mrad]."""
     return x * px
