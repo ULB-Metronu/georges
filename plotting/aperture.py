@@ -72,6 +72,7 @@ def draw_coll(ax, e, plane):
             )
         )
 
+
 def draw_bend(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(

@@ -9,8 +9,8 @@ STAR_COLUMNS = ['K', 'eS', 'nS', 'tS', 'csda', 'prange', 'factor']
 class MaterialsDB:
     def __init__(self, p):
         self.db_path = p
-        data_files = [os.path.splitext(f)[0] for f in os.listdir(p) if
-                      os.path.isfile(os.path.join(p, f)) and os.path.splitext(f)[1] == '.txt']
+        data_files = [os.path.splitext(f)[0] for f in os.listdir(os.path.join(p, 'pstar')) if
+                      os.path.isfile(os.path.join(p, 'pstar', f)) and os.path.splitext(f)[1] == '.txt']
         pstar = {m: self._star_read_data(m) for m in data_files}
         projected_ranges = {k: scipy.interpolate.CubicSpline(np.log(v['K']), np.log(v['prange'])) for k, v in
                             pstar.items()}
@@ -18,17 +18,21 @@ class MaterialsDB:
         self.__materials_db = {
             'projected_ranges': projected_ranges,
             'csda_ranges': csda_ranges,
+            'atomic': self._pdg_read_data()
         }
 
     def _star_read_data(self, m):
-        data = pd.read_table(os.path.join(self.db_path, f"{m}.txt"),
+        return pd.read_table(os.path.join(self.db_path, "pstar", f"{m}.txt"),
                              skiprows=7,
                              delimiter=' ',
                              names=STAR_COLUMNS,
                              index_col=False)
 
-        # data.index.name = 'K'
-        return data
+    def _pdg_read_data(self):
+        return pd.read_table(os.path.join(self.db_path, "pdg", "atomic.csv"),
+                             delimiter=',',
+                             index_col='material'
+                             )
 
     @property
     def csda_ranges(self):
@@ -43,19 +47,12 @@ class MaterialsDB:
         density = {
             'water': 1,
             'graphite': 1.7,
+            'beryllium': 1.85,
         }
         return density[material]
 
-    @staticmethod
-    def z(material):
-        z = {
-            'graphite': 6
-        }
-        return z[material]
+    def z(self, material):
+        return self.__materials_db['atomic'].at[material, 'Z']
 
-    @staticmethod
-    def a(material):
-        a = {
-            'graphite': 12
-        }
-        return a[material]
+    def a(self, material):
+        return self.__materials_db['atomic'].at[material, 'A']
