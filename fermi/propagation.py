@@ -17,7 +17,7 @@ def propagate(line, parameters, db):
         fe = compute_fermi_eyges(
             db=db,
             material=slab['MATERIAL'],
-            energy=slab['ENERGY'],
+            energy=slab['ENERGY_IN'],
             thickness=slab['LENGTH'] * 100,
             T=DifferentialMoliere
         )
@@ -33,9 +33,11 @@ def propagate(line, parameters, db):
     # Compute energy loss along the line
     energy = parameters['energy']
     for i, e in line_fermi.iterrows():
-        line_fermi.loc[i, 'ENERGY'] = energy
+        line_fermi.loc[i, 'ENERGY_IN'] = energy
         if e["TYPE"] == 'slab':
             energy = residual_energy(e['MATERIAL'], e['LENGTH'] * 100, energy, db=db)
+            line_fermi.loc[i, 'ENERGY_OUT'] = energy
+            line_fermi.loc[i, 'DeltaE'] = line_fermi.loc[i, 'ENERGY_IN'] - energy
 
     # Beam spreading and scattering following the Fermi-Eyges model
     return Beamline(
