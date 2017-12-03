@@ -29,7 +29,7 @@ class BeamlineBuilder:
         self.__path = path
         self.__prefix = prefix
         self.__elements = None
-        self.__beamline = None
+        self.__beamline = pd.DataFrame()
         self.__name = ""
         self.__from_survey = False
 
@@ -71,7 +71,7 @@ class BeamlineBuilder:
             raise BeamlineBuilderException("Invalid data type for 'elements'.")
 
     def define_elements_from_list(self, elements):
-        self.__elements = pd.DataFrame(self.__elements)
+        self.__elements = pd.DataFrame(elements)
         return self
 
     def define_elements_from_file(self, file):

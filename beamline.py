@@ -22,6 +22,7 @@ class Beamline:
         """
         :param beamline: defines the beamline to be created. It can be
             - a single pandas Dataframe
+            - a list that can be used to create a DataFrame
             - another beamline ('copy' operation)
         :param name: the name of the beamline to be created
         :param from_survey: indicates (True/False) is the beamline is to be converted from survey data
@@ -65,15 +66,20 @@ class Beamline:
         # Some type inference to get the sequence right
         # Sequence from a pandas.DataFrame
         if isinstance(beamline, pd.DataFrame):
+            self.__beamline = beamline.set_index('NAME')
             if self.__name is None:
                 self.__name = getattr(beamline, 'name', 'BEAMLINE')
-            self.__beamline = beamline
+            else:
+                self.__beamline.name = self.__name
             if self.__beamline.size == 0:
-                raise BeamlineException("Empty dataframe.")
+                raise BeamlineException ("Empty dataframe.")
+        # Sequence from a list
+        # Assume that a DataFrame can be created from the list
+        if isinstance(beamline, list):
+            self.__create(pd.DataFrame(beamline))
         # Sequence from another Beamline
         if isinstance(beamline, Beamline):
-            self.__name = beamline.name
-            self.__beamline = beamline.line
+            self.__create(beamline.line)
 
     def __expand_sequence_data(self):
         """Apply sequence transformation until a fixed point is reached."""
