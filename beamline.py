@@ -66,7 +66,7 @@ class Beamline:
         # Some type inference to get the sequence right
         # Sequence from a pandas.DataFrame
         if isinstance(beamline, pd.DataFrame):
-            self.__beamline = beamline.set_index('NAME')
+            self.__beamline = beamline.set_index('NAME') if beamline.index.names[0] is not 'NAME' else beamline
             if self.__name is None:
                 self.__name = getattr(beamline, 'name', 'BEAMLINE')
             else:

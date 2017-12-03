@@ -204,7 +204,7 @@ class Beam:
             raise BeamException("Trying to access an invalid data from a beam.")
         return self.__distribution[item]
 
-    def from_file(self,filename):
+    def from_file(self, filename):
         ##
         print('Open file : ', filename)
          #beam=
