@@ -102,4 +102,4 @@ def track(**kwargs):
                                             left_on='AT_CENTER_TRUNCATED',
                                             right_index=True,
                                             how='left').sort_values(by='AT_CENTER')
-        return beamline.Beamline(l)
+        return beamline.Beamline(line_tracking)
