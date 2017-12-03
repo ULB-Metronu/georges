@@ -1,10 +1,7 @@
 import os.path
 import pandas as pd
 import numpy as np
-import numpy.linalg as npl
 from .sequence_geometry import compute_derived_data
-
-DEFAULT_EXT = 'csv'
 
 
 class BeamlineException(Exception):
@@ -20,7 +17,7 @@ class Beamline:
     The internal representation is essentially a pandas DataFrames.
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, beamline, name=None):
         """
         :param args: defines the beamline to be created. It can be
             - a single pandas Dataframe containing an existing beamline
@@ -32,42 +29,22 @@ class Beamline:
             - elements: elements description file (looked up in path/)
 
         """
-        # We need the kwargs first to parse the args correctly
-        self.__path = kwargs.get('path', '.')
-        self.__prefix = kwargs.get('prefix', '')
-        self.__elements = kwargs.get('elements', None)
-        self.__survey = kwargs.get('survey', False)
 
         # Default values
         self.__length = 0
+        self.__name = name
         self.__strengths = None
         self.__beamline = None
-        self.__converted_from_survey = False
 
         # Process the beamline argument
-        self.__process_args(args)
+        self.__create(beamline)
+
+        # Verify that the beamline was created correctly
         if self.__beamline is None:
             raise BeamlineException("No beamline defined.")
 
-        # Process the elements description
-        if self.__elements is not None:
-            self.__process_elements()
-            self.__expand_elements_data()
-
-        # Angle conversion
-        if self.__survey:
-            if 'ANGLE' in self.__beamline:
-                self.__beamline['ANGLE'] *= np.pi / 180.0
-            if 'ANGLE_ELEMENT' in self.__beamline:
-                self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
-
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
-
-        # If the sequence is given as a survey, convert to s-positions
-        if self.__survey:
-            self.__convert_survey_to_sequence()
-            self.__expand_sequence_data()
 
         # Compute the sequence length
         if self.__length == 0 and self.__beamline.get('AT_EXIT') is not None:
@@ -83,99 +60,20 @@ class Beamline:
     def __repr__(self):
         return self.__beamline.to_html()
 
-    def __process_args(self, args):
+    def __create(self, beamline):
         """Process the arguments of the initializer."""
-        if len(args) == 0 or len(args) > 1:
-            raise BeamlineException("Single argument expected.")
-        arg = args[0]
         # Some type inference to get the sequence right
-        # Sequence from file name
-        if isinstance(arg, str):
-            self.__name = arg.upper()
-            self.__build_from_files([arg])
-        # Sequence from a list of files
-        if isinstance(arg, list) and len(arg) > 0:
-            self.__name = '_'.join(arg).upper()
-            self.__build_from_files(arg)
         # Sequence from a pandas.DataFrame
-        if isinstance(arg, pd.DataFrame):
-            self.__name = getattr(arg, 'name', 'BEAMLINE')
-            self.__beamline = arg
-            self.__beamline['PHYSICAL'] = True
+        if isinstance(beamline, pd.DataFrame):
+            if self.__name is None:
+                self.__name = getattr(beamline, 'name', 'BEAMLINE')
+            self.__beamline = beamline
             if self.__beamline.size == 0:
                 raise BeamlineException("Empty dataframe.")
         # Sequence from another Beamline
-        if isinstance(arg, Beamline):
-            self.__name = arg.name
-            self.__beamline = arg.line
-
-    def __process_elements(self):
-        """Process the elements description argument."""
-        # Some type inference to get the elements right
-        # Elements as a file name
-        if isinstance(self.__elements, str):
-            self.__build_elements_from_file(self.__elements)
-        # Elements as a list to be converted onto a DataFrame
-        elif isinstance(self.__elements, list) and len(self.__elements) > 0:
-            self.__elements = pd.DataFrame(self.__elements)
-        elif not isinstance(self.__elements, pd.DataFrame):
-            raise BeamlineException("Invalid data type for 'elements'.")
-
-    @property
-    def name(self):
-        """The sequence name."""
-        return self.__name
-
-    @name.setter
-    def name(self, n):
-        self.__name = n
-
-    @property
-    def length(self):
-        """The sequence length."""
-        return self.__length
-
-    @property
-    def converted_from_survey(self):
-        """True if the sequence has been converted from survey data."""
-        return self.__converted_from_survey
-
-    @property
-    def strengths(self):
-        """Strengths of the various elements of the beamline."""
-        return self.__strengths
-
-    @strengths.setter
-    def strengths(self, strengths):
-        if not strengths.index == self.__strengths:
-            raise BeamlineException("Trying to set the strengths for an invalid elements list.")
-        self.__strengths = strengths
-
-    @property
-    def elements(self):
-        """Elements composing the beamline."""
-        return self.__elements
-
-    @property
-    def line(self):
-        """The beamline representation."""
-        self.__beamline.name = self.name
-        self.__beamline.length = self.length
-        return self.__beamline
-
-    @line.setter
-    def line(self, line):
-        self.__beamline = line
-        self.__length = line.get('AT_EXIT').max()
-
-    def __build_from_files(self, names):
-        """Build a sequence DataFrame from a list of .csv files."""
-        files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXT) for n in names]
-        sequences = [
-            pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME') for f in files
-        ]
-        self.__beamline = pd.concat(sequences)
-        self.__beamline['PHYSICAL'] = True
+        if isinstance(beamline, Beamline):
+            self.__name = beamline.name
+            self.__beamline = beamline.line
 
     def __expand_sequence_data(self):
         """Apply sequence transformation until a fixed point is reached."""
@@ -187,34 +85,33 @@ class Beamline:
                 break
         self.__beamline = tmp2
 
-    def __build_elements_from_file(self, file):
-        file = os.path.splitext(file)[0] + '.' + (os.path.splitext(file)[1] or DEFAULT_EXT)
-        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
+    @property
+    def name(self):
+        """The sequence name."""
+        return self.__name
 
-    def __expand_elements_data(self):
-        self.__beamline = self.__beamline.merge(self.__elements,
-                                                left_on='TYPE',
-                                                right_index=True,
-                                                how='left',
-                                                suffixes=('', '_ELEMENT')
-                                                )
+    @property
+    def length(self):
+        """The sequence length."""
+        return self.__length
 
-    def __convert_survey_to_sequence(self):
-        s = self.__beamline
-        if 'LENGTH' not in s:
-            s['LENGTH'] = np.nan
-        offset = s['ORBIT_LENGTH'][0] / 2.0
-        if pd.isnull(offset):
-            offset = 0
-        self.__beamline['AT_CENTER'] = pd.DataFrame(npl.norm([
-            s['X'].diff().fillna(0.0),
-            s['Y'].diff().fillna(0.0)
-        ], axis=0) - (
-            s['LENGTH'].fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].fillna(0.0) / 2.0
-        ) + (
-            s['LENGTH'].shift(1).fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].shift(1).fillna(0.0) / 2.0
-        )).cumsum() / 1000.0 + offset
-        self.__converted_from_survey = True
+    @property
+    def line(self):
+        """The beamline representation."""
+        self.__beamline.name = self.name
+        self.__beamline.length = self.length
+        return self.__beamline
+
+    @property
+    def strengths(self):
+        """Strengths of the various elements of the beamline."""
+        return self.__strengths
+
+    @strengths.setter
+    def strengths(self, strengths):
+        if not strengths.index == self.__strengths:
+            raise BeamlineException("Trying to set the strengths for an invalid elements list.")
+        self.__strengths = strengths
 
     def add_markers(self):
         s = self.__beamline
@@ -243,7 +140,7 @@ class Beamline:
         s.apply(create_marker, axis=1)
         return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
 
-    def to_thin(self, element, value):
+    def to_thin(self, element):
         bl = self.__beamline
         bl.at[element, 'LENGTH'] = 0.0
         bl.at[element, 'ORBIT_LENGTH'] = 0.0
@@ -252,3 +149,10 @@ class Beamline:
         bl.at[element, 'CLASS'] = 'QUADRUPOLE'
         bl.at[element, 'APERTYPE'] = np.nan
         bl.at[element, 'APERTURE'] = np.nan
+
+    def convert_angles_to_radians(self):
+        # Angle conversion
+        if 'ANGLE' in self.__beamline:
+            self.__beamline['ANGLE'] *= np.pi / 180.0
+        if 'ANGLE_ELEMENT' in self.__beamline:
+            self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
