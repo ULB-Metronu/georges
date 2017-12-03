@@ -1,6 +1,7 @@
 import os.path
 import pandas as pd
 import numpy as np
+import numpy.linalg as npl
 from .sequence_geometry import compute_derived_data
 
 
@@ -17,17 +18,13 @@ class Beamline:
     The internal representation is essentially a pandas DataFrames.
     """
 
-    def __init__(self, beamline, name=None):
+    def __init__(self, beamline, name=None, from_survey=False):
         """
-        :param args: defines the beamline to be created. It can be
-            - a single pandas Dataframe containing an existing beamline
+        :param beamline: defines the beamline to be created. It can be
+            - a single pandas Dataframe
             - another beamline ('copy' operation)
-            - a csv file or a list of csv files (looked up in path/prefix)
-        :param kwargs: optional parameters include:
-            - path: filepath to the root directory of the beamline description files (defaults to '.')
-            - prefix: prefix for the beamline description files (defaults to '')
-            - elements: elements description file (looked up in path/)
-
+        :param name: the name of the beamline to be created
+        :param from_survey: indicates (True/False) is the beamline is to be converted from survey data
         """
 
         # Default values
@@ -35,6 +32,7 @@ class Beamline:
         self.__name = name
         self.__strengths = None
         self.__beamline = None
+        self.__from_survey = from_survey
 
         # Process the beamline argument
         self.__create(beamline)
@@ -42,6 +40,14 @@ class Beamline:
         # Verify that the beamline was created correctly
         if self.__beamline is None:
             raise BeamlineException("No beamline defined.")
+
+        # Converts from survey data
+        if self.__from_survey:
+            self.__convert_angles_to_radians()
+            self.__expand_sequence_data()
+            self.__convert_survey_to_sequence()
+            # Compute derived data until a fixed point sequence is reached,
+            # again to reexpand
 
         # Compute derived data until a fixed point sequence is reached
         self.__expand_sequence_data()
@@ -53,12 +59,6 @@ class Beamline:
         # Beamline must be defined
         assert self.__length is not None
         assert self.__beamline is not None
-
-    def __str__(self):
-        return str(self.__beamline)
-
-    def __repr__(self):
-        return self.__beamline.to_html()
 
     def __create(self, beamline):
         """Process the arguments of the initializer."""
@@ -84,6 +84,34 @@ class Beamline:
             if tmp.equals(tmp2):
                 break
         self.__beamline = tmp2
+
+    def __convert_survey_to_sequence(self):
+        s = self.__beamline
+        if 'LENGTH' not in s:
+            s['LENGTH'] = np.nan
+        offset = s['ORBIT_LENGTH'][0] / 2.0
+        if pd.isnull(offset):
+            offset = 0
+        self.__beamline['AT_CENTER'] = pd.DataFrame(
+            npl.norm(
+                [
+                    s['X'].diff().fillna(0.0),
+                    s['Y'].diff().fillna(0.0)
+                ],
+                axis=0
+            ) - (
+                s['LENGTH'].fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].fillna(0.0) / 2.0
+            ) + (
+                s['LENGTH'].shift(1).fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].shift(1).fillna(0.0) / 2.0
+            )).cumsum() / 1000.0 + offset
+        self.__converted_from_survey = True
+
+    def __convert_angles_to_radians(self):
+        # Angle conversion
+        if 'ANGLE' in self.__beamline:
+            self.__beamline['ANGLE'] *= np.pi / 180.0
+        if 'ANGLE_ELEMENT' in self.__beamline:
+            self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0
 
     @property
     def name(self):
@@ -149,10 +177,3 @@ class Beamline:
         bl.at[element, 'CLASS'] = 'QUADRUPOLE'
         bl.at[element, 'APERTYPE'] = np.nan
         bl.at[element, 'APERTURE'] = np.nan
-
-    def convert_angles_to_radians(self):
-        # Angle conversion
-        if 'ANGLE' in self.__beamline:
-            self.__beamline['ANGLE'] *= np.pi / 180.0
-        if 'ANGLE_ELEMENT' in self.__beamline:
-            self.__beamline['ANGLE_ELEMENT'] *= np.pi / 180.0

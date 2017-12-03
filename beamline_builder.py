@@ -1,6 +1,4 @@
 import os
-import numpy as np
-import numpy.linalg as npl
 import pandas as pd
 from .beamline import Beamline
 
@@ -15,7 +13,7 @@ class BeamlineBuilderException(Exception):
 
 
 class BeamlineBuilder:
-    def __init__(self, path='.', prefix='', elements=None, survey=False):
+    def __init__(self, path='.', prefix='', elements=None):
         """
         :param args: defines the beamline to be created. It can be
             - a single pandas Dataframe containing an existing beamline
@@ -33,6 +31,7 @@ class BeamlineBuilder:
         self.__elements = None
         self.__beamline = None
         self.__name = ""
+        self.__from_survey = False
 
     def add_from_files(self, names, path=None, prefix=None):
         if path is not None:
@@ -48,11 +47,16 @@ class BeamlineBuilder:
         self.__beamline['PHYSICAL'] = True
         return self
 
+    def add_from_survey_files(self, names, path=None, prefix=None):
+        self.__from_survey = True
+        return self.add_from_files(names, path, prefix)
+
     def add_from_file(self, file, path=None, prefix=None):
         return self.add_from_files([file], path, prefix)
 
-    def add_from_survey_file(self):
-        return self.add_from_file()
+    def add_from_survey_file(self, file):
+        self.__from_survey = True
+        return self.add_from_survey_files([file])
 
     def define_elements(self, e):
         """Process the elements description argument."""
@@ -75,35 +79,10 @@ class BeamlineBuilder:
         self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
         return self
 
-    def convert(self, from_survey=True):
-        if from_survey is True:
-            self.__convert_survey_to_sequence()
-        return self
-
     def build(self):
-        self.__expand_elements_data()
-        return Beamline(self.__beamline, name=self.__name)
-
-    def __convert_survey_to_sequence(self):
-        s = self.__beamline
-        if 'LENGTH' not in s:
-            s['LENGTH'] = np.nan
-        offset = s['ORBIT_LENGTH'][0] / 2.0
-        if pd.isnull(offset):
-            offset = 0
-        self.__beamline['AT_CENTER'] = pd.DataFrame(
-            npl.norm(
-                [
-                    s['X'].diff().fillna(0.0),
-                    s['Y'].diff().fillna(0.0)
-                ],
-                axis=0
-            ) - (
-                s['LENGTH'].fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].fillna(0.0) / 2.0
-            ) + (
-                s['LENGTH'].shift(1).fillna(0.0) / 2.0 - s['ORBIT_LENGTH'].shift(1).fillna(0.0) / 2.0
-            )).cumsum() / 1000.0 + offset
-        self.__converted_from_survey = True
+        if self.__elements is not None:
+            self.__expand_elements_data()
+        return Beamline(self.__beamline, name=self.__name, from_survey=self.__from_survey)
 
     def __expand_elements_data(self):
         self.__beamline = self.__beamline.merge(self.__elements,
