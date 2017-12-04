@@ -6,6 +6,8 @@ def scattering_length(**kwargs):
     material = kwargs['material']
     if material is 'water':
         return 6.0476276613967768
+    if material is 'air':
+        return 6E-3
     alpha = 0.0072973525664  # Fine structure constant
     avogadro = 6.02e23  # Avogadro's number
     re = 2.817940e-15 * 100  # Classical electron radius (in cm)

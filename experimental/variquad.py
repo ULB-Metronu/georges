@@ -61,7 +61,7 @@ def variquad(**kwargs):
     c = popt[2]
     # From http://accelconf.web.cern.ch/AccelConf/IPAC2015/papers/mopma052.pdf
     # Looks dimensionnally correct
-    s11 = a / (ql**2 * r12**2) # Verified correct
+    s11 = a / (ql**2 * r12**2)   # Verified correct
     s12 = (b - 2 * s11 * ql * r11 * r12)/(2*ql*r12**2)
     s21 = s12
     s22 = (c-s11 * r11**2 - 2 * s12 * r11 * r12)/(r12**2)

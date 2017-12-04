@@ -48,6 +48,7 @@ class MaterialsDB:
             'water': 1,
             'graphite': 1.7,
             'beryllium': 1.85,
+            'air': 1.205E-03,
         }
         return density[material]
 
