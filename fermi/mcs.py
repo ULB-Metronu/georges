@@ -22,7 +22,7 @@ class FermiRossi:
     @staticmethod
     def t(pv, p1v1, **kwargs):
         es = 15.0  # MeV
-        chi_0 = 19.32
+        chi_0 = 19.32  # TODO
         return (es/pv) ** 2 * (1/chi_0)
 
 

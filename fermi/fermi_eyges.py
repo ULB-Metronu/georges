@@ -17,16 +17,16 @@ def compute_fermi_eyges(**kwargs):
     energy = kwargs.get('energy')
     thickness = kwargs.get('thickness')
     db = kwargs.get('db')
-    T = kwargs.get('T')
-    A = [
-        quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, T, 0))[0],  # Order 0
-        quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, T, 1))[0],  # Order 1
-        quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, T, 2))[0],  # Order 2
+    t = kwargs.get('T')
+    a = [
+        quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 0))[0],  # Order 0
+        quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 1))[0],  # Order 1
+        quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 2))[0],  # Order 2
     ]
-    B = A[0] * A[2] - A[1]**2
+    b = a[0] * a[2] - a[1]**2
 
     return {
-        'A': A,
-        'B': B,
+        'A': a,
+        'B': b,
         'E_R': residual_energy(material, thickness, energy, db=db)
     }
