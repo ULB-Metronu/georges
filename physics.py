@@ -23,6 +23,12 @@ def kinematics(**kwargs):
         pc = energy_to_momentum(e)
         brho = momentum_to_brho(pc)
 
+    elif kwargs.get('momentum'):
+        pc = kwargs.get('momentum')
+        e = momentum_to_energy(pc)
+        r = energy_to_range(e)
+        brho = momentum_to_brho(pc)
+
     return {
         'range': r,
         'energy': e,
@@ -105,7 +111,7 @@ def compute_twiss_parameter(data):
     """ Compute TWISS parameters of the beam : alpha, beta, emittance, enveloppe, .... """
 
     # Data for emittance calculation
-
+    plan = data.columns[0]
     x = data[data.columns[0]]
     y = data[data.columns[1]]
 
@@ -127,7 +133,19 @@ def compute_twiss_parameter(data):
     phi = 0.5*np.rad2deg(np.arctan(2*alpha/(gamma-beta)))
 
     twiss_parameter = pd.Series(data=[alpha, beta, gamma, phi, emittance, sigma_xx, sigma_yy, sigma_xy],
-                                index=['ALPHA', 'BETA', 'GAMMA', 'PHI', 'EMITTANCE', 'SIGMA11'
-                                , 'SIGMA22', 'SIGMA12'])
+                                index=['ALPHA'+plan, 'BETA'+plan, 'GAMMA'+plan,
+                                       'PHI'+plan, 'EMITTANCE'+plan,
+                                       'SIGMA11'+plan, 'SIGMA22'+plan, 'SIGMA12'+plan])
 
     return twiss_parameter
+
+
+def compute_dpp(data):
+
+    p = data['BEAM'].distribution['DPP']
+    dpp = (data['P0']-p) / (data['P0'])
+    res = pd.Series(name=data.name)
+    res['MDPP'] = dpp.mean()
+    res['SDPP'] = dpp.std()
+
+    return res
