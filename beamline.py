@@ -18,7 +18,7 @@ class Beamline:
     The internal representation is essentially a pandas DataFrames.
     """
 
-    def __init__(self, beamline, name=None, from_survey=False):
+    def __init__(self, beamline, name=None, from_survey=False, with_expansion=True):
         """
         :param beamline: defines the beamline to be created. It can be
             - a single pandas Dataframe
@@ -51,7 +51,8 @@ class Beamline:
             # again to reexpand
 
         # Compute derived data until a fixed point sequence is reached
-        self.__expand_sequence_data()
+        if with_expansion:
+            self.__expand_sequence_data()
 
         # Compute the sequence length
         if self.__length == 0 and self.__beamline.get('AT_EXIT') is not None:
@@ -65,6 +66,9 @@ class Beamline:
         """Process the arguments of the initializer."""
         # Some type inference to get the sequence right
         # Sequence from a pandas.DataFrame
+        if beamline.index.names[0] is not 'NAME':
+            print(beamline.index.names)
+            print(beamline)
         if isinstance(beamline, pd.DataFrame):
             self.__beamline = beamline.set_index('NAME') if beamline.index.names[0] is not 'NAME' else beamline
             if self.__name is None:
