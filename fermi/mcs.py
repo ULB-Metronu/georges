@@ -26,6 +26,24 @@ class FermiRossi:
         return (es/pv) ** 2 * (1/chi_0)
 
 
+class DifferentialHighland:
+    """"""
+    @staticmethod
+    def t(pv, p1v1, **kwargs):
+        db = kwargs.get('db')
+        material = kwargs.get('material')
+        es = 15.0  # MeV
+        return DifferentialHighland.f_dm(l) * (es / pv) ** 2 * (1 / chi_s)
+
+    @staticmethod
+    def f_dh(l):
+        return 0.970 * (1+(np.log(l)/20.7)) * (1+(np.log(l)/22.7))
+
+    @staticmethod
+    def l(x, radiation_length):
+        return x / radiation_length
+
+
 class ICRU:
     """"""
     @staticmethod
