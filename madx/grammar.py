@@ -1,7 +1,10 @@
 """A dictionnary for the translation of the MAD-X grammar."""
 
 madx_syntax = {  # Do not forget the trailing ';' for each command!
-    'beam': "BEAM, PARTICLE={{{{PARTICLE}}}}, PC={{{{PC/1000.0}}}};",
+    'beam': "BEAM, PARTICLE={{{{PARTICLE}}}}, "
+            "PC={{{{PC/1000.0}}}}, "
+            "EX={{{{ EMITX or '1e-9' }}}}, "
+            "EY={{{{ EMITY or '1e-9' }}}};",
     'show_beam': "SHOW, BEAM;",
     'call_file': "CALL, FILE='{}';",
     'use_sequence': "USE, SEQUENCE={};",
