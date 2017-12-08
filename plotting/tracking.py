@@ -27,8 +27,8 @@ def tracking(ax, bl, **kwargs):
         '99%': 1000 * r['BEAM'].halo['99%'][plane],
         'mean': 1000 * r['BEAM'].mean[plane],
         'std': 1000 * r['BEAM'].std[plane],
-        'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] if r['BPM'] is True else -10000.0,
-        'std_bpm_err': np.max([1.0, 1000 * r['BEAM'].std_bpm[plane][1] if r['BPM'] is True else 0.0]),
+        'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] if 'BPM' in bl.line.columns else -10000.0,
+        'std_bpm_err': np.max([1.0, 1000 * r['BEAM'].std_bpm[plane][1] if 'BPM' in bl.line.columns else 0.0]),
     }), axis=1)
 
     if t['S'].count == 0:
@@ -41,6 +41,7 @@ def tracking(ax, bl, **kwargs):
         filled_plot(ax, t['S'], -t['std'], t['std'], palette[plane], True, alpha=0.3)
 
     if std:
+        plane = kwargs.get("palette")  # TO REMOVE
         ax.plot(t['S'], t['std'], '^-', color=palette[plane],
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
         ax.plot(t['S'], -t['std'], 'v-', color=palette[plane],
