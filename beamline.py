@@ -66,17 +66,17 @@ class Beamline:
         """Process the arguments of the initializer."""
         # Some type inference to get the sequence right
         # Sequence from a pandas.DataFrame
-        if beamline.index.names[0] is not 'NAME':
-            print(beamline.index.names)
-            print(beamline)
         if isinstance(beamline, pd.DataFrame):
-            self.__beamline = beamline.set_index('NAME') if beamline.index.names[0] is not 'NAME' else beamline
+            if 'NAME' in beamline.columns:
+                self.__beamline = beamline.set_index('NAME') if beamline.index.names[0] is not 'NAME' else beamline
+            else:
+                self.__beamline = beamline
             if self.__name is None:
                 self.__name = getattr(beamline, 'name', 'BEAMLINE')
             else:
                 self.__beamline.name = self.__name
             if self.__beamline.size == 0:
-                raise BeamlineException ("Empty dataframe.")
+                raise BeamlineException("Empty dataframe.")
         # Sequence from a list
         # Assume that a DataFrame can be created from the list
         if isinstance(beamline, list):
