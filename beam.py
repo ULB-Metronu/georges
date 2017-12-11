@@ -1,7 +1,7 @@
 import pandas as pd
 import pandas.core.common
 import numpy as np
-from . import physics
+#from . import physics
 from scipy.optimize import curve_fit
 
 PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'position'}
@@ -29,7 +29,8 @@ class Beam:
             - energy:
         """
 
-        self.__distribution = None
+        #self.__distribution = None
+        self.__distribution = kwargs.get('distribution', None)
         if len(args) >= 1:
             self.__initialize_distribution(args[0])
 
