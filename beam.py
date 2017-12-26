@@ -121,6 +121,16 @@ class Beam:
         }
 
     @property
+    def beam_dpp(self):
+        """TO DO"""
+
+        dpp = (self['P0'] - self['DPP']) / self['P0']
+        return {
+            'mean_dpp': dpp.mean(),
+            'std_dpp':dpp.std()
+        }
+
+    @property
     def std_bpm(self):
         return self._std_bpm()
 
@@ -205,9 +215,9 @@ class Beam:
         return self.__distribution[item]
 
     def from_file(self, filename):
-        ##
+        """TODO"""
         print('Open file : ', filename)
-         #beam=
+        # beam=
 
         return self
 
