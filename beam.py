@@ -29,7 +29,6 @@ class Beam:
             - energy:
         """
 
-        #self.__distribution = None
         self.__distribution = kwargs.get('distribution', None)
         if len(args) >= 1:
             self.__initialize_distribution(args[0])
