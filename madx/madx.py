@@ -32,6 +32,24 @@ SUPPORTED_CLASSES = ['QUADRUPOLE',
                      'INSTRUMENT',
                      ]
 
+TWISS_COLUMN = ['NAME', 'KEYWORD', 'S', 'BETX', 'ALFX', 'MUX',
+                'BETY', 'ALFY', 'MUY',
+                'X', 'PX', 'Y', 'PY',
+                'T', 'PT',
+                'DX', 'DPX',
+                'DY', 'DPY',
+                'PHIX', 'DMUX',
+                'PHIY', 'DMUY',
+                'DDX',  'DDPX',
+                'DDY',  'DDPY',
+                'K1L', 'K2L', 'K3L', 'K4L', 'K5L', 'K6L',
+                'K1SL', 'K2SL', 'K3SL', 'K4SL', 'K5SL', 'K6SL',
+                'ENERGY', 'L', 'ANGLE',
+                'HKICK', 'VKICK', 'TILT',
+                'E1', 'E2', 'H1', 'H2', 'HGAP',
+                'FINT', 'FINTX', 'KSI',
+                'APERTYPE', 'APER_1', 'APER_2']
+
 
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
@@ -230,8 +248,10 @@ class Madx(Simulator):
             self.raw("ENDEDIT;")
             self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
 
-        self.raw("SELECT, FLAG=sectormap, range='Q3E';")
-        self.raw("SELECT, FLAG=sectormap, range='P2E';")
+        # Add each columns for TWISS (improve notation ? )
+        for param in TWISS_COLUMN:
+            self._add_input('select_columns', 'twiss', param)
+
         options = ""
         for k, v in kwargs.items():
             if k not in ['ptc', 'start', 'line']:
