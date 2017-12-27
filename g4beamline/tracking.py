@@ -22,7 +22,8 @@ def read_g4beamline_tracking(file):
     column_names = ['X', 'Y', 'S', 'PX', 'PY', 'PZ', 't', 'PDGid', 'EventID', 'TrackID', 'ParentID', 'Weight']
     tmp = np.nan
     if os.path.isfile(file):
-        data = pd.read_csv(file, skiprows=G4BEAMLINE_SKIP_ROWS, delimiter=' ', header=None, names=column_names)
+        data = pd.read_csv(file, skiprows=G4BEAMLINE_SKIP_ROWS, delimiter=' ', header=None, names=column_names) \
+                 .query("TrackID == 1 and ParentID == 1")
 
         if len(data) == 0:
             return tmp
@@ -57,7 +58,7 @@ def track(**kwargs):
     # Convert m in mm for G4Beamline and rad in MeV/c
     g4_beam = b.distribution.copy()
 
-    momentum = physics.energy_to_momentum(b.energy)*1000
+    momentum = physics.energy_to_momentum(b.energy)
     g4_beam['X'] *= 1000
     g4_beam['Y'] *= 1000
     g4_beam['Z'] = 0.0
@@ -75,7 +76,7 @@ def track(**kwargs):
     l = line.line.copy()
 
     # Run G4Beamline
-    g4.track(round(g4_beam,5))
+    g4.track(round(g4_beam, 5))
     errors = g4.run(**kwargs).fatals
 
     if kwargs.get("debug", False):

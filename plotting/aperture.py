@@ -100,8 +100,13 @@ def fill_aperture(element, context):
 
 
 def aperture(ax, bl, **kwargs):
-    context = kwargs.get('context', {})
-    bl = bl.line.apply(lambda e: fill_aperture(e, context), axis=1)
+
+    # if slits : use the context to define aperture
+    if kwargs.get('context'):
+        bl = bl.line.apply(lambda e: fill_aperture(e, kwargs.get('context')), axis=1)
+    else:
+        bl = bl.line
+
     if 'APERTURE' not in bl:
         return
 

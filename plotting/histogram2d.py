@@ -53,12 +53,12 @@ def draw2d_histo(fig, data, twiss_parameter, **kwargs):
     ylims = [min(y), max(y)]
 
     # Set up default x and y limits
-    if kwargs.get('xlim', [min(x), max(x)]):
+    if kwargs.get('xlim') is not None:
         xlims = kwargs.get('xlim')
 
-    if kwargs.get('ylim', [min(y), max(y)]):
+    if kwargs.get('ylim') is not None:
         ylims = kwargs.get('ylim')
-  
+
     # Define the locations for the axes
     left, width = 0.12, 0.55
     bottom, height = 0.12, 0.55
@@ -108,7 +108,7 @@ def draw2d_histo(fig, data, twiss_parameter, **kwargs):
     # Plot the beam data
     _ = (ax_global.imshow(h, extent=[xmin, xmax, ymin, ymax],
                           interpolation='nearest', origin='lower',
-                          aspect='auto', cmap=kwargs.get('cmap', 'gray')))
+                          aspect='auto', cmap=kwargs.get('cmap', 'gist_gray_r')))
 
     # Plot the beam plot contours
     contourcolor = 'black'
