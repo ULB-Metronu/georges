@@ -41,6 +41,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                       "PT=0.0,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"
                       "FILE={},"
+                      "CHROM,"
                       "SECTORMAP={}"  # NO coma
                       "{};",  # Note the optional args
     'track_beamline': "TRACK,"
@@ -111,7 +112,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'ptc_track_end': "PTC_TRACK_END;",
     'match_ring': "MATCH,SEQUENCE={},"
                   "DELTAP={};",
-    'match_line': "MATCH,SEQUENCE={},"
+    'match_line': "MATCH,SEQUENCE={},CHROM,"
              "BETX={},ALFX={},MUX={},"
              "BETY={},ALFY={},MUY={},"
              "X={},PX={},Y={},PY={},"

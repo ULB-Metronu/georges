@@ -7,32 +7,46 @@ from .grammar import madx_syntax
 from ..simulator import Simulator
 from ..simulator import SimulatorException
 
-SUPPORTED_PROPERTIES = ['APERTYPE',
-                        'E1',
-                        'E2',
-                        'FINT',
-                        'HGAP',
-                        'THICK',
-                        'TILT',
-                        'K1',
-                        'K2',
-                        'K3',
-                        'K1S',
-                        'K2S',
-                        'K3S',
-                        'KNL',
-                        'KSL',
-                        ]
 
-SUPPORTED_CLASSES = ['QUADRUPOLE',
-                     'RBEND',
-                     'SBEND',
-                     'SEXTUPOLE',
-                     'OCTUPOLE',
-                     'MARKER',
-                     'COLLIMATOR',
-                     'INSTRUMENT',
-                     ]
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
+SUPPORTED_PROPERTIES = [
+    'APERTYPE',
+    'E1',
+    'E2',
+    'FINT',
+    'HGAP',
+    'THICK',
+    'TILT',
+    'K1',
+    'K2',
+    'K3',
+    'K1S',
+    'K2S',
+    'K3S',
+]
+
+SUPPORTED_PTC_PROPERTIES = [
+    'KNL',
+    'KSL'
+]
+
+SUPPORTED_CLASSES = [
+    'QUADRUPOLE',
+    'RBEND',
+    'SBEND',
+    'SEXTUPOLE',
+    'OCTUPOLE',
+    'MARKER',
+    'COLLIMATOR',
+    'INSTRUMENT',
+]
 
 TWISS_COLUMN = ['NAME', 'KEYWORD', 'S', 'BETX', 'ALFX', 'MUX',
                 'BETY', 'ALFY', 'MUY',
@@ -72,7 +86,24 @@ def element_to_mad(e):
     else:
         # Angle property not supported by the element or absent
         mad += ""
-    mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
+
+    # Add all supported MAD-X properties
+    mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
+
+    # Add PTC specific properties and convert to integrated gradients
+    if not mad.endswith(', '):
+        mad += ', '
+
+    def transform_ptc_k(k, l):
+        kk = k.strip('{}').split(',')
+        kkl = [f"{k}*{l}" for k in kk]
+        return '{' + ', '.join(kkl) + '}'
+    mad += ', '.join(
+        [
+            f"{p}:={transform_ptc_k(e[p], e['LENGTH'])}" for p in SUPPORTED_PTC_PROPERTIES if pd.notnull(e.get(p, None))
+        ]
+    )
+
     if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
         mad += ", L={}".format(e['LENGTH'])
     if pd.notnull(e.get('APERTYPE', None)):
@@ -95,9 +126,26 @@ def sequence_to_mad(sequence):
     m = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
     m += '\n'.join(sequence.apply(element_to_mad, axis=1)) + '\n'
     m += "ENDSEQUENCE;\n"
+
+    def context_variable_to_mad(var):
+        return '\n'.join(
+            [
+                f"{c.strip()}:={{{{ {c.strip()} or '0.0' }}}};" for c in var.strip('{}').split(',') if not is_number(c)
+            ]
+        )
+
     if 'CIRCUIT' in sequence:
-        m += '\n'.join(sequence['CIRCUIT'].dropna().map(lambda c: "{}:={{{{ {} or '0.0' }}}};".format(c, c)))
+        m += '\n'.join(sequence['CIRCUIT'].dropna().map(context_variable_to_mad))
         m += '\n'
+
+    if 'KNL' in sequence:
+        m += '\n'.join(sequence['KNL'].dropna().map(context_variable_to_mad))
+        m += '\n'
+
+    if 'KSL' in sequence:
+        m += '\n'.join(sequence['KSL'].dropna().map(context_variable_to_mad))
+        m += '\n'
+
     return m
 
 
