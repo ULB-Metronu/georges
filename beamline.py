@@ -133,6 +133,10 @@ class Beamline:
         """The sequence length."""
         return self.__length
 
+    def add_extra_drift(self, extra):
+        """Increase the sequence length by adding a drift"""
+        self.__length += extra
+
     @property
     def line(self):
         """The beamline representation."""

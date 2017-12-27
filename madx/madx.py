@@ -20,6 +20,8 @@ SUPPORTED_PROPERTIES = ['APERTYPE',
                         'K1S',
                         'K2S',
                         'K3S',
+                        'KNL',
+                        'KSL',
                         ]
 
 SUPPORTED_CLASSES = ['QUADRUPOLE',
@@ -230,13 +232,16 @@ class Madx(Simulator):
             self.raw("ENDEDIT;")
             self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
 
-        self.raw("SELECT, FLAG=sectormap, range='Q3E';")
-        self.raw("SELECT, FLAG=sectormap, range='P2E';")
+        #self.raw("SELECT, FLAG=sectormap, range='Q3E';")
+        #self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
             if k not in ['ptc', 'start', 'line']:
                 options += ",%s=%s" % (k, v)
-        self._add_input('twiss_beamline', kwargs.get('file', 'twiss.outx'), options)
+        if kwargs.get('line', False):
+            self._add_input('twiss', kwargs.get('file', 'twiss.outx'), options)
+        else:
+            self._add_input('twiss_beamline', kwargs.get('file', 'twiss.outx'), True, options)
         return self
 
     def __ptc_twiss(self, **kwargs):
@@ -244,7 +249,7 @@ class Madx(Simulator):
             self.raw("PTC_SETSWITCH, FRINGE=True;")
         self._add_input('ptc_create_universe')
         self._add_input('ptc_create_layout',
-                         False, 1, 6, 5, True, kwargs.get('fringe', False))
+                        False, 1, 6, 5, True, kwargs.get('fringe', False))
         if kwargs.get('misalignment', False):
             self._add_input('ptc_misalign')
         if kwargs.get('line', False):
@@ -390,7 +395,12 @@ class Madx(Simulator):
                         deltap
                         )
         for v in kwargs['vary']:
-            self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
+            if np.isnan(v['lower']) and np.isnan(v['upper']):
+                self._add_input('match_vary_unconstrained', v['variable'])
+            else:
+                self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
+        for c in kwargs.get('global_constraints', []):
+            self._add_input('match_global', f"{c}")
         for c in kwargs['constraints']:
             self._add_input('match_constraint', c['range'], f"{c['constraint']}")
         if kwargs['method'] is 'jacobian':
@@ -399,12 +409,42 @@ class Madx(Simulator):
             self._add_input('match_lmdif')
         elif kwargs['method'] is 'migrad':
             self._add_input('match_migrad')
+        elif kwargs['method'] is 'simplex':
+            self._add_input('match_simplex')
         else:
             raise MadxException("Invalid 'method' for matching. Please provide a valid entry.")
         self._add_input('end_match')
 
     def _match_ring(self, **kwargs):
-        pass
+        if kwargs.get('context') is None:
+            raise MadxException("A context must be provided.")
+        context = kwargs['context']
+        deltap = context.get('DELTAP', 0.0)
+
+        self._add_input('match_ring',
+                        kwargs['sequence'],
+                        deltap
+                        )
+        for v in kwargs['vary']:
+            if np.isnan(v['lower']) and np.isnan(v['upper']):
+                self._add_input('match_vary_unconstrained', v['variable'])
+            else:
+                self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
+        for c in kwargs.get('global_constraints', []):
+            self._add_input('match_global', f"{c}")
+        for c in kwargs.get('constraints', []):
+            self._add_input('match_constraint', c['range'], f"{c['constraint']}")
+        if kwargs['method'] is 'jacobian':
+            self._add_input('match_jacobian')
+        elif kwargs['method'] is 'lmdif':
+            self._add_input('match_lmdif')
+        elif kwargs['method'] is 'migrad':
+            self._add_input('match_migrad')
+        elif kwargs['method'] is 'simplex':
+            self._add_input('match_simplex')
+        else:
+            raise MadxException("Invalid 'method' for matching. Please provide a valid entry.")
+        self._add_input('end_match')
 
     def __add_misalignment_element(self,beamline):
         """MAD-X misalignement of elements."""
