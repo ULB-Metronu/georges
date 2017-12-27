@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib.patches
 from matplotlib.ticker import *
 
 PALETTE = {
@@ -59,6 +60,34 @@ def beamline_get_ticks_labels(o):
     return list(o.query("PHYSICAL == True").index)
 
 
+def draw_beamline(ax, bl, context):
+    offset = 1.1
+    ax2 = ax.twinx()
+    ax2.set_ylim([0, 1])
+    ax2.hlines(offset, 0, bl.length, clip_on=False)
+    for i, e in bl.line.query("TYPE=='SBEND'").iterrows():
+        if e['ANGLE'] > 0:
+            fc = 'r'
+        elif e['ANGLE'] < 0:
+            fc = 'b'
+        else:
+            fc = 'k'
+        if float(context[e['K1']]) > 0:
+            focusing = 1.0
+        elif float(context[e['K1']]) < 0:
+            focusing = -1.0
+        else:
+            focusing = 0.0
+        ax2.add_patch(
+                matplotlib.patches.Rectangle(
+                    (e['AT_ENTRY'], offset-0.05+focusing*0.02),
+                    e['LENGTH'],
+                    .1,
+                    hatch='', facecolor=fc, clip_on=False,
+                )
+            )
+
+
 def prepare(ax, bl, **kwargs):
     bl = bl.line
     ticks_locations = beamline_get_ticks_locations(bl)
@@ -96,6 +125,9 @@ def prepare(ax, bl, **kwargs):
                     arrowprops=dict(arrowstyle="<-", color='k'))
         ax.text(-0.126, 0.86, "Vertical", fontsize=7, rotation=90, transform=ax.transAxes)
         ax.text(-0.126, 0.22, "Horizontal", fontsize=7, rotation=90, transform=ax.transAxes)
+
+    if kwargs.get("with_beamline", False):
+        draw_beamline(ax, bl, kwargs.get('context', {}))
 
 
 def filled_plot(ax, x, y0, y, c, fill=False, **kwargs):
