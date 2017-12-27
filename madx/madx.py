@@ -466,10 +466,13 @@ class Madx(Simulator):
                         deltap
                         )
         for v in kwargs['vary']:
-            if np.isnan(v['lower']) and np.isnan(v['upper']):
-                self._add_input('match_vary_unconstrained', v['variable'])
+            if isinstance(v, dict):
+                if np.isnan(v['lower']) and np.isnan(v['upper']):
+                    self._add_input('match_vary_unconstrained', v['variable'])
+                else:
+                    self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
             else:
-                self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
+                self._add_input('match_vary_unconstrained', v)
         for c in kwargs.get('global_constraints', []):
             self._add_input('match_global', f"{c}")
         for c in kwargs['constraints']:
@@ -497,10 +500,13 @@ class Madx(Simulator):
                         deltap
                         )
         for v in kwargs['vary']:
-            if np.isnan(v['lower']) and np.isnan(v['upper']):
-                self._add_input('match_vary_unconstrained', v['variable'])
+            if isinstance(v, dict):
+                if np.isnan(v['lower']) and np.isnan(v['upper']):
+                    self._add_input('match_vary_unconstrained', v['variable'])
+                else:
+                    self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
             else:
-                self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
+                self._add_input('match_vary_unconstrained', v)
         for c in kwargs.get('global_constraints', []):
             self._add_input('match_global', f"{c}")
         for c in kwargs.get('constraints', []):
