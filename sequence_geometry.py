@@ -58,6 +58,12 @@ def at_exit(r):
         return np.nan
 
 
+def length(r):
+    """If length is not defined and orbit length is defined, set them equal."""
+    if pd.isnull(r.get('LENGTH')) and not pd.isnull(r.get('ORBIT_LENGTH')):
+        return r['ORBIT_LENGTH']
+
+
 def orbit_length(r):
     """Try to compute the element's orbit length from other data."""
     if pd.isnull(r.get('LENGTH')) and pd.isnull(r.get('RHO')):

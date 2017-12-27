@@ -18,6 +18,10 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                           "DPHI={},"
                           "DTHETA={};",
     'makethin': "MAKETHIN, sequence={}, style={};",
+    'twiss': "TWISS, "
+                      "DELTAP={{{{ DELTAP or '0.0' }}}},"
+                      "FILE={},"
+                      "{};",  # Note the optional args
     'twiss_beamline': "TWISS, "
                       "BETX={{{{ BETAX or '1.0' }}}},"
                       "ALFX={{{{ ALPHAX or '0.0' }}}},"
@@ -37,7 +41,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                       "PT=0.0,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"
                       "FILE={},"
-                      "SECTORMAP=true" # NO coma
+                      "SECTORMAP={}"  # NO coma
                       "{};",  # Note the optional args
     'track_beamline': "TRACK,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"
@@ -76,7 +80,8 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                           "ALFZ=0.0,"
                           "MUZ=0.0,"
                           "PT=0.0,"
-                          "SLICE_MAGNETS=true;",
+                          "SLICE_MAGNETS=true,"
+                          "DELTAP_DEPENDENCY=true;",
     'run_track_beamline': "RUN, TURNS=1, MAXAPER={0.1, 0.01, 0.1, 0.01, 1.0, 0.1};",  # Beamline so OK to hardcode TURNS=1
     'start_particle': "START, X={}, PX={}, Y={}, PY={}, T=0.0, PT={};",
     'observe': "OBSERVE, PLACE={};",
@@ -104,18 +109,23 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                  "FILE={},"
                  "EXTENSION={};",
     'ptc_track_end': "PTC_TRACK_END;",
+    'match_ring': "MATCH,SEQUENCE={},"
+                  "DELTAP={};",
     'match_line': "MATCH,SEQUENCE={},"
              "BETX={},ALFX={},MUX={},"
              "BETY={},ALFY={},MUY={},"
              "X={},PX={},Y={},PY={},"
              "DX={},DY={},DPX={},DPY={},"
              "DELTAP={};",
+    'match_vary_unconstrained': "VARY,NAME={};",
     'match_vary': "VARY,NAME={}, LOWER={}, UPPER={};",
+    'match_global': "GLOBAL,{};",
     'match_constraint': "CONSTRAINT,RANGE='{}',{};",
     'match_jacobian': "JACOBIAN, CALLS=5000, TOLERANCE=1E-6, REPEAT=1,"
                       "STRATEGY=1;",
     'match_lmdif': "LMDIF, CALLS=1000, TOLERANCE=1E-6;",
     'match_migrad': "MIGRAD, CALLS=1000, TOLERANCE=1E-6, STRATEGY=1;",
+    'match_simplex': "SIMPLEX, CALLS=10000, TOLERANCE=1E-6;",
     'end_match': "ENDMATCH;",
     'survey': "SURVEY, file=survey.out;",
 }

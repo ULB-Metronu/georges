@@ -79,10 +79,28 @@ class BeamlineBuilder:
         self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
         return self
 
-    def build(self):
+    def flatten(self, using='LENGTH', offset=0, drifts=0):
+        if 'AT_CENTER' not in self.__beamline \
+                and 'AT_EXIT' not in self.__beamline \
+                and 'AT_ENTRY' not in self.__beamline:
+            offset = offset
+            at_entry_list = []
+            for i, e in self.__beamline.iterrows():
+                at_entry_list.append(offset)
+                offset += e[using] + drifts
+            self.__beamline['AT_ENTRY'] = at_entry_list
+        return self
+
+    def build(self, name=None, extra_length=0.0):
+        if name is not None:
+            self.__name = name
         if self.__elements is not None:
             self.__expand_elements_data()
-        return Beamline(self.__beamline, name=self.__name, from_survey=self.__from_survey)
+        if 'PHYSICAL' not in self.__beamline:
+            self.__beamline['PHYSICAL'] = True
+        b = Beamline(self.__beamline, name=self.__name, from_survey=self.__from_survey)
+        b.add_extra_drift(extra_length)
+        return b
 
     def __expand_elements_data(self):
         self.__beamline = self.__beamline.merge(self.__elements,
@@ -91,6 +109,12 @@ class BeamlineBuilder:
                                                 how='left',
                                                 suffixes=('', '_ELEMENT')
                                                 )
+
+    def add_element(self, e):
+        e = pd.Series(e)
+        e.name = e['NAME']
+        self.__beamline = self.__beamline.append(e)
+        return self
 
     # TODO
     def replicate(a, n=2):
@@ -101,11 +125,4 @@ class BeamlineBuilder:
         # return a + b
         pass
 
-    def add_bend(self, **kwargs):
-        bend = {
-            'name': kwargs.get('name', 'bend'),
-            'angle': kwargs.get('angle', 0),
-            'K1': kwargs.get('K1', 0),
-        }
-        self._beamline.append(bend)
-        return self
+

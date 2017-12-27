@@ -23,9 +23,10 @@ def match(**kwargs):
     m = Madx(beamlines=[line])
     m.beam(line.name)
     m.match(sequence=line.name,
-            line=True,
+            line=not kwargs.get('periodic', True),
             vary=kwargs.get('vary', {}),
             constraints=kwargs.get('constraints', []),
+            global_constraints=kwargs.get('global_constraints', []),
             context=kwargs.get('context', {}),
             method=kwargs.get('method', 'jacobian')
             )

@@ -45,7 +45,10 @@ def alpha(ax, bl):
 
 def dispersion(ax, bl, **kwargs):
     """Plot the dispersion functions."""
-    twiss_function_plot(ax, bl, ['D'])
+    if kwargs.get('ptc', False):
+        twiss_function_plot(ax, bl, ['DISP'], ptc=True)
+    else:
+        twiss_function_plot(ax, bl, ['D'])
 
 
 def phase_advance(ax, bl):
@@ -53,9 +56,15 @@ def phase_advance(ax, bl):
     twiss_function_plot(ax, bl, ['MU'])
 
 
-def twiss_function_plot(ax, bl, functions):
+def twiss_function_plot(ax, bl, functions, **kwargs):
     bl = bl.line
 
+    if kwargs.get('ptc', False):
+        x = '1'
+        y = '3'
+    else:
+        x = 'X'
+        y = 'Y'
     for f in functions:
-        ax.plot(bl['S'], bl[f+'X'], color=palette['X'])
-        ax.plot(bl['S'], bl[f+'Y'], color=palette['Y'])
+        ax.plot(bl['S'], bl[f+x], color=palette['X'])
+        ax.plot(bl['S'], bl[f+y], color=palette['Y'])
