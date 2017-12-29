@@ -65,7 +65,7 @@ def draw_beamline(ax, bl, context):
     ax2 = ax.twinx()
     ax2.set_ylim([0, 1])
     ax2.hlines(offset, 0, bl.length, clip_on=False)
-    for i, e in bl.line.query("TYPE=='SBEND'").iterrows():
+    for i, e in bl.line.query("TYPE=='SBEND' or TYPE=='RBEND'").iterrows():
         if e['ANGLE'] > 0:
             fc = 'r'
         elif e['ANGLE'] < 0:
@@ -81,6 +81,16 @@ def draw_beamline(ax, bl, context):
         ax2.add_patch(
                 matplotlib.patches.Rectangle(
                     (e['AT_ENTRY'], offset-0.05+focusing*0.02),
+                    e['LENGTH'],
+                    .1,
+                    hatch='', facecolor=fc, clip_on=False,
+                )
+            )
+    for i, e in bl.line.query("TYPE=='SEXTUPOLE'").iterrows():
+        fc = 'g'
+        ax2.add_patch(
+                matplotlib.patches.Rectangle(
+                    (e['AT_ENTRY'], offset-0.05),
                     e['LENGTH'],
                     .1,
                     hatch='', facecolor=fc, clip_on=False,

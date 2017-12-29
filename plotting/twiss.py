@@ -48,7 +48,10 @@ def dispersion(ax, bl, **kwargs):
     if kwargs.get('ptc', False):
         twiss_function_plot(ax, bl, ['DISP'], ptc=True)
     else:
-        twiss_function_plot(ax, bl, ['D'])
+        # Caution: MAD-X dispersion is affected by relativistic factors
+        # See section 1.7.4 of the MAD-X user guide
+        ax.plot(bl.line['S'], kwargs.get('beta', 1)*bl.line['DX'], color=palette['X'])
+        ax.plot(bl.line['S'], kwargs.get('beta', 1)*bl.line['DY'], color=palette['Y'])
 
 
 def phase_advance(ax, bl):

@@ -85,6 +85,16 @@ def survey_style2(ax, bl):
                 0.4,
                 angle=np.degrees(-row['THETA']),
                 alpha=0.2, facecolor='y', ec='k', hatch='')
+        if row['KEYWORD'] == 'SEXTUPOLE':
+            w = patches.Rectangle(
+                (
+                    row['Z'] - row['L'] * np.cos(row['THETA']) - 0.2 * np.sin(row['THETA']),
+                    -row['X'] + row['L'] * np.sin(row['THETA']) - 0.2 * np.cos(row['THETA'])
+                ),
+                row['L'],
+                0.4,
+                angle=np.degrees(-row['THETA']),
+                alpha=1.0, facecolor='g', ec='k', hatch='')
         ax.add_patch(w)
 
     # For automatic scaling of the plot
