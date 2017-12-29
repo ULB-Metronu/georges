@@ -144,7 +144,13 @@ def sequence_to_mad(sequence, ptc_use_knl_only=False):
     m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, ptc_use_knl_only), axis=1)) + '\n'
     m += "ENDSEQUENCE;\n"
 
+    processed_variables = set()
+
     def context_variable_to_mad(var):
+        if var in processed_variables:
+            return None
+        else:
+            processed_variables.add(var)
         return '\n'.join(
             [
                 f"{c.strip()}:={{{{ {c.strip()} or '0.0' }}}};" for c in var.strip('{}').split(',') if not is_number(c)
@@ -152,15 +158,15 @@ def sequence_to_mad(sequence, ptc_use_knl_only=False):
         )
 
     if 'CIRCUIT' in sequence:
-        m += '\n'.join(sequence['CIRCUIT'].dropna().map(context_variable_to_mad))
+        m += '\n'.join(filter(None, sequence['CIRCUIT'].dropna().map(context_variable_to_mad)))
         m += '\n'
 
     if 'KNL' in sequence:
-        m += '\n'.join(sequence['KNL'].dropna().map(context_variable_to_mad))
+        m += '\n'.join(filter(None, sequence['KNL'].dropna().map(context_variable_to_mad)))
         m += '\n'
 
     if 'KSL' in sequence:
-        m += '\n'.join(sequence['KSL'].dropna().map(context_variable_to_mad))
+        m += '\n'.join(filter(None, sequence['KSL'].dropna().map(context_variable_to_mad)))
         m += '\n'
 
     return m
