@@ -74,7 +74,7 @@ def survey_style2(ax, bl):
             theta1 = min(tmp, tmp - angle)
             theta2 = max(tmp, tmp - angle)
             tmp = theta1 if angle > 0 else theta2
-            w = patches.Wedge(centre, r + 0.2, theta1, theta2, width=0.4, alpha=1, facecolor=c, ec='k')
+            w = patches.Wedge(centre, r + 0.2, theta1, theta2, width=0.4, alpha=1, facecolor=c, ec=c)
         if row['KEYWORD'] == 'DRIFT':
             w = patches.Rectangle(
                 (
@@ -84,7 +84,7 @@ def survey_style2(ax, bl):
                 row['L'],
                 0.4,
                 angle=np.degrees(-row['THETA']),
-                alpha=0.2, facecolor='y', ec='k', hatch='')
+                alpha=0.2, facecolor='y', ec='y', hatch='')
         if row['KEYWORD'] == 'SEXTUPOLE' or row['KEYWORD'] == 'MULTIPOLE':
             w = patches.Rectangle(
                 (
@@ -94,7 +94,7 @@ def survey_style2(ax, bl):
                 row['L'],
                 0.4,
                 angle=np.degrees(-row['THETA']),
-                alpha=1.0, facecolor='g', ec='k', hatch='')
+                alpha=1.0, facecolor='g', ec='g', hatch='')
         ax.add_patch(w)
 
     # For automatic scaling of the plot
