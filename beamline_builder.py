@@ -159,22 +159,25 @@ class BeamlineBuilder:
         return list(flatten(sequence, ltypes=list))
 
     def flatten(self, using='LENGTH', offset=0):
-        if 'AT_CENTER' not in self.__beamline \
-                and 'AT_EXIT' not in self.__beamline \
-                and 'AT_ENTRY' not in self.__beamline:
-            at_entry_list = []
-            for i, e in self.__beamline.iterrows():
-                at_entry_list.append(offset)
-                offset += e[using]
-            self.__beamline['AT_ENTRY'] = at_entry_list
-            if self.__beamline.iloc[-1]['TYPE'] is 'DRIFT':
-                self.__beamline = self.__beamline.append(
-                    {
-                        'NAME': 'END_BUILDER_MARKER',
-                        'TYPE': 'MARKER',
-                        'AT_ENTRY': at_entry_list[-1] + self.__beamline.iloc[-1][using]
-                    }
-                    , ignore_index=True
-                )
-            self.__beamline = self.__beamline.query("TYPE != 'DRIFT'")
+        elements_names = {}
+        at_entry_list = []
+        for i, e in self.__beamline.iterrows():
+            if elements_names.get(e['NAME']) is None:
+                elements_names[e['NAME']] = 0
+            else:
+                elements_names[e['NAME']] += 1
+            self.__beamline.loc[i, 'NAME'] = f"{self.__beamline.iloc[i]['NAME']}_{elements_names[e['NAME']]}"
+            at_entry_list.append(offset)
+            offset += e[using]
+        self.__beamline['AT_ENTRY'] = at_entry_list
+        if self.__beamline.iloc[-1]['TYPE'] is 'DRIFT':
+            self.__beamline = self.__beamline.append(
+                {
+                    'NAME': 'END_BUILDER_MARKER',
+                    'TYPE': 'MARKER',
+                    'AT_ENTRY': at_entry_list[-1] + self.__beamline.iloc[-1][using]
+                }
+                , ignore_index=True
+            )
+        self.__beamline = self.__beamline.query("TYPE != 'DRIFT'")
         return self
