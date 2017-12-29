@@ -52,6 +52,7 @@ SUPPORTED_CLASSES = [
     'SBEND',
     'SEXTUPOLE',
     'OCTUPOLE',
+    'MULTIPOLE',
     'MARKER',
     'COLLIMATOR',
     'INSTRUMENT',

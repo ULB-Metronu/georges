@@ -85,7 +85,7 @@ def survey_style2(ax, bl):
                 0.4,
                 angle=np.degrees(-row['THETA']),
                 alpha=0.2, facecolor='y', ec='k', hatch='')
-        if row['KEYWORD'] == 'SEXTUPOLE':
+        if row['KEYWORD'] == 'SEXTUPOLE' or row['KEYWORD'] == 'MULTIPOLE':
             w = patches.Rectangle(
                 (
                     row['Z'] - row['L'] * np.cos(row['THETA']) - 0.2 * np.sin(row['THETA']),

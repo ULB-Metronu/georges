@@ -86,7 +86,7 @@ def draw_beamline(ax, bl, context):
                     hatch='', facecolor=fc, clip_on=False,
                 )
             )
-    for i, e in bl.line.query("TYPE=='SEXTUPOLE'").iterrows():
+    for i, e in bl.line.query("TYPE=='SEXTUPOLE' or TYPE=='MULTIPOLE'").iterrows():
         fc = 'g'
         ax2.add_patch(
                 matplotlib.patches.Rectangle(
