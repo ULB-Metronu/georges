@@ -91,6 +91,27 @@ class BeamlineBuilder:
             self.__beamline['AT_ENTRY'] = at_entry_list
         return self
 
+    def duplicate(self, n=2):
+        df = pd.DataFrame()
+        tmp = list(map(pd.DataFrame.copy, [self.__beamline] * n))
+        tmp2 = []
+        for idx, bl in enumerate(tmp):
+            bl['NAME'] += f"_{idx}"
+            tmp2.append(
+                bl.append(
+                    pd.Series(
+                        {
+                            'NAME': f"END_MARKER_{idx}",
+                            'CLASS': 'MARKER',
+                            'ORBIT_LENGTH': 0,
+                        }
+                    ),
+                    ignore_index=True
+                )
+            )
+        self.__beamline = df.append(tmp2, ignore_index=True)
+        return self
+
     def replicate(self, n=2, extra_length=0.0, using='ORBIT_LENGTH'):
         df = pd.DataFrame()
         offset = (self.__beamline['AT_ENTRY'] + self.__beamline[using]).max() + extra_length
@@ -105,7 +126,8 @@ class BeamlineBuilder:
                         {
                             'NAME': f"END_MARKER_{idx}",
                             'CLASS': 'MARKER',
-                            'AT_ENTRY': (1+idx) * offset
+                            'ORBIT_LENGTH': 0,
+                            'AT_ENTRY': (1+idx) * offset,
                         }
                     ),
                     ignore_index=True
@@ -140,7 +162,7 @@ class BeamlineBuilder:
         return self
 
     @property
-    def beamline(self):
+    def line(self):
         return self.__beamline
 
     def join(a, b):
