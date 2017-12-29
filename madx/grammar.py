@@ -58,6 +58,19 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                  "NO=4,"
                  "DELTAP_DEPENDENCY=true,"
                  "SLICE_MAGNETS=true;",
+    'ptc_twiss_co_guess': "PTC_TWISS,ICASE=56,"
+                 "DELTAP={{{{ DELTAP or '0.0' }}}},"
+                 "FILE={},"
+                 "CLOSED_ORBIT=true,"
+                 "NO=4,"
+                 "DELTAP_DEPENDENCY=true,"
+                 "SLICE_MAGNETS=true,"
+                 "X={},"
+                 "PX={},"
+                 "Y={},"
+                 "PY={},"
+                 "T={},"
+                 "PT={};",
     'ptc_twiss_beamline': "PTC_TWISS,ICASE=56,"
                           "NO=2,"
                           "DELTAP={{{{ DELTAP or '0.0' }}}},"
@@ -93,7 +106,8 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'eager_variable': "{} = {{{{ {} }}}};",  # Oops
     'lazy_variable': "{} := {{{{ {} }}}};",  # Oops
     'ptc_create_universe': "PTC_CREATE_UNIVERSE;",
-    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};\nPTC_SETSWITCH, FRINGE={};",
+    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};\n",
+                        # "PTC_SETSWITCH, FRINGE={}, TIME=False;",
     'ptc_misalign': "PTC_ALIGN;",
     'ptc_align': "PTC_ALIGN;",
     'ptc_end': "PTC_END;",

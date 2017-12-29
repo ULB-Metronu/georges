@@ -24,6 +24,9 @@ SUPPORTED_PROPERTIES = [
     'HGAP',
     'THICK',
     'TILT',
+]
+
+SUPPORTED_K_PROPERTIES = [
     'K1',
     'K2',
     'K3',
@@ -33,6 +36,12 @@ SUPPORTED_PROPERTIES = [
 ]
 
 SUPPORTED_PTC_PROPERTIES = [
+    'NST',
+    'MODEL',
+    'METHOD',
+]
+
+SUPPORTED_PTC_K_PROPERTIES = [
     'KNL',
     'KSL'
 ]
@@ -48,23 +57,23 @@ SUPPORTED_CLASSES = [
     'INSTRUMENT',
 ]
 
-TWISS_COLUMN = ['NAME', 'KEYWORD', 'S', 'BETX', 'ALFX', 'MUX',
-                'BETY', 'ALFY', 'MUY',
-                'X', 'PX', 'Y', 'PY',
-                'T', 'PT',
-                'DX', 'DPX',
-                'DY', 'DPY',
-                'PHIX', 'DMUX',
-                'PHIY', 'DMUY',
-                'DDX',  'DDPX',
-                'DDY',  'DDPY',
-                'K1L', 'K2L', 'K3L', 'K4L', 'K5L', 'K6L',
-                'K1SL', 'K2SL', 'K3SL', 'K4SL', 'K5SL', 'K6SL',
-                'ENERGY', 'L', 'ANGLE',
-                'HKICK', 'VKICK', 'TILT',
-                'E1', 'E2', 'H1', 'H2', 'HGAP',
-                'FINT', 'FINTX', 'KSI',
-                'APERTYPE', 'APER_1', 'APER_2']
+TWISS_COLUMNS = ['NAME', 'KEYWORD', 'S', 'BETX', 'ALFX', 'MUX',
+                 'BETY', 'ALFY', 'MUY',
+                 'X', 'PX', 'Y', 'PY',
+                 'T', 'PT',
+                 'DX', 'DPX',
+                 'DY', 'DPY',
+                 'PHIX', 'DMUX',
+                 'PHIY', 'DMUY',
+                 'DDX', 'DDPX',
+                 'DDY', 'DDPY',
+                 'K1L', 'K2L', 'K3L', 'K4L', 'K5L', 'K6L',
+                 'K1SL', 'K2SL', 'K3SL', 'K4SL', 'K5SL', 'K6SL',
+                 'ENERGY', 'L', 'ANGLE',
+                 'HKICK', 'VKICK', 'TILT',
+                 'E1', 'E2', 'H1', 'H2', 'HGAP',
+                 'FINT', 'FINTX', 'KSI',
+                 'APERTYPE', 'APER_1', 'APER_2']
 
 
 class MadxException(Exception):
@@ -74,7 +83,7 @@ class MadxException(Exception):
         self.message = m
 
 
-def element_to_mad(e):
+def element_to_mad(e, ptc_use_knl_only=False):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
     if e.CLASS not in SUPPORTED_CLASSES:
         return ""
@@ -89,6 +98,10 @@ def element_to_mad(e):
 
     # Add all supported MAD-X properties
     mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
+    if not mad.endswith(', '):
+        mad += ', '
+    if not ptc_use_knl_only:
+        mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_K_PROPERTIES if pd.notnull(e.get(p, None))])
 
     # Add PTC specific properties and convert to integrated gradients
     if not mad.endswith(', '):
@@ -98,11 +111,15 @@ def element_to_mad(e):
         kk = k.strip('{}').split(',')
         kkl = [f"{k}*{l}" for k in kk]
         return '{' + ', '.join(kkl) + '}'
+
     mad += ', '.join(
         [
-            f"{p}:={transform_ptc_k(e[p], e['LENGTH'])}" for p in SUPPORTED_PTC_PROPERTIES if pd.notnull(e.get(p, None))
+            f"{p}:={transform_ptc_k(e[p], e['LENGTH'])}" for p in SUPPORTED_PTC_K_PROPERTIES if pd.notnull(e.get(p, None))
         ]
     )
+    if not mad.endswith(', '):
+        mad += ', '
+    mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PTC_PROPERTIES if pd.notnull(e.get(p, None))])
 
     if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
         mad += ", L={}".format(e['LENGTH'])
@@ -117,14 +134,14 @@ def element_to_mad(e):
     return mad
 
 
-def sequence_to_mad(sequence):
+def sequence_to_mad(sequence, ptc_use_knl_only=False):
     """Convert a pandas.DataFrame sequence onto a MAD-X input."""
     sequence.sort_values(by='AT_CENTER', inplace=True)
     sequence.query("TYPE != 'SOLIDS' and TYPE != 'SLITS'", inplace=True)
     if sequence is None:
         return ""
     m = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
-    m += '\n'.join(sequence.apply(element_to_mad, axis=1)) + '\n'
+    m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, ptc_use_knl_only), axis=1)) + '\n'
     m += "ENDSEQUENCE;\n"
 
     def context_variable_to_mad(var):
@@ -158,6 +175,7 @@ class Madx(Simulator):
     EXECUTABLE_NAME = 'madx'
 
     def __init__(self, **kwargs):
+        self._ptc_use_knl_only = kwargs.get('ptc_use_knl_only', False)
         super().__init__(**kwargs)
         self._syntax = madx_syntax
         self._exec = Madx.EXECUTABLE_NAME
@@ -166,7 +184,7 @@ class Madx(Simulator):
         super()._attach(beamline)
         if beamline.length is None or pd.isnull(beamline.length):
             raise SimulatorException("Beamline length not defined.")
-        self._input += sequence_to_mad(beamline.line)
+        self._input += sequence_to_mad(beamline.line, ptc_use_knl_only=self._ptc_use_knl_only)
 
     def run(self, **kwargs):
         """Run madx as a subprocess."""
@@ -299,7 +317,7 @@ class Madx(Simulator):
             self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
 
         # Add each columns for TWISS (improve notation ? )
-        for param in TWISS_COLUMN:
+        for param in TWISS_COLUMNS:
             self._add_input('select_columns', 'twiss', param)
 
 
@@ -316,15 +334,22 @@ class Madx(Simulator):
         return self
 
     def __ptc_twiss(self, **kwargs):
-        if kwargs.get("fringe"):
-            self.raw("PTC_SETSWITCH, FRINGE=True;")
+        ptc_params = kwargs.get('ptc_params', {})
         self._add_input('ptc_create_universe')
         self._add_input('ptc_create_layout',
-                        False, 1, 6, 5, True, kwargs.get('fringe', False))
+                        ptc_params.get('time', False),
+                        ptc_params.get('model', 1),
+                        ptc_params.get('method', 6),
+                        ptc_params.get('nst', 5),
+                        ptc_params.get('exact', True),
+                        ptc_params.get('fringe', False))
         if kwargs.get('misalignment', False):
             self._add_input('ptc_misalign')
         if kwargs.get('line', False):
-            self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'),)
+            if not ptc_params.get('co_guess'):
+                self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'),)
+            else:
+                self._add_input('ptc_twiss_co_guess', kwargs.get('file', 'ptc_twiss.outx'), *ptc_params.get('co_guess'))
         else:
             self._add_input('ptc_twiss_beamline', kwargs.get('file', 'ptc_twiss.outx'),)
 
