@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 PROTON_MASS = 938.2720813
 
@@ -22,7 +21,6 @@ def kinematics(**kwargs):
         r = energy_to_range(e)
         pc = energy_to_momentum(e)
         brho = momentum_to_brho(pc)
-
     elif kwargs.get('momentum'):
         pc = kwargs.get('momentum')
         e = momentum_to_energy(pc)
@@ -33,7 +31,8 @@ def kinematics(**kwargs):
         'range': r,
         'energy': e,
         'momentum': pc,
-        'brho': brho
+        'brho': brho,
+        'beta': energy_to_beta(e)
     }
 
 
@@ -69,6 +68,7 @@ def energy_to_pv(energy):
     E = energy + PROTON_MASS
     return (E**2 - PROTON_MASS**2) / E
 
+
 def range_to_energy(r):
     """Return the kinetic energy [MeV] from the range [g/cm^2]."""
     a = 0.00169; b = -0.00490; c = 0.56137; d = 3.46405
@@ -76,10 +76,12 @@ def range_to_energy(r):
         a * np.log(r)**3 + b * np.log(r)**2 + c * np.log(r) + d
     )
 
+
 def energy_to_range(e):
     """Return the range [g/cm^2] from the kinetic energy [MeV]."""
     b = 0.008539; c = 0.5271; d = 3.4917
     return np.exp((-c + np.sqrt(c**2 - 4 * b * (d - np.log(e))))/(2*b))
+
 
 def compute_ess_transmission(beam_sigma, slits, dispersion):
     """Compute the transmission as a function of the momentum offset (in %) from a simple analytical model."""
