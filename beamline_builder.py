@@ -1,8 +1,27 @@
+import functools
+import itertools
+import collections
 import os
 import pandas as pd
 from .beamline import Beamline
 
 DEFAULT_EXTENSION = 'csv'
+
+
+def flatten(iterable, ltypes=collections.Iterable):
+    """
+    Helper function to flatten nested/irregular lists.
+    Borrowed from https://stackoverflow.com/questions/2158395/flatten-an-irregular-list-of-lists
+    :param iterable: iterable object to be flattened
+    :param ltypes: object type
+    """
+    remainder = iter(iterable)
+    while True:
+        first = next(remainder)
+        if isinstance(first, ltypes) and not isinstance(first, (str, bytes)):
+            remainder = itertools.chain(first, remainder)
+        else:
+            yield first
 
 
 class BeamlineBuilderException(Exception):
@@ -15,23 +34,26 @@ class BeamlineBuilderException(Exception):
 class BeamlineBuilder:
     def __init__(self, path='.', prefix='', elements=None):
         """
-        :param args: defines the beamline to be created. It can be
-            - a single pandas Dataframe containing an existing beamline
-            - another beamline ('copy' operation)
-            - a csv file or a list of csv files (looked up in path/prefix)
-        :param kwargs: optional parameters include:
-            - path: filepath to the root directory of the beamline description files (defaults to '.')
-            - prefix: prefix for the beamline description files (defaults to '')
-            - elements: elements description file (looked up in path/)
-
+        BeamlineBuilder class used for the generation of georges.Beamline objects.
+        :param path: path for file lookup (default to '.')
+        :param prefix: default prefix for file lookup (default to '')
+        :param elements: name of the elements file (default to None)
         """
-        self.__internal = None
         self.__path = path
         self.__prefix = prefix
         self.__elements = None
         self.__beamline = pd.DataFrame()
         self.__name = ""
         self.__from_survey = False
+        if elements is not None:
+            self.add_element(elements)
+
+    @property
+    def line(self):
+        """
+        :return: beamline object being built ('snapshot' during the creation phase).
+        """
+        return self.__beamline
 
     def add_from_files(self, names, path=None, prefix=None):
         if path is not None:
@@ -79,63 +101,6 @@ class BeamlineBuilder:
         self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
         return self
 
-    def flatten(self, using='LENGTH', offset=0, drifts=0):
-        if 'AT_CENTER' not in self.__beamline \
-                and 'AT_EXIT' not in self.__beamline \
-                and 'AT_ENTRY' not in self.__beamline:
-            offset = offset
-            at_entry_list = []
-            for i, e in self.__beamline.iterrows():
-                at_entry_list.append(offset)
-                offset += e[using] + drifts
-            self.__beamline['AT_ENTRY'] = at_entry_list
-        return self
-
-    def duplicate(self, n=2):
-        df = pd.DataFrame()
-        tmp = list(map(pd.DataFrame.copy, [self.__beamline] * n))
-        tmp2 = []
-        for idx, bl in enumerate(tmp):
-            bl['NAME'] += f"_{idx}"
-            tmp2.append(
-                bl.append(
-                    pd.Series(
-                        {
-                            'NAME': f"END_MARKER_{idx}",
-                            'CLASS': 'MARKER',
-                            'ORBIT_LENGTH': 0,
-                        }
-                    ),
-                    ignore_index=True
-                )
-            )
-        self.__beamline = df.append(tmp2, ignore_index=True)
-        return self
-
-    def replicate(self, n=2, extra_length=0.0, using='ORBIT_LENGTH'):
-        df = pd.DataFrame()
-        offset = (self.__beamline['AT_ENTRY'] + self.__beamline[using]).max() + extra_length
-        tmp = list(map(pd.DataFrame.copy, [self.__beamline] * n))
-        tmp2 = []
-        for idx, bl in enumerate(tmp):
-            bl['NAME'] += f"_{idx}"
-            bl['AT_ENTRY'] += idx * offset
-            tmp2.append(
-                bl.append(
-                    pd.Series(
-                        {
-                            'NAME': f"END_MARKER_{idx}",
-                            'CLASS': 'MARKER',
-                            'ORBIT_LENGTH': 0,
-                            'AT_ENTRY': (1+idx) * offset,
-                        }
-                    ),
-                    ignore_index=True
-                )
-            )
-        self.__beamline = df.append(tmp2, ignore_index=True)
-        return self
-
     def build(self, name=None, extra_length=0.0):
         if name is not None:
             self.__name = name
@@ -155,18 +120,61 @@ class BeamlineBuilder:
                                                 suffixes=('', '_ELEMENT')
                                                 )
 
+    def add(self, e):
+        if isinstance(e, (dict, pd.Series)):
+            return self.add_element(e)
+        if isinstance(e, (list,)):
+            return self.add_sequence(e)
+
     def add_element(self, e):
         e = pd.Series(e)
         e.name = e['NAME']
         self.__beamline = self.__beamline.append(e)
         return self
 
-    @property
-    def line(self):
-        return self.__beamline
+    def add_sequence(self, s):
+        self.__beamline = self.__beamline.append(pd.DataFrame(s))
+        return self
 
-    def join(a, b):
-        # return a + b
-        pass
+    @staticmethod
+    def build_sequence(s, start_drift=0.0, end_drift=0.0, inter_drift=0.0):
+        def drift(l):
+            return {
+                'TYPE': 'DRIFT',
+                'LENGTH': l,
+                'ORBIT_LENGTH': l,
+            }
+        from operator import add
+        sequence = list()
+        if start_drift != 0.0:
+            sequence.append(drift(start_drift))
+        if inter_drift != 0.0:
+            for e in functools.reduce(add, [(e, drift(inter_drift)) for e in s])[:-1]:
+                sequence.append(e)
+        else:
+            for e in s:
+                sequence.append(e)
+        if end_drift != 0.0:
+            sequence.append(drift(end_drift))
+        return list(flatten(sequence, ltypes=list))
 
-
+    def flatten(self, using='LENGTH', offset=0):
+        if 'AT_CENTER' not in self.__beamline \
+                and 'AT_EXIT' not in self.__beamline \
+                and 'AT_ENTRY' not in self.__beamline:
+            at_entry_list = []
+            for i, e in self.__beamline.iterrows():
+                at_entry_list.append(offset)
+                offset += e[using]
+            self.__beamline['AT_ENTRY'] = at_entry_list
+            if self.__beamline.iloc[-1]['TYPE'] is 'DRIFT':
+                self.__beamline = self.__beamline.append(
+                    {
+                        'NAME': 'END_BUILDER_MARKER',
+                        'TYPE': 'MARKER',
+                        'AT_ENTRY': at_entry_list[-1] + self.__beamline.iloc[-1][using]
+                    }
+                    , ignore_index=True
+                )
+            self.__beamline = self.__beamline.query("TYPE != 'DRIFT'")
+        return self
