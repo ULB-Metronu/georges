@@ -59,12 +59,15 @@ def survey_style2(ax, bl):
         if row['KEYWORD'] == 'SBEND' or row['KEYWORD'] == 'MARKER':
             if row['KEYWORD'] == 'SBEND':
                 r = row['L'] / row['ANGLE']
-                if row['ANGLE'] > 0:
-                    c = 'r'
-                elif row['ANGLE'] < 0:
-                    c = 'b'
+                if row.get('MAIN_BEND'):
+                    c = 'r' if row['MAIN_BEND'] is True else 'b'
                 else:
-                    c = 'gray'
+                    if row['ANGLE'] > 0:
+                        c = 'r'
+                    elif row['ANGLE'] < 0:
+                        c = 'b'
+                    else:
+                        c = 'gray'
             if row['KEYWORD'] == 'MARKER':
                 r = 0.1
                 c = 'b'
@@ -84,8 +87,12 @@ def survey_style2(ax, bl):
                 row['L'],
                 0.4,
                 angle=np.degrees(-row['THETA']),
-                alpha=0.2, facecolor='y', ec='y', hatch='')
-        if row['KEYWORD'] == 'SEXTUPOLE' or row['KEYWORD'] == 'MULTIPOLE':
+                alpha=0.2,
+                facecolor='y',
+                ec='y',
+                hatch=''
+            )
+        if row['KEYWORD'] in ('MULTIPOLE', 'SEXTUPOLE', 'OCTUPOLE'):
             w = patches.Rectangle(
                 (
                     row['Z'] - row['L'] * np.cos(row['THETA']) - 0.2 * np.sin(row['THETA']),
@@ -94,7 +101,11 @@ def survey_style2(ax, bl):
                 row['L'],
                 0.4,
                 angle=np.degrees(-row['THETA']),
-                alpha=1.0, facecolor='g', ec='g', hatch='')
+                alpha=1.0,
+                facecolor='g',
+                ec='g',
+                hatch=''
+            )
         ax.add_patch(w)
 
     # For automatic scaling of the plot
