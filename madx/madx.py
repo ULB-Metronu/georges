@@ -332,7 +332,7 @@ class Madx(Simulator):
         #self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
-            if k not in ['ptc', 'start', 'line']:
+            if k not in ['ptc', 'start', 'line', 'ptc_params']:
                 options += ",%s=%s" % (k, v)
         if kwargs.get('line', False):
             self._add_input('twiss', kwargs.get('file', 'twiss.outx'), options)
