@@ -53,7 +53,30 @@ def survey_style1(ax, bl, **kwargs):
     plt.axes().set_aspect('equal', 'datalim')
 
 
+ELEMENT_COLORS = {
+    'QUADRUPOLE': '#cb4b16',  # Solarized 'orange'
+    'SEXTUPOLE': 'g',
+    'OCTUPOLE': 'g',
+    'MULTIPOLE': 'g'
+}
+
+
 def survey_style2(ax, bl):
+    x_edges = [
+        np.min(list(map(np.abs, [bl.line['Z'].max(), bl.line['Z'].min()]))),
+        np.max(list(map(np.abs, [bl.line['Z'].max(), bl.line['Z'].min()])))
+    ]
+    y_edges = [
+        np.min(list(map(np.abs, [bl.line['X'].max(), bl.line['X'].min()]))),
+        np.max(list(map(np.abs, [bl.line['X'].max(), bl.line['X'].min()])))
+    ]
+    edges = [
+        np.max([x_edges[0], y_edges[0]]),
+        np.max([x_edges[1], y_edges[1]])
+    ]
+    padding = np.max(edges)*0.1
+    ax.set_xlim([edges[0]-padding, edges[1]+padding])
+    ax.set_ylim([edges[0]-padding, edges[1]+padding])
     tmp = -90
     for index, row in bl.line.iterrows():
         if row['KEYWORD'] == 'SBEND' or row['KEYWORD'] == 'MARKER':
@@ -92,7 +115,7 @@ def survey_style2(ax, bl):
                 ec='y',
                 hatch=''
             )
-        if row['KEYWORD'] in ('MULTIPOLE', 'SEXTUPOLE', 'OCTUPOLE'):
+        if row['KEYWORD'] in ('MULTIPOLE', 'QUADRUPOLE', 'SEXTUPOLE', 'OCTUPOLE'):
             w = patches.Rectangle(
                 (
                     row['Z'] - row['L'] * np.cos(row['THETA']) - 0.2 * np.sin(row['THETA']),
@@ -102,14 +125,11 @@ def survey_style2(ax, bl):
                 0.4,
                 angle=np.degrees(-row['THETA']),
                 alpha=1.0,
-                facecolor='g',
-                ec='g',
+                facecolor=ELEMENT_COLORS[row['KEYWORD']],
+                ec=ELEMENT_COLORS[row['KEYWORD']],
                 hatch=''
             )
         ax.add_patch(w)
-
-    # For automatic scaling of the plot
-    ax.plot([], [])
 
 
 def survey(ax, bl, style='style2', **kwargs):
