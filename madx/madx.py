@@ -76,6 +76,14 @@ TWISS_COLUMNS = ['NAME', 'KEYWORD', 'S', 'BETX', 'ALFX', 'MUX',
                  'FINT', 'FINTX', 'KSI',
                  'APERTYPE', 'APER_1', 'APER_2']
 
+PTC_DEFAULTS = {
+    'TIME': False,
+    'MODEL': 1,
+    'METHOD': 6,
+    'NST': 5,
+    'EXACT': True,
+    'FRINGE': False,
+}
 
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
@@ -344,12 +352,12 @@ class Madx(Simulator):
         ptc_params = kwargs.get('ptc_params', {})
         self._add_input('ptc_create_universe')
         self._add_input('ptc_create_layout',
-                        ptc_params.get('time', False),
-                        ptc_params.get('model', 1),
-                        ptc_params.get('method', 6),
-                        ptc_params.get('nst', 5),
-                        ptc_params.get('exact', True),
-                        ptc_params.get('fringe', False))
+                        ptc_params.get('time', PTC_DEFAULTS['TIME']),
+                        ptc_params.get('model', PTC_DEFAULTS['MODEL']),
+                        ptc_params.get('method', PTC_DEFAULTS['METHOD']),
+                        ptc_params.get('nst', PTC_DEFAULTS['NST']),
+                        ptc_params.get('exact', PTC_DEFAULTS['EXACT']),
+                        ptc_params.get('fringe', PTC_DEFAULTS['FRINGE']))
         if kwargs.get('misalignment', False):
             self._add_input('ptc_misalign')
         if kwargs.get('line', False):
@@ -455,9 +463,28 @@ class Madx(Simulator):
         if constraints is None:
             raise MadxException("A dictionary of constraints should be provided.")
         if kwargs.get('line', False):
-            self._match_line(**kwargs)
+            if kwargs.get('ptc', False):
+                self._match_line_ptc(**kwargs)
+            else:
+                self._match_line(**kwargs)
         else:
             self._match_ring(**kwargs)
+
+    def _match_line_ptc(self, **kwargs):
+        if kwargs.get('context') is None:
+            raise MadxException("A context must be provided.")
+        self._add_input('ptc_match_macro',
+                        **kwargs.get('ptc_params',
+                                     {
+                                         'time': ptc_params.get('time', False),
+                                         'model': ptc_params.get('model', 1),
+                                         'method': ptc_params.get('method', 6),
+                                         'nst': ptc_params.get('nst', PTC_DEFAULT['NST']),
+                                         'exact': ptc_params.get('exact', True),
+                                         'fringe': ptc_params.get('fringe', False)
+                                     }
+                                     )
+                        )
 
     def _match_line(self, **kwargs):
         if kwargs.get('context') is None:

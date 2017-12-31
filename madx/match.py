@@ -28,7 +28,9 @@ def match(**kwargs):
             constraints=kwargs.get('constraints', []),
             global_constraints=kwargs.get('global_constraints', []),
             context=kwargs.get('context', {}),
-            method=kwargs.get('method', 'jacobian')
+            method=kwargs.get('method', 'jacobian'),
+            ptc=kwargs.get('ptc', False),
+            ptc_params=kwargs.get('ptc_params', {})
             )
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):

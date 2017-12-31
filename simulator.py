@@ -38,6 +38,11 @@ class Simulator:
 
     def _add_input(self, keyword, *args, **kwargs):
         """Uses the simulator syntax to add to the input"""
+        print(keyword)
+        print("args")
+        print(args)
+        print("kwargs")
+        print(kwargs)
         self._input += self._syntax[keyword].format(*args, **kwargs) + '\n'
 
     def print_warnings(self):

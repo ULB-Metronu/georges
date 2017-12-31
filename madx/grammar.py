@@ -9,7 +9,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'call_file': "CALL, FILE='{}';",
     'use_sequence': "USE, SEQUENCE={};",
     'save_beta': "SAVEBETA, LABEL={}, PLACE={};",
-    'misalign_option':"EOPTION, ADD=False;",
+    'misalign_option': "EOPTION, ADD=False;",
     'mad_misalign_setup': "SELECT, FLAG=ERROR,CLASS={};\n"
                           "EALIGN, "
                           "DX={},"
@@ -19,9 +19,9 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                           "DTHETA={};",
     'makethin': "MAKETHIN, sequence={}, style={};",
     'twiss': "TWISS, "
-                      "DELTAP={{{{ DELTAP or '0.0' }}}},"
-                      "FILE={},"
-                      "{};",  # Note the optional args
+             "DELTAP={{{{ DELTAP or '0.0' }}}},"
+             "FILE={},"
+             "{};",  # Note the optional args
     'twiss_beamline': "TWISS, "
                       "BETX={{{{ BETAX or '1.0' }}}},"
                       "ALFX={{{{ ALPHAX or '0.0' }}}},"
@@ -126,7 +126,29 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'ptc_track_end': "PTC_TRACK_END;",
     'match_ring': "MATCH,SEQUENCE={},"
                   "DELTAP={};",
-    'match_line': "MATCH,SEQUENCE={},CHROM,"
+    'ptc_match_macro': "PTC_TWISS_MATCH_MACRO: MACRO={{"
+                       "PTC_CREATE_UNIVERSE;"
+                       "PTC_CREATE_LAYOUT, TIME={time}, MODEL={model}, METHOD={method}, NST={nst}, EXACT={exact};"
+                       "PTC_TWISS, TABLE=ptc_twiss_matching, ICASE=56, DELTAP={DELTAP},"
+                       "BETX={{{{ BETAX or '1.0' }}}}, "
+                       "ALFX={{{{ ALFX or '1.0' }}}}, "
+                       "MUX={{{{ MUX or '1.0' }}}}, "
+                       "BETY={{{{ BETAY or '1.0' }}}}, "
+                       "ALFY={{{{ ALFY or '1.0' }}}}, "
+                       "MUY={{{{ MUY or '1.0' }}}}, "
+                       "BETZ=1.0, ALFZ=0.0, MUZ=0.0,"
+                       "DX={{{{ DX or '1.0' }}}}, "
+                       "DPX={{{{ DPX or '1.0' }}}}, "
+                       "DY={{{{ DY or '1.0' }}}}, "
+                       "DPY={{{{ DPY or '1.0' }}}},"
+                       "X={{{{ X or '1.0' }}}}, "
+                       "PX={{{{ PX or '1.0' }}}}, "
+                       "Y={{{{ Y or '1.0' }}}}, "
+                       "PY={{{{ PY or '1.0' }}}}, "
+                       "T=0.0, PT=0.0;"
+                       "PTC_END;"
+                       "}};",
+    'match_line': "MATCH,SEQUENCE={}, CHROM,"
              "BETX={},ALFX={},MUX={},"
              "BETY={},ALFY={},MUY={},"
              "X={},PX={},Y={},PY={},"
