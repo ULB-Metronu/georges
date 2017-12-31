@@ -35,6 +35,10 @@ palette['X_MADX'] = palette['cyan']
 palette['Y_MADX'] = palette['orange']
 palette['X_G4BL'] = palette['magenta']
 palette['Y_G4BL'] = palette['green']
+palette['QUADRUPOLE'] = palette['orange']
+palette['SEXTUPOLE'] = palette['green']
+palette['OCTUPOLE'] = palette['green']
+palette['MULTIPOLE'] = palette['green']
 
 
 def style_boxplot(bp, color):
@@ -83,17 +87,22 @@ def draw_beamline(ax, bl, context):
                     (e['AT_ENTRY'], offset-0.05+focusing*0.02),
                     e['LENGTH'],
                     .1,
-                    hatch='', facecolor=fc, clip_on=False,
+                    hatch='',
+                    facecolor=fc,
+                    clip_on=False,
                 )
             )
-    for i, e in bl.line.query("TYPE=='SEXTUPOLE' or TYPE=='MULTIPOLE'").iterrows():
+    for i, e in bl.line.query("TYPE=='SEXTUPOLE' or TYPE=='QUADRUPOLE' or TYPE=='MULTIPOLE'").iterrows():
         fc = 'g'
         ax2.add_patch(
                 matplotlib.patches.Rectangle(
                     (e['AT_ENTRY'], offset-0.05),
                     e['LENGTH'],
                     .1,
-                    hatch='', facecolor=fc, clip_on=False,
+                    hatch='',
+                    facecolor=palette[e['TYPE']],
+                    ec=palette[e['TYPE']],
+                    clip_on=False,
                 )
             )
 
