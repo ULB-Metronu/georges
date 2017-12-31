@@ -77,8 +77,16 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     # PTC initialization
     #
     'ptc_create_universe': "PTC_CREATE_UNIVERSE;",
-    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};\n",
-                        # "PTC_SETSWITCH, FRINGE={}, TIME=False;",
+    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};",
+    'ptc_setswitch': "PTC_SETSWITCH, "
+                     "FRINGE={}, "
+                     "TIME={}, "
+                     "DEBUGLEVEL={},"
+                     "MAXACCELERATION={},"
+                     "EXACT MIS={},"
+                     "TOTALPATH={},"
+                     "RADIATION={},"
+                     "FRINGE={};",
     'ptc_misalign': "PTC_ALIGN;",
     'ptc_align': "PTC_ALIGN;",
     'ptc_end': "PTC_END;",
