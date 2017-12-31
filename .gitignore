@@ -21,3 +21,4 @@ examples/survey.out
 examples/tracking.outxone
 examples/twiss.outx
 docs/_build/**
+docs/_static/
