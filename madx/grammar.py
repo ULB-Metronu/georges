@@ -1,6 +1,9 @@
 """A dictionnary for the translation of the MAD-X grammar."""
 
 madx_syntax = {  # Do not forget the trailing ';' for each command!
+    #
+    # MAD-X initialization
+    #
     'beam': "BEAM, PARTICLE={{{{PARTICLE}}}}, "
             "PC={{{{PC/1000.0}}}}, "
             "EX={{{{ EMITX or '1e-9' }}}}, "
@@ -17,7 +20,18 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                           "DS={},"
                           "DPHI={},"
                           "DTHETA={};",
-    'makethin': "MAKETHIN, sequence={}, style={};",
+    'stop': "STOP;",
+    'rbarc': "OPTION, RBARC=false;",
+    'select_columns': "SELECT, FLAG={}, COLUMN={};",
+    'eager_variable': "{} = {{{{ {} }}}};",  # Oops
+    'lazy_variable': "{} := {{{{ {} }}}};",  # Oops
+    #
+    # MAD-X Survey
+    #
+    'survey': "SURVEY, file=survey.out;",
+    #
+    # MAD-X Twiss
+    #
     'twiss': "TWISS, "
              "DELTAP={{{{ DELTAP or '0.0' }}}},"
              "FILE={},"
@@ -44,6 +58,10 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                       "CHROM,"
                       "SECTORMAP={}"  # NO coma
                       "{};",  # Note the optional args
+    #
+    # MAD-X Track
+    #
+    'makethin': "MAKETHIN, sequence={}, style={};",
     'track_beamline': "TRACK,"
                       "DELTAP={{{{ DELTAP or '0.0' }}}},"
                       "ONEPASS=true,"
@@ -51,6 +69,22 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                       "DUMP=true,"
                       "ONETABLE=true,"
                       "FILE=tracking.outx;",
+    'run_track_beamline': "RUN, TURNS=1, MAXAPER={0.1, 0.01, 0.1, 0.01, 1.0, 0.1};",
+    'start_particle': "START, X={}, PX={}, Y={}, PY={}, T=0.0, PT={};",
+    'observe': "OBSERVE, PLACE={};",
+    'end_track': 'ENDTRACK;',
+    #
+    # PTC initialization
+    #
+    'ptc_create_universe': "PTC_CREATE_UNIVERSE;",
+    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};\n",
+                        # "PTC_SETSWITCH, FRINGE={}, TIME=False;",
+    'ptc_misalign': "PTC_ALIGN;",
+    'ptc_align': "PTC_ALIGN;",
+    'ptc_end': "PTC_END;",
+    #
+    # PTC Twiss
+    #
     'ptc_twiss': "PTC_TWISS,ICASE=56,"
                  "DELTAP={{{{ DELTAP or '0.0' }}}},"
                  "FILE={},"
@@ -96,21 +130,9 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                           "PT=0.0,"
                           "SLICE_MAGNETS=true,"
                           "DELTAP_DEPENDENCY=true;",
-    'run_track_beamline': "RUN, TURNS=1, MAXAPER={0.1, 0.01, 0.1, 0.01, 1.0, 0.1};",  # Beamline so OK to hardcode TURNS=1
-    'start_particle': "START, X={}, PX={}, Y={}, PY={}, T=0.0, PT={};",
-    'observe': "OBSERVE, PLACE={};",
-    'end_track': 'ENDTRACK;',
-    'stop': "STOP;",
-    'rbarc': "OPTION, RBARC=false;",
-    'select_columns': "SELECT, FLAG={}, COLUMN={};",
-    'eager_variable': "{} = {{{{ {} }}}};",  # Oops
-    'lazy_variable': "{} := {{{{ {} }}}};",  # Oops
-    'ptc_create_universe': "PTC_CREATE_UNIVERSE;",
-    'ptc_create_layout': "PTC_CREATE_LAYOUT, TIME={}, MODEL={}, METHOD={}, NST={}, EXACT={};\n",
-                        # "PTC_SETSWITCH, FRINGE={}, TIME=False;",
-    'ptc_misalign': "PTC_ALIGN;",
-    'ptc_align': "PTC_ALIGN;",
-    'ptc_end': "PTC_END;",
+    #
+    # PTC Track
+    #
     'ptc_observe': "PTC_OBSERVE, PLACE={};",
     'ptc_start': "PTC_START, X={}, PX={}, Y={}, PY={}, T=0.0, PT={};",
     'ptc_track': "PTC_TRACK, ICASE={},"
@@ -124,6 +146,9 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                  "FILE={},"
                  "EXTENSION={};",
     'ptc_track_end': "PTC_TRACK_END;",
+    #
+    # Matching
+    #
     'match_ring': "MATCH,SEQUENCE={},"
                   "DELTAP={};",
     'ptc_match_macro': "PTC_TWISS_MATCH_MACRO: MACRO={{"
@@ -167,5 +192,4 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'match_migrad': "MIGRAD, CALLS=1000, TOLERANCE=1E-6, STRATEGY=1;",
     'match_simplex': "SIMPLEX, CALLS=10000, TOLERANCE=1E-6;",
     'end_match': "ENDMATCH;",
-    'survey': "SURVEY, file=survey.out;",
 }
