@@ -85,6 +85,7 @@ PTC_DEFAULTS = {
     'FRINGE': False,
 }
 
+
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
 
@@ -123,7 +124,8 @@ def element_to_mad(e, ptc_use_knl_only=False):
 
     mad += ', '.join(
         [
-            f"{p}:={transform_ptc_k(e[p], e['LENGTH'])}" for p in SUPPORTED_PTC_K_PROPERTIES if pd.notnull(e.get(p, None))
+            f"{p}:={transform_ptc_k(e[p], e['LENGTH'])}" for p in SUPPORTED_PTC_K_PROPERTIES if
+            pd.notnull(e.get(p, None))
         ]
     )
     if not mad.endswith(', '):
@@ -335,9 +337,8 @@ class Madx(Simulator):
         for param in TWISS_COLUMNS:
             self._add_input('select_columns', 'twiss', param)
 
-
-        #self.raw("SELECT, FLAG=sectormap, range='Q3E';")
-        #self.raw("SELECT, FLAG=sectormap, range='P2E';")
+        # self.raw("SELECT, FLAG=sectormap, range='Q3E';")
+        # self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
             if k not in ['ptc', 'start', 'line', 'ptc_params']:
@@ -362,11 +363,11 @@ class Madx(Simulator):
             self._add_input('ptc_misalign')
         if kwargs.get('line', False):
             if not ptc_params.get('co_guess'):
-                self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'),)
+                self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'), )
             else:
                 self._add_input('ptc_twiss_co_guess', kwargs.get('file', 'ptc_twiss.outx'), *ptc_params.get('co_guess'))
         else:
-            self._add_input('ptc_twiss_beamline', kwargs.get('file', 'ptc_twiss.outx'),)
+            self._add_input('ptc_twiss_beamline', kwargs.get('file', 'ptc_twiss.outx'), )
 
         self._add_input('ptc_end')
 
@@ -473,18 +474,44 @@ class Madx(Simulator):
     def _match_line_ptc(self, **kwargs):
         if kwargs.get('context') is None:
             raise MadxException("A context must be provided.")
+        ptc_params = kwargs.get('ptc_params')
         self._add_input('ptc_match_macro',
-                        **kwargs.get('ptc_params',
-                                     {
-                                         'time': ptc_params.get('time', False),
-                                         'model': ptc_params.get('model', 1),
-                                         'method': ptc_params.get('method', 6),
-                                         'nst': ptc_params.get('nst', PTC_DEFAULT['NST']),
-                                         'exact': ptc_params.get('exact', True),
-                                         'fringe': ptc_params.get('fringe', False)
-                                     }
-                                     )
+                        **{
+                            'time': ptc_params.get('time', PTC_DEFAULTS['TIME']),
+                            'model': ptc_params.get('model', PTC_DEFAULTS['MODEL']),
+                            'method': ptc_params.get('method', PTC_DEFAULTS['METHOD']),
+                            'nst': ptc_params.get('nst', PTC_DEFAULTS['NST']),
+                            'exact': ptc_params.get('exact', PTC_DEFAULTS['EXACT']),
+                            'fringe': ptc_params.get('fringe', PTC_DEFAULTS['FRINGE'])
+                        }
                         )
+        self._add_input('match_with_ptc', kwargs['sequence'])
+        # Parameter variations
+        for v in kwargs['vary']:
+            if isinstance(v, dict):
+                if np.isnan(v['lower']) and np.isnan(v['upper']):
+                    self._add_input('match_vary_unconstrained', v['variable'])
+                else:
+                    self._add_input('match_vary', v['variable'], v['lower'], v['upper'])
+            else:
+                self._add_input('match_vary_unconstrained', v)
+        # Special macro usage for matching with PTC
+        self._add_input('match_use_macro')
+        # Constraints expressed from PTC table
+        for c in kwargs['constraints']:
+            self._add_input('match_ptc_constraint', c['range'], c['parameter'], c['value'])
+        # Regular MAD-X matching methods
+        if kwargs['method'] is 'jacobian':
+            self._add_input('match_jacobian')
+        elif kwargs['method'] is 'lmdif':
+            self._add_input('match_lmdif')
+        elif kwargs['method'] is 'migrad':
+            self._add_input('match_migrad')
+        elif kwargs['method'] is 'simplex':
+            self._add_input('match_simplex')
+        else:
+            raise MadxException("Invalid 'method' for matching. Please provide a valid entry.")
+        self._add_input('end_match')
 
     def _match_line(self, **kwargs):
         if kwargs.get('context') is None:
@@ -582,7 +609,7 @@ class Madx(Simulator):
             raise MadxException("Invalid 'method' for matching. Please provide a valid entry.")
         self._add_input('end_match')
 
-    def __add_misalignment_element(self,beamline):
+    def __add_misalignment_element(self, beamline):
         """MAD-X misalignement of elements."""
         beamline.line.query("TYPE != 'MARKER'").apply(
             lambda r: self._add_input('mad_misalign_setup', r['TYPE'],

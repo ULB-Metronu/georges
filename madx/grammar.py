@@ -129,22 +129,22 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'ptc_match_macro': "PTC_TWISS_MATCH_MACRO: MACRO={{"
                        "PTC_CREATE_UNIVERSE;"
                        "PTC_CREATE_LAYOUT, TIME={time}, MODEL={model}, METHOD={method}, NST={nst}, EXACT={exact};"
-                       "PTC_TWISS, TABLE=ptc_twiss_matching, ICASE=56, DELTAP={DELTAP},"
+                       "PTC_TWISS, TABLE=ptc_twiss_matching, ICASE=56, DELTAP={{{{ DELTAP or '0.0' }}}},"
                        "BETX={{{{ BETAX or '1.0' }}}}, "
-                       "ALFX={{{{ ALFX or '1.0' }}}}, "
-                       "MUX={{{{ MUX or '1.0' }}}}, "
+                       "ALFX={{{{ ALFX or '0.0' }}}}, "
+                       "MUX={{{{ MUX or '0.0' }}}}, "
                        "BETY={{{{ BETAY or '1.0' }}}}, "
-                       "ALFY={{{{ ALFY or '1.0' }}}}, "
-                       "MUY={{{{ MUY or '1.0' }}}}, "
+                       "ALFY={{{{ ALFY or '0.0' }}}}, "
+                       "MUY={{{{ MUY or '0.0' }}}}, "
                        "BETZ=1.0, ALFZ=0.0, MUZ=0.0,"
-                       "DX={{{{ DX or '1.0' }}}}, "
-                       "DPX={{{{ DPX or '1.0' }}}}, "
-                       "DY={{{{ DY or '1.0' }}}}, "
-                       "DPY={{{{ DPY or '1.0' }}}},"
-                       "X={{{{ X or '1.0' }}}}, "
-                       "PX={{{{ PX or '1.0' }}}}, "
-                       "Y={{{{ Y or '1.0' }}}}, "
-                       "PY={{{{ PY or '1.0' }}}}, "
+                       "DX={{{{ DX or '0.0' }}}}, "
+                       "DPX={{{{ DPX or '0.0' }}}}, "
+                       "DY={{{{ DY or '0.0' }}}}, "
+                       "DPY={{{{ DPY or '0.0' }}}},"
+                       "X={{{{ X or '0.0' }}}}, "
+                       "PX={{{{ PX or '0.0' }}}}, "
+                       "Y={{{{ Y or '0.0' }}}}, "
+                       "PY={{{{ PY or '0.0' }}}}, "
                        "T=0.0, PT=0.0;"
                        "PTC_END;"
                        "}};",
@@ -154,10 +154,13 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
              "X={},PX={},Y={},PY={},"
              "DX={},DY={},DPX={},DPY={},"
              "DELTAP={};",
+    'match_with_ptc': "MATCH,SEQUENCE={}, USE_MACRO;",
+    'match_use_macro': "USE_MACRO, NAME=PTC_TWISS_MATCH_MACRO;",
     'match_vary_unconstrained': "VARY,NAME={};",
     'match_vary': "VARY,NAME={}, LOWER={}, UPPER={};",
     'match_global': "GLOBAL,{};",
     'match_constraint': "CONSTRAINT,RANGE='{}',{};",
+    'match_ptc_constraint': "CONSTRAINT, expr= table(ptc_twiss_matching, {}, {})={};",
     'match_jacobian': "JACOBIAN, CALLS=5000, TOLERANCE=1E-6, REPEAT=1,"
                       "STRATEGY=1;",
     'match_lmdif': "LMDIF, CALLS=1000, TOLERANCE=1E-6;",
