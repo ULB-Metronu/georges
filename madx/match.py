@@ -20,7 +20,7 @@ def match(**kwargs):
     line = kwargs.get('line', None)
     if line is None:
         raise MatchException("Beamline and MAD-X objects need to be defined.")
-    m = Madx(beamlines=[line])
+    m = Madx(beamlines=[line], ptc_use_knl_only=kwargs.get('ptc_use_knl_only', False))
     m.beam(line.name)
     m.match(sequence=line.name,
             line=not kwargs.get('periodic', True),
