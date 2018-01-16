@@ -73,12 +73,7 @@ def twiss(**kwargs):
         raise TwissException("Beamline and MAD-X objects need to be defined.")
     m = Madx(beamlines=[line], ptc_use_knl_only=kwargs.get('ptc_use_knl_only', False))
     m.beam(line.name)
-    m.twiss(line=kwargs.get('periodic', False),
-            ptc=kwargs.get('ptc', False),
-            centre=True,
-            start=kwargs.get("start", None),
-            ptc_params=kwargs.get("ptc_params", {})
-            )
+    m.twiss(**kwargs)
     errors = m.run(**kwargs).fatals
     if kwargs.get("debug", False):
         print(m.input)

@@ -23,6 +23,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
     'stop': "STOP;",
     'rbarc': "OPTION, RBARC=false;",
     'select_columns': "SELECT, FLAG={}, COLUMN={};",
+    'select_columns_range': "SELECT, FLAG={}, COLUMN={}, RANGE={};",
     'eager_variable': "{} = {{{{ {} }}}};",  # Oops
     'lazy_variable': "{} := {{{{ {} }}}};",  # Oops
     #

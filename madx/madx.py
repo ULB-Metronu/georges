@@ -17,13 +17,19 @@ def is_number(s):
 
 
 SUPPORTED_PROPERTIES = [
+    'THICK',
     'APERTYPE',
+    'FINT',
+]
+
+SUPPORTED_PROPERTIES_DEFERRED = [
     'E1',
     'E2',
-    'FINT',
     'HGAP',
-    'THICK',
     'TILT',
+    'KICK',
+    'HKICK',
+    'VKICK',
 ]
 
 SUPPORTED_K_PROPERTIES = [
@@ -56,25 +62,47 @@ SUPPORTED_CLASSES = [
     'MARKER',
     'COLLIMATOR',
     'INSTRUMENT',
+    'HKICKER',
+    'VKICKER',
+    'KICKER',
 ]
 
-TWISS_COLUMNS = ['NAME', 'KEYWORD', 'S', 'BETX', 'ALFX', 'MUX',
-                 'BETY', 'ALFY', 'MUY',
-                 'X', 'PX', 'Y', 'PY',
-                 'T', 'PT',
-                 'DX', 'DPX',
-                 'DY', 'DPY',
-                 'PHIX', 'DMUX',
-                 'PHIY', 'DMUY',
-                 'DDX', 'DDPX',
-                 'DDY', 'DDPY',
-                 'K1L', 'K2L', 'K3L', 'K4L', 'K5L', 'K6L',
-                 'K1SL', 'K2SL', 'K3SL', 'K4SL', 'K5SL', 'K6SL',
-                 'ENERGY', 'L', 'ANGLE',
-                 'HKICK', 'VKICK', 'TILT',
-                 'E1', 'E2', 'H1', 'H2', 'HGAP',
-                 'FINT', 'FINTX', 'KSI',
-                 'APERTYPE', 'APER_1', 'APER_2']
+MAD_DEFAULT_TWISS_COLUMNS = ['NAME', 'KEYWORD', 'S', 'BETX', 'ALFX', 'MUX',
+                             'BETY', 'ALFY', 'MUY',
+                             'X', 'PX', 'Y', 'PY',
+                             'T', 'PT',
+                             'DX', 'DPX',
+                             'DY', 'DPY',
+                             'PHIX', 'DMUX',
+                             'PHIY', 'DMUY',
+                             'DDX', 'DDPX',
+                             'DDY', 'DDPY',
+                             'K1L', 'K2L', 'K3L', 'K4L', 'K5L', 'K6L',
+                             'K1SL', 'K2SL', 'K3SL', 'K4SL', 'K5SL', 'K6SL',
+                             'ENERGY', 'L', 'ANGLE',
+                             'HKICK', 'VKICK', 'TILT',
+                             'E1', 'E2', 'H1', 'H2', 'HGAP',
+                             'FINT', 'FINTX', 'KSI',
+                             'APERTYPE', 'APER_1', 'APER_2']
+
+PTC_DEFAULT_TWISS_COLUMNS = [
+    'NAME',
+    'S',
+    'BETA11',
+    'BETA22',
+    'ALFA11',
+    'ALFA22',
+    'MU1',
+    'MU2',
+    'DISP1',
+    'DISP2',
+    'DISP3',
+    'DISP4',
+    'X',
+    'PX',
+    'Y',
+    'PY',
+]
 
 PTC_DEFAULTS = {
     'TIME': False,
@@ -107,7 +135,10 @@ def element_to_mad(e, ptc_use_knl_only=False):
         mad += ""
 
     # Add all supported MAD-X properties
-    mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
+    mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES_DEFERRED if pd.notnull(e.get(p, None))])
+    if not mad.endswith(', '):
+        mad += ', '
+    mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
     if not mad.endswith(', '):
         mad += ', '
     if not ptc_use_knl_only:
@@ -334,7 +365,7 @@ class Madx(Simulator):
             self.raw("USE, SEQUENCE={};".format(kwargs.get('line').name))
 
         # Add each columns for TWISS (improve notation ? )
-        for param in TWISS_COLUMNS:
+        for param in MAD_DEFAULT_TWISS_COLUMNS:
             self._add_input('select_columns', 'twiss', param)
 
         # self.raw("SELECT, FLAG=sectormap, range='Q3E';")
@@ -351,6 +382,11 @@ class Madx(Simulator):
 
     def __ptc_twiss(self, **kwargs):
         ptc_params = kwargs.get('ptc_params', {})
+        columns = ",".join(kwargs.get('columns', PTC_DEFAULT_TWISS_COLUMNS))
+        if kwargs.get('select_range'):
+            self._add_input('select_columns_range', "PTC_TWISS", columns, kwargs.get('select_range'))
+        else:
+            self._add_input('select_columns', "PTC_TWISS", columns)
         self._add_input('ptc_create_universe')
         self._add_input('ptc_create_layout',
                         ptc_params.get('time', PTC_DEFAULTS['TIME']),
