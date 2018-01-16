@@ -55,7 +55,7 @@ class BeamlineBuilder:
         """
         return self.__beamline
 
-    def add_from_files(self, names, path=None, prefix=None):
+    def add_from_files(self, names, path=None, prefix=None, sep=','):
         if path is not None:
             self.__path = path
         if prefix is not None:
@@ -63,22 +63,22 @@ class BeamlineBuilder:
         self.__name = '_'.join(names).upper()
         files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXTENSION) for n in names]
         sequences = [
-            pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME') for f in files
+            pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep) for f in files
         ]
         self.__beamline = pd.concat(sequences)
         self.__beamline['PHYSICAL'] = True
         return self
 
-    def add_from_survey_files(self, names, path=None, prefix=None):
+    def add_from_survey_files(self, names, path=None, prefix=None, sep=','):
         self.__from_survey = True
-        return self.add_from_files(names, path, prefix)
+        return self.add_from_files(names, path, prefix, sep=sep)
 
-    def add_from_file(self, file, path=None, prefix=None):
-        return self.add_from_files([file], path, prefix)
+    def add_from_file(self, file, path=None, prefix=None, sep=','):
+        return self.add_from_files([file], path, prefix, sep=sep)
 
-    def add_from_survey_file(self, file):
+    def add_from_survey_file(self, file, sep=','):
         self.__from_survey = True
-        return self.add_from_survey_files([file])
+        return self.add_from_survey_files([file], sep=sep)
 
     def define_elements(self, e):
         """Process the elements description argument."""
