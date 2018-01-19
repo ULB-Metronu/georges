@@ -79,5 +79,5 @@ def process_match_output(output):
         'constraints': match_constraints,
         'variables': match_variables,
         'penalty': match_penalty,
-        'summary': filter(None, match_summary)
+        'summary': list(filter(None, match_summary))
     }

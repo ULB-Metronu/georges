@@ -397,7 +397,7 @@ class Madx(Simulator):
                         ptc_params.get('fringe', PTC_DEFAULTS['FRINGE']))
         if kwargs.get('misalignment', False):
             self._add_input('ptc_misalign')
-        if kwargs.get('line', False):
+        if kwargs.get('periodic', False):
             if not ptc_params.get('co_guess'):
                 self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'), )
             else:
