@@ -41,7 +41,7 @@ def match(**kwargs):
     data = process_match_output(m.output)
     matched_context = kwargs.get('context', {}).copy()
     for k, v in data['variables'].items():
-        matched_context[k.upper()] = v['final']
+        matched_context[k.upper()] = float(v['final'])
     data['context'] = matched_context
     return data
 
@@ -78,6 +78,6 @@ def process_match_output(output):
     return {
         'constraints': match_constraints,
         'variables': match_variables,
-        'penalty': match_penalty,
+        'penalty': float(match_penalty),
         'summary': list(filter(None, match_summary))
     }
