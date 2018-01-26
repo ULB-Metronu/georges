@@ -119,6 +119,7 @@ PTC_DEFAULTS = {
     'ENVELOPE': False,
 }
 
+
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
 
@@ -170,12 +171,19 @@ def element_to_mad(e, ptc_use_knl_only=False):
 
     if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
         mad += ", L={}".format(e['LENGTH'])
-    if pd.notnull(e.get('APERTYPE', None)):
+    if pd.notnull(e.get('APERTYPE', None)) and pd.notnull(e.get('APERTURE', None)):
         mad += ", APERTURE={}".format(str(e['APERTURE']).strip('[]'))
-    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')) and pd.isnull(e.get('VALUE')):
-        mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
-    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('VALUE')):
-        mad += ", {}={}".format(e['PLUG'], e['VALUE'])
+
+    # Add 'knobs'
+    if pd.notnull(e.get('PLUG')) and pd.notnull(e.get('CIRCUIT')):
+        if e.get('PLUG') == 'APERTURE':
+            circuit = e['CIRCUIT'].strip('{}').split(',')
+            if len(circuit) == 1:
+                circuit.append(circuit[0])
+            mad += ", {}:={}, {}".format(e['PLUG'], circuit[0], circuit[1])
+        else:
+            mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
+
     mad += ", AT={}".format(e['AT_CENTER'])
     mad += ";"
     return mad
