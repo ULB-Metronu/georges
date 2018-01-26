@@ -19,7 +19,6 @@ def is_number(s):
 SUPPORTED_PROPERTIES = [
     'THICK',
     'APERTYPE',
-    'FINT',
 ]
 
 SUPPORTED_PROPERTIES_DEFERRED = [
@@ -144,6 +143,8 @@ def element_to_mad(e, ptc_use_knl_only=False):
     mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES_DEFERRED if pd.notnull(e.get(p, None))])
     if not mad.endswith(', '):
         mad += ', '
+    if (e.CLASS is 'SBEND' or e.CLASS is 'RBEND') and pd.notnull(e.get('FINT', None)):
+        mad += f", FINT={e['FINT']}"
     mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
     if not mad.endswith(', '):
         mad += ', '
