@@ -473,7 +473,7 @@ class Madx(Simulator):
             return
         self.makethin(beamline.name, **kwargs)
         self._add_input('track_beamline')
-        self._add_particles_for_tracking(particles)
+        self.__add_particles_for_tracking(particles)
         beamline.line.apply(lambda e: self.__generate_observation_points(e, beamline.length), axis=1)
         self._add_input('run_track_beamline')
         self._add_input('end_track')
@@ -510,7 +510,7 @@ class Madx(Simulator):
                         kwargs.get('icase', 5),
                         kwargs.get('deltap', 0.0),
                         kwargs.get('closed_orbit', False),
-                        kwargs.get('element_by_element', True),
+                        ptc_params.get('element_by_element', True),
                         kwargs.get('turns', 1),
                         True,
                         kwargs.get('onetable', True),

@@ -70,7 +70,7 @@ madx_syntax = {  # Do not forget the trailing ';' for each command!
                       "DUMP=true,"
                       "ONETABLE=true,"
                       "FILE=tracking.outx;",
-    'run_track_beamline': "RUN, TURNS=1, MAXAPER={0.1, 0.01, 0.1, 0.01, 1.0, 0.1};",
+    'run_track_beamline': "RUN, TURNS=1, MAXAPER={{0.1, 0.01, 0.1, 0.01, 1.0, 0.1}};",
     'start_particle': "START, X={}, PX={}, Y={}, PY={}, T=0.0, PT={};",
     'observe': "OBSERVE, PLACE={};",
     'end_track': 'ENDTRACK;',
