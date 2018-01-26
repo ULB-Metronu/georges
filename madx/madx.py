@@ -111,8 +111,13 @@ PTC_DEFAULTS = {
     'NST': 5,
     'EXACT': True,
     'FRINGE': False,
+    'DEBUGLEVEL': 1,
+    'MAXACCELERATION': True,
+    'EXACT_MIS': False,
+    'TOTALPATH': False,
+    'RADIATION': False,
+    'ENVELOPE': False,
 }
-
 
 class MadxException(Exception):
     """Exception raised for errors in the Madx module."""
@@ -393,8 +398,17 @@ class Madx(Simulator):
                         ptc_params.get('model', PTC_DEFAULTS['MODEL']),
                         ptc_params.get('method', PTC_DEFAULTS['METHOD']),
                         ptc_params.get('nst', PTC_DEFAULTS['NST']),
-                        ptc_params.get('exact', PTC_DEFAULTS['EXACT']),
-                        ptc_params.get('fringe', PTC_DEFAULTS['FRINGE']))
+                        ptc_params.get('exact', PTC_DEFAULTS['EXACT']))
+        self._add_input('ptc_setswitch',
+                        ptc_params.get('debuglevel', PTC_DEFAULTS['DEBUGLEVEL']),
+                        ptc_params.get('maxacceleration', PTC_DEFAULTS['MAXACCELERATION']),
+                        ptc_params.get('exact_mis', PTC_DEFAULTS['EXACT_MIS']),
+                        ptc_params.get('totalpath', PTC_DEFAULTS['TOTALPATH']),
+                        ptc_params.get('radiation', PTC_DEFAULTS['RADIATION']),
+                        ptc_params.get('envelope', PTC_DEFAULTS['ENVELOPE']),
+                        ptc_params.get('fringe', PTC_DEFAULTS['FRINGE']),
+                        ptc_params.get('time', PTC_DEFAULTS['TIME']),
+                        )
         if kwargs.get('misalignment', False):
             self._add_input('ptc_misalign')
         if kwargs.get('periodic', False):
@@ -458,18 +472,27 @@ class Madx(Simulator):
         return self
 
     def __ptc_track(self, particles, beamline, **kwargs):
+        ptc_params = kwargs.get('ptc_params', {})
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
 
         self._add_input('ptc_create_universe')
         self._add_input('ptc_create_layout',
-                        False,
-                        kwargs.get('model', 2),
-                        kwargs.get('method', 6),
-                        kwargs.get('nst', 10),
-                        kwargs.get('exact', True),
-                        kwargs.get('fringe', False)
+                        ptc_params.get('time', PTC_DEFAULTS['TIME']),
+                        ptc_params.get('model', PTC_DEFAULTS['MODEL']),
+                        ptc_params.get('method', PTC_DEFAULTS['METHOD']),
+                        ptc_params.get('nst', PTC_DEFAULTS['NST']),
+                        ptc_params.get('exact', PTC_DEFAULTS['EXACT']))
+        self._add_input('ptc_setswitch',
+                        ptc_params.get('debuglevel', PTC_DEFAULTS['DEBUGLEVEL']),
+                        ptc_params.get('maxacceleration', PTC_DEFAULTS['MAXACCELERATION']),
+                        ptc_params.get('exact_mis', PTC_DEFAULTS['EXACT_MIS']),
+                        ptc_params.get('totalpath', PTC_DEFAULTS['TOTALPATH']),
+                        ptc_params.get('radiation', PTC_DEFAULTS['RADIATION']),
+                        ptc_params.get('envelope', PTC_DEFAULTS['ENVELOPE']),
+                        ptc_params.get('fringe', PTC_DEFAULTS['FRINGE']),
+                        ptc_params.get('time', PTC_DEFAULTS['TIME']),
                         )
         if kwargs.get('misalignment', False):
             self._add_input('ptc_misalign')

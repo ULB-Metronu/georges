@@ -74,7 +74,7 @@ def track(**kwargs):
     m.beam(line.name)
     m.track(b.distribution,
             line,
-            fringe=kwargs.get('fringe', False),
+            ptc_params=kwargs.get('ptc_params', {}),
             ptc=kwargs.get('ptc', True),
             misalignment=kwargs.get('misalignment', False),
             start=kwargs.get('start', False)
