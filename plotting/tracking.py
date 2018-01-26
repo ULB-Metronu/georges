@@ -41,7 +41,6 @@ def tracking(ax, bl, **kwargs):
         filled_plot(ax, t['S'], -t['std'], t['std'], palette[plane], True, alpha=0.3)
 
     if std:
-        plane = kwargs.get("palette")  # TO REMOVE
         ax.plot(t['S'], t['std'], '^-', color=palette[plane],
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
         ax.plot(t['S'], -t['std'], 'v-', color=palette[plane],
