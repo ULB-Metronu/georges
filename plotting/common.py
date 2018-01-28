@@ -76,9 +76,9 @@ def draw_beamline(ax, bl, context):
             fc = 'b'
         else:
             fc = 'k'
-        if float(context[e['K1']]) > 0:
+        if float(context.get(e['K1'], 0.0)) > 0:
             focusing = 1.0
-        elif float(context[e['K1']]) < 0:
+        elif float(context.get(e['K1'], 0.0)) < 0:
             focusing = -1.0
         else:
             focusing = 0.0
