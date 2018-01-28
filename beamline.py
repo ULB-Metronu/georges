@@ -191,3 +191,36 @@ class Beamline:
         bl.at[element, 'CLASS'] = 'QUADRUPOLE'
         bl.at[element, 'APERTYPE'] = np.nan
         bl.at[element, 'APERTURE'] = np.nan
+
+    def add_drifts(self):
+        line_with_drifts = pd.DataFrame()
+        at_entry = 0
+
+        def create_drift(name, length, at_entry):
+            s = pd.Series(
+                {
+                    'CLASS': 'DRIFT',
+                    'LENGTH': length,
+                    'AT_ENTRY': at_entry,
+                    'AT_CENTER': at_entry + length / 2.0,
+                    'AT_EXIT': at_entry + length
+                }
+            )
+            s.name = name
+            return s
+
+        for r in self.__beamline.iterrows():
+            i = r[0]
+            e = r[1]
+            diff = e['AT_ENTRY'] - at_entry
+            if diff == 0:
+                line_with_drifts = line_with_drifts.append(e)
+            else:
+                line_with_drifts = line_with_drifts.append(create_drift(
+                    name=f"DRIFT_{i}",
+                    length=diff,
+                    at_entry=at_entry
+                )).append(e)
+                at_entry = e['AT_EXIT']
+
+        return Beamline(line_with_drifts)

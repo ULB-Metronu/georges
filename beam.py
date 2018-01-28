@@ -341,7 +341,7 @@ class Beam:
 
     def from_5d_sigma_matrix(self, n, **kwargs):
         """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
-        distribution = Beam.generate_from_5d_sigma_matrix(n, kwargs)
+        distribution = Beam.generate_from_5d_sigma_matrix(n, **kwargs)
         self.__initialize_distribution(pd.DataFrame(distribution))
         self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
         return self
