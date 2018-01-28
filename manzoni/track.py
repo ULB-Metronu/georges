@@ -1,22 +1,23 @@
 import numpy as np
 from .transfer import transfer
+from . import *
 
 
 def convert_line(line):
     def class_conversion(e):
         if e['CLASS'] == 'DRIFT':
-            e['CLASS_CODE'] = 0
+            e['CLASS_CODE'] = CLASS_CODE_DRIFT
         elif e['CLASS'] == 'QUADRUPOLE':
-            e['CLASS_CODE'] = 2
+            e['CLASS_CODE'] = CLASS_CODE_QUADRUPOLE
         else:
             e['CLASS_CODE'] = 10
         return e
 
     def apertype_conversion(e):
         if e['APERTYPE'] == 'CIRCLE':
-            e['APERTYPE_CODE'] = 1
+            e['APERTYPE_CODE'] = APERTYPE_CODE_CIRCLE
         elif e['APERTYPE'] == 'RECTANGLE':
-            e['APERTYPE_CODE'] = 2
+            e['APERTYPE_CODE'] = APERTYPE_CODE_RECTANGLE
         return e
     line = line.apply(class_conversion, axis=1)
     line = line.apply(apertype_conversion, axis=1)
@@ -37,11 +38,6 @@ def aperture_check(b, e):
 
 
 def track(l, b):
-    # 0 - CLASS_CODE
-    # 1 - L
-    # 2 - K1
-    # 3 - APERTYPE_CODE
-    # 4 - APERTURE
     line = l[['CLASS_CODE', 'L', 'K1', 'APERTYPE_CODE', 'APERTURE']].as_matrix()
     r = range(0, line.shape[0])
     beams = []
