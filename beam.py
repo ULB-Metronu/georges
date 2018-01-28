@@ -1,7 +1,7 @@
 import pandas as pd
 import pandas.core.common
 import numpy as np
-#from . import physics
+from . import physics
 from scipy.optimize import curve_fit
 
 PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'position'}
@@ -285,8 +285,17 @@ class Beam:
                                   )
         return self
 
-    def from_5d_sigma_matrix(self, n, **kwargs):
-        """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
+    @staticmethod
+    def generate_from_5d_sigma_matrix(n, **kwargs):
+        # For performance considerations, see
+        # https://software.intel.com/en-us/blogs/2016/06/15/faster-random-number-generation-in-intel-distribution-for-python
+        try:
+            import numpy.random_intel
+            generator = numpy.random_intel.multivariate_normal
+        except ModuleNotFoundError:
+            import numpy.random
+            generator = numpy.random.multivariate_normal
+
         s11 = kwargs.get('s11', 0)
         s12 = kwargs.get('s12', 0)
         s13 = kwargs.get('s13', 0)
@@ -311,9 +320,9 @@ class Beam:
         s52 = s25
         s53 = s35
         s54 = s45
-        s55 = kwargs.get('DPPRMS', 0)**2
+        s55 = kwargs.get('DPPRMS', 0) ** 2
 
-        self.__initialize_distribution(pd.DataFrame(np.random.multivariate_normal(
+        return generator(
             [kwargs.get('X', 0),
              kwargs.get('PX', 0),
              kwargs.get('Y', 0),
@@ -327,7 +336,12 @@ class Beam:
                 [s41, s42, s43, s44, s45],
                 [s51, s52, s53, s54, s55]
             ]),
-            n
-        )))
+            int(n)
+        )
+
+    def from_5d_sigma_matrix(self, n, **kwargs):
+        """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
+        distribution = Beam.generate_from_5d_sigma_matrix(n, kwargs)
+        self.__initialize_distribution(pd.DataFrame(distribution))
         self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
         return self

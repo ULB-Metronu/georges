@@ -9,3 +9,4 @@ from . import experimental
 from . import physics
 from . import statistics
 from . import plotting
+from . import manzoni
