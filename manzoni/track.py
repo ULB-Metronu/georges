@@ -11,6 +11,8 @@ def convert_line(line, to_numpy=True):
             e['CLASS_CODE'] = CLASS_CODE_SBEND
         elif e['CLASS'] == 'QUADRUPOLE':
             e['CLASS_CODE'] = CLASS_CODE_QUADRUPOLE
+        elif e['CLASS'] == 'DEGRADER':
+            e['CLASS_CODE'] = CLASS_CODE_DEGRADER
         else:
             e['CLASS_CODE'] = CLASS_CODE_NONE
         return e
@@ -58,19 +60,32 @@ def transform_variables(line, variables):
 def adjust_line(line, variables, parameters):
     for i, p in enumerate(parameters):
         line[variables[i][0], variables[i][1]] = p
-    return line  # Check later if calling this function will
+    return line  # Check later if calling this function will create a copy
 
 
-def track(line, b):
+def track(line, b, **kwargs):
     r = range(0, line.shape[0])
     beams = []
     for i in r:
-        matrix = transfer[int(line[i, 0])]
+        if line[i, INDEX_CLASS_CODE] == CLASS_CODE_DEGRADER:
+            b += np.random_intel.multivariate_normal(
+                [0.0, 0.0, 0.0, 0.0, 0.0], np.array(
+                    [
+                        [kwargs.get('deg_s11', 0), kwargs.get('deg_s12', 0), 0, 0, 0],
+                        [kwargs.get('deg_s12', 0), kwargs.get('deg_s22', 0), 0, 0, 0],
+                        [0, 0, kwargs.get('deg_s11', 0), kwargs.get('deg_s12', 0), 0],
+                        [0, 0, kwargs.get('deg_s12', 0), kwargs.get('deg_s22', 0), 0],
+                        [0, 0, 0, 0, kwargs.get('deg_dpp', 0)]
+                    ]),
+                int(b.shape[0]))
+            beams.append(b)
+            continue
+        matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
         if matrix is not None:
             # For performance considerations, see
             # https://stackoverflow.com/q/48474274/420892
             # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
             b = b.dot(matrix(line[i]).T)
-        b = aperture_check(b, line[i])
+        aperture_check(b, line[i])
         beams.append(b)
     return beams

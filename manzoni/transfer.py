@@ -15,7 +15,27 @@ def drift(e):
     )
 
 
+def degrader(e):
+    NN = 1e5
+    np.random_intel.multivariate_normal(
+        [1.0, 1.0], np.array(
+            [
+                [1, 0],
+                [0, 1],
+            ]),
+        int(NN))
+    np.random_intel.multivariate_normal(
+        [1.0, 1.0], np.array(
+            [
+                [1, 0],
+                [0, 1],
+            ]),
+        int(NN))
+    np.random_intel.normal(0, 1, int(NN))
+
+
 def sbend(e):
+    # http://laacg.lanl.gov/laacg/services/traceman.pdf
     theta = e[INDEX_ANGLE]
     length = e[INDEX_L]
     s = np.sin(theta)
@@ -33,10 +53,10 @@ def sbend(e):
             [0, 0, 0, 0, 1]
         ]
     )
-    m_b =  np.array(
+    m_b = np.array(
         [
-            [c, (length / theta) * s, 0, 0, 0],
-            [-(theta / length) * s, c, 0, 0, 0],
+            [c, (length / theta) * s, 0, 0, (length/theta)*(1-c)],
+            [-(theta / length) * s, c, 0, 0, s],
             [0, 0, 1, length, 0],
             [0, 0, 0, 1, 0],
             [0, 0, 0, 0, 1]
