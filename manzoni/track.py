@@ -67,8 +67,10 @@ def track(line, b):
     for i in r:
         matrix = transfer[int(line[i, 0])]
         if matrix is not None:
+            # For performance considerations, see
+            # https://stackoverflow.com/q/48474274/420892
+            # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
             b = b.dot(matrix(line[i]).T)
-            #b = np.einsum('ij,kj->ik', b[:, 0:4], matrix)
         b = aperture_check(b, line[i])
         beams.append(b)
     return beams
