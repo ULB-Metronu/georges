@@ -45,6 +45,22 @@ def aperture_check(b, e):
     return np.compress(s, b, axis=0)
 
 
+def transform_variables(line, variables):
+    ll = line.reset_index()
+
+    def transform(v):
+        i = ll[ll['index'] == v[0]].index.values[0]
+        j = INDEX[v[1]]
+        return [i, j]
+    return list(map(transform, variables))
+
+
+def adjust_line(line, variables, parameters):
+    for i, p in enumerate(parameters):
+        line[variables[i][0], variables[i][1]] = p
+    return line  # Check later if calling this function will
+
+
 def track(line, b):
     r = range(0, line.shape[0])
     beams = []
