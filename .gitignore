@@ -1,9 +1,5 @@
-__pycache__/*
 *.pyc
 __pycache__/
-bdsim/__pycache__/
-madx/__pycache__/
-plotting/__pycache__/
 .DS_Store
 .idea/shelf/
 /examples/.ipynb_checkpoints/**
