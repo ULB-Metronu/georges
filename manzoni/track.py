@@ -44,6 +44,7 @@ def aperture_check(b, e):
     # Unknown aperture type
     else:
         return b
+    # np.compress used for performance
     return np.compress(s, b, axis=0)
 
 
@@ -64,9 +65,16 @@ def adjust_line(line, variables, parameters):
 
 
 def track(line, b, **kwargs):
-    r = range(0, line.shape[0])
+    """
+    Tracking through a linear beamline.
+    Code optimized for performance.
+    :param line: beamline description in Manzoni format
+    :param b: initial beam
+    :param kwargs: optional parameters
+    :return: a list of beams (beam tracked up to each element in the beamline)
+    """
     beams = []
-    for i in r:
+    for i in range(0, line.shape[0]):
         if line[i, INDEX_CLASS_CODE] == CLASS_CODE_DEGRADER:
             b += np.random_intel.multivariate_normal(
                 [0.0, 0.0, 0.0, 0.0, 0.0], np.array(
@@ -80,6 +88,7 @@ def track(line, b, **kwargs):
                 int(b.shape[0]))
             beams.append(b)
             continue
+        # Get the transfer matrix of the current element
         matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
         if matrix is not None:
             # For performance considerations, see
