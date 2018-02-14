@@ -2,6 +2,11 @@ import numpy as np
 from .transfer import transfer
 from .constants import *
 
+try:
+    import numpy.random_intel as nprandom
+except ModuleNotFoundError:
+    import numpy.random as nprandom
+
 
 def convert_line(line, to_numpy=True):
     def class_conversion(e):
@@ -13,6 +18,8 @@ def convert_line(line, to_numpy=True):
             e['CLASS_CODE'] = CLASS_CODE_QUADRUPOLE
         elif e['CLASS'] == 'DEGRADER':
             e['CLASS_CODE'] = CLASS_CODE_DEGRADER
+        elif e['CLASS'] == 'SROTATION':
+            e['CLASS_CODE'] = CLASS_CODE_ROTATION
         else:
             e['CLASS_CODE'] = CLASS_CODE_NONE
         return e
@@ -76,7 +83,7 @@ def track(line, b, **kwargs):
     beams = []
     for i in range(0, line.shape[0]):
         if line[i, INDEX_CLASS_CODE] == CLASS_CODE_DEGRADER:
-            b += np.random_intel.multivariate_normal(
+            b += nprandom.multivariate_normal(
                 [0.0, 0.0, 0.0, 0.0, 0.0], np.array(
                     [
                         [kwargs.get('deg_s11', 0), kwargs.get('deg_s12', 0), 0, 0, 0],

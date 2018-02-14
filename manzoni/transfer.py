@@ -2,6 +2,19 @@ import numpy as np
 from .constants import *
 
 
+def rotation(e):
+    angle = e[INDEX_ANGLE]
+    return np.array(
+        [
+            [np.cos(angle), 0, -np.sin(angle), 0, 0],
+            [0, np.cos(angle), 0, -np.sin(angle), 0],
+            [np.sin(angle), 0, np.cos(angle), 0, 0],
+            [0, np.sin(angle), 0, np.cos(angle), 0],
+            [0, 0, 0, 0, 1],
+        ]
+    )
+
+
 def drift(e):
     length = e[INDEX_L]
     return np.array(
@@ -115,3 +128,5 @@ transfer.insert(CLASS_CODE_DRIFT, drift)
 transfer.insert(CLASS_CODE_SBEND, sbend)
 transfer.insert(CLASS_CODE_QUADRUPOLE, quadrupole)
 transfer.insert(CLASS_CODE_NONE, None)
+transfer.insert(CLASS_CODE_DEGRADER, degrader)
+transfer.insert(CLASS_CODE_ROTATION, rotation)

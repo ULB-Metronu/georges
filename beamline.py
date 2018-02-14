@@ -192,18 +192,20 @@ class Beamline:
         bl.at[element, 'APERTYPE'] = np.nan
         bl.at[element, 'APERTURE'] = np.nan
 
-    def add_drifts(self):
+    def add_drifts(self, with_pipe=True):
         line_with_drifts = pd.DataFrame()
         at_entry = 0
 
-        def create_drift(name, length, at_entry):
+        def create_drift(name, length, at):
             s = pd.Series(
                 {
                     'CLASS': 'DRIFT',
+                    'TYPE': 'DRIFT',
+                    'PIPE': with_pipe,
                     'LENGTH': length,
-                    'AT_ENTRY': at_entry,
-                    'AT_CENTER': at_entry + length / 2.0,
-                    'AT_EXIT': at_entry + length
+                    'AT_ENTRY': at,
+                    'AT_CENTER': at + length / 2.0,
+                    'AT_EXIT': at + length
                 }
             )
             s.name = name
@@ -219,7 +221,7 @@ class Beamline:
                 line_with_drifts = line_with_drifts.append(create_drift(
                     name=f"DRIFT_{i}",
                     length=diff,
-                    at_entry=at_entry
+                    at=at_entry
                 )).append(e)
                 at_entry = e['AT_EXIT']
 
