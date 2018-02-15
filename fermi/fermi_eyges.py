@@ -23,10 +23,11 @@ def compute_fermi_eyges(**kwargs):
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 1))[0],  # Order 1
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 2))[0],  # Order 2
     ]
-    b = a[0] * a[2] - a[1]**2
+    b = a[0] * a[2] - a[1]**2  # Emittance
 
     return {
         'A': a,
         'B': b,
-        'E_R': residual_energy(material, thickness, energy, db=db)
+        'E_R': residual_energy(material, thickness, energy, db=db),
+        'DPP': 0.0,  # TODO
     }

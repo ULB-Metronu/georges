@@ -35,6 +35,10 @@ class MaterialsDB:
                              )
 
     @property
+    def db(self):
+        return self.__materials_db
+
+    @property
     def csda_ranges(self):
         return self.__materials_db['csda_ranges']
 
@@ -44,11 +48,13 @@ class MaterialsDB:
 
     @staticmethod
     def density(material):
+        # TODO Where is this coming from?
         density = {
             'water': 1,
             'graphite': 1.7,
             'beryllium': 1.85,
             'air': 1.205E-03,
+            'aluminum': 2.7,
         }
         return density[material]
 
