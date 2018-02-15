@@ -1,6 +1,5 @@
 """A dictionnary for the translation of the G4BeamLine grammar."""
 
-
 g4beamline_syntax = {
 
     'define_detector': "sample detector radius=29.75 format=ascii",
@@ -9,7 +8,6 @@ g4beamline_syntax = {
     'keep_protons': "trackcuts keep=proton",
     'start_command': "start x=0 y=0 z=0 initialZ=0 radiusCut=1000",  # Define the equivalent of MaxAper in G4Beamline
     'beam_input': "beam ascii file=input_beam.dat nEvents={}",
-
     'beam_start': "beam gaussian particle={{{{PARTICLE.lower()}}}}"
                   " beamX={} meanXp={} "
                   " beamY={} meanYp={} "

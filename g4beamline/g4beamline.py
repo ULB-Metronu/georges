@@ -19,7 +19,6 @@ class G4BeamlineException(Exception):
 
 def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
     """Convert a pandas.Series representation onto a G4Beamline sequence element."""
-    g4bl = ""
     # For each element place a detector
     g4bl = "zntuple z={} file='Detector{}' format=ascii \n".format(e['AT_CENTER'] * 1000, e.name)
     if e['TYPE'] in ['QUADRUPOLE']:
@@ -56,8 +55,6 @@ def element_to_g4beamline(e, fringe=None, build_solids=None, **kwargs):
                                                                   e.name)
 
     if e['TYPE'] == 'SOLIDS' and build_solids:
-
-        print('Construct Solids')
 
         if e['SOLIDS_FILE'] is None and e['SOLIDS_FILE'] is np.nan:
             raise G4BeamlineException(f"No files are provided for solids {e.name}.")
@@ -138,9 +135,7 @@ class G4Beamline(Simulator):
 
         # Create the input file
         self.__add_input('beam_input', (len(particles),))
-        if os.path.exists('input_beam.dat'):
-            os.remove('input_beam.dat')
-        with open('input_beam.dat', 'w') as f:
+        with open('input_beam.dat', 'w+') as f:
             f.write('#BLTrackFile\n')
             f.write('# x y z Px Py Pz t PDGid EventID TrackID ParentID Weight\n')
             f.write('# mm mm mm MeV/c MeV/c MeV/c ns - - - - -\n')
