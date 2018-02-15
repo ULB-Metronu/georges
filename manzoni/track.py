@@ -1,11 +1,7 @@
 import numpy as np
 from .transfer import transfer
+from .kick import kick
 from .constants import *
-
-try:
-    import numpy.random_intel as nprandom
-except ModuleNotFoundError:
-    import numpy.random as nprandom
 
 
 def convert_line(line, to_numpy=True):
@@ -20,6 +16,10 @@ def convert_line(line, to_numpy=True):
             e['CLASS_CODE'] = CLASS_CODE_DEGRADER
         elif e['CLASS'] == 'SROTATION':
             e['CLASS_CODE'] = CLASS_CODE_ROTATION
+        elif e['CLASS'] == 'HKICKER':
+            e['CLASS_CODE'] = CLASS_CODE_HKICKER
+        elif e['CLASS'] == 'VKICKER':
+            e['CLASS_CODE'] = CLASS_CODE_VKICKER
         else:
             e['CLASS_CODE'] = CLASS_CODE_NONE
         return e
@@ -35,8 +35,29 @@ def convert_line(line, to_numpy=True):
         return e
     line = line.apply(class_conversion, axis=1)
     line = line.apply(apertype_conversion, axis=1)
+    line = line.fillna(0.0) \
+               .query(
+        "CLASS == 'DRIFT' or "
+        "CLASS == 'SBEND' or "
+        "CLASS == 'QUADRUPOLE' or "
+        "CLASS == 'COLLIMATOR' or "
+        "CLASS == 'DEGRADER' or "
+        "CLASS == 'SROTATION' or "
+        "CLASS == 'HKICKER' or "
+        "CLASS == 'VKICKER'"
+    )
     if to_numpy:
-        return line[['CLASS_CODE', 'LENGTH', 'K1', 'APERTYPE_CODE', 'APERTURE']].as_matrix()
+        return line[[
+            'CLASS_CODE',
+            'LENGTH',
+            'K1',
+            'APERTYPE_CODE',
+            'APERTURE',
+            'ANGLE',
+            'APERTURE2',
+            'E1',
+            'E2'
+        ]].as_matrix()
     else:
         return line
 
@@ -82,26 +103,16 @@ def track(line, b, **kwargs):
     """
     beams = []
     for i in range(0, line.shape[0]):
-        if line[i, INDEX_CLASS_CODE] == CLASS_CODE_DEGRADER:
-            b += nprandom.multivariate_normal(
-                [0.0, 0.0, 0.0, 0.0, 0.0], np.array(
-                    [
-                        [kwargs.get('deg_s11', 0), kwargs.get('deg_s12', 0), 0, 0, 0],
-                        [kwargs.get('deg_s12', 0), kwargs.get('deg_s22', 0), 0, 0, 0],
-                        [0, 0, kwargs.get('deg_s11', 0), kwargs.get('deg_s12', 0), 0],
-                        [0, 0, kwargs.get('deg_s12', 0), kwargs.get('deg_s22', 0), 0],
-                        [0, 0, 0, 0, kwargs.get('deg_dpp', 0)]
-                    ]),
-                int(b.shape[0]))
-            beams.append(b)
-            continue
-        # Get the transfer matrix of the current element
-        matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
-        if matrix is not None:
+        if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
+            offset = kick[int(line[i, INDEX_CLASS_CODE])](line[i], b.shape[0], **kwargs)
+            b += offset
+        elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
+            # Get the transfer matrix of the current element
+            matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
             # For performance considerations, see
             # https://stackoverflow.com/q/48474274/420892
             # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
             b = b.dot(matrix(line[i]).T)
-        aperture_check(b, line[i])
-        beams.append(b)
+        b = aperture_check(b, line[i])
+        beams.append(b.copy())
     return beams

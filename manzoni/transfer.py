@@ -28,25 +28,6 @@ def drift(e):
     )
 
 
-def degrader(e):
-    NN = 1e5
-    np.random_intel.multivariate_normal(
-        [1.0, 1.0], np.array(
-            [
-                [1, 0],
-                [0, 1],
-            ]),
-        int(NN))
-    np.random_intel.multivariate_normal(
-        [1.0, 1.0], np.array(
-            [
-                [1, 0],
-                [0, 1],
-            ]),
-        int(NN))
-    np.random_intel.normal(0, 1, int(NN))
-
-
 def sbend(e):
     # http://laacg.lanl.gov/laacg/services/traceman.pdf
     theta = e[INDEX_ANGLE]
@@ -105,7 +86,7 @@ def quadrupole(e):
                 [0, 0, k * sh, ch, 0],
                 [0, 0, 0, 0, 1]
             ])
-    else:
+    elif k < 0:
         k *= -1
         k = np.sqrt(k)
         kl = k * length
@@ -121,12 +102,13 @@ def quadrupole(e):
                 [0, 0, -k * s, c, 0],
                 [0, 0, 0, 0, 1]
             ])
+    else:
+        return np.eye(5)
 
 
-transfer = list()
-transfer.insert(CLASS_CODE_DRIFT, drift)
-transfer.insert(CLASS_CODE_SBEND, sbend)
-transfer.insert(CLASS_CODE_QUADRUPOLE, quadrupole)
-transfer.insert(CLASS_CODE_NONE, None)
-transfer.insert(CLASS_CODE_DEGRADER, degrader)
-transfer.insert(CLASS_CODE_ROTATION, rotation)
+transfer = {
+    CLASS_CODE_DRIFT: drift,
+    CLASS_CODE_SBEND: sbend,
+    CLASS_CODE_QUADRUPOLE: quadrupole,
+    CLASS_CODE_ROTATION: rotation,
+}
