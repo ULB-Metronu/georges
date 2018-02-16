@@ -9,6 +9,8 @@ def kinematics(**kwargs):
     e = 0
     pc = 0
     brho = 0
+    beta = 0
+    gamma = 1
     if len(kwargs) > 1:
         raise Exception("A single keyword argument is expected: range, energy, momentum, brho).")
     if kwargs.get("range"):
@@ -16,23 +18,44 @@ def kinematics(**kwargs):
         e = range_to_energy(r)
         pc = energy_to_momentum(e)
         brho = momentum_to_brho(pc)
+        beta = energy_to_beta(e)
+        gamma = beta_to_gamma(beta)
     elif kwargs.get('energy'):
         e = kwargs.get('energy')
         r = energy_to_range(e)
         pc = energy_to_momentum(e)
         brho = momentum_to_brho(pc)
+        beta = energy_to_beta(e)
+        gamma = beta_to_gamma(beta)
     elif kwargs.get('momentum'):
         pc = kwargs.get('momentum')
         e = momentum_to_energy(pc)
         r = energy_to_range(e)
         brho = momentum_to_brho(pc)
+        beta = energy_to_beta(e)
+        gamma = beta_to_gamma(beta)
+    elif kwargs.get('beta'):
+        beta = kwargs.get('beta')
+        e = beta_to_energy(beta)
+        pc = energy_to_momentum(e)
+        r = energy_to_range(e)
+        brho = momentum_to_brho(pc)
+        gamma = beta_to_gamma(beta)
+    elif kwargs.get('gamma'):
+        gamma = kwargs.get('gamma')
+        e = gamma_to_energy(gamma)
+        pc = energy_to_momentum(e)
+        brho = momentum_to_brho(pc)
+        r = energy_to_range(e)
+        beta = energy_to_beta(e)
 
     return {
         'range': r,
         'energy': e,
         'momentum': pc,
         'brho': brho,
-        'beta': energy_to_beta(e)
+        'beta': beta,
+        'gamma': gamma,
     }
 
 
@@ -63,6 +86,21 @@ def energy_to_beta(ekin):
     return np.sqrt((gamma ** 2 - 1) / gamma ** 2)
 
 
+def beta_to_gamma(beta):
+    """Return gamma relativistic from beta."""
+    return 1/(np.sqrt(1-beta**2))
+
+
+def gamma_to_energy(gamma):
+    """Return relativistic energy from gamma."""
+    return gamma * PROTON_MASS - PROTON_MASS
+
+
+def beta_to_energy(beta):
+    """Return relativistic energy from beta."""
+    return beta_to_gamma(beta) * PROTON_MASS - PROTON_MASS
+
+
 def energy_to_pv(energy):
     """Return relativistic factor 'pv' from kinetic energy (MeV)."""
     E = energy + PROTON_MASS
@@ -79,6 +117,7 @@ def range_to_energy(r):
 
 def energy_to_range(e):
     """Return the range [g/cm^2] from the kinetic energy [MeV]."""
+    """IEC60601 energy to range in water"""
     b = 0.008539; c = 0.5271; d = 3.4917
     return np.exp((-c + np.sqrt(c**2 - 4 * b * (d - np.log(e))))/(2*b))
 
