@@ -13,7 +13,7 @@ class FermiPropagateException(Exception):
         self.message = m
 
 
-def propagate(line, parameters, db, gaps='vacuum'):
+def propagate(line, beam, db, gaps='vacuum'):
     def compute_fermi_eyges_on_slab(slab):
         # If vacuum return a null-element
         if slab['MATERIAL'] == 'vacuum':
@@ -55,7 +55,7 @@ def propagate(line, parameters, db, gaps='vacuum'):
         line_fermi = with_gaps
 
     # Compute energy loss along the line
-    energy = parameters['energy']
+    energy = beam['energy']
     for i, e in line_fermi.iterrows():
         line_fermi.loc[i, 'ENERGY_IN'] = energy
         if e['TYPE'] == 'slab' or e['TYPE'] == 'gap':
@@ -76,7 +76,7 @@ def propagate(line, parameters, db, gaps='vacuum'):
         )
 
     # Sum the matrix elements
-    acc = [parameters['A0'], parameters['A1'], parameters['A2']]
+    acc = [beam['A0'], beam['A1'], beam['A2']]
     line_fermi['LENGTH'].fillna(0.0, inplace=True)
     line_fermi['A0'].fillna(0.0, inplace=True)
     line_fermi['A1'].fillna(0.0, inplace=True)

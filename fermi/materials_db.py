@@ -49,7 +49,7 @@ class MaterialsDB:
     @staticmethod
     def density(material):
         # TODO Where is this coming from?
-        density = {
+        density = {  # g/cm3
             'water': 1,
             'graphite': 1.7,
             'beryllium': 1.85,
