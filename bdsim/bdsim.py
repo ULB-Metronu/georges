@@ -154,7 +154,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                 psi=np.deg2rad(30),
                 theta=np.deg2rad(90)
             )
-        if(element['TYPE'] == "SBEND"):
+        if element['TYPE'] == "SBEND":
             m.AddDipole(
                 index,
                 'sbend',
@@ -185,8 +185,8 @@ class BDSim(Simulator):
     def __init__(self, **kwargs):
         self._bdsim_machine = None
         self._bdsim_options = pybdsim.Options.Options()
-        super().__init__(**kwargs)
         self._exec = BDSim.EXECUTABLE_NAME
+        super().__init__(**kwargs)
 
     def _attach(self, beamline):
         super()._attach(beamline)
