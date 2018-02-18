@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-
 from .common import prepare, draw_beamline
 from .aperture import aperture
 from .twiss import twiss

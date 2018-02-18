@@ -4,7 +4,7 @@ import numpy as np
 from . import physics
 from scipy.optimize import curve_fit
 
-PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'position'}
+PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'positron'}
 PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'DPP', 'DT']
 
 
@@ -34,6 +34,8 @@ class Beam:
             self.__initialize_distribution(args[0])
 
         self.__particle = kwargs.get('particle', 'proton')
+        if self.__particle not in PARTICLE_TYPES:
+            raise BeamException("Trying to initialize a beam with invalid particle type.")
         self.__energy = kwargs.get('energy', None)
 
     @property
