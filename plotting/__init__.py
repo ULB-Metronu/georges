@@ -7,4 +7,3 @@ from .tracking import tracking, g4blprofile
 from .survey import survey
 from .bpm import bpm
 from .scattering import scattering
-from .histogram2d import draw2d_histo
