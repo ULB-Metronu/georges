@@ -8,6 +8,54 @@ except ModuleNotFoundError:
     import numpy.random as nprandom
 
 
+def sextupole(e, n, **kwargs):
+    return np.array(
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    )
+
+
+def octupole(e, n, **kwargs):
+    return np.array(
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    )
+
+
+def decapole(e, n, **kwargs):
+    return np.array(
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    )
+
+
+def multipole(e, n, **kwargs):
+    return np.array(
+        [
+            0,
+            0,
+            0,
+            0,
+            0
+        ]
+    )
+
+
 def hkicker(e, n, **kwargs):
     return np.array(
         [
@@ -51,6 +99,10 @@ def degrader(e, n, **kwargs):
 
 
 kick = {
+    CLASS_CODES['SEXTUPOLE']: sextupole,
+    CLASS_CODES['OCTUPOLE']: octupole,
+    CLASS_CODES['DECAPOLE']: decapole,
+    CLASS_CODES['MULTIPOLE']: multipole,
     CLASS_CODES['HKICKER']: hkicker,
     CLASS_CODES['VKICKER']: vkicker,
     CLASS_CODES['DEGRADER']: degrader,
