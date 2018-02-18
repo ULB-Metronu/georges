@@ -16,8 +16,6 @@ class Context:
         }
         self.__strength = None
 
-
-
     def __getitem__(self, key):
         return self.__context[key]
 

@@ -7,7 +7,7 @@ STAR_COLUMNS = ['K', 'eS', 'nS', 'tS', 'csda', 'prange', 'factor']
 
 
 class MaterialsDB:
-    def __init__(self, p):
+    def __init__(self, p=os.path.dirname(__file__)):
         self.db_path = p
         data_files = [os.path.splitext(f)[0] for f in os.listdir(os.path.join(p, 'pstar')) if
                       os.path.isfile(os.path.join(p, 'pstar', f)) and os.path.splitext(f)[1] == '.txt']
