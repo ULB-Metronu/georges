@@ -4,19 +4,17 @@ from matplotlib import patches
 from matplotlib.ticker import NullFormatter, MaxNLocator
 
 
-def ellipse(ra, rb, angle, x0, y0):
+def ellipse(ra, rb, angle, x0, y0, **kwargs):
     """
-    Plot an ellipse (`matplotlib.patches.Ellipse`) from beam parameters.
-    :param ra:
-    :param rb:
-    :param angle:
-    :param x0:
-    :param y0:
-    :return:
+    Create an ellipse from beam parameters.
+    :param ra: semi-major axis
+    :param rb: semi-minor axis
+    :param angle: oritentation angle
+    :param x0: center X coordinate
+    :param y0: center Y coordinate
+    :return: `matplotlib.patches.Ellipse` object
     """
-    theta = np.arange(0.0, 360.0, 1.0) * np.pi / 180.0
-
-    xcenter, ycenter = x0, y0
+    theta = np.radians(np.arange(0.0, 360.0, 1.0))
 
     width = 2 * ra
     height = 2 * rb
@@ -24,22 +22,22 @@ def ellipse(ra, rb, angle, x0, y0):
     x = width * np.cos(theta)
     y = height * np.sin(theta)
 
-    rtheta = np.radians(ang)
+    rtheta = np.radians(angle)
     rotation_matrix = np.array([
         [np.cos(rtheta), -np.sin(rtheta)],
         [np.sin(rtheta), np.cos(rtheta)],
     ])
 
     x, y = np.dot(rotation_matrix, np.array([x, y]))
-    x += xcenter
-    y += ycenter
+    x += x0
+    y += y0
 
-    return patches.Ellipse((xcenter, ycenter), width, height,
+    return patches.Ellipse((x0, y0), width, height,
                            angle=angle,
-                           linewidth=1,
-                           fill=False,
-                           linestyle='--',
-                           edgecolor='black')
+                           linewidth=kwargs.get('linewidth', 1),
+                           fill=kwargs.get('fill', False),
+                           linestyle=kwargs.get('linestyle', '--'),
+                           edgecolor=kwargs.get('color', 'black'))
 
 
 def draw2d_histo(fig, data, twiss_parameter, **kwargs):
