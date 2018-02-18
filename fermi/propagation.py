@@ -13,9 +13,9 @@ class FermiPropagateException(Exception):
         self.message = m
 
 
-def propagate(line, beam, db, gaps='vacuum'):
+def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
     def compute_fermi_eyges_on_slab(slab):
-        # If vacuum return a null-element
+        # If vacuum, return a null-element
         if slab['MATERIAL'] == 'vacuum':
             return pd.Series({
                 'A0': 0,
@@ -29,7 +29,7 @@ def propagate(line, beam, db, gaps='vacuum'):
             material=slab['MATERIAL'],
             energy=slab['ENERGY_IN'],
             thickness=slab['LENGTH'] * 100,
-            T=DifferentialMoliere
+            T=model
         )
         return pd.Series({
             'A0': fe['A'][0],
