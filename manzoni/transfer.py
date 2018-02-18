@@ -16,7 +16,7 @@ def rotation(e):
 
 
 def drift(e):
-    length = e[INDEX_L]
+    length = e[INDEX_LENGTH]
     return np.array(
         [
             [1, length, 0, 0, 0],
@@ -31,22 +31,13 @@ def drift(e):
 def sbend(e):
     # http://laacg.lanl.gov/laacg/services/traceman.pdf
     theta = e[INDEX_ANGLE]
-    length = e[INDEX_L]
-    s = np.sin(theta)
-    c = np.cos(theta)
+    if theta == 0:
+        return drift(e)
+    length = e[INDEX_LENGTH]
     e1 = e[INDEX_E1]
     e2 = e[INDEX_E2]
-    k1 = (-1.0/(length/theta))*np.tan(e1)
-    k2 = (-1.0/(length/theta))*np.tan(e2)
-    m_e1 = np.array(
-        [
-            [1, 0, 0, 0, 0],
-            [-k1, 1, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, k1, 1, 0],
-            [0, 0, 0, 0, 1]
-        ]
-    )
+    s = np.sin(theta)
+    c = np.cos(theta)
     m_b = np.array(
         [
             [c, (length / theta) * s, 0, 0, (length/theta)*(1-c)],
@@ -56,20 +47,35 @@ def sbend(e):
             [0, 0, 0, 0, 1]
         ]
     )
-    m_e2 = np.array(
-        [
-            [1, 0, 0, 0, 0],
-            [-k2, 1, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, k2, 1, 0],
-            [0, 0, 0, 0, 1]
-        ]
-    )
-    return m_e2 @ m_b @ m_e1
+    if e1 == 0 and e2 == 0:
+        return m_b
+    else:
+        k1 = (-1.0/(length/theta))*np.tan(e1)
+        k2 = (-1.0/(length/theta))*np.tan(e2)
+        m_e1 = np.array(
+            [
+                [1, 0, 0, 0, 0],
+                [-k1, 1, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, k1, 1, 0],
+                [0, 0, 0, 0, 1]
+            ]
+        )
+
+        m_e2 = np.array(
+            [
+                [1, 0, 0, 0, 0],
+                [-k2, 1, 0, 0, 0],
+                [0, 0, 1, 0, 0],
+                [0, 0, k2, 1, 0],
+                [0, 0, 0, 0, 1]
+            ]
+        )
+        return m_e2 @ m_b @ m_e1
 
 
 def quadrupole(e):
-    length = e[INDEX_L]
+    length = e[INDEX_LENGTH]
     k = e[INDEX_K1]
     if k > 0:
         k = np.sqrt(k)
@@ -107,8 +113,8 @@ def quadrupole(e):
 
 
 transfer = {
-    CLASS_CODE_DRIFT: drift,
-    CLASS_CODE_SBEND: sbend,
-    CLASS_CODE_QUADRUPOLE: quadrupole,
-    CLASS_CODE_ROTATION: rotation,
+    CLASS_CODES['DRIFT']: drift,
+    CLASS_CODES['SBEND']: sbend,
+    CLASS_CODES['QUADRUPOLE']: quadrupole,
+    CLASS_CODES['ROTATION']: rotation,
 }

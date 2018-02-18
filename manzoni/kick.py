@@ -51,7 +51,7 @@ def degrader(e, n, **kwargs):
 
 
 kick = {
-    CLASS_CODE_HKICKER: hkicker,
-    CLASS_CODE_VKICKER: vkicker,
-    CLASS_CODE_DEGRADER: degrader,
+    CLASS_CODES['HKICKER']: hkicker,
+    CLASS_CODES['VKICKER']: vkicker,
+    CLASS_CODES['DEGRADER']: degrader,
 }

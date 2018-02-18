@@ -6,25 +6,18 @@ from .constants import *
 
 def convert_line(line, to_numpy=True):
     def class_conversion(e):
-        if e['CLASS'] == 'DRIFT':
-            e['CLASS_CODE'] = CLASS_CODE_DRIFT
-        elif e['CLASS'] == 'SBEND':
-            e['CLASS_CODE'] = CLASS_CODE_SBEND
-        elif e['CLASS'] == 'QUADRUPOLE':
-            e['CLASS_CODE'] = CLASS_CODE_QUADRUPOLE
-        elif e['CLASS'] == 'DEGRADER':
-            e['CLASS_CODE'] = CLASS_CODE_DEGRADER
-        elif e['CLASS'] == 'SROTATION':
-            e['CLASS_CODE'] = CLASS_CODE_ROTATION
-        elif e['CLASS'] == 'HKICKER':
-            e['CLASS_CODE'] = CLASS_CODE_HKICKER
-        elif e['CLASS'] == 'VKICKER':
-            e['CLASS_CODE'] = CLASS_CODE_VKICKER
+        if e['CLASS'] not in CLASS_CODES:
+            e['CLASS_CODE'] = CLASS_CODES['NONE']
         else:
-            e['CLASS_CODE'] = CLASS_CODE_NONE
+            e['CLASS_CODE'] = CLASS_CODES[e['CLASS']]
         return e
 
     def apertype_conversion(e):
+        if 'APERTYPE' not in e.index.values:
+            e['APERTYPE_CODE'] = APERTYPE_CODE_NONE
+            e['APERTURE'] = 0.0
+            e['APERTURE_2'] = 0.0
+            return e
         if e['APERTYPE'] == 'CIRCLE':
             e['APERTYPE_CODE'] = APERTYPE_CODE_CIRCLE
         elif e['APERTYPE'] == 'RECTANGLE':
@@ -32,42 +25,32 @@ def convert_line(line, to_numpy=True):
         else:
             e['APERTYPE_CODE'] = APERTYPE_CODE_NONE
             e['APERTURE'] = 0.0
+            e['APERTURE_2'] = 0.0
         return e
+    # Create or copy missing columns
+    if 'CLASS' not in line and 'KEYWORD' in line:
+        line['CLASS'] = line['KEYWORD']
+    for i in INDEX.keys():
+        if i not in line:
+            line[i] = 0.0
+    # Perform the conversion
     line = line.apply(class_conversion, axis=1)
     line = line.apply(apertype_conversion, axis=1)
-    line = line.fillna(0.0) \
-               .query(
-        "CLASS == 'DRIFT' or "
-        "CLASS == 'SBEND' or "
-        "CLASS == 'QUADRUPOLE' or "
-        "CLASS == 'COLLIMATOR' or "
-        "CLASS == 'DEGRADER' or "
-        "CLASS == 'SROTATION' or "
-        "CLASS == 'HKICKER' or "
-        "CLASS == 'VKICKER'"
-    )
+    # Adjustments for the final format
+    line = line.fillna(0.0)# \
+               #.query(f"CLASS in {tuple(CLASS_CODES.keys())}")
     if to_numpy:
-        return line[[
-            'CLASS_CODE',
-            'LENGTH',
-            'K1',
-            'APERTYPE_CODE',
-            'APERTURE',
-            'ANGLE',
-            'APERTURE2',
-            'E1',
-            'E2'
-        ]].as_matrix()
+        return line[list(INDEX.keys())].as_matrix()
     else:
-        return line
+        return line[list(INDEX.keys())]
 
 
 def aperture_check(b, e):
     # Circular aperture
-    if e[3] == APERTYPE_CODE_CIRCLE:
+    if e[INDEX_APERTYPE_CODE] == APERTYPE_CODE_CIRCLE:
         s = (b[:, 0]**2 + b[:, 2]**2) < e[INDEX_APERTURE]**2
     # Rectangular aperture
-    elif e[3] == APERTYPE_CODE_RECTANGLE:
+    elif e[INDEX_APERTYPE_CODE] == APERTYPE_CODE_RECTANGLE:
         s = (b[:, 0]**2 < e[INDEX_APERTURE]**2) & (b[:, 2]**2 < e[INDEX_APERTURE_2]**2)
     # Unknown aperture type
     else:

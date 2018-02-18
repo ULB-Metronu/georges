@@ -1,50 +1,71 @@
 # Define constants for indexing in numpy arrays
-INDEX_CLASS_CODE = 0
-INDEX_L = 1
-INDEX_K1 = 2
-INDEX_APERTYPE_CODE = 3
-INDEX_APERTURE = 4
-INDEX_ANGLE = 5
-INDEX_APERTURE_2 = 6
-INDEX_E1 = 7
-INDEX_E2 = 8
-
-INDEX = {
-    'CLASS_CODE': 0,
-    'L': 1,
-    'K1': 2,
-    'APERTYPE_CODE': 3,
-    'APERTURE': 4,
-    'ANGLE': 5,
-    'APERTURE_2': 6,
-    'E1': 7,
-    'E2': 8,
-}
+INDEX = {k: i for i, k in enumerate(
+    (
+        'CLASS_CODE',
+        'LENGTH',
+        'ANGLE',
+        'E1',
+        'E2',
+        'K1',
+        'K2',
+        'K3',
+        'K4',
+        'APERTYPE_CODE',
+        'APERTURE',
+        'APERTURE_2',
+    )
+)}
+# For convenience
+INDEX_CLASS_CODE = INDEX['CLASS_CODE']
+INDEX_LENGTH = INDEX['LENGTH']
+INDEX_ANGLE = INDEX['ANGLE']
+INDEX_E1 = INDEX['E1']
+INDEX_E2 = INDEX['E2']
+INDEX_K1 = INDEX['K1']
+INDEX_K2 = INDEX['K2']
+INDEX_K3 = INDEX['K3']
+INDEX_K4 = INDEX['K4']
+INDEX_APERTYPE_CODE = INDEX['APERTYPE_CODE']
+INDEX_APERTURE = INDEX['APERTURE']
+INDEX_APERTURE_2 = INDEX['APERTURE_2']
 
 # Define constants for elements types
-CLASS_CODE_DRIFT = 0
-CLASS_CODE_SBEND = 1
-CLASS_CODE_QUADRUPOLE = 2
-CLASS_CODE_NONE = 3
-CLASS_CODE_DEGRADER = 4
-CLASS_CODE_ROTATION = 5
-CLASS_CODE_HKICKER = 6
-CLASS_CODE_VKICKER = 7
+CLASS_CODES = {k: i for i, k in enumerate(
+    (
+        'NONE',
+        'DRIFT',
+        'SBEND',
+        'QUADRUPOLE',
+        'SEXTUPOLE',
+        'OCTUPOLE',
+        'DECAPOLE',
+        'MULTIPOLE',
+        'ROTATION',
+        'HKICKER',
+        'VKICKER',
+        'DEGRADER',
+    )
+)}
 
+# Group elements in categories
 CLASS_CODE_MATRIX = [
-    CLASS_CODE_DRIFT,
-    CLASS_CODE_SBEND,
-    CLASS_CODE_QUADRUPOLE,
-    CLASS_CODE_ROTATION,
+    CLASS_CODES['DRIFT'],
+    CLASS_CODES['SBEND'],
+    CLASS_CODES['QUADRUPOLE'],
+    CLASS_CODES['ROTATION'],
 ]
 
 CLASS_CODE_KICK = [
-    CLASS_CODE_HKICKER,
-    CLASS_CODE_VKICKER,
-    CLASS_CODE_DEGRADER,
+    CLASS_CODES['SEXTUPOLE'],
+    CLASS_CODES['OCTUPOLE'],
+    CLASS_CODES['DECAPOLE'],
+    CLASS_CODES['MULTIPOLE'],
+    CLASS_CODES['HKICKER'],
+    CLASS_CODES['VKICKER'],
+    CLASS_CODES['DEGRADER'],
 ]
 
 # Define constants for aperture types
+APERTYPE_CODE_NONE = 0
 APERTYPE_CODE_CIRCLE = 1
 APERTYPE_CODE_RECTANGLE = 2
-APERTYPE_CODE_NONE = 3
