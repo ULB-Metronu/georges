@@ -11,7 +11,7 @@ The module is composed of:
 # Typical use case
 
 
-```
+```python
 import georges.fermi
 db = georges.fermi.MaterialsDB()
 georges.fermi.get_range_from_energy(material='water',
