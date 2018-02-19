@@ -387,9 +387,9 @@ class Madx(Simulator):
         # self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
-            if k not in ['ptc', 'start', 'line', 'ptc_params']:
+            if k not in ['ptc', 'start', 'line', 'ptc_params', 'context', 'debug']:
                 options += ",%s=%s" % (k, v)
-        if kwargs.get('line', False):
+        if kwargs.get('periodic', False):
             self._add_input('twiss', kwargs.get('file', 'twiss.outx'), options)
         else:
             self._add_input('twiss_beamline', kwargs.get('file', 'twiss.outx'), True, options)

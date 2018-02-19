@@ -79,7 +79,7 @@ def track(**kwargs):
     if len(errors) > 0:
         print(errors)
         raise TrackException("MAD-X ended with fatal error.")
-    if kwargs.get('ptc'):
+    if kwargs.get('ptc', True):
         madx_track = read_tracking(os.path.join(".", 'ptctrackone.tfs'))
     else:
         madx_track = read_tracking(os.path.join(".", 'tracking.outxone'))
