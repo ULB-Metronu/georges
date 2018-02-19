@@ -27,8 +27,8 @@ def tracking(ax, bl, **kwargs):
         '99%': 1000 * r['BEAM'].halo['99%'][plane],
         'mean': 1000 * r['BEAM'].mean[plane],
         'std': 1000 * r['BEAM'].std[plane],
-        'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] if 'BPM' in bl.line.columns else -10000.0,
-        'std_bpm_err': np.max([1.0, 1000 * r['BEAM'].std_bpm[plane][1] if 'BPM' in bl.line.columns else 0.0]),
+        'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] * int(pd.notnull(r['BPM'])) if 'BPM' in bl.line.columns else 0.0,
+        'std_bpm_err': np.max([1.0, 1000 * r['BEAM'].std_bpm[plane][1] * int(pd.notnull(r['BPM'])) if 'BPM' in bl.line.columns else 0.0]),
     }), axis=1)
 
     if t['S'].count == 0:
@@ -47,7 +47,9 @@ def tracking(ax, bl, **kwargs):
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
 
     if std_bpm:
-        ax.errorbar(t['S']- 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
+        # Adjustment to avoid plotting zero values where no BPM is present
+        t.loc[t.std_bpm == 0, 'std_bpm'] = -1000
+        ax.errorbar(t['S'] - 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
                     fmt='none',
                     elinewidth=2.0,
                     linewidth=0.0,
