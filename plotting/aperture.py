@@ -1,4 +1,5 @@
 import matplotlib
+import matplotlib.patches
 import numpy as np
 from .common import palette
 
