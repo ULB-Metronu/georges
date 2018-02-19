@@ -22,6 +22,10 @@ def convert_line(line, to_numpy=True):
             e['APERTYPE_CODE'] = APERTYPE_CODE_CIRCLE
         elif e['APERTYPE'] == 'RECTANGLE':
             e['APERTYPE_CODE'] = APERTYPE_CODE_RECTANGLE
+            s = e['APERTURE'].strip('[{}]').split(',')
+            e['APERTURE'] = float(s[0])
+            if len(s) > 1:
+                e['APERTURE_2'] = float(s[1])
         else:
             e['APERTYPE_CODE'] = APERTYPE_CODE_NONE
             e['APERTURE'] = 0.0
