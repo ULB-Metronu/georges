@@ -68,7 +68,7 @@ def orbit_length(r):
     """Try to compute the element's orbit length from other data."""
     if pd.isnull(r.get('LENGTH')) and pd.isnull(r.get('RHO')):
         return 0.0
-    if pd.isnull(r.get('ANGLE')):
+    if pd.isnull(r.get('ANGLE')) or r.get('ANGLE') == 0.0:
         # Straight element
         return r['LENGTH']
     if pd.isnull(r.get('RHO')):
