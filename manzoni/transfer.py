@@ -52,7 +52,7 @@ def bend(e, e1, e2):
     length = e[INDEX_LENGTH]
     e1 = e[INDEX_E1] + e1
     e2 = e[INDEX_E2] + e2
-    k_bend = (theta/length)**2
+    k_bend = theta/length
     k = np.sqrt(np.abs(k_bend + e[INDEX_K1]))
     k1 = np.sqrt(np.abs(e[INDEX_K1]))
     kl = k * length
@@ -76,16 +76,16 @@ def bend(e, e1, e2):
         m2 = [0, 1, 0, 0, s_dpp]
 
     # Vertical plane
-    if e[INDEX_K1] > 0:
+    if e[INDEX_K1] < 0:
         s = np.sin(k1l)
         c = np.cos(k1l)
-        m3 = [0, 0, c, (1 / k) * s, 0]
-        m4 = [0, 0, -k * s, c, 0]
-    elif e[INDEX_K1] < 0:
+        m3 = [0, 0, c, (1 / k1) * s, 0]
+        m4 = [0, 0, -k1 * s, c, 0]
+    elif e[INDEX_K1] > 0:
         sh = np.sinh(k1l)
         ch = np.cosh(k1l)
-        m3 = [0, 0, ch, (1 / k) * sh, 0]
-        m4 = [0, 0, k * sh, ch, 0]
+        m3 = [0, 0, ch, (1 / k1) * sh, 0]
+        m4 = [0, 0, k1 * sh, ch, 0]
     else:  # k1 == 0
         m3 = [0, 0, 1, length, 0]
         m4 = [0, 0, 0, 1, 0]
