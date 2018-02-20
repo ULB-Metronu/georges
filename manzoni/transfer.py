@@ -57,8 +57,8 @@ def bend(e, e1, e2):
     k1 = np.sqrt(np.abs(e[INDEX_K1]))
     kl = k * length
     k1l = k1 * length
-    s_dpp = np.sin(k_bend * length)
-    c_dpp = np.cos(k_bend * length)
+    s_dpp = np.sin(theta)
+    c_dpp = np.cos(theta)
 
     # Horizontal plane
     if k_bend + e[INDEX_K1] > 0:
@@ -67,11 +67,11 @@ def bend(e, e1, e2):
         m1 = [c, (1 / k) * s, 0, 0, (length / theta) * (1 - c_dpp)]
         m2 = [-k * s, c, 0, 0, s_dpp]
     elif k_bend + e[INDEX_K1] < 0:
-        s = np.sinh(kl)
-        c = np.cosh(kl)
-        m1 = [c, (1 / k) * s, 0, 0, (length / theta) * (1 - c_dpp)]
-        m2 = [-k * s, c, 0, 0, s_dpp]
-    else: # k_bend + e[INDEX_K1] == 0
+        sh = np.sinh(kl)
+        ch = np.cosh(kl)
+        m1 = [ch, (1 / k) * sh, 0, 0, (length / theta) * (1 - c_dpp)]
+        m2 = [k * sh, ch, 0, 0, s_dpp]
+    else:  # k_bend + e[INDEX_K1] == 0
         m1 = [1, length, 0, 0, (length / theta) * (1 - c_dpp)]
         m2 = [0, 1, 0, 0, s_dpp]
 
@@ -79,24 +79,24 @@ def bend(e, e1, e2):
     if e[INDEX_K1] > 0:
         s = np.sin(k1l)
         c = np.cos(k1l)
-        m3 = []
-        m4 = []
+        m3 = [0, 0, c, (1 / k) * s, 0]
+        m4 = [0, 0, -k * s, c, 0]
     elif e[INDEX_K1] < 0:
-        s = np.sinh(k1l)
-        c = np.cosh(k1l)
-        m3 = []
-        m4 = []
+        sh = np.sinh(k1l)
+        ch = np.cosh(k1l)
+        m3 = [0, 0, ch, (1 / k) * sh, 0]
+        m4 = [0, 0, k * sh, ch, 0]
     else:  # k1 == 0
         m3 = [0, 0, 1, length, 0]
         m4 = [0, 0, 0, 1, 0]
 
     # Construct 4D matrix
-    m_b = np.array([
+    m_b = np.stack([
         m1,
         m2,
         m3,
         m4,
-        [0, 0, 0, 0, 1]
+        [0, 0, 0, 0, 1],
     ])
 
     # Poleface angle
