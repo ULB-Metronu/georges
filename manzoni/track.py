@@ -22,14 +22,15 @@ def convert_line(line, to_numpy=True):
             e['APERTYPE_CODE'] = APERTYPE_CODE_CIRCLE
         elif e['APERTYPE'] == 'RECTANGLE':
             e['APERTYPE_CODE'] = APERTYPE_CODE_RECTANGLE
-            s = e['APERTURE'].strip('[{}]').split(',')
-            e['APERTURE'] = float(s[0])
-            if len(s) > 1:
-                e['APERTURE_2'] = float(s[1])
         else:
             e['APERTYPE_CODE'] = APERTYPE_CODE_NONE
             e['APERTURE'] = 0.0
             e['APERTURE_2'] = 0.0
+        if isinstance(e['APERTURE'], str):
+            s = e['APERTURE'].strip('[{}]').split(',')
+            e['APERTURE'] = float(s[0])
+            if len(s) > 1:
+                e['APERTURE_2'] = float(s[1])
         return e
     # Create or copy missing columns
     if 'CLASS' not in line and 'KEYWORD' in line:
@@ -91,6 +92,9 @@ def track(line, b, **kwargs):
     beams = []
     for i in range(0, line.shape[0]):
         if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
+            if line[i, INDEX_CLASS_CODE] == CLASS_CODES['DEGRADER']:
+                idx = np.random.randint(b.shape[0], size=int((1-kwargs.get('loss', 0))*b.shape[0]))
+                b = b[idx, :]
             offset = kick[int(line[i, INDEX_CLASS_CODE])](line[i], b.shape[0], **kwargs)
             b += offset
         elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:

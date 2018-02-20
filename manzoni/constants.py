@@ -35,6 +35,7 @@ CLASS_CODES = {k: i for i, k in enumerate(
         'NONE',
         'DRIFT',
         'SBEND',
+        'RBEND',
         'QUADRUPOLE',
         'SEXTUPOLE',
         'OCTUPOLE',
@@ -51,6 +52,7 @@ CLASS_CODES = {k: i for i, k in enumerate(
 CLASS_CODE_MATRIX = [
     CLASS_CODES['DRIFT'],
     CLASS_CODES['SBEND'],
+    CLASS_CODES['RBEND'],
     CLASS_CODES['QUADRUPOLE'],
     CLASS_CODES['ROTATION'],
 ]
