@@ -79,30 +79,29 @@ def adjust_line(line, variables, parameters):
     return line  # Check later if calling this function will create a copy
 
 
-def track(line, b, **kwargs):
+def track(line, b, turns=1, **kwargs):
     """
     Tracking through a linear beamline.
     Code optimized for performance.
     :param line: beamline description in Manzoni format
     :param b: initial beam
+    :param turns: number of tracking turns
     :param kwargs: optional parameters
     :return: a list of beams (beam tracked up to each element in the beamline)
     """
     beams = []
-    for i in range(0, line.shape[0]):
-        if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
-            if line[i, INDEX_CLASS_CODE] == CLASS_CODES['DEGRADER']:
-                idx = np.random.randint(b.shape[0], size=int((1-kwargs.get('loss', 0))*b.shape[0]))
-                b = b[idx, :]
-            offset = kick[int(line[i, INDEX_CLASS_CODE])](line[i], b.shape[0], **kwargs)
-            b += offset
-        elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
-            # Get the transfer matrix of the current element
-            matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
-            # For performance considerations, see
-            # https://stackoverflow.com/q/48474274/420892
-            # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
-            b = b.dot(matrix(line[i]).T)
-        b = aperture_check(b, line[i])
+    for j in range(0, turns):
+        for i in range(0, line.shape[0]):
+            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
+                offset = kick[int(line[i, INDEX_CLASS_CODE])](line[i], b, **kwargs)
+                b += offset
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
+                # Get the transfer matrix of the current element
+                matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
+                # For performance considerations, see
+                # https://stackoverflow.com/q/48474274/420892
+                # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
+                b = b.dot(matrix(line[i]).T)
+            b = aperture_check(b, line[i])
         beams.append(b.copy())
     return beams
