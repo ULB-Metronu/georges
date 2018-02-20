@@ -42,8 +42,7 @@ def convert_line(line, to_numpy=True):
     line = line.apply(class_conversion, axis=1)
     line = line.apply(apertype_conversion, axis=1)
     # Adjustments for the final format
-    line = line.fillna(0.0)# \
-               #.query(f"CLASS in {tuple(CLASS_CODES.keys())}")
+    line = line.fillna(0.0)
     if to_numpy:
         return line[list(INDEX.keys())].as_matrix()
     else:

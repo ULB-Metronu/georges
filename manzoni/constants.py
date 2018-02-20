@@ -13,6 +13,8 @@ INDEX = {k: i for i, k in enumerate(
         'APERTYPE_CODE',
         'APERTURE',
         'APERTURE_2',
+        'HGAP',
+        'FINT',
     )
 )}
 # For convenience
@@ -28,6 +30,8 @@ INDEX_K4 = INDEX['K4']
 INDEX_APERTYPE_CODE = INDEX['APERTYPE_CODE']
 INDEX_APERTURE = INDEX['APERTURE']
 INDEX_APERTURE_2 = INDEX['APERTURE_2']
+INDEX_HGAP = INDEX['HGAP']
+INDEX_FINT = INDEX['FINT']
 
 # Define constants for elements types
 CLASS_CODES = {k: i for i, k in enumerate(
