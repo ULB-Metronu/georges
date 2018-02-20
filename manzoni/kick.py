@@ -8,7 +8,7 @@ except ModuleNotFoundError:
     import numpy.random as nprandom
 
 
-def sextupole(e, n, **kwargs):
+def sextupole(e, b, **kwargs):
     return np.array(
         [
             0,
@@ -20,7 +20,7 @@ def sextupole(e, n, **kwargs):
     )
 
 
-def octupole(e, n, **kwargs):
+def octupole(e, b, **kwargs):
     return np.array(
         [
             0,
@@ -32,7 +32,7 @@ def octupole(e, n, **kwargs):
     )
 
 
-def decapole(e, n, **kwargs):
+def decapole(e, b, **kwargs):
     return np.array(
         [
             0,
@@ -44,7 +44,7 @@ def decapole(e, n, **kwargs):
     )
 
 
-def multipole(e, n, **kwargs):
+def multipole(e, b, **kwargs):
     return np.array(
         [
             0,
@@ -56,7 +56,7 @@ def multipole(e, n, **kwargs):
     )
 
 
-def hkicker(e, n, **kwargs):
+def hkicker(e, b, **kwargs):
     return np.array(
         [
             0,
@@ -68,7 +68,7 @@ def hkicker(e, n, **kwargs):
     )
 
 
-def vkicker(e, n, **kwargs):
+def vkicker(e, b, **kwargs):
     return np.array(
         [
             0,
@@ -80,11 +80,15 @@ def vkicker(e, n, **kwargs):
     )
 
 
-def degrader(e, n, **kwargs):
+def degrader(e, b, **kwargs):
     s11 = kwargs.get('deg', {}).get('A', [0, 0, 0])[0]
     s12 = kwargs.get('deg', {}).get('A', [0, 0, 0])[1]
     s22 = kwargs.get('deg', {}).get('A', [0, 0, 0])[2]
     dpp = kwargs.get('deg', {}).get('DPP', 0)
+
+    # Remove particles
+    idx = np.random.randint(b.shape[0], size=int((1 - kwargs.get('loss', 0)) * b.shape[0]))
+    b = b[idx, :]
 
     return nprandom.multivariate_normal(
         [0.0, 0.0, 0.0, 0.0, 0.0], np.array(
@@ -95,7 +99,7 @@ def degrader(e, n, **kwargs):
                 [0, 0, s12, s22, 0],
                 [0, 0, 0, 0, dpp]
             ]),
-        int(n))
+        int(b.shape[0]))
 
 
 kick = {
