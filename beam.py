@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import pandas.core.common
 import numpy as np
@@ -29,9 +30,10 @@ class Beam:
             - energy:
         """
 
-        self.__distribution = kwargs.get('distribution', None)
-        if len(args) >= 1:
-            self.__initialize_distribution(args[0])
+        if kwargs.get('distribution') is  None:
+            self.__initialize_distribution(*args, **kwargs)
+        else:
+            self.__distribution = kwargs['distribution']
 
         self.__particle = kwargs.get('particle', 'proton')
         if self.__particle not in PARTICLE_TYPES:
@@ -216,22 +218,24 @@ class Beam:
             raise BeamException("Trying to access an invalid data from a beam.")
         return self.__distribution[item]
 
-    def from_file(self, filename):
-        """TODO"""
-        print('Open file : ', filename)
-        # beam=
+    @staticmethod
+    def from_file(filename, path=None):
+        """"""
+        if path is not None:
+            f = os.path.join(path, filename)
+        else:
+            f = filename
+        return pd.read_csv(f)
 
-        return self
-
-    def __initialize_distribution(self, distribution, **kwargs):
+    def __initialize_distribution(self, *args, **kwargs):
         """Try setting the internal pandas.DataFrame with a distribution."""
         try:
-            self.__distribution = pd.DataFrame(distribution)
-        except pd.core.common.PandasError:
-            if kwargs.get("filename"):
-                self._from_file(kwargs.get("filename"))
+            self.__distribution = pd.DataFrame(args[0])
+        except (IndexError, ValueError):
+            if kwargs.get("filename") is not None:
+                self.__distribution = Beam.from_file(kwargs.get('filename'), path=kwargs.get('path'))
             else:
-                raise BeamException("Trying to initialize a beam from an invalid type.")
+                return
         self.__n_particles = self.__distribution.shape[0]
         self.__dims = self.__distribution.shape[1]
         if self.__dims < 2 or self.__dims > 6:
