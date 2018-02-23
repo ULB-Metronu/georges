@@ -6,6 +6,8 @@ from .constants import *
 
 def convert_line(line, to_numpy=True):
     def class_conversion(e):
+        #if e['CLASS'] in ('RFCAVITY', 'HKICKER'):
+        #    e['CLASS_CODE'] = CLASS_CODES['DRIFT']
         if e['CLASS'] not in CLASS_CODES:
             e['CLASS_CODE'] = CLASS_CODES['NONE']
         else:
@@ -103,5 +105,5 @@ def track(line, b, turns=1, **kwargs):
                 # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
                 b = b.dot(matrix(line[i]).T)
             b = aperture_check(b, line[i])
-        beams.append(b.copy())
+            beams.append(b.copy())
     return beams

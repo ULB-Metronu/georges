@@ -44,7 +44,7 @@ def bend(e, e1, e2):
         return drift(e)
 
     # Special case of a quadrupole
-    if e[INDEX_ANGLE] == 0 and e[INDEX_K1] !=0:
+    if e[INDEX_ANGLE] == 0 and e[INDEX_K1] != 0:
         return quadrupole(e)
 
     # Definition of the main variables
@@ -52,7 +52,7 @@ def bend(e, e1, e2):
     length = e[INDEX_LENGTH]
     e1 = e[INDEX_E1] + e1
     e2 = e[INDEX_E2] + e2
-    k_bend = theta/length
+    k_bend = (theta/length)**2
     k = np.sqrt(np.abs(k_bend + e[INDEX_K1]))
     k1 = np.sqrt(np.abs(e[INDEX_K1]))
     kl = k * length
