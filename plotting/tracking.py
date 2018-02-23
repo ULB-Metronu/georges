@@ -19,14 +19,12 @@ def tracking(ax, bl, **kwargs):
 
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
         'S': r['AT_CENTER'],
-        '1%': 1000 * r['BEAM'].halo['1%'][plane],
-        '5%': 1000 * r['BEAM'].halo['5%'][plane],
-        '20%': 1000 * r['BEAM'].halo['20%'][plane],
-        '80%': 1000 * r['BEAM'].halo['80%'][plane],
-        '95%': 1000 * r['BEAM'].halo['95%'][plane],
-        '99%': 1000 * r['BEAM'].halo['99%'][plane],
-        'mean': 1000 * r['BEAM'].mean[plane],
-        'std': 1000 * r['BEAM'].std[plane],
+        '1%': 1000 * r['BEAM'].halo['1%'][plane] if halo_99 else 0.0,
+        '5%': 1000 * r['BEAM'].halo['5%'][plane] if halo else 0.0,
+        '95%': 1000 * r['BEAM'].halo['95%'][plane] if halo else 0.0,
+        '99%': 1000 * r['BEAM'].halo['99%'][plane] if halo_99 else 0.0,
+        'mean': 1000 * r['BEAM'].mean[plane] if mean else 0.0,
+        'std': 1000 * r['BEAM'].std[plane] if std else 0.0,
         'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] * int(pd.notnull(r['BPM'])) if 'BPM' in bl.line.columns else 0.0,
         'std_bpm_err': np.max([1.0, 1000 * r['BEAM'].std_bpm[plane][1] * int(pd.notnull(r['BPM'])) if 'BPM' in bl.line.columns else 0.0]),
     }), axis=1)
