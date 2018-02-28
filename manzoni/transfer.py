@@ -16,6 +16,11 @@ def rotation(e):
 
 
 def drift(e):
+    """
+    Transfer matrix of a drift.
+    :param e: element definition
+    :return: a numpy array representing the 5D transfer matrix
+    """
     length = e[INDEX_LENGTH]
     return np.array(
         [
@@ -29,16 +34,31 @@ def drift(e):
 
 
 def rbend(e):
+    """
+    Transfer matrix of a rectangular bend (RBEND); a bend with pole-face angle.
+    :param e: element definition
+    :return: a numpy array representing the 5D transfer matrix
+    """
     return bend(e, e[INDEX_ANGLE]/2, e[INDEX_ANGLE]/2)
 
 
 def sbend(e):
+    """
+    Transfer matrix of a sector bend (SBEND); a bend with no pole-face angle.
+    :param e: element definition
+    :return: a numpy array representing the 5D transfer matrix
+    """
     return bend(e, 0, 0)
 
 
 def bend(e, e1, e2):
-    # http://laacg.lanl.gov/laacg/services/traceman.pdf
-
+    """
+    Transfer matrix of a generic bend. Pole-face angles are optional.
+    :param e: element definition
+    :param e1: entrance pole-face angle (added to the element pole-face angle)
+    :param e2: exit pole-face angle (added to the element pole-face angle)
+    :return: a numpy array representing the 5D transfer matrix
+    """
     # Special case of a drift
     if e[INDEX_ANGLE] == 0 and e[INDEX_K1] == 0:
         return drift(e)
@@ -133,9 +153,14 @@ def bend(e, e1, e2):
 
 
 def quadrupole(e):
+    """
+    Quadrupole transfer matrix of an element.
+    :param e: element definition
+    :return: a numpy array representing the 5D transfer matrix
+    """
     length = e[INDEX_LENGTH]
     k = e[INDEX_K1]
-    if k > 0:
+    if k > 0:  # Focusing quadrupole
         k = np.sqrt(k)
         kl = k * length
         s = np.sin(kl)
@@ -150,7 +175,7 @@ def quadrupole(e):
                 [0, 0, k * sh, ch, 0],
                 [0, 0, 0, 0, 1]
             ])
-    elif k < 0:
+    elif k < 0:  # Defocusing quadrupole
         k *= -1
         k = np.sqrt(k)
         kl = k * length
@@ -166,8 +191,8 @@ def quadrupole(e):
                 [0, 0, -k * s, c, 0],
                 [0, 0, 0, 0, 1]
             ])
-    else:
-        return np.eye(5)
+    else:  # Zero strengths, this is a drift
+        return drift(e)
 
 
 transfer = {

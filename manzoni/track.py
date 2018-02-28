@@ -100,8 +100,8 @@ def track(line, b, turns=1, **kwargs):
     for j in range(0, turns):
         for i in range(0, line.shape[0]):
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
-                offset = kick[int(line[i, INDEX_CLASS_CODE])](line[i], b, **kwargs)
-                b += offset
+                # In place operation
+                kick[int(line[i, INDEX_CLASS_CODE])](line[i], b, **kwargs)
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
                 # Get the transfer matrix of the current element
                 matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
