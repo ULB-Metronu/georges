@@ -1,3 +1,4 @@
+import torch
 import numpy as np
 from .transfer import transfer
 from .kick import kick
@@ -15,11 +16,13 @@ def convert_line(line, to_numpy=True):
         return e
 
     def apertype_conversion(e):
+        # Default aperture
         if 'APERTYPE' not in e.index.values:
             e['APERTYPE_CODE'] = APERTYPE_CODE_NONE
             e['APERTURE'] = 0.0
             e['APERTURE_2'] = 0.0
             return e
+        # Aperture types
         if e['APERTYPE'] == 'CIRCLE':
             e['APERTYPE_CODE'] = APERTYPE_CODE_CIRCLE
         elif e['APERTYPE'] == 'RECTANGLE':
@@ -28,6 +31,7 @@ def convert_line(line, to_numpy=True):
             e['APERTYPE_CODE'] = APERTYPE_CODE_NONE
             e['APERTURE'] = 0.0
             e['APERTURE_2'] = 0.0
+        # Aperture sizes
         if isinstance(e['APERTURE'], str):
             s = e['APERTURE'].strip('[{}]').split(',')
             e['APERTURE'] = float(s[0])
@@ -92,6 +96,7 @@ def track(line, b, turns=1, **kwargs):
     :return: a list of beams (beam tracked up to each element in the beamline)
     """
     beams = []
+    #b = torch.DoubleTensor()
     for j in range(0, turns):
         for i in range(0, line.shape[0]):
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:

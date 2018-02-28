@@ -12,5 +12,8 @@
   </component>
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pybdsim" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pymadx" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/pytransport" vcs="Git" />
   </component>
 </project>
