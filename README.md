@@ -12,6 +12,10 @@ Beamlines are loaded, converted (if necessary) and then transformed using functi
  
 Support tools are also provided, notably a plotting library (entirely based on *Matplotlib*) which provides plotting capabilities for various optics computation (beam envelope, Twiss parameters, etc.).
 
+## Dependencies
+
+Pandas >= 0.21 required.
+
 ## Usage
 No attempt is made to support python versions earlier than CPython 3.5. Jython and alternative implementation have not been tested.
 
