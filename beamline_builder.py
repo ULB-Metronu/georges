@@ -61,7 +61,7 @@ class BeamlineBuilder:
         if prefix is not None:
             self.__prefix = prefix
         self.__name = '_'.join(names).upper()
-        files = [os.path.splitext(n)[0] + '.' + (os.path.splitext(n)[1] or DEFAULT_EXTENSION) for n in names]
+        files = [os.path.splitext(n)[0] + (os.path.splitext(n)[1] or f".{DEFAULT_EXTENSION}") for n in names]
         sequences = [
             pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep) for f in files
         ]
@@ -76,9 +76,9 @@ class BeamlineBuilder:
     def add_from_file(self, file, path=None, prefix=None, sep=','):
         return self.add_from_files([file], path, prefix, sep=sep)
 
-    def add_from_survey_file(self, file, sep=','):
+    def add_from_survey_file(self, file, path=None, prefix=None, sep=','):
         self.__from_survey = True
-        return self.add_from_survey_files([file], sep=sep)
+        return self.add_from_survey_files([file], path, prefix, sep=sep)
 
     def define_elements(self, e):
         """Process the elements description argument."""

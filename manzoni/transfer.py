@@ -197,6 +197,7 @@ def quadrupole(e):
 
 transfer = {
     CLASS_CODES['DRIFT']: drift,
+    CLASS_CODES['COLLIMATOR']: drift,
     CLASS_CODES['SBEND']: sbend,
     CLASS_CODES['RBEND']: rbend,
     CLASS_CODES['QUADRUPOLE']: quadrupole,

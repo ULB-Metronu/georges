@@ -38,6 +38,7 @@ CLASS_CODES = {k: i for i, k in enumerate(
     (
         'NONE',
         'DRIFT',
+        'COLLIMATOR',
         'SBEND',
         'RBEND',
         'QUADRUPOLE',
