@@ -111,6 +111,6 @@ def track(line, b, turns=1, **kwargs):
                 # https://stackoverflow.com/q/48474274/420892
                 # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
                 b = b.dot(matrix(line[i]).T)
-            b = aperture_check(b, line[i])
+            #b = aperture_check(b, line[i])
             beams.append(b.copy())
     return beams
