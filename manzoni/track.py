@@ -99,8 +99,6 @@ def track(line, b, turns=1, **kwargs):
     #b = torch.DoubleTensor()
     for j in range(0, turns):
         for i in range(0, line.shape[0]):
-            b = aperture_check(b, line[i])
-
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
                 # In place operation
                 kick[int(line[i, INDEX_CLASS_CODE])](line[i], b, **kwargs)
@@ -111,6 +109,6 @@ def track(line, b, turns=1, **kwargs):
                 # https://stackoverflow.com/q/48474274/420892
                 # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
                 b = b.dot(matrix(line[i]).T)
-            #b = aperture_check(b, line[i])
+            b = aperture_check(b, line[i])
             beams.append(b.copy())
     return beams
