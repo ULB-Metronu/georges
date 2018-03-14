@@ -121,7 +121,9 @@ def sequence_to_bdsim(sequence, **kwargs):
         if (element['TYPE'] == 'DRIFT' and element['PIPE'] is False) or element['TYPE'] == 'GAP':
             m.AddGap(index, element['LENGTH'])
         if element['TYPE'] == 'QUADRUPOLE':
-            m.AddQuadrupole(index, element['LENGTH'], k1=context.get(f"{index}_K1", 0.0))
+            # Add two quadrupole with same k1 but different length to have a sampler inside
+            m.AddQuadrupole(index+"_1", 0.5*element['LENGTH'], k1=context.get(f"{index}_K1", 0.0))
+            m.AddQuadrupole(index+"_2", 0.5*element['LENGTH'], k1=context.get(f"{index}_K1", 0.0))
         if element['TYPE'] == 'SEXTUPOLE':
             m.AddSextupole(index, element['LENGTH'], k2=context.get(f"{index}_K2", 0.0))
         if element['TYPE'] == 'OCTUPOLE':
@@ -146,23 +148,35 @@ def sequence_to_bdsim(sequence, **kwargs):
             m.AddGap(f"{index}_GAP", element['LENGTH'])
             m.AddPlacement(
                 index,
-                geometryFile=element['SOLIDS_FILE'],
+                geometryFile=context.get(f"{index}_file"),
                 x=0.0,
                 y=-0.229,
-                z=element['AT_CENTER']-50/1000,
+                z=element['AT_CENTER']-50/1000,  # A corriger pour etre plus générique
                 phi=0.0,
-                psi=np.deg2rad(30),
-                theta=np.deg2rad(90)
+                psi=context.get(f"{index}_psi", 0.0),
+                theta=context.get(f"{index}_theta", np.deg2rad(90.0))
             )
         if element['TYPE'] == "SBEND":
-            m.AddDipole(
-                index,
-                'sbend',
-                element['LENGTH'],
-                angle=element['ANGLE'],
-                e1=element['E1'],
-                e2=element['E2']
-            )
+
+            if context.get(f"{index}_B") is not None: # add functionnality inside BDsim
+                m.AddDipole(
+                    index,
+                    'sbend',
+                    element['LENGTH'],
+                    b=context.get(f"{index}_B"),
+                    angle=element['ANGLE'],
+                    e1=element['E1'],
+                    e2=element['E2']
+                )
+            else:
+                m.AddDipole(
+                    index,
+                    'sbend',
+                    element['LENGTH'],
+                    angle=element['ANGLE'],
+                    e1=element['E1'],
+                    e2=element['E2']
+                )
     m.AddSampler("all")
     return m
 
