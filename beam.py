@@ -30,7 +30,7 @@ class Beam:
             - energy:
         """
 
-        if kwargs.get('distribution') is  None:
+        if kwargs.get('distribution') is None:
             self.__initialize_distribution(*args, **kwargs)
         else:
             self.__distribution = kwargs['distribution']
@@ -119,9 +119,11 @@ class Beam:
             'beta_x': s11 / self.emit['X'],
             'alpha_x': -s12 / self.emit['X'],
             'gamma_x': s22 / self.emit['X'],
+            'phi_x': np.arctan(-2*s12/(s22-s11)),
             'beta_y': s33 / self.emit['Y'],
             'alpha_y': -s34 / self.emit['Y'],
             'gamma_y': s44 / self.emit['Y'],
+            'phi_y': np.arctan(-2*s34/(s44-s33)),
         }
 
     @property
@@ -131,7 +133,7 @@ class Beam:
         dpp = (self['P0'] - self['DPP']) / self['P0']
         return {
             'mean_dpp': dpp.mean(),
-            'std_dpp':dpp.std()
+            'std_dpp': dpp.std()
         }
 
     @property
