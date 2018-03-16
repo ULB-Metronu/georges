@@ -132,7 +132,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                       xsize=float(element['APERTURE']),
                       ysize=float(element['APERTURE']),
                       material='Copper',
-                     )
+                      )
         if element['TYPE'] == "SLITS":
             m.AddRCol(index,
                       element['LENGTH'],
