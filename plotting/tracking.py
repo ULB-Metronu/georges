@@ -39,9 +39,9 @@ def tracking(ax, bl, **kwargs):
         filled_plot(ax, t['S'], t['mean'] - t['std'], t['mean'] + t['std'], palette[plane], True, alpha=0.3)
 
     if std:
-        ax.plot(t['S'], t['mean'] + t['std'], '^-', color=palette[plane],
+        ax.plot(t['S'], t['mean'] + t['std'], '^-', color=palette[kwargs.get('palette')],
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
-        ax.plot(t['S'], t['mean'] - t['std'], 'v-', color=palette[plane],
+        ax.plot(t['S'], t['mean'] - t['std'], 'v-', color=palette[kwargs.get('palette')],
                 markeredgecolor=palette[plane], markersize=2, linewidth=1)
 
     if std_bpm:
