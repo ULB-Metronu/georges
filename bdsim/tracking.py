@@ -61,53 +61,35 @@ def track(**kwargs):
     line = kwargs.get('line', None)
     b = kwargs.get('beam', None)
     context = kwargs.get('context', None)
+    options = kwargs.get('options', None)
 
     if line is None or b is None or context is None:
         raise TrackException("Beamline, Beam, Context and BDsim objects need to be defined.")
+
+    if options is None:
+        print("Warning : no options is provided")
 
     bd = BDSim(beamlines=[line], **kwargs)
 
     # Write the input file for bdsim
     bd_beam = b.distribution.copy()
     p0 = physics.energy_to_momentum(b.energy)
+    bd.track(bd_beam, p0)
+
+    # Add options for Bdsim
+    bd.set_options(options)
 
     # Run bdsim
-    bd.track(bd_beam, p0)
     errors = bd.run(**kwargs).fatals
-
 
     # Create a new beamline to include the results
     l = line.line.copy()
 
     # Open the ROOT file and get the events
- #   f = ROOT.TFile('output.root')
- #   evttree = f.Get("Event")
-
-    # Add columns which contains datas
-    #l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree), axis=1)
-
-#    return beamline.Beamline(l)
-
-    # l.apply(lambda g:
-    #         os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
-    #         axis=1)
-
-    # Run G4Beamline
-    #bd.track(round(g4_beam, 5))
-    #errors = bd.run(**kwargs).fatals
-
-    #if kwargs.get("debug", False):
-    #    print(g4.raw_input)
-    #    print(g4.input)
-    #if len(errors) > 0:
-    #    print(errors)
-    #    # raise TrackException("G4Beamline ended with fatal error.")
-
-    # Add columns which contains datas
-    #l['BEAM'] = l.apply(lambda g: read_g4beamline_tracking('Detector' + g.name + '.txt'), axis=1)
-    #l.apply(lambda g:
-     #       os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
-     #       axis=1)
-
-    #return beamline.Beamline(l)
-
+    f = ROOT.TFile('output.root')
+    evttree = f.Get("Event")
+    #
+    # # Add columns which contains datas
+    l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree), axis=1)
+    #
+    return beamline.Beamline(l)
