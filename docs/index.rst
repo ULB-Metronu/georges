@@ -11,6 +11,9 @@ Georges's documentation
    :caption: Contents:
 
    readme
+   introduction
+   authorship
+   installation
 
 
 Indices and tables
