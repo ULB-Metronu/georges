@@ -215,6 +215,20 @@ class BDSim(Simulator):
             print(self._output)
         return self
 
+    def track(self, particles, p0):
+        if len(particles) == 0:
+            print("No particles to track... Doing nothing.")
+            return
+
+        particles['E'] = p0 * (particles['DPP'] + 1)
+        particles.to_csv('input_beam.dat', header=None,
+                         index=False,
+                         sep='\t',
+                         columns=['X', 'PX', 'Y', 'PY', 'E'])
+
+        # Add the beam to the simulation
+        self.beam_from_file('input_beam.dat')
+
     def add_options(self, **kwargs):
         for k, v in kwargs.items():
             self.add_option(k, v)
