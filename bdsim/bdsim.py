@@ -122,8 +122,7 @@ def sequence_to_bdsim(sequence, **kwargs):
             m.AddGap(index, element['LENGTH'])
         if element['TYPE'] == 'QUADRUPOLE':
             # Add two quadrupole with same k1 but different length to have a sampler inside
-            m.AddQuadrupole(index+"_1", 0.5*element['LENGTH'], k1=context.get(f"{index}_K1", 0.0))
-            m.AddQuadrupole(index+"_2", 0.5*element['LENGTH'], k1=context.get(f"{index}_K1", 0.0))
+            m.AddQuadrupole(index, element['LENGTH'], k1=context.get(f"{index}_K1", 0.0))
         if element['TYPE'] == 'SEXTUPOLE':
             m.AddSextupole(index, element['LENGTH'], k2=context.get(f"{index}_K2", 0.0))
         if element['TYPE'] == 'OCTUPOLE':
