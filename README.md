@@ -54,7 +54,7 @@ You can run a container with
 docker run -it username/georges
 ```
 
-then connect to [http://localhost:8888](http://localhost:8888 "Jupyter Notebook") to access the Jupyter Notebook interface.
+then connect to [http://localhost:8888](http://localhost:8888) to access the Jupyter Notebook interface.
 
 The image includes a complete Anaconda Python3 environment with the most common packages. 
 The latest *MAD-X* development release is available in */usr/local/bin/madx*.

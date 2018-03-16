@@ -59,6 +59,13 @@ def vkicker(e, b, **kwargs):
     )
 
 
+def scatterer(e, b, **kwargs):
+    s22 = e[INDEX_SCATTERING_ANGLE]
+    b[:, 1] += np.random.normal(0.0, s22, int(b.shape[0]))
+    b[:, 3] += np.random.normal(0.0, s22, int(b.shape[0]))
+    return b
+
+
 def degrader(e, b, **kwargs):
     s11 = kwargs.get('deg', {}).get('A', [0, 0, 0])[0]
     s12 = kwargs.get('deg', {}).get('A', [0, 0, 0])[1]
