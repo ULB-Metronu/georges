@@ -151,8 +151,8 @@ def sequence_to_bdsim(sequence, **kwargs):
                 y=-0.229,
                 z=element['AT_CENTER']-50/1000,
                 phi=0.0,
-                psi=np.deg2rad(context.get(f"{index}_psi", 0)),
-                theta=np.deg2rad(context.get(f"{index}_theta", 90))
+                psi=context.get(f"{index}_psi", 0.0),
+                theta=context.get(f"{index}_theta", np.deg2rad(90.0))
             )
         if element['TYPE'] == "SBEND":
             m.AddDipole(
