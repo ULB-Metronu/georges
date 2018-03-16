@@ -65,20 +65,28 @@ def track(**kwargs):
     if line is None or b is None or context is None:
         raise TrackException("Beamline, Beam, Context and BDsim objects need to be defined.")
 
-    print(context)
     bd = BDSim(beamlines=[line], **kwargs)
+
+    # Write the input file for bdsim
+    bd_beam = b.distribution.copy()
+    p0 = physics.energy_to_momentum(b.energy)
+
+    # Run bdsim
+    bd.track(bd_beam, p0)
+    errors = bd.run(**kwargs).fatals
+
 
     # Create a new beamline to include the results
     l = line.line.copy()
 
     # Open the ROOT file and get the events
-    f = ROOT.TFile('output.root')
-    evttree = f.Get("Event")
+ #   f = ROOT.TFile('output.root')
+ #   evttree = f.Get("Event")
 
     # Add columns which contains datas
-    l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree), axis=1)
+    #l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree), axis=1)
 
-    return beamline.Beamline(l)
+#    return beamline.Beamline(l)
 
     # l.apply(lambda g:
     #         os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
