@@ -7,7 +7,7 @@ from ..simulator import SimulatorException
 from ..lib.pybdsim import pybdsim
 from .. import physics
 
-INPUT_FILENAME = 'input.bdsim'
+INPUT_FILENAME = 'input.gmad'
 
 SUPPORTED_OPTIONS = [
             'beampipeRadius',
@@ -186,21 +186,26 @@ class BDSim(Simulator):
         self._bdsim_machine = None
         self._bdsim_options = pybdsim.Options.Options()
         self._exec = BDSim.EXECUTABLE_NAME
+        self._nparticles = 0
         super().__init__(**kwargs)
 
     def _attach(self, beamline):
         super()._attach(beamline)
         if beamline.length is None or pd.isnull(beamline.length):
             raise SimulatorException("Beamline length not defined.")
-        self._bdsim_machine = sequence_to_bdsim(beamline.line)
+        self._bdsim_machine = sequence_to_bdsim(beamline.line, context=self._context)
 
     def run(self, **kwargs):
         """Run bdsim as a subprocess."""
 
-        if self._get_exec() is None:
-            raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+        # Write the file
+        self._bdsim_machine.Write(INPUT_FILENAME)
 
-        p = sub.Popen(f"{self._get_exec()} --file={INPUT_FILENAME}",
+        # not working for the time not self_exec ?
+        # if self._get_exec() is None:
+        #    raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+
+        p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={INPUT_FILENAME} --batch --ngenerate={self._nparticles} --outfile=output",
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
@@ -220,14 +225,19 @@ class BDSim(Simulator):
             print("No particles to track... Doing nothing.")
             return
 
-        particles['E'] = p0 * (particles['DPP'] + 1)
+        particles['E'] = physics.momentum_to_energy(p0 * (particles['DPP'] + 1))
+        particles['E'] = (particles['E']+physics.PROTON_MASS)/1000  # total energy in GeV
         particles.to_csv('input_beam.dat', header=None,
                          index=False,
                          sep='\t',
                          columns=['X', 'PX', 'Y', 'PY', 'E'])
 
         # Add the beam to the simulation
-        self.beam_from_file('input_beam.dat')
+        self.beam_from_file(physics.momentum_to_energy(p0), 'input_beam.dat')
+        self._nparticles = len(particles)
+
+    def set_options(self, options):
+        self._bdsim_machine.AddOptions(options)
 
     def add_options(self, **kwargs):
         for k, v in kwargs.items():
@@ -239,12 +249,12 @@ class BDSim(Simulator):
         # Ugly way to get the first letter capitalized...
         getattr(self._bdsim_options, f"Set{key[0].upper() + key[1:] }")(value)
 
-    def beam_from_file(self, beam_file, **kwargs):
+    def beam_from_file(self, initial_energy, beam_file, **kwargs):
         b = pybdsim.Beam.Beam(
             particletype=kwargs.get('particletype', 'proton'),
-            energy=kwargs.get('energy', physics.PROTON_MASS/1000),
+            energy=kwargs.get('energy', (initial_energy+physics.PROTON_MASS)/1000),
             distrtype='userfile',
             distrFile=f"\"{beam_file}\"",
-            distrFileFormat='"x[m]:xp[rad]:y[m]:yp[rad]:E[MeV]"'
+            distrFileFormat='"x[m]:xp[rad]:y[m]:yp[rad]:E[GeV]"'
         )
         self._bdsim_machine.AddBeam(b)
