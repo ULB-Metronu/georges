@@ -1,9 +1,13 @@
 import os, re, io
 import pandas as pd
+import numpy as np
+import ROOT
+import root_numpy
 from .. import beamline
 from .. import beam
 from .bdsim import BDSim
 from .. import physics
+
 
 class TrackException(Exception):
     """Exception raised for errors in the Track module."""
@@ -12,9 +16,39 @@ class TrackException(Exception):
         self.message = m
 
 
-def read_tracking(file):
+def convert_array(data_frame, element):  # A mettre sous une meilleure forme
+
+    new_df = pd.DataFrame()
+    new_idx = 0
+    for index, line in data_frame.iterrows():
+
+        if np.size(line[element + ".x"]) > 0:
+            new_df.at[new_idx, "X"] = line[element + ".x"][0]
+            new_df.at[new_idx, "Y"] = line[element + ".y"][0]
+            new_df.at[new_idx, "PX"] = line[element + ".xp"][0]
+            new_df.at[new_idx, "PY"] = line[element + ".yp"][0]
+            new_df.at[new_idx, "ENERGY"] = 1000 * (line[element + ".energy"][0] - 0.938)
+            new_df.at[new_idx, "PARENTID"] = line[element + ".parentID"][0]
+            new_idx += 1
+
+    new_df['P'] = physics.energy_to_momentum(new_df['ENERGY'])
+    return new_df
+
+
+def read_tracking(element, evttree):
     """Read a BDSIM Tracking 'one' file to a dataframe."""
-    # TO DO
+
+    if element['TYPE'] not in ['MARKER', 'SOLIDS']:
+        data_element = root_numpy.tree2array(evttree, branches=[element.name + ".x",
+                                                                element.name + ".y",
+                                                                element.name + ".xp",
+                                                                element.name + ".yp",
+                                                                element.name + ".energy",
+                                                                element.name + ".parentID"])
+        df = pd.DataFrame(data=data_element)
+        corrected_df = convert_array(df, element.name)
+        tmp = beam.Beam(corrected_df[['X', 'PX', 'Y', 'PY', 'P']])
+        return tmp
 
 
 def track(**kwargs):
@@ -36,6 +70,19 @@ def track(**kwargs):
 
     # Create a new beamline to include the results
     l = line.line.copy()
+
+    # Open the ROOT file and get the events
+    f = ROOT.TFile('output.root')
+    evttree = f.Get("Event")
+
+    # Add columns which contains datas
+    l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree), axis=1)
+
+    return beamline.Beamline(l)
+
+    # l.apply(lambda g:
+    #         os.remove('Detector' + g.name + '.txt') if os.path.isfile('Detector' + g.name + '.txt') else None,
+    #         axis=1)
 
     # Run G4Beamline
     #bd.track(round(g4_beam, 5))
