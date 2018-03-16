@@ -15,6 +15,11 @@ INDEX = {k: i for i, k in enumerate(
         'APERTURE_2',
         'HGAP',
         'FINT',
+        'FE_A0',
+        'FE_A1',
+        'FE_A2',
+        'FE_DPP',
+        'FE_LOSS',
     )
 )}
 # For convenience
@@ -32,12 +37,18 @@ INDEX_APERTURE = INDEX['APERTURE']
 INDEX_APERTURE_2 = INDEX['APERTURE_2']
 INDEX_HGAP = INDEX['HGAP']
 INDEX_FINT = INDEX['FINT']
+INDEX_FE_A0 = INDEX['FE_A0']
+INDEX_FE_A1 = INDEX['FE_A1']
+INDEX_FE_A2 = INDEX['FE_A2']
+INDEX_FE_DPP = INDEX['FE_DPP']
+INDEX_FE_LOSS = INDEX['FE_LOSS']
 
 # Define constants for elements types
 CLASS_CODES = {k: i for i, k in enumerate(
     (
         'NONE',
         'DRIFT',
+        'COLLIMATOR',
         'SBEND',
         'RBEND',
         'QUADRUPOLE',
@@ -51,13 +62,18 @@ CLASS_CODES = {k: i for i, k in enumerate(
         'DEGRADER',
     )
 )}
+print(CLASS_CODES)
 
 # Group elements in categories
 CLASS_CODE_MATRIX = [
     CLASS_CODES['DRIFT'],
+    CLASS_CODES['COLLIMATOR'],
+    CLASS_CODES['QUADRUPOLE'],
+]
+
+CLASS_CODE_MATRIX_5D = [
     CLASS_CODES['SBEND'],
     CLASS_CODES['RBEND'],
-    CLASS_CODES['QUADRUPOLE'],
     CLASS_CODES['ROTATION'],
 ]
 

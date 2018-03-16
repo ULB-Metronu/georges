@@ -1,7 +1,7 @@
 *.pyc
 __pycache__/
 .DS_Store
-.idea/shelf/
+.idea/
 /examples/.ipynb_checkpoints
 examples/Maxwellian_bend_for_ptc.txt
 examples/Maxwellian_bend_for_ptc_electric.txt
@@ -12,5 +12,3 @@ examples/ptctrackone.tfs
 examples/survey.out
 examples/tracking.outxone
 examples/twiss.outx
-docs/_build/**
-docs/_static/

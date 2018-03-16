@@ -3,13 +3,17 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Georges's documentation!
-===================================
+Georges's documentation
+=======================
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
+   readme
+   introduction
+   authorship
+   installation
 
 
 Indices and tables

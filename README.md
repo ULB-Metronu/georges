@@ -1,7 +1,7 @@
 # georges
 Georges' the lemur opinionated particle accelerator modeling Python package. Also a thin wrapper over MAD-X/PTC, BDSim and G4Beamline.
 
-<img src="https://github.com/chernals/georges/blob/master/georges.png" width="300" />
+<img src="https://github.com/chernals/georges/blob/master/docs/_static/georges.png" width="300" />
 
 ## Design
 The aim of this library is to unify the description and computation of particle accelerator beamlines for different tools (MAD-X, PTC, BDSim and G4Beamline at this stage) in a unique Python library.
@@ -11,6 +11,10 @@ The library design strongly follows conventions and typical uses of the *Pandas*
 Beamlines are loaded, converted (if necessary) and then transformed using functions split in packages (one package per beam physics code, *e.g.* MAD-X or G4Geamline). Those functional packages are supported by a series of *proxy classes* for each external computation code.
  
 Support tools are also provided, notably a plotting library (entirely based on *Matplotlib*) which provides plotting capabilities for various optics computation (beam envelope, Twiss parameters, etc.).
+
+## Dependencies
+
+Pandas >= 0.21 required.
 
 ## Usage
 No attempt is made to support python versions earlier than CPython 3.5. Jython and alternative implementation have not been tested.
@@ -50,7 +54,7 @@ You can run a container with
 docker run -it username/georges
 ```
 
-then connect to [http://localhost:8888](http://localhost:8888 "Jupyter Notebook") to access the Jupyter Notebook interface.
+then connect to [http://localhost:8888](http://localhost:8888) to access the Jupyter Notebook interface.
 
 The image includes a complete Anaconda Python3 environment with the most common packages. 
 The latest *MAD-X* development release is available in */usr/local/bin/madx*.

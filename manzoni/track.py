@@ -1,4 +1,4 @@
-import torch
+#import torch
 import numpy as np
 from .transfer import transfer
 from .kick import kick
@@ -97,12 +97,27 @@ def track(line, b, turns=1, **kwargs):
     """
     beams = []
     #b = torch.DoubleTensor()
+    b1 = None
+    b2 = None
+    beam_5d = True
     for j in range(0, turns):
         for i in range(0, line.shape[0]):
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
                 # In place operation
                 kick[int(line[i, INDEX_CLASS_CODE])](line[i], b, **kwargs)
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
+                if beam_5d:
+                    b1 = b[:, 0:2].copy()
+                    b2 = b[:, 2:4].copy()
+                matrices = transfer[int(line[i, INDEX_CLASS_CODE])]
+                # For performance considerations, see
+                # https://stackoverflow.com/q/48474274/420892
+                # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
+                b1 = b1.dot(matrices(line[i])[0].T)
+                b2 = b1.dot(matrices(line[i])[1].T)
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX_5D:
+                if not beam_5d:
+                    b = b
                 # Get the transfer matrix of the current element
                 matrix = transfer[int(line[i, INDEX_CLASS_CODE])]
                 # For performance considerations, see
