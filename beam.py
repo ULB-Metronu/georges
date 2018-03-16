@@ -220,14 +220,16 @@ class Beam:
             raise BeamException("Trying to access an invalid data from a beam.")
         return self.__distribution[item]
 
-    @staticmethod
-    def from_file(filename, path=None):
+    def from_file(self, filename, path=None):
         """"""
         if path is not None:
             f = os.path.join(path, filename)
         else:
             f = filename
-        return pd.read_csv(f)
+
+        tmp = pd.read_csv(f)
+        self.__distribution = tmp
+        return self
 
     def __initialize_distribution(self, *args, **kwargs):
         """Try setting the internal pandas.DataFrame with a distribution."""
