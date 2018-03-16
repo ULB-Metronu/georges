@@ -18,7 +18,7 @@ def tracking(ax, bl, **kwargs):
     mean = kwargs.get("mean", True)
 
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
-        'S': r['AT_CENTER'],
+        'S': r[kwargs.get("reference_plane", 'AT_CENTER')],
         '1%': 1000 * r['BEAM'].halo['1%'][plane] if halo_99 else 0.0,
         '5%': 1000 * r['BEAM'].halo['5%'][plane] if halo else 0.0,
         '95%': 1000 * r['BEAM'].halo['95%'][plane] if halo else 0.0,
