@@ -1,1 +1,0 @@
-.. mdinclude:: ../fermi/README.md
