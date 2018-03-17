@@ -11,8 +11,15 @@ class SimulatorException(Exception):
 
 
 class Simulator:
+    """Base class to support external 'simulator' programs (MAD-X, BDSim, etc.)."""
 
-    def __init__(self, **kwargs):
+    def __init__(self, beamlines=None, path=None, **kwargs):
+        """
+
+        :param beamlines:
+        :param path: path to the simulator executable (default: lookup using 'which')
+        :param kwargs:
+        """
         self._input = ""
         self._exec = ""
         self._output = None
@@ -20,24 +27,26 @@ class Simulator:
         self._fatals = []
         self._context = {}
         self._last_context = None
-        self._path = kwargs.get('path', None)
+        self._path = path
         self._beamlines = []
-        if kwargs.get("beamlines") and not isinstance(kwargs.get("beamlines"), list):
-            raise SimulatorException("The 'beamlines' argument must be a list.")
+        if beamlines and not isinstance(beamlines, list):
+            raise SimulatorException("The 'beamlines' argument must be a list (if defined).")
         for b in kwargs.get('beamlines', []):
             self._attach(b)
 
     def _attach(self, beamline):
+        """Attach a beamline to the simulator instance."""
         self._beamlines.append(beamline)
 
     def _get_exec(self):
+        """Retrive the path to the simulator executable."""
         if self._path is not None:
             return os.path.join(self._path, self._exec)
         else:
             return shutil.which(self._exec, path=".:/usr/local/bin:/usr/bin:/bin")
 
     def _add_input(self, keyword, *args, **kwargs):
-        """Uses the simulator syntax to add to the input"""
+        """Uses the simulator's own syntax to add to the input"""
         self._input += self._syntax[keyword].format(*args, **kwargs) + '\n'
 
     def print_warnings(self):
@@ -56,6 +65,7 @@ class Simulator:
 
     @property
     def input(self):
+        """Return the current state of the input to be generated."""
         if self._last_context is None:
             raise SimulatorException("Asking for input but no context yet.")
         return jinja2.Template(self._input).render(self._last_context)
