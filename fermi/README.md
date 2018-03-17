@@ -1,4 +1,4 @@
-# Fermi-Eyges
+## Fermi-Eyges
 
 The `Fermi-Eyges` module is a reimplementation of the Fermi-Eyges transport framework, largely based on the work and publications of Bernard Gottschalk.
 
@@ -10,7 +10,7 @@ The module is composed of:
  - *Propagation* (`propagation.py`): propagation of a beam through a mutli-material beamline following the Fermi-Eyges transport theory.
  
 
-## Typical use case
+### Typical use case
 
 
 ```python

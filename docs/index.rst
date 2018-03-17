@@ -14,8 +14,8 @@ Georges's documentation
    introduction
    authorship
    installation
+   usage
    modules
-   citation
 
 
 Indices and tables

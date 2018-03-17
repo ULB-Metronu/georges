@@ -1,6 +1,6 @@
 # Installation
 
-Georges' submodules (in particular the Georges/Manzoni tracking code) are optimized to work with 
+:mod:`georges` submodules (in particular the :mod:`georges.manzoni` tracking code) are optimized to work with 
 
 [Using Intel distribution for Python with Anaconda](https://software.intel.com/en-us/articles/using-intel-distribution-for-python-with-anaconda)
 
