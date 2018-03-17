@@ -10,7 +10,7 @@ The module is composed of:
  - *Propagation* (`propagation.py`): propagation of a beam through a mutli-material beamline following the Fermi-Eyges transport theory.
  
 
-# Typical use case
+## Typical use case
 
 
 ```python
