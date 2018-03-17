@@ -25,7 +25,7 @@ class Simulator:
         self._output = None
         self._warnings = []
         self._fatals = []
-        self._context = {}
+        self._context = kwargs.get('context', {})
         self._last_context = None
         self._path = path
         self._beamlines = []

@@ -2,6 +2,7 @@ import numpy as np
 from numpy import linspace
 from matplotlib import patches
 from matplotlib.ticker import NullFormatter, MaxNLocator
+from .. import statistics as stat
 
 
 def ellipse(ra, rb, angle, x0, y0, **kwargs):
@@ -40,8 +41,7 @@ def ellipse(ra, rb, angle, x0, y0, **kwargs):
                            edgecolor=kwargs.get('color', 'black'))
 
 
-def draw2d_histo(fig, data, twiss_parameter, **kwargs):
-    draw_ellipse = kwargs.get('draw_ellipse', False)
+def draw2d_histo(fig, data, twiss_angle, **kwargs):
 
     # Define the x and y data
     x = data[data.columns[0]]
@@ -114,17 +114,17 @@ def draw2d_histo(fig, data, twiss_parameter, **kwargs):
     ycenter = np.mean(y)
     ra = np.std(x)
     rb = np.std(y)
-    ang = twiss_parameter['PHI']
+    ang = np.rad2deg(twiss_angle)
 
-    if draw_ellipse:
+    if kwargs.get('draw_ellipse', False):
         ax_global.add_patch(ellipse(ra, rb, ang, xcenter, ycenter))
         ax_global.add_patch(ellipse(2 * ra, 2 * rb, ang, xcenter, ycenter))
 
-        r1 = (xcenter + ra + 0.25 * ra)
+        r1 = (xcenter + ra + 0.3 * ra)
         x1 = r1 * np.cos(np.deg2rad(ang))
         y1 = r1 * np.sin(np.deg2rad(ang))
 
-        r2 = (xcenter + 2 * ra + 0.25 * ra)
+        r2 = (xcenter + 2 * ra + 0.3 * ra)
         x2 = r2 * np.cos(np.deg2rad(ang))
         y2 = r2 * np.sin(np.deg2rad(ang))
 
@@ -262,17 +262,17 @@ def draw2d_histo(fig, data, twiss_parameter, **kwargs):
                         fontsize=6)
 
 
-
 # Define a function to make the ellipses
-def ellipse(ra, rb, ang, x0, y0, Nb=100):
-    xpos, ypos = x0, y0
-    radm, radn = ra, rb
-    an = ang
-    co, si = np.cos(an), np.sin(an)
-    the = linspace(0, 2 * np.pi, Nb)
-    X = radm * np.cos(the) * co - si * radn * np.sin(the) + xpos
-    Y = radm * np.cos(the) * si + co * radn * np.sin(the) + ypos
-    return X, Y
+
+# def ellipse(ra, rb, ang, x0, y0, Nb=100):
+#     xpos, ypos = x0, y0
+#     radm, radn = ra, rb
+#     an = ang
+#     co, si = np.cos(an), np.sin(an)
+#     the = linspace(0, 2 * np.pi, Nb)
+#     X = radm * np.cos(the) * co - si * radn * np.sin(the) + xpos
+#     Y = radm * np.cos(the) * si + co * radn * np.sin(the) + ypos
+#     return X, Y
 
 
 def make2Dplot(fig, Data_BEAMX, Data_BEAMY, Nbinx, Nbiny):

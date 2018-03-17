@@ -7,7 +7,7 @@ from ..simulator import SimulatorException
 from ..lib.pybdsim import pybdsim
 from .. import physics
 
-INPUT_FILENAME = 'input.bdsim'
+INPUT_FILENAME = 'input.gmad'
 
 SUPPORTED_OPTIONS = [
             'beampipeRadius',
@@ -121,6 +121,7 @@ def sequence_to_bdsim(sequence, **kwargs):
         if (element['TYPE'] == 'DRIFT' and element['PIPE'] is False) or element['TYPE'] == 'GAP':
             m.AddGap(index, element['LENGTH'])
         if element['TYPE'] == 'QUADRUPOLE':
+            # Add two quadrupole with same k1 but different length to have a sampler inside
             m.AddQuadrupole(index, element['LENGTH'], k1=context.get(f"{index}_K1", 0.0))
         if element['TYPE'] == 'SEXTUPOLE':
             m.AddSextupole(index, element['LENGTH'], k2=context.get(f"{index}_K2", 0.0))
@@ -132,7 +133,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                       xsize=float(element['APERTURE']),
                       ysize=float(element['APERTURE']),
                       material='Copper',
-                     )
+                      )
         if element['TYPE'] == "SLITS":
             m.AddRCol(index,
                       element['LENGTH'],
@@ -146,23 +147,35 @@ def sequence_to_bdsim(sequence, **kwargs):
             m.AddGap(f"{index}_GAP", element['LENGTH'])
             m.AddPlacement(
                 index,
-                geometryFile=element['SOLIDS_FILE'],
+                geometryFile=context.get(f"{index}_file"),
                 x=0.0,
                 y=-0.229,
-                z=element['AT_CENTER']-50/1000,
+                z=element['AT_CENTER']-50/1000,  # A corriger pour etre plus générique
                 phi=0.0,
-                psi=np.deg2rad(30),
-                theta=np.deg2rad(90)
+                psi=context.get(f"{index}_psi", 0.0),
+                theta=context.get(f"{index}_theta", np.deg2rad(90.0))
             )
         if element['TYPE'] == "SBEND":
-            m.AddDipole(
-                index,
-                'sbend',
-                element['LENGTH'],
-                angle=element['ANGLE'],
-                e1=element['E1'],
-                e2=element['E2']
-            )
+
+            if context.get(f"{index}_B") is not None: # add functionnality inside BDsim
+                m.AddDipole(
+                    index,
+                    'sbend',
+                    element['LENGTH'],
+                    b=context.get(f"{index}_B"),
+                    angle=element['ANGLE'],
+                    e1=element['E1'],
+                    e2=element['E2']
+                )
+            else:
+                m.AddDipole(
+                    index,
+                    'sbend',
+                    element['LENGTH'],
+                    angle=element['ANGLE'],
+                    e1=element['E1'],
+                    e2=element['E2']
+                )
     m.AddSampler("all")
     return m
 
@@ -186,21 +199,26 @@ class BDSim(Simulator):
         self._bdsim_machine = None
         self._bdsim_options = pybdsim.Options.Options()
         self._exec = BDSim.EXECUTABLE_NAME
+        self._nparticles = 0
         super().__init__(**kwargs)
 
     def _attach(self, beamline):
         super()._attach(beamline)
         if beamline.length is None or pd.isnull(beamline.length):
             raise SimulatorException("Beamline length not defined.")
-        self._bdsim_machine = sequence_to_bdsim(beamline.line)
+        self._bdsim_machine = sequence_to_bdsim(beamline.line, context=self._context)
 
     def run(self, **kwargs):
         """Run bdsim as a subprocess."""
 
-        if self._get_exec() is None:
-            raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+        # Write the file
+        self._bdsim_machine.Write(INPUT_FILENAME)
 
-        p = sub.Popen(f"{self._get_exec()} --file={INPUT_FILENAME}",
+        # not working for the time not self_exec ?
+        # if self._get_exec() is None:
+        #    raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+
+        p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={INPUT_FILENAME} --batch --ngenerate={self._nparticles} --outfile=output",
                       stdin=sub.PIPE,
                       stdout=sub.PIPE,
                       stderr=sub.STDOUT,
@@ -215,6 +233,25 @@ class BDSim(Simulator):
             print(self._output)
         return self
 
+    def track(self, particles, p0):
+        if len(particles) == 0:
+            print("No particles to track... Doing nothing.")
+            return
+
+        particles['E'] = physics.momentum_to_energy(p0 * (particles['DPP'] + 1))
+        particles['E'] = (particles['E']+physics.PROTON_MASS)/1000  # total energy in GeV
+        particles.to_csv('input_beam.dat', header=None,
+                         index=False,
+                         sep='\t',
+                         columns=['X', 'PX', 'Y', 'PY', 'E'])
+
+        # Add the beam to the simulation
+        self.beam_from_file(physics.momentum_to_energy(p0), 'input_beam.dat')
+        self._nparticles = len(particles)
+
+    def set_options(self, options):
+        self._bdsim_machine.AddOptions(options)
+
     def add_options(self, **kwargs):
         for k, v in kwargs.items():
             self.add_option(k, v)
@@ -225,12 +262,12 @@ class BDSim(Simulator):
         # Ugly way to get the first letter capitalized...
         getattr(self._bdsim_options, f"Set{key[0].upper() + key[1:] }")(value)
 
-    def beam_from_file(self, beam_file, **kwargs):
+    def beam_from_file(self, initial_energy, beam_file, **kwargs):
         b = pybdsim.Beam.Beam(
             particletype=kwargs.get('particletype', 'proton'),
-            energy=kwargs.get('energy', physics.PROTON_MASS/1000),
+            energy=kwargs.get('energy', (initial_energy+physics.PROTON_MASS)/1000),
             distrtype='userfile',
             distrFile=f"\"{beam_file}\"",
-            distrFileFormat='"x[m]:xp[rad]:y[m]:yp[rad]:E[MeV]"'
+            distrFileFormat='"x[m]:xp[rad]:y[m]:yp[rad]:E[GeV]"'
         )
         self._bdsim_machine.AddBeam(b)
