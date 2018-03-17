@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import pandas.core.common
 import numpy as np
 from . import physics
 from scipy.optimize import curve_fit
@@ -22,23 +21,24 @@ class Beam:
     The internal representation is essentially a pandas DataFrame.
     """
 
-    def __init__(self, *args, **kwargs):
-        """
-        :param args: distribution of particles to initialize the beam with. Should be pandas.DataFrame() friendly.
-        :param kwargs: optional parameters include:
-            - particle: identifier for the particle type (default: proton).
-            - energy:
+    def __init__(self, distribution=None, particle='proton', energy=None, *args, **kwargs):
         """
 
-        if kwargs.get('distribution') is  None:
+        :param distribution: distribution of particles to initialize the beam with. Should be pandas.DataFrame() friendly.
+        :param particle: the particle type (default: 'proton', must be 'proton', 'antiproton', 'electron' or 'positron').
+        :param energy: the reference energy of the beam
+        :param args: optional parameters.
+        :param kwargs: optional keyword parameters.
+        """
+        if distribution is None:
             self.__initialize_distribution(*args, **kwargs)
         else:
-            self.__distribution = kwargs['distribution']
+            self.__distribution = distribution
 
-        self.__particle = kwargs.get('particle', 'proton')
+        self.__particle = particle
         if self.__particle not in PARTICLE_TYPES:
             raise BeamException("Trying to initialize a beam with invalid particle type.")
-        self.__energy = kwargs.get('energy', None)
+        self.__energy = energy
 
     @property
     def distribution(self):
@@ -49,13 +49,6 @@ class Beam:
     def particle(self):
         """Return the particle type."""
         return self.__particle
-
-    @particle.setter
-    def particle(self, p):
-        if p in PARTICLE_TYPES:
-            self.__particle = p
-        else:
-            raise BeamException("Invalid particle type")
 
     @property
     def dims(self):
@@ -97,9 +90,10 @@ class Beam:
     @property
     def emit(self):
         """Return the emittance of the beam in both planes"""
-        return {'X': np.sqrt(np.linalg.det(self.__distribution.head(len(self.__distribution))[['X', 'PX']].cov())),
-                'Y': np.sqrt(np.linalg.det(self.__distribution.head(len(self.__distribution))[['Y', 'PY']].cov()))
-                }
+        return {
+            'X': np.sqrt(np.linalg.det(self.__distribution.head(len(self.__distribution))[['X', 'PX']].cov())),
+            'Y': np.sqrt(np.linalg.det(self.__distribution.head(len(self.__distribution))[['Y', 'PY']].cov()))
+        }
 
     @property
     def sigma(self):
@@ -126,12 +120,13 @@ class Beam:
 
     @property
     def beam_dpp(self):
+        # TODO what is this?
         """TO DO"""
 
         dpp = (self['P0'] - self['DPP']) / self['P0']
         return {
             'mean_dpp': dpp.mean(),
-            'std_dpp':dpp.std()
+            'std_dpp': dpp.std()
         }
 
     @property
@@ -219,13 +214,11 @@ class Beam:
         return self.__distribution[item]
 
     @staticmethod
-    def from_file(filename, path=None):
-        """"""
-        if path is not None:
-            f = os.path.join(path, filename)
-        else:
-            f = filename
-        return pd.read_csv(f)
+    def from_file(file, path=''):
+        """Read a beam distribution from file."""
+        df = pd.read_csv(os.path.join(path, file))
+        # TODO check that df contains only correct columns and dimensions
+        return df
 
     def __initialize_distribution(self, *args, **kwargs):
         """Try setting the internal pandas.DataFrame with a distribution."""
@@ -233,10 +226,12 @@ class Beam:
             self.__distribution = pd.DataFrame(args[0])
         except (IndexError, ValueError):
             if kwargs.get("filename") is not None:
-                self.__distribution = Beam.from_file(kwargs.get('filename'), path=kwargs.get('path'))
+                self.__distribution = Beam.from_file(kwargs.get('filename'), path=kwargs.get('path', ''))
             else:
                 return
         self.__n_particles = self.__distribution.shape[0]
+        if self.__n_particles <= 0:
+            raise BeamException("Trying to initialize a beam distribution with invalid number of particles.")
         self.__dims = self.__distribution.shape[1]
         if self.__dims < 2 or self.__dims > 6:
             raise BeamException("Trying to initialize a beam distribution with invalid dimensions.")
