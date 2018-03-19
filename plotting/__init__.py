@@ -3,7 +3,7 @@ from .aperture import aperture
 from .twiss import twiss
 from .twiss import beta, alpha, dispersion, phase_advance
 from .losses import losses
-from .tracking import tracking, g4blprofile
+from .tracking import tracking, g4blprofile, compare_beamline
 from .survey import survey
 from .bpm import bpm
 from .scattering import scattering
