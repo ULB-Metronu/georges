@@ -139,7 +139,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                       xsize=0.1,
                       ysize=0.1,
                       material="copper"
-                     )
+                      )
         if element['TYPE'] == "MARKER":
             m.AddMarker(index)
         if element['TYPE'] == "SOLIDS":
@@ -155,14 +155,25 @@ def sequence_to_bdsim(sequence, **kwargs):
                 theta=context.get(f"{index}_theta", np.deg2rad(90.0))
             )
         if element['TYPE'] == "SBEND":
-            m.AddDipole(
-                index,
-                'sbend',
-                element['LENGTH'],
-                angle=element['ANGLE'],
-                e1=element['E1'],
-                e2=element['E2']
-            )
+            if context.get(f"{index}_B") is not None:  # add functionnality inside BDsim
+                m.AddDipole(
+                    index,
+                    'sbend',
+                    element['LENGTH'],
+                    b=context.get(f"{index}_B"),
+                    angle=element['ANGLE'],
+                    e1=element['E1'],
+                    e2=element['E2']
+                )
+            else:
+                m.AddDipole(
+                    index,
+                    'sbend',
+                    element['LENGTH'],
+                    angle=element['ANGLE'],
+                    e1=element['E1'],
+                    e2=element['E2']
+                )
     m.AddSampler("all")
     return m
 
