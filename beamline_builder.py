@@ -136,6 +136,10 @@ class BeamlineBuilder:
         self.__beamline = self.__beamline.append(pd.DataFrame(s))
         return self
 
+    def add_offset(self, offset):
+        self.__beamline['AT_CENTER'] += offset
+        return self
+
     @staticmethod
     def build_sequence(s, start_drift=0.0, end_drift=0.0, inter_drift=0.0):
         def drift(l):
