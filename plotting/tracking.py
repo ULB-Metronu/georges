@@ -63,6 +63,40 @@ def tracking(ax, bl, **kwargs):
                 markeredgecolor=palette[plane], markersize=2, linewidth=1, label=kwargs.get("label"))
 
 
+def compare_beamline(ax, bl1, bl2, **kwargs):
+    """Compare results obtained with different softwares"""
+    if kwargs.get("plane") is None:
+        raise Exception("Plane (plane='X' or plane='Y') must be specified.")
+
+    plane = kwargs.get("plane")
+    if plane is None:
+        raise Exception("The 'plane' keyword argument must be set to 'X' or 'Y'.")
+
+    std = kwargs.get("std", True)
+    mean = kwargs.get("mean", False)
+
+    t1 = bl1.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
+        'S': r[kwargs.get("reference_plane_beamline1", 'AT_CENTER')],
+        'mean_bl1': 1000 * r['BEAM'].mean[plane],
+        'std_bl1': 1000 * r['BEAM'].std[plane]
+    }), axis=1)
+
+    t2 = bl2.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
+        'S': r[kwargs.get("reference_plane_beamline2", 'AT_CENTER')],
+        'mean_bl2': 1000 * r['BEAM'].mean[plane],
+        'std_bl2': 1000 * r['BEAM'].std[plane]
+    }), axis=1)
+
+    diff = pd.merge(t1, t2, on='S')  # Only get data for AT_CENTER
+    print(diff)
+    if std:
+        ax.plot(diff['S'], (diff['std_bl1']-diff['std_bl2'])/diff['std_bl1'], '^-', color=palette[plane],
+                markeredgecolor=palette[plane], markersize=2, linewidth=1)
+    if mean:
+        ax.plot(diff['S'], diff['mean_bl1']-diff['mean_bl2'], '^-', color=palette[plane],
+                markeredgecolor=palette[plane], markersize=2, linewidth=1)
+
+
 def g4blprofile(ax, g4beamlineData, **kwargs):
     if kwargs.get("plane") is None:
         raise Exception("Plane (plane='X' or plane='Y') must be specified.")
