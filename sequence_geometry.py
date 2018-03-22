@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 
 
-# TODO Move these methods to a class (static or something similar and remove ugly inspect statement
 def compute_derived_data(row):
     """Compute derived data for a beamline element."""
     # Corner case

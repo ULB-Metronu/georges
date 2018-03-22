@@ -14,6 +14,8 @@ Georges's documentation
    introduction
    authorship
    installation
+   usage
+   modules
 
 
 Indices and tables
@@ -21,6 +23,5 @@ Indices and tables
 
 * :ref:`genindex`
 * :ref:`modindex`
-* :ref:`search`
 
 .. automodule:: georges
