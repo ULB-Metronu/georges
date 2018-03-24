@@ -59,7 +59,6 @@ def track(**kwargs):
     if line is None or b is None:
         raise TrackException("Beamline, Beam and MAD-X objects need to be defined.")
     m = Madx(beamlines=[line])
-
     # Create a new beamline to include the results
     line_tracking = line.line.copy()
 

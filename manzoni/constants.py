@@ -62,16 +62,12 @@ CLASS_CODES = {k: i for i, k in enumerate(
         'DEGRADER',
     )
 )}
-print(CLASS_CODES)
 
 # Group elements in categories
 CLASS_CODE_MATRIX = [
     CLASS_CODES['DRIFT'],
     CLASS_CODES['COLLIMATOR'],
     CLASS_CODES['QUADRUPOLE'],
-]
-
-CLASS_CODE_MATRIX_5D = [
     CLASS_CODES['SBEND'],
     CLASS_CODES['RBEND'],
     CLASS_CODES['ROTATION'],

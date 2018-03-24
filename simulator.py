@@ -31,11 +31,12 @@ class Simulator:
         self._beamlines = []
         if beamlines and not isinstance(beamlines, list):
             raise SimulatorException("The 'beamlines' argument must be a list (if defined).")
-        for b in kwargs.get('beamlines', []):
+        for b in beamlines:
             self._attach(b)
 
     def _attach(self, beamline):
         """Attach a beamline to the simulator instance."""
+        print(beamline)
         self._beamlines.append(beamline)
 
     def _get_exec(self):

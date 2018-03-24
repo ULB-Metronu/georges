@@ -110,7 +110,7 @@ def bend(e, e1, e2):
         m3 = [0, 0, 1, length, 0]
         m4 = [0, 0, 0, 1, 0]
 
-    # Construct 4D matrix
+    # Construct 5D matrix
     m_b = np.stack([
         m1,
         m2,

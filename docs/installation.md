@@ -32,26 +32,8 @@ To be able to import the library you will need to have it in your python path. O
 echo $PYTHONPATH
     
 This will add all the libraries in your `~/reps` directory to `$PYTHONPATH` and will make them available for import.
-
-## Using and importing Georges in Python
-You can access the library by simply importing it:
-
-    import georges
-   
-This will include only the core components of Georges. The different Georges' modules must be imported separately, depending on your needs:
-
-    import georges.madx
-    import georges.bdsim
-    import georges.manzoni
-    import georges.plotting
-    
-See the examples below for a typical use case.
-
-    import georges
-    from georges.plotting import *
-    import georges.manzoni
  
-## Using Geoges with Jupyter Notebook
+## Using Georges with Jupyter Notebook
 xxxx  
 
 

@@ -237,9 +237,9 @@ class Madx(Simulator):
 
     EXECUTABLE_NAME = 'madx'
 
-    def __init__(self, **kwargs):
+    def __init__(self, beamlines=None, path=None, **kwargs):
         self._ptc_use_knl_only = kwargs.get('ptc_use_knl_only', False)
-        super().__init__(**kwargs)
+        super().__init__(beamlines=beamlines, path=path, **kwargs)
         self._syntax = madx_syntax
         self._exec = Madx.EXECUTABLE_NAME
 

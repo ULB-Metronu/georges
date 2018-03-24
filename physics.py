@@ -1,9 +1,12 @@
 import numpy as np
 
 PROTON_MASS = 938.2720813
+ELECTRON_MASS = 0.5109989461
+CHARGED_PION_MASS = 139.57018
+NEUTRAL_PION_MASS = 134.9766
 
 
-def kinematics(**kwargs):
+def kinematics(units="MeV", **kwargs):
     """Return a dictionary with all kinematics parameters from a given input."""
     r = 0
     e = 0
@@ -12,7 +15,7 @@ def kinematics(**kwargs):
     beta = 0
     gamma = 1
     if len(kwargs) > 1:
-        raise Exception("A single keyword argument is expected: range, energy, momentum, brho).")
+        raise Exception("A single keyword argument is expected: range, energy, momentum, beta, gamma).")
     if kwargs.get("range"):
         r = kwargs.get('range')
         e = range_to_energy(r)

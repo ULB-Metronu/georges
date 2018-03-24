@@ -30,10 +30,7 @@ class Beam:
         :param args: optional parameters.
         :param kwargs: optional keyword parameters.
         """
-        if distribution is None:
-            self.__initialize_distribution(*args, **kwargs)
-        else:
-            self.__distribution = distribution
+        self.__initialize_distribution(distribution, *args, **kwargs)
 
         self.__particle = particle
         if self.__particle not in PARTICLE_TYPES:
@@ -220,15 +217,18 @@ class Beam:
         # TODO check that df contains only correct columns and dimensions
         return df
 
-    def __initialize_distribution(self, *args, **kwargs):
+    def __initialize_distribution(self, distribution=None, *args, **kwargs):
         """Try setting the internal pandas.DataFrame with a distribution."""
-        try:
-            self.__distribution = pd.DataFrame(args[0])
-        except (IndexError, ValueError):
-            if kwargs.get("filename") is not None:
-                self.__distribution = Beam.from_file(kwargs.get('filename'), path=kwargs.get('path', ''))
-            else:
-                return
+        if distribution is not None:
+            self.__distribution = distribution
+        else:
+            try:
+                self.__distribution = pd.DataFrame(args[0])
+            except (IndexError, ValueError):
+                if kwargs.get("filename") is not None:
+                    self.__distribution = Beam.from_file(kwargs.get('filename'), path=kwargs.get('path', ''))
+                else:
+                    return
         self.__n_particles = self.__distribution.shape[0]
         if self.__n_particles <= 0:
             raise BeamException("Trying to initialize a beam distribution with invalid number of particles.")

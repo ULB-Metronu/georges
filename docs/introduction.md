@@ -20,7 +20,8 @@ The georges.physics.kinematics function allows rapid and easy conversion between
 
 ```python
 georges.physics.kinematics(energy=100)
-{'beta': 0.43244159571922342,
+{
+ 'beta': 0.43244159571922342,
  'brho': 1.5010379999999999,
  'energy': 102.33086821870768,
  'gamma': 1.109063106808982,
@@ -31,7 +32,8 @@ georges.physics.kinematics(energy=100)
 
 ```python
 georges.physics.kinematics(gamma=1.2)
-{'beta': 0.5527707983925666,
+{
+ 'beta': 0.5527707983925666,
  'brho': 2.0760332515185556,
  'energy': 187.65441625999995,
  'gamma': 1.2,
@@ -42,7 +44,8 @@ georges.physics.kinematics(gamma=1.2)
 
 ```python
 georges.physics.kinematics(beta=0.4)
-{'beta': 0.4,
+{
+ 'beta': 0.4,
  'brho': 1.365929596629474,
  'energy': 85.466688943097552,
  'gamma': 1.0910894511799618,
@@ -53,7 +56,8 @@ georges.physics.kinematics(beta=0.4)
 
 ```python
 georges.physics.kinematics(range=32)
-{'beta': 0.59219057901310057,
+{
+ 'beta': 0.59219057901310057,
  'brho': 2.3000819451857275,
  'energy': 226.12911179644985,
  'gamma': 1.2410059046872013,
