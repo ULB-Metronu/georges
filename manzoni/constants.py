@@ -22,6 +22,7 @@ INDEX = {k: i for i, k in enumerate(
         'FE_LOSS',
     )
 )}
+
 # For convenience
 INDEX_CLASS_CODE = INDEX['CLASS_CODE']
 INDEX_LENGTH = INDEX['LENGTH']

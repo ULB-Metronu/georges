@@ -1,14 +1,14 @@
-#import torch
 import numpy as np
 from .transfer import transfer
 from .kick import kick
 from .constants import *
+from .aperture import aperture_check
 
 
 def convert_line(line, to_numpy=True):
     def class_conversion(e):
-        #if e['CLASS'] in ('RFCAVITY', 'HKICKER'):
-        #    e['CLASS_CODE'] = CLASS_CODES['DRIFT']
+        if e['CLASS'] in ('RFCAVITY', 'HKICKER'):
+            e['CLASS_CODE'] = CLASS_CODES['DRIFT']
         if e['CLASS'] not in CLASS_CODES:
             e['CLASS_CODE'] = CLASS_CODES['NONE']
         else:
@@ -55,20 +55,6 @@ def convert_line(line, to_numpy=True):
         return line[list(INDEX.keys())]
 
 
-def aperture_check(b, e):
-    # Circular aperture
-    if e[INDEX_APERTYPE_CODE] == APERTYPE_CODE_CIRCLE:
-        s = (b[:, 0]**2 + b[:, 2]**2) < e[INDEX_APERTURE]**2
-    # Rectangular aperture
-    elif e[INDEX_APERTYPE_CODE] == APERTYPE_CODE_RECTANGLE:
-        s = (b[:, 0]**2 < e[INDEX_APERTURE]**2) & (b[:, 2]**2 < e[INDEX_APERTURE_2]**2)
-    # Unknown aperture type
-    else:
-        return b
-    # np.compress used for performance
-    return np.compress(s, b, axis=0)
-
-
 def transform_variables(line, variables):
     ll = line.reset_index()
 
@@ -85,29 +71,38 @@ def adjust_line(line, variables, parameters):
     return line  # Check later if calling this function will create a copy
 
 
-def track(line, b, turns=1, **kwargs):
+def track(line, beam, turns=1, observer=None, **kwargs):
     """
-    Tracking through a linear beamline.
+    Tracking through a beamline.
     Code optimized for performance.
     :param line: beamline description in Manzoni format
-    :param b: initial beam
+    :param beam: initial beam
     :param turns: number of tracking turns
+    :param observer: Observer object to witness and record the tracking data
     :param kwargs: optional parameters
-    :return: a list of beams (beam tracked up to each element in the beamline)
+    :return: Observer.track_end() return value
     """
-    beams = []
-    #b = torch.DoubleTensor()
+    # Initial call to the observer
+    if observer is not None:
+        observer.track_start(beam)
+    # Main loop
     for j in range(0, turns):
         for i in range(0, line.shape[0]):
-            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK:
+            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK and beam.shape[0] > 0:
                 # In place operation
-                kick[int(line[i, INDEX_CLASS_CODE])](line[i], b, **kwargs)
+                kick[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
                 matrices = transfer[int(line[i, INDEX_CLASS_CODE])]
                 # For performance considerations, see
                 # https://stackoverflow.com/q/48474274/420892
                 # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
-                b = b.dot(matrices(line[i]).T)
-            b = aperture_check(b, line[i])
-            beams.append(b.copy())
-    return beams
+                beam = beam.dot(matrices(line[i]).T)
+            beam = aperture_check(beam, line[i])
+            if observer is not None and observer.element_by_element_is_active is True:
+                observer.element_by_element(j, i, beam)
+        if observer is not None and observer.turn_by_turn_is_active is True:
+            observer.turn_by_turn(j, i, beam)
+    # Final call to the observer
+    if observer is not None:
+        return observer.track_end(j, i, beam)
+    return
