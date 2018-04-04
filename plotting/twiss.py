@@ -51,15 +51,15 @@ def alpha(ax, bl, **kwargs):
         ax.plot(bl.line['S'], bl.line['ALFA22'], color=palette['Y'])
 
 
-def dispersion(ax, bl, **kwargs):
+def dispersion(ax, bl, planes='both', rel_beta=1, **kwargs):
     """Plot the dispersion functions."""
-    if kwargs.get('ptc', False):
-        twiss_function_plot(ax, bl, ['DISP'], ptc=True)
+    if kwargs.get('ptc', True):
+        twiss_function_plot(ax, bl, ['DISP'], ptc=True, planes=planes)
     else:
         # Caution: MAD-X dispersion is affected by relativistic factors
         # See section 1.7.4 of the MAD-X user guide
-        ax.plot(bl.line['S'], kwargs.get('beta', 1)*bl.line['DX'], color=palette['X'])
-        ax.plot(bl.line['S'], kwargs.get('beta', 1)*bl.line['DY'], color=palette['Y'])
+        ax.plot(bl.line['S'], rel_beta * bl.line['DX'], color=palette['X'])
+        ax.plot(bl.line['S'], rel_beta * bl.line['DY'], color=palette['Y'])
 
 
 def phase_advance(ax, bl, **kwargs):
@@ -67,7 +67,7 @@ def phase_advance(ax, bl, **kwargs):
     twiss_function_plot(ax, bl, ['MU'], kwargs.get('ptc', False))
 
 
-def twiss_function_plot(ax, bl, functions, **kwargs):
+def twiss_function_plot(ax, bl, functions, planes='both', **kwargs):
     bl = bl.line
 
     if kwargs.get('ptc', False):
@@ -77,5 +77,7 @@ def twiss_function_plot(ax, bl, functions, **kwargs):
         x = 'X'
         y = 'Y'
     for f in functions:
-        ax.plot(bl['S'], bl[f+x], color=palette['X'])
-        ax.plot(bl['S'], bl[f+y], color=palette['Y'])
+        if planes is 'both' or planes is 'X':
+            ax.plot(bl['S'], bl[f+x], color=palette['X'])
+        if planes is 'both' or planes is 'Y':
+            ax.plot(bl['S'], bl[f+y], color=palette['Y'])

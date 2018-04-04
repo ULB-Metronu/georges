@@ -77,6 +77,7 @@ class Beamline:
                 self.__beamline.name = self.__name
             if self.__beamline.size == 0:
                 raise BeamlineException("Empty dataframe.")
+            self.__beamline.index.name = 'NAME'
         # Sequence from a list
         # Assume that a DataFrame can be created from the list
         if isinstance(beamline, list):

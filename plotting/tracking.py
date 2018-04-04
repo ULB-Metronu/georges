@@ -1,4 +1,5 @@
-from .common import palette, filled_plot
+from .common import filled_plot
+from .common import palette as common_palette
 import pandas as pd
 import numpy as np
 
@@ -9,6 +10,7 @@ def tracking(ax, bl, **kwargs):
         raise Exception("Plane (plane='X' or plane='Y') must be specified.")
 
     plane = kwargs.get("plane")
+    palette = kwargs.get("palette", common_palette)
     if plane is None:
         raise Exception("The 'plane' keyword argument must be set to 'X' or 'Y'.")
     halo = kwargs.get("halo", True)
@@ -18,7 +20,7 @@ def tracking(ax, bl, **kwargs):
     mean = kwargs.get("mean", True)
 
     t = bl.line.query("BEAM == BEAM").apply(lambda r: pd.Series({
-        'S': r['AT_CENTER'],
+        'S': r['AT_EXIT'],
         '1%': 1000 * r['BEAM'].halo['1%'][plane] if halo_99 else 0.0,
         '5%': 1000 * r['BEAM'].halo['5%'][plane] if halo else 0.0,
         '95%': 1000 * r['BEAM'].halo['95%'][plane] if halo else 0.0,

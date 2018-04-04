@@ -169,7 +169,7 @@ def element_to_mad(e, ptc_use_knl_only=False):
     )
     if not mad.endswith(', '):
         mad += ', '
-    mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PTC_PROPERTIES if pd.notnull(e.get(p, None))])
+    mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PTC_PROPERTIES if pd.notnull(e.get(p, None))])
 
     if pd.notnull(e['LENGTH']) and e['LENGTH'] != 0.0:
         mad += ", L={}".format(e['LENGTH'])
