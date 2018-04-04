@@ -18,7 +18,8 @@ class MaterialsDB:
         self.__materials_db = {
             'projected_ranges': projected_ranges,
             'csda_ranges': csda_ranges,
-            'atomic': self._pdg_read_data()
+            'atomic': self._pdg_read_data("atomic.csv"),
+            'density': self._pdg_read_data("density.csv"),
         }
 
     def _star_read_data(self, m):
@@ -28,8 +29,8 @@ class MaterialsDB:
                              names=STAR_COLUMNS,
                              index_col=False)
 
-    def _pdg_read_data(self):
-        return pd.read_table(os.path.join(self.db_path, "pdg", "atomic.csv"),
+    def _pdg_read_data(self, data):
+        return pd.read_table(os.path.join(self.db_path, "pdg", data),
                              delimiter=',',
                              index_col='material'
                              )
@@ -48,15 +49,7 @@ class MaterialsDB:
 
     @staticmethod
     def density(material):
-        # TODO Where is this coming from?
-        density = {  # g/cm3
-            'water': 1,
-            'graphite': 1.7,
-            'beryllium': 1.85,
-            'air': 1.205E-03,
-            'aluminum': 2.7,
-        }
-        return density[material]
+        return self.__materials_db['density'].at[material, 'rho']
 
     def z(self, material):
         return self.__materials_db['atomic'].at[material, 'Z']
