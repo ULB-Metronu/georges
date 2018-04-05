@@ -1,15 +1,16 @@
-from matplotlib.ticker import *
-from .common import beamline_get_ticks_locations, palette
+from .common import beamline_get_ticks_locations
+from .common import palette as common_palette
 from matplotlib.ticker import *
 import pandas as pd
 
 
 def losses(ax, bl, **kwargs):
     """Plot the losses from a beamline tracking computation and a context."""
+    palette = kwargs.get("palette", common_palette)
     bl = bl.line
     init = bl.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').iloc[0]['BEAM'].n_particles
     transmission = bl.query("BEAM == BEAM").drop_duplicates(subset='AT_CENTER', keep='first').apply(lambda r: pd.Series({
-        'S': r['AT_CENTER'],
+        'S': r['AT_EXIT'],
         'T': r['BEAM'].n_particles/init
     }), axis=1)
 
@@ -27,11 +28,11 @@ def losses(ax, bl, **kwargs):
     ax2.yaxis.label.set_color(palette['green'])
     ax2.grid(True)
     if kwargs.get('log', False):
-        ax2.semilogy(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
+        ax2.semilogy(transmission['S'], 100*transmission['T'], 's-', color=palette['green'])
     else:
         ax2.yaxis.set_major_locator(MultipleLocator(10))
         ax2.set_ylim([0, 100])
-        ax2.plot(transmission['S'], 100*transmission['T'], '^-', color=palette['green'])
+        ax2.plot(transmission['S'], 100*transmission['T'], 's-', color=palette['green'])
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
     ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.set_ylabel('Losses ($\%$)')
@@ -43,6 +44,6 @@ def losses(ax, bl, **kwargs):
     ax.set_ylim([0, 100 * transmission['T'].diff().abs().max() + 5.0])
 
     if kwargs.get('with_current'):
-        ax2.plot(bl['AT_CENTER'], bl['CURRENT'], 'k-')
+        ax2.plot(bl['AT_EXIT'], bl['CURRENT'], 'k-')
 
     return transmission

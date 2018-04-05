@@ -13,6 +13,19 @@ class FermiPropagateException(Exception):
         self.message = m
 
 
+def track_energy(energy, line_fermi, db):
+    for i, e in line_fermi.iterrows():
+        line_fermi.loc[i, 'ENERGY_IN'] = energy
+        if e['TYPE'] == 'slab' or e['TYPE'] == 'gap' or e['CLASS'] == 'DEGRADER':
+            energy = residual_energy(
+                e['MATERIAL'], e['LENGTH'] * 100, energy, db=db
+            ) if e['MATERIAL'] is not 'vacuum' else energy
+            line_fermi.loc[i, 'ENERGY_OUT'] = energy
+            line_fermi.loc[i, 'DeltaE'] = line_fermi.loc[i, 'ENERGY_IN'] - energy
+        else:
+            line_fermi.loc[i, 'ENERGY_OUT'] = energy
+
+
 def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
     def compute_fermi_eyges_on_slab(slab):
         # If vacuum, return a null-element
@@ -55,17 +68,7 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
         line_fermi = with_gaps
 
     # Compute energy loss along the line
-    energy = beam['energy']
-    for i, e in line_fermi.iterrows():
-        line_fermi.loc[i, 'ENERGY_IN'] = energy
-        if e['TYPE'] == 'slab' or e['TYPE'] == 'gap':
-            energy = residual_energy(
-                e['MATERIAL'], e['LENGTH'] * 100, energy, db=db
-            ) if e['MATERIAL'] is not 'vacuum' else energy
-            line_fermi.loc[i, 'ENERGY_OUT'] = energy
-            line_fermi.loc[i, 'DeltaE'] = line_fermi.loc[i, 'ENERGY_IN'] - energy
-        else:
-            line_fermi.loc[i, 'ENERGY_OUT'] = energy
+    track_energy(beam['energy'], line_fermi, db)
 
     # Beam spreading and scattering following the Fermi-Eyges model
     line_fermi = line_fermi.merge(

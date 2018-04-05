@@ -23,9 +23,6 @@ def track(line, beam, **Kwargs):
     manzoni_line = convert_line(line.line)
     manzoni_beam = np.array(beam.distribution)
 
-    # Create a new beamline to include the results
-    line_tracking = line.line.copy()
-
     # Run Manzoni
     o = ElementByElementObserver()
     manzoni.track(manzoni_line, manzoni_beam, observer=o)

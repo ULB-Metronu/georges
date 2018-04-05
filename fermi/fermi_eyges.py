@@ -3,8 +3,8 @@ from ..physics import energy_to_pv
 from .stopping import residual_energy
 
 
-def fermi_eyges_integrals(u, initial_energy, thickness, material, db, T, n):
-    return (thickness-u)**n * T.t(
+def fermi_eyges_integrals(u, initial_energy, thickness, material, db, t, n):
+    return (thickness-u)**n * t.t(
         energy_to_pv(residual_energy(material, u, initial_energy, db=db)),
         energy_to_pv(initial_energy),
         db=db,
@@ -12,12 +12,7 @@ def fermi_eyges_integrals(u, initial_energy, thickness, material, db, T, n):
     )
 
 
-def compute_fermi_eyges(**kwargs):
-    material = kwargs.get('material')
-    energy = kwargs.get('energy')
-    thickness = kwargs.get('thickness')
-    db = kwargs.get('db')
-    t = kwargs.get('T')
+def compute_fermi_eyges(material, energy, thickness, db, t, **kwargs):
     a = [
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 0))[0],  # Order 0
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 1))[0],  # Order 1

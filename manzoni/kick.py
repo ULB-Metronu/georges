@@ -1,7 +1,6 @@
 import numpy as np
 from .constants import *
 
-
 try:
     import numpy.random_intel as nprandom
 except ModuleNotFoundError:
@@ -59,31 +58,18 @@ def vkicker(e, b, **kwargs):
     )
 
 
-def scatterer(e, b, **kwargs):
-    s22 = e[INDEX_SCATTERING_ANGLE]
-    b[:, 1] += np.random.normal(0.0, s22, int(b.shape[0]))
-    b[:, 3] += np.random.normal(0.0, s22, int(b.shape[0]))
-    return b
-
-
 def degrader(e, b, **kwargs):
-    s11 = kwargs.get('deg', {}).get('A', [0, 0, 0])[0]
-    s12 = kwargs.get('deg', {}).get('A', [0, 0, 0])[1]
-    s22 = kwargs.get('deg', {}).get('A', [0, 0, 0])[2]
-    dpp = kwargs.get('deg', {}).get('DPP', 0)
-
     # Remove particles
-    idx = np.random.randint(b.shape[0], size=int((1 - kwargs.get('loss', 0)) * b.shape[0]))
+    idx = np.random.randint(b.shape[0], size=int((1 - e[INDEX_FE_LOSS]) * b.shape[0]))
     b = b[idx, :]
-
     return b + nprandom.multivariate_normal(
         [0.0, 0.0, 0.0, 0.0, 0.0], np.array(
             [
-                [s11, s12, 0, 0, 0],
-                [s12, s22, 0, 0, 0],
-                [0, 0, s11, s12, 0],
-                [0, 0, s12, s22, 0],
-                [0, 0, 0, 0, dpp]
+                [e[INDEX_FE_A0], e[INDEX_FE_A1], 0, 0, 0],
+                [e[INDEX_FE_A1], e[INDEX_FE_A2], 0, 0, 0],
+                [0, 0, e[INDEX_FE_A0], e[INDEX_FE_A1], 0],
+                [0, 0, e[INDEX_FE_A1], e[INDEX_FE_A2], 0],
+                [0, 0, 0, 0, e[INDEX_FE_DPP]]
             ]),
         int(b.shape[0]))
 

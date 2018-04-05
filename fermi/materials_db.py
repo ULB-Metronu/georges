@@ -47,8 +47,7 @@ class MaterialsDB:
     def projected_ranges(self):
         return self.__materials_db['projected_ranges']
 
-    @staticmethod
-    def density(material):
+    def density(self, material):
         return self.__materials_db['density'].at[material, 'rho']
 
     def z(self, material):

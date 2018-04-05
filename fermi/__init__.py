@@ -6,4 +6,4 @@ from .stopping import get_range_from_energy, \
     thickness
 from .fermi_eyges import compute_fermi_eyges
 from .mcs import DifferentialMoliere, FermiRossi, ICRUProtons, scattering_length
-from .propagation import propagate
+from .propagation import propagate, track_energy

@@ -3,6 +3,7 @@ from .transfer import transfer
 from .kick import kick
 from .constants import *
 from .aperture import aperture_check
+from .. import fermi
 
 
 def convert_line(line, to_numpy=True):
@@ -38,15 +39,44 @@ def convert_line(line, to_numpy=True):
             if len(s) > 1:
                 e['APERTURE_2'] = float(s[1])
         return e
+
+    def fermi_eyges_computations(e):
+        if e['CLASS'] != 'DEGRADER':
+            return e
+        fe = fermi.compute_fermi_eyges(material=e['MATERIAL'],
+                                       energy=e['ENERGY_IN'],
+                                       thickness=e['LENGTH'],
+                                       db=db,
+                                       t=fermi.DifferentialMoliere)
+        e['FE_A0'] = fe['A'][0]
+        e['FE_A1'] = fe['A'][1]
+        e['FE_A2'] = fe['A'][2]
+        e['FE_DPP'] = 0
+        return e
+
     # Create or copy missing columns
+    line = line.copy()
     if 'CLASS' not in line and 'KEYWORD' in line:
         line['CLASS'] = line['KEYWORD']
+    if 'CLASS' not in line and 'TYPE' in line:
+        line['CLASS'] = line['KEYWORD']
+
+    # Fill with zeros
     for i in INDEX.keys():
         if i not in line:
             line[i] = 0.0
+
     # Perform the conversion
     line = line.apply(class_conversion, axis=1)
     line = line.apply(apertype_conversion, axis=1)
+
+    # Energy tracking
+    db = fermi.MaterialsDB()
+    fermi.track_energy(230, line, db)
+
+    # Compute Fermi-Eyges parameters
+    line = line.apply(fermi_eyges_computations, axis=1)
+
     # Adjustments for the final format
     line = line.fillna(0.0)
     if to_numpy:
