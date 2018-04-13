@@ -20,6 +20,7 @@ INDEX = {k: i for i, k in enumerate(
         'FE_A2',
         'FE_DPP',
         'FE_LOSS',
+        'BRHO',
     )
 )}
 
@@ -43,6 +44,7 @@ INDEX_FE_A1 = INDEX['FE_A1']
 INDEX_FE_A2 = INDEX['FE_A2']
 INDEX_FE_DPP = INDEX['FE_DPP']
 INDEX_FE_LOSS = INDEX['FE_LOSS']
+INDEX_BRHO = INDEX['BRHO']
 
 # Define constants for elements types
 CLASS_CODES = {k: i for i, k in enumerate(

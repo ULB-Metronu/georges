@@ -232,4 +232,7 @@ class Beamline:
                 )).append(e)
                 at_entry = e['AT_EXIT']
 
+        negative_drifts = line_with_drifts.query("LENGTH < 0.0")
+        if len(negative_drifts.index) > 0:
+            raise BeamlineException(f"Negative drift detected for elements {negative_drifts.index.values}.")
         return Beamline(line_with_drifts)

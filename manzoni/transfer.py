@@ -73,20 +73,20 @@ def bend(e, e1, e2):
     e1 = e[INDEX_E1] + e1
     e2 = e[INDEX_E2] + e2
     k_bend = (theta/length)**2
-    k = np.sqrt(np.abs(k_bend + e[INDEX_K1]))
-    k1 = np.sqrt(np.abs(e[INDEX_K1]))
+    k = np.sqrt(np.abs(k_bend + e[INDEX_K1] / e[INDEX_BRHO]))
+    k1 = np.sqrt(np.abs(e[INDEX_K1] / e[INDEX_BRHO]))
     kl = k * length
     k1l = k1 * length
     s_dpp = np.sin(theta)
     c_dpp = np.cos(theta)
 
     # Horizontal plane
-    if k_bend + e[INDEX_K1] > 0:
+    if k_bend + e[INDEX_K1] / e[INDEX_BRHO] > 0:
         s = np.sin(kl)
         c = np.cos(kl)
         m1 = [c, (1 / k) * s, 0, 0, (length / theta) * (1 - c_dpp)]
         m2 = [-k * s, c, 0, 0, s_dpp]
-    elif k_bend + e[INDEX_K1] < 0:
+    elif k_bend + e[INDEX_K1] / e[INDEX_BRHO] < 0:
         sh = np.sinh(kl)
         ch = np.cosh(kl)
         m1 = [ch, (1 / k) * sh, 0, 0, (length / theta) * (1 - c_dpp)]
@@ -159,7 +159,7 @@ def quadrupole(e):
     :return: a numpy array representing the 5D transfer matrix
     """
     length = e[INDEX_LENGTH]
-    k = e[INDEX_K1]
+    k = e[INDEX_K1] / e[INDEX_BRHO]
     if k > 0:  # Focusing quadrupole
         k = np.sqrt(k)
         kl = k * length

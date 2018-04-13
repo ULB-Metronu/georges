@@ -9,7 +9,10 @@ def xy_from_string(a, i, c):
         try:
             converted = float(x)
         except ValueError:
-            converted = float(c.get(x))
+            try:
+                converted = float(c.get(x))
+            except TypeError:
+                converted = 1.0
         return converted
     if len(str(a).strip('[]').strip('{}').split(',')) >= int(i) + 1:
         return convert(str(a).strip('[]').strip('{}').split(',')[int(i)])
@@ -103,17 +106,17 @@ def draw_bend(ax, e):
 
 def fill_aperture(element, context):
     if element.name+'_APERTURE' in context and element['TYPE'] == 'SLITS':
-        element['APERTURE'] = context[element.name+'_APERTURE']
-    if element['TYPE'] == 'COLLIMATOR' and element['PLUG'] == 'APERTURE':
+        element['APERTURE'] = context[element.name + '_APERTURE']
+    if element['TYPE'] == 'COLLIMATOR' and \
+            element['PLUG'] == 'APERTURE' and \
+            element['APERTURE'] is not None and \
+            np.isnan(element['APERTURE']):
         element['APERTURE'] = element['CIRCUIT']
     return element
 
 
-def aperture(ax, bl, **kwargs):
-    if kwargs.get('context'):
-        bl = bl.line.apply(lambda e: fill_aperture(e, kwargs.get('context')), axis=1)
-    else:
-        bl = bl.line
+def aperture(ax, bl, context={}, **kwargs):
+    bl = bl.line.apply(lambda e: fill_aperture(e, context), axis=1)
 
     if 'APERTURE' not in bl:
         return
@@ -121,20 +124,20 @@ def aperture(ax, bl, **kwargs):
     planes = kwargs.get('plane', 'both')
 
     bl['APERTURE_UP'] = bl['APERTURE'].apply(
-        lambda a: xy_from_string(a, planes == 'both' or planes == 'Y', kwargs.get('context'))
+        lambda a: xy_from_string(a, planes == 'both' or planes == 'Y', context)
     )
     bl['APERTURE_DOWN'] = bl['APERTURE'].apply(
-        lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X'), kwargs.get('context'))
+        lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X'), context)
     )
 
     if 'CHAMBER' not in bl:
         bl['CHAMBER'] = 0
 
     bl['CHAMBER_UP'] = bl['CHAMBER'].apply(
-        lambda a: xy_from_string(a, planes == 'both' or planes == 'Y', kwargs.get('context'))
+        lambda a: xy_from_string(a, planes == 'both' or planes == 'Y', context)
     )
     bl['CHAMBER_DOWN'] = bl['CHAMBER'].apply(
-        lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X'), kwargs.get('context'))
+        lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X'), context)
     )
 
     bl.query("CLASS == 'QUADRUPOLE'").apply(lambda e: draw_quad(ax, e), axis=1)

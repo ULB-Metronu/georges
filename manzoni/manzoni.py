@@ -4,9 +4,10 @@ from .kick import kick
 from .constants import *
 from .aperture import aperture_check
 from .. import fermi
+from .. import physics
 
 
-def convert_line(line, to_numpy=True):
+def convert_line(line, context={}, to_numpy=True):
     def class_conversion(e):
         if e['CLASS'] in ('RFCAVITY', 'HKICKER'):
             e['CLASS_CODE'] = CLASS_CODES['DRIFT']
@@ -14,6 +15,11 @@ def convert_line(line, to_numpy=True):
             e['CLASS_CODE'] = CLASS_CODES['NONE']
         else:
             e['CLASS_CODE'] = CLASS_CODES[e['CLASS']]
+        return e
+
+    def circuit_conversion(e):
+        if e['PLUG'] in INDEX and e['PLUG'] != 'APERTURE':
+            e[e['PLUG']] = context.get(e['CIRCUIT'], 0.0)
         return e
 
     def apertype_conversion(e):
@@ -33,7 +39,18 @@ def convert_line(line, to_numpy=True):
             e['APERTURE'] = 0.0
             e['APERTURE_2'] = 0.0
         # Aperture sizes
-        if isinstance(e['APERTURE'], str):
+        if not isinstance(e['APERTURE'], str):
+            if np.isnan(e['APERTURE']) and e['PLUG'] == 'APERTURE':
+                s = e['CIRCUIT'].strip('[{}]').split(',')
+                if context.get(s[0], 0):
+                    e['APERTURE'] = float(context.get(s[0], 1.0))
+                else:
+                    e['APERTURE'] = 1.0
+                if len(s) > 1:
+                    e['APERTURE_2'] = float(context.get(s[1], 1.0))
+                else:
+                    e['APERTURE_2'] = 1.0
+        else:
             s = e['APERTURE'].strip('[{}]').split(',')
             e['APERTURE'] = float(s[0])
             if len(s) > 1:
@@ -68,11 +85,18 @@ def convert_line(line, to_numpy=True):
 
     # Perform the conversion
     line = line.apply(class_conversion, axis=1)
+    line = line.apply(circuit_conversion, axis=1)
     line = line.apply(apertype_conversion, axis=1)
 
     # Energy tracking
     db = fermi.MaterialsDB()
-    fermi.track_energy(230, line, db)
+    energy = 230  # Default value
+    if context.get('ENERGY'):
+        energy = context['ENERGY']
+    elif context.get('PC'):
+        energy = physics.momentum_to_energy(context['PC'])
+    fermi.track_energy(energy, line, db)
+    line['BRHO'] = physics.energy_to_brho(line['ENERGY_IN'])
 
     # Compute Fermi-Eyges parameters
     line = line.apply(fermi_eyges_computations, axis=1)
