@@ -60,6 +60,8 @@ def draw_quad(ax, e):
 
 
 def draw_coll(ax, e, plane):
+    if not np.isnan(e['PIPE']):
+        return
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)

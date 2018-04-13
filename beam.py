@@ -30,8 +30,12 @@ class Beam:
         :param args: optional parameters.
         :param kwargs: optional keyword parameters.
         """
-        self.__initialize_distribution(distribution, *args, **kwargs)
-
+        try:
+            self.__initialize_distribution(distribution, *args, **kwargs)
+        except BeamException:
+            self.__dims = 5
+            self.__distribution = pd.DataFrame(np.zeros((1, 5)))
+            self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
         self.__particle = particle
         if self.__particle not in PARTICLE_TYPES:
             raise BeamException("Trying to initialize a beam with invalid particle type.")

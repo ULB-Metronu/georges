@@ -45,7 +45,7 @@ def convert_line(line, to_numpy=True):
             return e
         fe = fermi.compute_fermi_eyges(material=e['MATERIAL'],
                                        energy=e['ENERGY_IN'],
-                                       thickness=e['LENGTH'],
+                                       thickness=100*e['LENGTH'],
                                        db=db,
                                        t=fermi.DifferentialMoliere)
         e['FE_A0'] = fe['A'][0]
@@ -82,6 +82,7 @@ def convert_line(line, to_numpy=True):
     if to_numpy:
         return line[list(INDEX.keys())].as_matrix()
     else:
+        print(CLASS_CODES)
         return line[list(INDEX.keys())]
 
 
@@ -120,7 +121,7 @@ def track(line, beam, turns=1, observer=None, **kwargs):
         for i in range(0, line.shape[0]):
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK and beam.shape[0] > 0:
                 # In place operation
-                kick[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+                beam = kick[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
                 matrices = transfer[int(line[i, INDEX_CLASS_CODE])]
                 # For performance considerations, see

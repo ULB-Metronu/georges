@@ -38,5 +38,5 @@ def residual_range(material, t, k_in, **kwargs):
 
 
 def thickness(material, k_out, k_in, **kwargs):
-    return get_range_from_energy(material, k_out, db=kwargs.get('db', None)) \
-           - get_range_from_energy(material, k_in, db=kwargs.get('db', None))
+    return get_range_from_energy(material, k_in, db=kwargs.get('db', None)) \
+           - get_range_from_energy(material, k_out, db=kwargs.get('db', None))
