@@ -1,5 +1,4 @@
 import unittest
-import beam
 
 
 class TestBeam(unittest.TestCase):

@@ -2,8 +2,8 @@
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/lib/pybdsim" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/georges/lib/pybdsim" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/georges" isTestSource="false" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.6 (idp)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

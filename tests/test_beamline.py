@@ -1,6 +1,8 @@
 import unittest
+
 import pandas as pd
-import beamline
+
+from georges import beamline
 
 PREFIX = 'tests/test_data'
 

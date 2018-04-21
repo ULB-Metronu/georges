@@ -1,8 +1,8 @@
-import os.path
-import pandas as pd
 import numpy as np
 import numpy.linalg as npl
-from .sequence_geometry import compute_derived_data
+import pandas as pd
+
+from georges.sequence_geometry import compute_derived_data
 
 
 class BeamlineException(Exception):

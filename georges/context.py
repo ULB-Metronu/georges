@@ -1,5 +1,4 @@
 import pandas as pd
-from .physics import *
 
 
 def read_range_file(self, file):

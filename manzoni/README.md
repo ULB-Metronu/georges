@@ -1,5 +1,0 @@
-## Manzoni
-
-### Basic example
-
-### 
