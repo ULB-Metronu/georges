@@ -1,0 +1,6 @@
+*.pyc
+*~
+#emacs autosave
+\#*\#
+build
+pytransport.egg-info

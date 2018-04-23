@@ -1,0 +1,5 @@
+*.pyc
+docs/build*
+docs/build/*
+pymadx.egg-info/*
+build/*
