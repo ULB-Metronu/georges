@@ -1,6 +1,5 @@
 from setuptools import setup, find_packages
 
-
 with open('README.md') as f:
     readme = f.read()
 
@@ -16,5 +15,15 @@ setup(
     author_email='cedric.hernalsteens@iba-group.com',
     url='https://github.com/chernals/georges',
     license=lic,
-    packages=find_packages(exclude=('tests', 'docs', 'examples'))
+    packages=find_packages(exclude=('tests', 'docs', 'examples')),
+    install_requires=[
+        'numpy>=1.14.0',
+        'pandas>=0.22.0',
+        'scipy>=1.0.0',
+        'matplotlib>=2.1.1',
+        'jinja2>=2.9.6',
+        'xlrd>=1.1.0',
+        'lmfit>=0.9.7',
+        'm2r>=0.1.13',
+    ],
 )
