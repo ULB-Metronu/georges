@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from beam import Beam
+from ..beam import Beam
 
 from georges.beamline import Beamline
 from . import manzoni
