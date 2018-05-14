@@ -1,0 +1,9 @@
+name: pyiba
+channels:
+  - intel
+dependencies:
+  - python=3.6
+  - intelpython3_full
+  - pip:
+    - lmfit
+    - 
