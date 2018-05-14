@@ -133,7 +133,7 @@ def element_to_mad(e, ptc_use_knl_only=False):
     """Convert a pandas.Series representation onto a MAD-X sequence element."""
     if e.CLASS not in SUPPORTED_CLASSES:
         return ""
-    mad = "{}: {}, ".format(e.name, e.CLASS)
+    mad = f"{e.name}: {e.CLASS}, "
     if e.get('BENDING_ANGLE') is not None and not np.isnan(e['BENDING_ANGLE']):
         mad += f"ANGLE={e['BENDING_ANGLE']},"
     elif e.get('ANGLE') is not None and not np.isnan(e['ANGLE']):
@@ -143,16 +143,16 @@ def element_to_mad(e, ptc_use_knl_only=False):
         mad += ""
 
     # Add all supported MAD-X properties
-    mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES_DEFERRED if pd.notnull(e.get(p, None))])
+    mad += ', '.join([f"{p}:={e[p]}" for p in SUPPORTED_PROPERTIES_DEFERRED if pd.notnull(e.get(p, None))])
     if not mad.endswith(', '):
         mad += ', '
     if (e.CLASS is 'SBEND' or e.CLASS is 'RBEND') and pd.notnull(e.get('FINT', None)):
         mad += f", FINT={e['FINT']}"
-    mad += ', '.join(["{}={}".format(p, e[p]) for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
+    mad += ', '.join([f"{p}={e[p]}" for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
     if not mad.endswith(', '):
         mad += ', '
     if not ptc_use_knl_only:
-        mad += ', '.join(["{}:={}".format(p, e[p]) for p in SUPPORTED_K_PROPERTIES if pd.notnull(e.get(p, None))])
+        mad += ', '.join([f"{p}:={e[p]}" for p in SUPPORTED_K_PROPERTIES if pd.notnull(e.get(p, None))])
 
     # Add PTC specific properties and convert to integrated gradients
     if not mad.endswith(', '):
@@ -185,8 +185,13 @@ def element_to_mad(e, ptc_use_knl_only=False):
             if len(circuit) == 1:
                 circuit.append(circuit[0])
             mad += ", {}:={}, {}".format(e['PLUG'], circuit[0], circuit[1])
+        elif e.get('PLUG') == 'K1' \
+                or e.get('PLUG') == 'K2' \
+                or e.get('PLUG') == 'K3' \
+                or e.get('PLUG') == 'K4':
+            mad += f", {e['PLUG']}:={e['CIRCUIT']}/{e['BRHO']}"
         else:
-            mad += ", {}:={}".format(e['PLUG'], e['CIRCUIT'])
+            mad += f", {e['PLUG']}:={e['CIRCUIT']}"
 
     mad += ", AT={}".format(e['AT_CENTER'])
     mad += ";"
@@ -245,18 +250,24 @@ class Madx(Simulator):
         self._syntax = madx_syntax
         self._exec = Madx.EXECUTABLE_NAME
 
-    def _attach(self, beamline):
+    def _attach(self, beamline, context=None):
         super()._attach(beamline)
         if beamline.length is None or pd.isnull(beamline.length):
             raise SimulatorException("Beamline length not defined.")
+        if context is not None and context.get('BRHO'):
+            beamline.line['BRHO'] = context['BRHO']
         self._input += sequence_to_mad(beamline.line, ptc_use_knl_only=self._ptc_use_knl_only)
 
     def run(self, **kwargs):
         """Run madx as a subprocess."""
+
+        # Finalize the input template
         self._input += self._syntax['stop']
         template_input = jinja2.Template(self._input).render(kwargs.get("context", {}))
         if kwargs.get("debug", False) >= 2:
             print(template_input)
+
+        # Run subprocess
         if self._get_exec() is None:
             raise MadxException("Can't run MADX if no valid path and executable are defined.")
         p = sub.Popen([self._get_exec()],
@@ -266,12 +277,17 @@ class Madx(Simulator):
                       cwd=".",
                       shell=True
                       )
+
+        # Feed with input data
         self._output = p.communicate(input=template_input.encode())[0].decode()
+
+        # Decode output
         self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
         self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
         self._last_context = kwargs.get("context", {})
         if kwargs.get('debug', False):
             print(self._output)
+
         return self
 
     def raw(self, raw):

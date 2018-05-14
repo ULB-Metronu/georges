@@ -62,3 +62,9 @@ then connect to [http://localhost:8888](http://localhost:8888) to access the Jup
 
 The image includes a complete Anaconda Python3 environment with the most common packages. 
 The latest *MAD-X* development release is available in */usr/local/bin/madx*.
+
+
+download anaconda
+
+conda update conda
+
