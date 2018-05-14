@@ -37,7 +37,6 @@ class Simulator:
 
     def _attach(self, beamline):
         """Attach a beamline to the simulator instance."""
-        print(beamline)
         self._beamlines.append(beamline)
 
     def _get_exec(self):
