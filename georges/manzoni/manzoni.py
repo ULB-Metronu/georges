@@ -68,7 +68,8 @@ def convert_line(line, context={}, to_numpy=True):
         e['FE_A0'] = fe['A'][0]
         e['FE_A1'] = fe['A'][1]
         e['FE_A2'] = fe['A'][2]
-        e['FE_DPP'] = 0
+        e['FE_DPP'] = fe['DPP']
+        e['FE_LOSS'] = fe['LOSS']
         return e
 
     # Create or copy missing columns
