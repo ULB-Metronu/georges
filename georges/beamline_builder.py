@@ -65,6 +65,13 @@ class BeamlineBuilder:
         sequences = [
             pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep) for f in files
         ]
+        if len(sequences) >= 2:
+            sequences[1]['AT_CENTER'] += sequences[0].iloc[-1]['AT_CENTER']
+            if sequences[0].index[-1] == sequences[1].index[0]:
+                self.__beamline = pd.concat([sequences[0][:-1], sequences[1][1:]])
+            else:
+                self.__beamline = pd.concat(sequences)
+            return self
         self.__beamline = pd.concat(sequences)
         self.__beamline['PHYSICAL'] = True
         return self
