@@ -64,6 +64,7 @@ def vkicker(e, b, **kwargs):
 def degrader(e, b, **kwargs):
     # Remove particles
     idx = np.random.randint(b.shape[0], size=int((1 - e[INDEX_FE_LOSS]) * b.shape[0]))
+    b = b[idx, :]
     b += nprandom.multivariate_normal(
         [0.0, 0.0, 0.0, 0.0, 0.0],
         np.array(
