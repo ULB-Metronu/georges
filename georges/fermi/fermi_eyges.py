@@ -1,3 +1,4 @@
+import numpy as np
 from scipy.integrate import quad
 from ..physics import energy_to_pv
 from .stopping import residual_energy
@@ -18,7 +19,7 @@ def compute_fermi_eyges(material, energy, thickness, db, t, **kwargs):
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 1))[0],  # Order 1
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 2))[0],  # Order 2
     ]
-    b = a[0] * a[2] - a[1]**2  # Emittance
+    b = np.sqrt(a[0] * a[2] - a[1]**2)  # Emittance
 
     return {
         'A': a,

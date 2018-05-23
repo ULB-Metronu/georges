@@ -61,10 +61,13 @@ class BeamlineBuilder:
         if prefix is not None:
             self.__prefix = prefix
         self.__name = '_'.join(names).upper()
-        files = [os.path.splitext(n)[0] + (os.path.splitext(n)[1] or f".{DEFAULT_EXTENSION}") for n in names]
+        files = [
+            os.path.splitext(n)[0] + (os.path.splitext(n)[1] or f".{DEFAULT_EXTENSION}") for n in names
+        ]
         sequences = [
             pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep) for f in files
         ]
+        sequences[1]['AT_CENTER'] += sequences[0].iloc[-1]['AT_CENTER']
         self.__beamline = pd.concat(sequences)
         self.__beamline['PHYSICAL'] = True
         return self
