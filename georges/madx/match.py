@@ -14,7 +14,7 @@ class MatchException(Exception):
 
 
 def match(**kwargs):
-    """TODO
+    """Interface to the MAD-X matchnig module.
     """
     # Process arguments
     line = kwargs.get('line', None)
