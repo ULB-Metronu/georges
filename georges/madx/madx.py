@@ -202,7 +202,7 @@ def sequence_to_mad(sequence, ptc_use_knl_only=False):
     """Convert a pandas.DataFrame sequence onto a MAD-X input."""
     sequence.sort_values(by='AT_CENTER', inplace=True)
     sequence.query("TYPE != 'SOLIDS' and TYPE != 'SLITS'", inplace=True)
-    if sequence is None:
+    if sequence.empty:
         return ""
     m = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
     m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, ptc_use_knl_only), axis=1)) + '\n'
