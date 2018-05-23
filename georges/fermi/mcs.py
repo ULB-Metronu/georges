@@ -2,18 +2,20 @@ import numpy as np
 
 
 def scattering_length(**kwargs):
+    # See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
+
     db = kwargs.get('db')
     material = kwargs['material']
+    rho = db.density(material)
     if material is 'water':
-        return 6.0476276613967768
+        return 46.88/rho
     if material is 'air':
-        return 6E-3
+        return 46.76/rho
     alpha = 0.0072973525664  # Fine structure constant
     avogadro = 6.02e23  # Avogadro's number
     re = 2.817940e-15 * 100  # Classical electron radius (in cm)
     a = db.a(material)
     z = db.z(material)
-    rho = db.density(material)
     return 1 / (rho * alpha * avogadro * re**2 * z**2 * (2 * np.log(33219 * (a*z)**(-1/3)) - 1) / a)
 
 

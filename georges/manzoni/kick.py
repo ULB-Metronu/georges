@@ -19,7 +19,6 @@ def octupole(e, b, **kwargs):
     return b
 
 
-
 def decapole(e, b, **kwargs):
     b[:, 1] = e[INDEX_K3] * (b[:, X]**4 - 6 * b[:, X]**2 * b[:, Y]**2 + b[:, Y]**4)
     b[:, 3] = e[INDEX_K3] * (b[:, X]**3 * b[:, Y] - b[:, X] * b[:, Y]**3)
@@ -70,10 +69,10 @@ def degrader(e, b, **kwargs):
         [0.0, 0.0, 0.0, 0.0, 0.0],
         np.array(
             [
-                [e[INDEX_FE_A0], e[INDEX_FE_A1], 0, 0, 0],
-                [e[INDEX_FE_A1], e[INDEX_FE_A2], 0, 0, 0],
-                [0, 0, e[INDEX_FE_A0], e[INDEX_FE_A1], 0],
-                [0, 0, e[INDEX_FE_A1], e[INDEX_FE_A2], 0],
+                [e[INDEX_FE_A2], e[INDEX_FE_A1], 0, 0, 0],
+                [e[INDEX_FE_A1], e[INDEX_FE_A0], 0, 0, 0],
+                [0, 0, e[INDEX_FE_A2], e[INDEX_FE_A1], 0],
+                [0, 0, e[INDEX_FE_A1], e[INDEX_FE_A0], 0],
                 [0, 0, 0, 0, e[INDEX_FE_DPP]]
             ]
         ),
