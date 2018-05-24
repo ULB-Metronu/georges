@@ -2,8 +2,7 @@ import numpy as np
 
 
 def scattering_length(**kwargs):
-    #See in Techniques of Proton Radiotherapy:Transport Theory
-    #B. Gottschalk, May 1, 2012
+    # See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
 
     db = kwargs.get('db')
     material = kwargs['material']
@@ -25,7 +24,7 @@ class FermiRossi:
     @staticmethod
     def t(pv, p1v1, **kwargs):
         es = 15.0  # MeV
-        chi_0 = 19.32  # TODO
+        chi_0 = 19.32
         return (es/pv) ** 2 * (1/chi_0)
 
 

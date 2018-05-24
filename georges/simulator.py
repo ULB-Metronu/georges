@@ -43,7 +43,7 @@ class Simulator:
         """Retrive the path to the simulator executable."""
         if self._path is not None:
             return os.path.join(self._path, self._exec)
-        elif 'win' in sys.platform:
+        elif sys.platform == 'win':
             return shutil.which(self._exec)
         else:
             return shutil.which(self._exec, path=".:/usr/local/bin:/usr/bin:/bin")

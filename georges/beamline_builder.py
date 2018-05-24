@@ -61,7 +61,9 @@ class BeamlineBuilder:
         if prefix is not None:
             self.__prefix = prefix
         self.__name = '_'.join(names).upper()
-        files = [os.path.splitext(n)[0] + (os.path.splitext(n)[1] or f".{DEFAULT_EXTENSION}") for n in names]
+        files = [
+            os.path.splitext(n)[0] + (os.path.splitext(n)[1] or f".{DEFAULT_EXTENSION}") for n in names
+        ]
         sequences = [
             pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep) for f in files
         ]
@@ -103,9 +105,9 @@ class BeamlineBuilder:
         self.__elements = pd.DataFrame(elements)
         return self
 
-    def define_elements_from_file(self, file):
+    def define_elements_from_file(self, file, sep=','):
         file = os.path.splitext(file)[0] + '.' + (os.path.splitext(file)[1] or DEFAULT_EXTENSION)
-        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
+        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME', sep=sep)
         return self
 
     def build(self, name=None, extra_length=0.0):

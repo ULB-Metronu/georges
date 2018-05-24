@@ -145,17 +145,6 @@ class Beamline:
         self.__beamline.length = self.length
         return self.__beamline
 
-    @property
-    def strengths(self):
-        """Strengths of the various elements of the beamline."""
-        return self.__strengths
-
-    @strengths.setter
-    def strengths(self, strengths):
-        if not strengths.index == self.__strengths:
-            raise BeamlineException("Trying to set the strengths for an invalid elements list.")
-        self.__strengths = strengths
-
     def add_markers(self):
         s = self.__beamline
         markers = []
