@@ -105,9 +105,9 @@ class BeamlineBuilder:
         self.__elements = pd.DataFrame(elements)
         return self
 
-    def define_elements_from_file(self, file):
+    def define_elements_from_file(self, file, sep=','):
         file = os.path.splitext(file)[0] + '.' + (os.path.splitext(file)[1] or DEFAULT_EXTENSION)
-        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME')
+        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME', sep=sep)
         return self
 
     def build(self, name=None, extra_length=0.0):
