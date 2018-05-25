@@ -35,7 +35,7 @@ class DifferentialHighland:
         db = kwargs.get('db')
         material = kwargs.get('material')
         es = 15.0  # MeV
-        return DifferentialHighland.f_dm(l) * (es / pv) ** 2 * (1 / chi_s)
+        return DifferentialHighland.f_dh(l) * (es / pv) ** 2 * (1 / chi_s)
 
     @staticmethod
     def f_dh(l):

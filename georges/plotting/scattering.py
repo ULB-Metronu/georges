@@ -7,13 +7,14 @@ def draw_slab(ax, e):
         'graphite': 'g',
         'beryllium': 'r',
         'water': 'b',
+        'lexan': 'y',
     }
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], -1),  # (x,y)
             e['LENGTH'],  # width
             2,  # height
-            hatch='', facecolor=materials_colors[e['MATERIAL']]
+            hatch='', facecolor=materials_colors.get(e['MATERIAL'], 'k')
         )
     )
 

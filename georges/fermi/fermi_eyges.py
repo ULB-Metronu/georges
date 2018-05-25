@@ -67,4 +67,7 @@ def compute_fermi_eyges(material, energy, thickness, db, t, with_dpp=False, with
         'E_R': residual_energy(material, thickness, energy, db=db),
         'DPP': dpp,
         'LOSS': loss,
+        'TWISS_ALPHA': -a[1] / b,
+        'TWISS_BETA': a[2] / b,
+        'TWISS_GAMMA': a[0] / b,
     }
