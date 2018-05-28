@@ -70,20 +70,25 @@ class TurnByTurnObserver(Observer):
 
 class ElementByElementObserver(Observer):
 
-    def __init__(self, **kwargs):
+    def __init__(self, elements=None, **kwargs):
         super().__init__(turn_by_turn_active=False, element_by_element_active=True, **kwargs)
+        self._elements = elements
+
+    @property
+    def elements(self):
+        return self._elements
 
     def track_start(self, beam):
         super().track_start(beam)
 
     def track_end(self, turn, element, beam):
-        super().track_end(turn, element, beam)
-        self._data = np.array(self.data).reshape(turn+1, element+1, -1)
+        if self.elements is not None:
+            n_elements = len(self.elements)-1
+        else:
+            n_elements = element+1
+        super().track_end(turn, n_elements, beam)
+        self._data = np.array(self.data).reshape(turn+1, n_elements+1, -1)
         return self
 
     def element_by_element(self, turn, element, beam):
         self._data.append(self._element_by_element(beam))
-
-    @property
-    def beamline_data(self):
-        line = pd.dataFrame()

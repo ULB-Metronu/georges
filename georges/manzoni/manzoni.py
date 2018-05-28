@@ -131,6 +131,14 @@ def adjust_line(line, variables, parameters):
     return line
 
 
+def transform_elements(line, elements):
+    ll = line.reset_index()
+
+    def transform(e):
+        return ll[ll['NAME'] == e].index.values[0]
+    return list(map(transform, elements))
+
+
 def track(line, beam, turns=1, observer=None, **kwargs):
     """
     Tracking through a beamline.
@@ -159,7 +167,10 @@ def track(line, beam, turns=1, observer=None, **kwargs):
                 beam = beam.dot(matrices(line[i]).T)
             beam = aperture_check(beam, line[i])
             if observer is not None and observer.element_by_element_is_active is True:
-                observer.element_by_element(j, i, beam)
+                if observer.elements is None:
+                    observer.element_by_element(j, i, beam)
+                elif i in observer.elements:
+                    observer.element_by_element(j, i, beam)
         if observer is not None and observer.turn_by_turn_is_active is True:
             observer.turn_by_turn(j, i, beam)
     # Final call to the observer
