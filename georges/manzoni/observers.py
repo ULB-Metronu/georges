@@ -85,7 +85,7 @@ class ElementByElementObserver(Observer):
         if self.elements is not None:
             n_elements = len(self.elements)-1
         else:
-            n_elements = element+1
+            n_elements = element
         super().track_end(turn, n_elements, beam)
         self._data = np.array(self.data).reshape(turn+1, n_elements+1, -1)
         return self
