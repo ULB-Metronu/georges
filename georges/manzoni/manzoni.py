@@ -108,7 +108,7 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
     # Adjustments for the final format
     line = line.fillna(0.0)
     if to_numpy:
-        return line[list(INDEX.keys())].as_matrix()
+        return line[list(INDEX.keys())].values
     else:
         return line[list(INDEX.keys())]
 

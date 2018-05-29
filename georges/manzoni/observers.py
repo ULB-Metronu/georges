@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 
 _ = lambda x: x.copy()
 
@@ -38,7 +37,8 @@ class Observer:
         return self._turn_by_turn_is_active
 
     def track_start(self, beam):
-        self._start_data = self._track_start(beam)
+        if self._track_start is not None:
+            self._start_data = self._track_start(beam)
 
     def element_by_element(self, turn, element, beam):
         pass
