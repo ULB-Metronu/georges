@@ -1,7 +1,7 @@
 import numpy as np
 
 
-class GenericBounds:
+class GenericConstraints:
     def __init__(self, xmax=None, xmin=None):
         self.xmax = None
         self.xmin = None

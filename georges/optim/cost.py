@@ -45,7 +45,7 @@ class CostOptics(Cost):
         manzoni.adjust_line(self._model.beamline, self._model.variables, x)
         o = manzoni.manzoni.track(self._model.beamline, self._model.beam, observer=obs)
         p = self._parameters
-        return np.sqrt(
+        return (
             p['sigma_x'].get('weight', 0.0) * (o.data[0, 0, 0] - p['sigma_x'].get('value', 0.0)) ** 2
             + p['sigma_y'].get('weight', 0.0) * (o.data[0, 0, 1] - p['sigma_y'].get('value', 0.0)) ** 2
             + p['symmetry'].get('weight', 0.0) * (
