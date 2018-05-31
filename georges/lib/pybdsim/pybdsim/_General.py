@@ -9,6 +9,7 @@ General utilities for day to day housekeeping
 import glob
 import os
 from . import Data
+from .. import pybdsim
 import re as _re
 import numpy as _np
 
