@@ -127,8 +127,8 @@ class Options(dict):
     def SetBeamPipeThickness(self,bpt,unitsstring='mm'):
         self['beampipeThickness'] = str(bpt) + '*' + unitsstring
 
-    def SetPipeMaterial(self,bpm):
-        self['pipeMaterial'] = '"' + str(bpm) + '"'
+    def SetPipeMaterial(self, bpm):
+        self['beampipeMaterial'] = str(bpm)
 
     def SetVacuumMaterial(self,vm):
         self['vacMaterial'] = '"' + str(vm) + '"'
@@ -381,6 +381,13 @@ class Options(dict):
 
     def SetDefaultBiasMaterial(self, biases=""):
         self["defaultBiasMaterial"] = biases
+
+    def SetWorldMaterial(self, material="vacuum"):
+        self["worldMaterial"] = '"'+material+'"'
+
+    def SetPreprocessGDML(self, process="False"):
+        self["preprocessGDML"] = int(process)
+
 
 class Editor :
     def __init__(self, fileName) :
