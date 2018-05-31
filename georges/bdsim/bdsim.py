@@ -124,10 +124,10 @@ def sequence_to_bdsim(sequence, **kwargs):
         if (element['TYPE'] == 'DRIFT' and element['PIPE'] is False) or element['TYPE'] == 'GAP':
             m.AddGap(index, element['LENGTH'])
         if element['TYPE'] == 'QUADRUPOLE':
-            # Add two quadrupole with same k1 but different length to have a sampler inside
+
             m.AddQuadrupole(index,
                             element['LENGTH'],
-                            k1=context.get(f"{index}_K1", 0.0),
+                            k1=context.get(element['CIRCUIT'], 0.0)/element['BRHO'],
                             aper1=(float(element['APERTURE']), 'm'),
                             apertureType="circular",
                             magnetGeometryType="cylindrical")
@@ -152,6 +152,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                       )
         if element['TYPE'] == "MARKER":
             m.AddMarker(index)
+
         if element['TYPE'] == "SOLIDS":
             m.AddGap(f"{index}_GAP", element['LENGTH'])
             m.AddPlacement(
@@ -177,10 +178,9 @@ def sequence_to_bdsim(sequence, **kwargs):
                          vkick=context.get(f"{index}_SCAN", 0)
                          )
 
-
         if element['TYPE'] == "SBEND":
 
-            #TODO improve the way to have the aperture
+            # TODO improve the way to have the aperture
             if element['APERTYPE'] == 'RECTANGLE':
                 aperture = element['APERTURE'].split(",")
                 if context.get(f"{index}_B") is not None:  # add functionnality inside BDsim
@@ -239,6 +239,8 @@ class BDSim(Simulator):
         self._exec = BDSim.EXECUTABLE_NAME
         self._nparticles = 0
         self._outputname = kwargs.get('output_name', 'output')
+        self._build_solids = kwargs.get('build_solids', True)
+
         super().__init__(**kwargs)
 
     def _attach(self, beamline, context=None):
@@ -247,6 +249,14 @@ class BDSim(Simulator):
             raise SimulatorException("Beamline length not defined.")
         if context is not None and context.get('BRHO'):
             beamline.line['BRHO'] = context['BRHO']
+        if context.get('BRHO') is None:
+            raise BdsimException('BRHO is not defined in the context')
+
+        if not self._build_solids:
+            print("Replace solids by markers")
+            idx = beamline.line.query('TYPE == "SOLIDS"').index
+            beamline.line.at[idx, 'TYPE'] = 'MARKER'
+
         self._bdsim_machine = sequence_to_bdsim(beamline.line, context=context)
 
     def run(self, **kwargs):
