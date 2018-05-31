@@ -145,6 +145,23 @@ class Helpers:
         record = stats.compile(pop)
         logbook.record(gen=0, evals=len(invalid_ind), **record)
         print(logbook.stream)
+        param = [tuple(ind) for ind in pop if ind.fitness.values]
+        fit = [ind.fitness.values for ind in pop if ind.fitness.values]
+        fobj = [np.array(i[:]).sum() for i in fit]
+        d_index = [(gen, i) for i in range(0, len(param))]
+        index = pd.MultiIndex.from_tuples(d_index, names=['gen', 'pop'])
+        a = pd.DataFrame(param, columns=['IQ1C', 'IQ2C', 'IQ3C', 'IQ4C', 'IQ5C'])
+        b = pd.DataFrame(fit, columns=['SigmaX', 'SigmaY', 'Sym', 'Losses', 'alfaX', 'alfaY'])
+        fobj = pd.DataFrame(fobj, columns=['f_obj'])
+        c = a.join(b)
+        cc = c.join(fobj)
+        cc = cc.set_index(index)
+        try:
+            a = pd.read_csv('Test.csv', index_col=[0, 1])
+            b = pd.concat([a, cc])
+            b.to_csv('Test.csv')
+        except FileNotFoundError:
+            cc.to_csv('Test.csv')
 
         # Begin the generational process
         for gen in range(1, NGEN):
@@ -172,8 +189,25 @@ class Helpers:
             record = stats.compile(pop)
             logbook.record(gen=gen, evals=len(invalid_ind), **record)
             print(logbook.stream)
-
+            param = [tuple(ind) for ind in pop if ind.fitness.values]
+            fit = [ind.fitness.values for ind in pop if ind.fitness.values]
+            fobj = [np.array(i[:]).sum() for i in fit]
+            d_index = [(gen, i) for i in range(0, len(param))]
+            index = pd.MultiIndex.from_tuples(d_index, names=['gen', 'pop'])
+            a = pd.DataFrame(param, columns=['IQ1C', 'IQ2C', 'IQ3C', 'IQ4C', 'IQ5C'])
+            b = pd.DataFrame(fit, columns=['SigmaX', 'SigmaY', 'Sym', 'Losses', 'alfaX', 'alfaY'])
+            fobj = pd.DataFrame(fobj, columns=['f_obj'])
+            c = a.join(b)
+            cc = c.join(fobj)
+            cc = cc.set_index(index)
+            try:
+                a = pd.read_csv('Test.csv', index_col=[0, 1])
+                b = pd.concat([a, cc])
+                b.to_csv('Test.csv')
+            except FileNotFoundError:
+                cc.to_csv('Test.csv')
         return pfrt, pop, logbook
+
 
 h = Helpers()
 creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, -1.0, -1.0, -1.0, -1.0))
@@ -183,7 +217,6 @@ toolbox.register('map', futures.map)
 toolbox.register("individual", h.initialize, creator.Individual)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 toolbox.register("evaluate", h.evaluate)
-#toolbox.decorate("evaluate", tools.DeltaPenalty(h.feasible, 0.0, h.distance))
 toolbox.register("mate", tools.cxSimulatedBinaryBounded, eta=2, low=h.lower_bounds, up=h.upper_bounds)
 toolbox.register("mutate", tools.mutPolynomialBounded, eta=2, low=h.lower_bounds, up=h.upper_bounds,
                  indpb=1 / len(h.variables))
@@ -191,8 +224,4 @@ toolbox.register("select", tools.selNSGA2)
 
 
 if __name__ == '__main__':
-    pfrt, pop, stats = h.algo(NGEN=150, POP=4000, CXPB=0.9)
-    import pickle
-
-    with open('objs.pkl', 'wb') as f:
-        pickle.dump([pfrt, pop, stats], f)
+    h.algo(NGEN=150, POP=4000, CXPB=0.9)
