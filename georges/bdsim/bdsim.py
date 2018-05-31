@@ -245,6 +245,8 @@ class BDSim(Simulator):
         super()._attach(beamline)
         if beamline.length is None or pd.isnull(beamline.length):
             raise SimulatorException("Beamline length not defined.")
+        if context is not None and context.get('BRHO'):
+            beamline.line['BRHO'] = context['BRHO']
         self._bdsim_machine = sequence_to_bdsim(beamline.line, context=context)
 
     def run(self, **kwargs):
