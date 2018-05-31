@@ -207,7 +207,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                         apertureType='rectangular',
                         aper1=0.5*float(aperture[0]),
                         aper2=0.5*float(aperture[1]),
-                        scaling=context.get(f"{index}_scale",1)
+                        scaling=context.get(f"{index}_scale", 1)
                     )
     m.AddSampler("all")
     return m
