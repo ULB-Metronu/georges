@@ -241,11 +241,11 @@ class BDSim(Simulator):
         self._outputname = kwargs.get('output_name', 'output')
         super().__init__(**kwargs)
 
-    def _attach(self, beamline):
+    def _attach(self, beamline, context=None):
         super()._attach(beamline)
         if beamline.length is None or pd.isnull(beamline.length):
             raise SimulatorException("Beamline length not defined.")
-        self._bdsim_machine = sequence_to_bdsim(beamline.line, context=self._context)
+        self._bdsim_machine = sequence_to_bdsim(beamline.line, context=context)
 
     def run(self, **kwargs):
         """Run bdsim as a subprocess."""
