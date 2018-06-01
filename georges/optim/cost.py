@@ -51,7 +51,7 @@ class CostOptics(Cost):
             + p['symmetry'].get('weight', 0.0) * (
                 np.abs(o.data[0, 0, 0] - o.data[0, 0, 1]) / (o.data[0, 0, 0] + o.data[0, 0, 1]))
             + p['alpha_x'].get('weight', 0.0) * (o.data[0, 0, 2] - p['alpha_x'].get('value', 0.0)) ** 2
-            + p['sigma_y'].get('weight', 0.0) * (o.data[0, 0, 3] - p['alpha_y'].get('value', 0.0)) ** 2
+            + p['alpha_y'].get('weight', 0.0) * (o.data[0, 0, 3] - p['alpha_y'].get('value', 0.0)) ** 2
             + p['transmission'].get('weight', 0.0) * (self._model.beam.shape[0] - o.data[0, 0, 4]) /
             self._model.beam.shape[0]
         )

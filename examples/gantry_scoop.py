@@ -17,7 +17,7 @@ class Helpers:
             .add_drifts(using_collimators=True, pipe_aperture=0.033)
 
         self.kinematics = georges.physics.kinematics(energy=230)
-        self.b = georges.Beam(energy=self.kinematics['energy']).from_twiss_parameters(1e4,
+        self.b = georges.Beam(energy=self.kinematics['energy']).from_twiss_parameters(5e4,
                                                                             BETAX=1.14,
                                                                             ALPHAX=0.0159,
                                                                             EMITX=28.50e-6,
@@ -74,26 +74,7 @@ class Helpers:
         self.manzoni_variables = georges.manzoni.transform_variables(self.l, self.variables)
 
         self.manzoni_beam = self.b.distribution.values
-        self.cube = self.scale(pyDOE.lhs(5, 200, None), [-20, 4, 1, -14, 3], [-12, 12, 9, -6, 12])
-
-    def feasible(self, individual):
-        a = self.evaluate(individual)
-        """Feasibility function for the individual. Returns True if feasible False"""
-        if 4 < a[0] < 5 and 4 < a[1] < 5:
-            return True
-        return False
-
-    def distance(self, individual):
-        a = self.evaluate(individual)
-        """A distance function to the feasibility region."""
-        return [
-            (a[0] - 4) ** 2 + 6,
-            (a[1] - 4) ** 2 + 6,
-            a[2] + 6,
-            a[3] + 6,
-            a[4] + 6,
-            a[5] + 6,
-        ]
+        self.cube = self.scale(pyDOE.lhs(5, 4000, None), [-20, 4, 1, -14, 3], [-12, 12, 9, -6, 12])
 
     def scale(self, cube, xmin, xmax):
         for i in range(0, cube.shape[1]):
@@ -118,7 +99,7 @@ class Helpers:
                                           ]
         )
         o = georges.manzoni.manzoni.track(self.manzoni_line, self.manzoni_beam, observer=obs)
-        return [
+        f = [
             np.abs(o.data[:, -5][0][0]),
             np.abs(o.data[:, -5][0][1]),
             np.abs(o.data[:, -5][0][0] - o.data[:, -5][0][1]) / (o.data[:, -5][0][0] + o.data[:, -5][0][0]),
@@ -127,6 +108,17 @@ class Helpers:
             np.abs(o.data[:, -5][0][4])
 
         ]
+        if 4 < f[0] < 5 and 4 < f[1] < 5:
+            return f
+        else:
+            return [
+                (f[0] - 4) ** 2 + 6,
+                (f[1] - 4) ** 2 + 6,
+                f[2] + 6,
+                f[3] + 6,
+                f[4] + 6,
+                f[5] + 6,
+            ]
 
     def algo(self, seed=None, NGEN=20, POP=400, CXPB=0.8):
         random.seed(seed)
@@ -153,6 +145,23 @@ class Helpers:
         record = stats.compile(pop)
         logbook.record(gen=0, evals=len(invalid_ind), **record)
         print(logbook.stream)
+        param = [tuple(ind) for ind in pop if ind.fitness.values]
+        fit = [ind.fitness.values for ind in pop if ind.fitness.values]
+        fobj = [np.array(i[:]).sum() for i in fit]
+        d_index = [(gen, i) for i in range(0, len(param))]
+        index = pd.MultiIndex.from_tuples(d_index, names=['gen', 'pop'])
+        a = pd.DataFrame(param, columns=['IQ1C', 'IQ2C', 'IQ3C', 'IQ4C', 'IQ5C'])
+        b = pd.DataFrame(fit, columns=['SigmaX', 'SigmaY', 'Sym', 'Losses', 'alfaX', 'alfaY'])
+        fobj = pd.DataFrame(fobj, columns=['f_obj'])
+        c = a.join(b)
+        cc = c.join(fobj)
+        cc = cc.set_index(index)
+        try:
+            a = pd.read_csv('Test.csv', index_col=[0, 1])
+            b = pd.concat([a, cc])
+            b.to_csv('Test.csv')
+        except FileNotFoundError:
+            cc.to_csv('Test.csv')
 
         # Begin the generational process
         for gen in range(1, NGEN):
@@ -180,8 +189,25 @@ class Helpers:
             record = stats.compile(pop)
             logbook.record(gen=gen, evals=len(invalid_ind), **record)
             print(logbook.stream)
-
+            param = [tuple(ind) for ind in pop if ind.fitness.values]
+            fit = [ind.fitness.values for ind in pop if ind.fitness.values]
+            fobj = [np.array(i[:]).sum() for i in fit]
+            d_index = [(gen, i) for i in range(0, len(param))]
+            index = pd.MultiIndex.from_tuples(d_index, names=['gen', 'pop'])
+            a = pd.DataFrame(param, columns=['IQ1C', 'IQ2C', 'IQ3C', 'IQ4C', 'IQ5C'])
+            b = pd.DataFrame(fit, columns=['SigmaX', 'SigmaY', 'Sym', 'Losses', 'alfaX', 'alfaY'])
+            fobj = pd.DataFrame(fobj, columns=['f_obj'])
+            c = a.join(b)
+            cc = c.join(fobj)
+            cc = cc.set_index(index)
+            try:
+                a = pd.read_csv('Test.csv', index_col=[0, 1])
+                b = pd.concat([a, cc])
+                b.to_csv('Test.csv')
+            except FileNotFoundError:
+                cc.to_csv('Test.csv')
         return pfrt, pop, logbook
+
 
 h = Helpers()
 creator.create("FitnessMin", base.Fitness, weights=(-1.0, -1.0, -1.0, -1.0, -1.0, -1.0))
@@ -191,7 +217,6 @@ toolbox.register('map', futures.map)
 toolbox.register("individual", h.initialize, creator.Individual)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
 toolbox.register("evaluate", h.evaluate)
-#toolbox.decorate("evaluate", tools.DeltaPenalty(h.feasible, 0.0, h.distance))
 toolbox.register("mate", tools.cxSimulatedBinaryBounded, eta=2, low=h.lower_bounds, up=h.upper_bounds)
 toolbox.register("mutate", tools.mutPolynomialBounded, eta=2, low=h.lower_bounds, up=h.upper_bounds,
                  indpb=1 / len(h.variables))
@@ -199,4 +224,4 @@ toolbox.register("select", tools.selNSGA2)
 
 
 if __name__ == '__main__':
-    pfrt, pop, stats = h.algo(NGEN=50, POP=200, CXPB=0.9)
+    h.algo(NGEN=150, POP=4000, CXPB=0.9)

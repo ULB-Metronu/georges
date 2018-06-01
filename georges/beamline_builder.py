@@ -55,7 +55,7 @@ class BeamlineBuilder:
         """
         return self.__beamline
 
-    def add_from_files(self, names, path=None, prefix=None, sep=','):
+    def add_from_files(self, names, path=None, prefix=None, sep=None):
         if path is not None:
             self.__path = path
         if prefix is not None:
@@ -64,10 +64,16 @@ class BeamlineBuilder:
         files = [
             os.path.splitext(n)[0] + (os.path.splitext(n)[1] or f".{DEFAULT_EXTENSION}") for n in names
         ]
-        sequences = [
-            pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep) for f in files
-        ]
-        if len(sequences) >= 2:
+        sequences = []
+        for f in files:
+            if sep is None:
+                try:
+                    sequences.append(pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=','))
+                except ValueError:
+                    sequences.append(pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=';'))
+            else:
+                sequences.append(pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep))
+        if len(sequences) >= 2 and not self.__from_survey:
             sequences[1]['AT_CENTER'] += sequences[0].iloc[-1]['AT_CENTER']
             if sequences[0].index[-1] == sequences[1].index[0]:
                 self.__beamline = pd.concat([sequences[0][:-1], sequences[1][1:]])
