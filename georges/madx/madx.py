@@ -248,7 +248,6 @@ class Madx(Simulator):
 
     def __init__(self, beamlines=None, path=None, **kwargs):
         self._ptc_use_knl_only = kwargs.get('ptc_use_knl_only', False)
-        self._add_markers = kwargs.get('add_markers', True)
         super().__init__(beamlines=beamlines, path=path, **kwargs)
         self._syntax = madx_syntax
         self._exec = Madx.EXECUTABLE_NAME
@@ -259,11 +258,7 @@ class Madx(Simulator):
             raise SimulatorException("Beamline length not defined.")
         if context is not None and context.get('BRHO'):
             beamline.line['BRHO'] = context['BRHO']
-        if self._add_markers:
-            tmp = beamline.add_markers().line
-        else:
-            tmp = beamline.line
-        self._input += sequence_to_mad(tmp, ptc_use_knl_only=self._ptc_use_knl_only)
+        self._input += sequence_to_mad(beamline.line, ptc_use_knl_only=self._ptc_use_knl_only)
 
     def run(self, **kwargs):
         """Run madx as a subprocess."""
