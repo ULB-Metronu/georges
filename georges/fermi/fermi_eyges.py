@@ -18,11 +18,11 @@ def compute_energy_dispersion(energy, material):
     # 4th degree polynomial fits of Robin data with no cuts
     E = energy
     if material == 'beryllium':
-        return 7.723e-11*E**4 - 5.637e-08*E**3 + 1.603e-05*E**2 - 0.002182*E + 0.1249
+        return 6.388e-11*E**4 - 4.906e-08*E**3 + 1.46e-05*E**2 - 0.002062*E + 0.1214
     elif material == 'graphite':
-        return 1.403e-10*E**4 - 9.54e-08*E**3 + 2.455e-05*E**2 - 0.002913*E + 0.1416
+        return 1.082e-10*E**4 - 7.794e-08*E**3 + 2.113e-05*E**2 - 0.002629*E + 0.1332
     elif material == 'alluminum':
-        return 1.308e-10*E**4 - 8.826e-08*E**3 + 2.263e-05*E**2 - 0.002693*E + 0.1324
+        return 9.625e-11*E**4 - 6.95e-08*E**3 + 1.897e-05*E**2 - 0.002389*E + 0.1234
     elif material == 'diamond':
         return 4.997e-10*E**4 - 3.04e-07*E**3 + 6.783e-05*E**2 - 0.006684*E**2 + 0.2572
     else:
@@ -42,10 +42,10 @@ def compute_losses(energy, material):
     elif material == 'diamond':
         return -1.3e-10*E**4 + 8.528e-08*E**3 - 1.434e-05*E**2 + 0.002085*E + 0.6084
     else:
-        return 0.0
+        return 1.0
 
 
-def compute_fermi_eyges(material, energy, thickness, db, t, with_dpp=False, with_losses=False, **kwargs):
+def compute_fermi_eyges(material, energy, thickness, db, t, with_dpp=True, with_losses=True, **kwargs):
     a = [
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 0))[0],  # Order 0
         1e-2*quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 1))[0],  # Order 1
