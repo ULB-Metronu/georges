@@ -205,7 +205,9 @@ def sequence_to_mad(sequence, ptc_use_knl_only=False):
     if sequence is None:
         return ""
     m = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
+    m += 'MAD_START: MARKER, AT = 0.0;\n'
     m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, ptc_use_knl_only), axis=1)) + '\n'
+    m += f"MAD_END: MARKER, AT={sequence.length};\n"
     m += "ENDSEQUENCE;\n"
 
     processed_variables = set()
