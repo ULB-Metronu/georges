@@ -170,7 +170,7 @@ class Beamline:
             return r
 
         s.apply(create_marker, axis=1)
-        return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
+        return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')], sort=False).sort_values(by='AT_CENTER'))
 
     def to_thin(self, element):
         bl = self.__beamline

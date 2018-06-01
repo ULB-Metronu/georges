@@ -42,14 +42,14 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
             material=slab['MATERIAL'],
             energy=slab['ENERGY_IN'],
             thickness=slab['LENGTH'] * 100,
-            T=model
+            t=model
         )
         return pd.Series({
             'A0': fe['A'][0],
             'A1': fe['A'][1],
             'A2': fe['A'][2],
             'B': fe['B']
-        }).rename(e.name)
+        }).rename(slab.name)
 
     # Do not modify the input beamline
     line_fermi = line.line.copy()
@@ -66,6 +66,10 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
         air_gaps.set_index('NAME', inplace=True)
         with_gaps = pd.concat([line_fermi, air_gaps]).sort_values(by='AT_ENTRY')
         line_fermi = with_gaps
+
+    # Add columns as needed
+    if 'TYPE' not in line_fermi:
+        line_fermi['TYPE'] = line_fermi['CLASS']
 
     # Compute energy loss along the line
     track_energy(beam['energy'], line_fermi, db)

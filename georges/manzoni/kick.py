@@ -84,6 +84,13 @@ def degrader(e, b, **kwargs):
     return b
 
 
+def scatterer(e, b, **kwargs):
+    # Remove particles
+    b[:, 1] += nprandom.normal(0.0, e[INDEX_FE_A0], int(b.shape[0]))
+    b[:, 1] += nprandom.normal(0.0, e[INDEX_FE_A0], int(b.shape[0]))
+    return b
+
+
 kick = {
     CLASS_CODES['SEXTUPOLE']: sextupole,
     CLASS_CODES['OCTUPOLE']: octupole,

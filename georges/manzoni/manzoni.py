@@ -108,7 +108,7 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
     # Adjustments for the final format
     line = line.fillna(0.0)
     if to_numpy:
-        return line[list(INDEX.keys())].as_matrix()
+        return line[list(INDEX.keys())].values
     else:
         return line[list(INDEX.keys())]
 
@@ -129,6 +129,14 @@ def adjust_line(line, variables, parameters):
         line[variables[it.index][0], variables[it.index][1]] = it[0]
         it.iternext()
     return line
+
+
+def transform_elements(line, elements):
+    ll = line.reset_index()
+
+    def transform(e):
+        return ll[ll['NAME'] == e].index.values[0]
+    return list(map(transform, elements))
 
 
 def track(line, beam, turns=1, observer=None, **kwargs):
@@ -159,7 +167,10 @@ def track(line, beam, turns=1, observer=None, **kwargs):
                 beam = beam.dot(matrices(line[i]).T)
             beam = aperture_check(beam, line[i])
             if observer is not None and observer.element_by_element_is_active is True:
-                observer.element_by_element(j, i, beam)
+                if observer.elements is None:
+                    observer.element_by_element(j, i, beam)
+                elif i in observer.elements:
+                    observer.element_by_element(j, i, beam)
         if observer is not None and observer.turn_by_turn_is_active is True:
             observer.turn_by_turn(j, i, beam)
     # Final call to the observer
