@@ -607,11 +607,12 @@ class Machine:
             raise ValueError(s)
         if angle is None and b is None:
             raise TypeError('angle or b must be specified for a dipole')
-        elif angle != None:
+        elif angle is not None and b is None:
             self.Append(Element(name,category,l=length,angle=angle,**kwargs))
-        else:
+        elif b is not None and angle is None:
             self.Append(Element(name,category,l=length,B=b,**kwargs))
-
+        else:
+            self.Append(Element(name, category, l=length, angle=angle, B=b, **kwargs))
     def AddQuadrupole(self, name='qd', length=0.1, k1=0.0, **kwargs):
         self.Append(Element(name,'quadrupole',l=length,k1=k1,**kwargs))
         

@@ -5,7 +5,7 @@
       <sourceFolder url="file://$MODULE_DIR$/georges/lib/pybdsim" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/georges" isTestSource="false" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.6 (idp)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.6.4 (~/anaconda3/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
