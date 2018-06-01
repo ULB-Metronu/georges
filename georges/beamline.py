@@ -209,7 +209,7 @@ class Beamline:
             i = r[0]
             e = r[1]
             diff = e['AT_ENTRY'] - at_entry
-            if diff == 0:
+            if diff <= 1e-6:
                 line_with_drifts = line_with_drifts.append(e)
             else:
                 line_with_drifts = line_with_drifts.append(create_drift(

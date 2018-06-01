@@ -67,7 +67,7 @@ class BeamlineBuilder:
         sequences = [
             pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep) for f in files
         ]
-        if len(sequences) >= 2:
+        if len(sequences) >= 2 and self.__from_survey == False:
             sequences[1]['AT_CENTER'] += sequences[0].iloc[-1]['AT_CENTER']
             if sequences[0].index[-1] == sequences[1].index[0]:
                 self.__beamline = pd.concat([sequences[0][:-1], sequences[1][1:]])
@@ -89,20 +89,20 @@ class BeamlineBuilder:
         self.__from_survey = True
         return self.add_from_survey_files([file], path, prefix, sep=sep)
 
-    def define_elements(self, e):
+    def define_elements(self, e, sep=','):
         """Process the elements description argument."""
         # Some type inference to get the elements right
         # Elements as a file name
         if isinstance(e, str):
-            return self.define_elements_from_file(e)
+            return self.define_elements_from_file(e, sep)
         # Elements as a list to be converted onto a DataFrame
         elif isinstance(e, list) and len(e) > 0:
-            return self.define_elements_from_list(e)
+            return self.define_elements_from_list(e, sep)
         elif not isinstance(self.__elements, pd.DataFrame):
             raise BeamlineBuilderException("Invalid data type for 'elements'.")
 
-    def define_elements_from_list(self, elements):
-        self.__elements = pd.DataFrame(elements)
+    def define_elements_from_list(self, elements, sep=','):
+        self.__elements = pd.DataFrame(elements, sep)
         return self
 
     def define_elements_from_file(self, file, sep=','):

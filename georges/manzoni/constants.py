@@ -63,6 +63,7 @@ CLASS_CODES = {k: i for i, k in enumerate(
         'HKICKER',
         'VKICKER',
         'DEGRADER',
+        'SCATTERER',
     )
 )}
 
@@ -84,6 +85,8 @@ CLASS_CODE_KICK = [
     CLASS_CODES['HKICKER'],
     CLASS_CODES['VKICKER'],
     CLASS_CODES['DEGRADER'],
+    CLASS_CODES['SCATTERER'],
+
 ]
 
 # Define constants for aperture types
