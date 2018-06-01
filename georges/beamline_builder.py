@@ -84,14 +84,14 @@ class BeamlineBuilder:
         self.__beamline['PHYSICAL'] = True
         return self
 
-    def add_from_survey_files(self, names, path=None, prefix=None, sep=','):
+    def add_from_survey_files(self, names, path=None, prefix=None, sep=None):
         self.__from_survey = True
         return self.add_from_files(names, path, prefix, sep=sep)
 
-    def add_from_file(self, file, path=None, prefix=None, sep=','):
+    def add_from_file(self, file, path=None, prefix=None, sep=None):
         return self.add_from_files([file], path, prefix, sep=sep)
 
-    def add_from_survey_file(self, file, path=None, prefix=None, sep=','):
+    def add_from_survey_file(self, file, path=None, prefix=None, sep=None):
         self.__from_survey = True
         return self.add_from_survey_files([file], path, prefix, sep=sep)
 
