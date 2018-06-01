@@ -73,7 +73,7 @@ class BeamlineBuilder:
                     sequences.append(pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=';'))
             else:
                 sequences.append(pd.read_csv(os.path.join(self.__path, self.__prefix, f), index_col='NAME', sep=sep))
-        if len(sequences) >= 2:
+        if len(sequences) >= 2 and not self.__from_survey:
             sequences[1]['AT_CENTER'] += sequences[0].iloc[-1]['AT_CENTER']
             if sequences[0].index[-1] == sequences[1].index[0]:
                 self.__beamline = pd.concat([sequences[0][:-1], sequences[1][1:]])
