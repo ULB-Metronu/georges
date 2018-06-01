@@ -151,6 +151,8 @@ class Beamline:
 
         def create_marker(r):
             if r['CLASS'] != 'MARKER' and r['CLASS'] != 'INSTRUMENT':
+                if r.name + 'IN' in s and r.name + 'OUT' in s:
+                    return r
                 m = pd.Series({
                     'TYPE': 'MARKER',
                     'CLASS': 'MARKER',
