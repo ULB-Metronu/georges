@@ -41,7 +41,7 @@ def hkicker(e, b, **kwargs):
     return b + np.array(
         [
             0,
-            e[INDEX_K1],
+            e[INDEX_KICK],
             0,
             0,
             0
@@ -55,7 +55,7 @@ def vkicker(e, b, **kwargs):
             0,
             0,
             0,
-            e[INDEX_K1],
+            e[INDEX_KICK],
             0
         ]
     )

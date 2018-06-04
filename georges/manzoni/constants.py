@@ -10,6 +10,7 @@ INDEX = {k: i for i, k in enumerate(
         'K2',
         'K3',
         'K4',
+        'KICK',
         'APERTYPE_CODE',
         'APERTURE',
         'APERTURE_2',
@@ -34,6 +35,7 @@ INDEX_K1 = INDEX['K1']
 INDEX_K2 = INDEX['K2']
 INDEX_K3 = INDEX['K3']
 INDEX_K4 = INDEX['K4']
+INDEX_KICK = INDEX['KICK']
 INDEX_APERTYPE_CODE = INDEX['APERTYPE_CODE']
 INDEX_APERTURE = INDEX['APERTURE']
 INDEX_APERTURE_2 = INDEX['APERTURE_2']
