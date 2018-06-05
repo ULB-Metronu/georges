@@ -93,6 +93,7 @@ class Options(dict):
             'synchrad',
             'optical',
             'hadronic',
+            'hadronic_elastic',
             'hadronichp',
             'qgsp_bert',
             'qgsp_bert_hp',
