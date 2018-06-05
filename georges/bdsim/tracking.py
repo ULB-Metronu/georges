@@ -72,11 +72,11 @@ def read_tracking(element, evttree, **kwargs):
         bdsim_beam['PDG_ID'] = m[element.name + ".partID"].values
         bdsim_beam['Weight'] = m[element.name + ".weight"].values
         bdsim_beam.query('X == X', inplace=True)  # Remove None entries
-        bdsim_beam['E'] = 1000 * (bdsim_beam['E'] - 0.938)
+        bdsim_beam['E'] = 1000*bdsim_beam['E'] - physics.PROTON_MASS
         bdsim_beam['P'] = physics.energy_to_momentum(bdsim_beam['E'])
 
         # Query particles inside the aperture
-        # TODO make the selection based on the aperture of each element. By default r < 29.75mm
+        # TODO make a kwargs if we want to have an aperture (if using_collimators == TRUE)
         bdsim_beam["R"] = np.sqrt(bdsim_beam['X']**2 + bdsim_beam['Y']**2)
 
         if element['APERTYPE'] == 'CIRCLE':
