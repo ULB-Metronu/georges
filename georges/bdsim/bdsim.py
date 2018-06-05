@@ -158,12 +158,12 @@ def sequence_to_bdsim(sequence, **kwargs):
             m.AddPlacement(
                 index,
                 geometryFile=context.get(f"{index}_file"),
-                x=0.0,
-                y=-0.229,
-                z=element['AT_CENTER']-50/1000,  # A corriger pour etre plus générique
-                phi=0.0,
+                x=context.get(f"{index}_x", 0.0),
+                y=context.get(f"{index}_y", 0.0),
+                z=element['AT_CENTER'],
+                phi=context.get(f"{index}_phi", 0.0),
                 psi=context.get(f"{index}_psi", 0.0),
-                theta=context.get(f"{index}_theta", np.deg2rad(90.0))
+                theta=context.get(f"{index}_theta", 0.0)
             )
 
         if element['TYPE'] == "HKICKER":
