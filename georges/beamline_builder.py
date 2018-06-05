@@ -84,23 +84,23 @@ class BeamlineBuilder:
         self.__beamline['PHYSICAL'] = True
         return self
 
-    def add_from_survey_files(self, names, path=None, prefix=None, sep=','):
+    def add_from_survey_files(self, names, path=None, prefix=None, sep=None):
         self.__from_survey = True
         return self.add_from_files(names, path, prefix, sep=sep)
 
-    def add_from_file(self, file, path=None, prefix=None, sep=','):
+    def add_from_file(self, file, path=None, prefix=None, sep=None):
         return self.add_from_files([file], path, prefix, sep=sep)
 
-    def add_from_survey_file(self, file, path=None, prefix=None, sep=','):
+    def add_from_survey_file(self, file, path=None, prefix=None, sep=None):
         self.__from_survey = True
         return self.add_from_survey_files([file], path, prefix, sep=sep)
 
-    def define_elements(self, e):
+    def define_elements(self, e, sep=None):
         """Process the elements description argument."""
         # Some type inference to get the elements right
         # Elements as a file name
         if isinstance(e, str):
-            return self.define_elements_from_file(e)
+            return self.define_elements_from_file(e, sep)
         # Elements as a list to be converted onto a DataFrame
         elif isinstance(e, list) and len(e) > 0:
             return self.define_elements_from_list(e)
@@ -111,9 +111,16 @@ class BeamlineBuilder:
         self.__elements = pd.DataFrame(elements)
         return self
 
-    def define_elements_from_file(self, file, sep=','):
+    def define_elements_from_file(self, file, sep=None):
         file = os.path.splitext(file)[0] + '.' + (os.path.splitext(file)[1] or DEFAULT_EXTENSION)
-        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME', sep=sep)
+        if sep is None:
+            try:
+                self.__elements = pd.read_csv(os.path.join(self.__path, file), sep=',')
+            except ValueError:
+                self.__elements = pd.read_csv(os.path.join(self.__path, file), sep=';')
+        else:
+            self.__elements = pd.read_csv(os.path.join(self.__path, file), sep=sep)
+        self.__elements = self.__elements.set_index('NAME')
         return self
 
     def build(self, name=None, extra_length=0.0):

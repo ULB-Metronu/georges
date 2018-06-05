@@ -147,7 +147,7 @@ def element_to_mad(e, ptc_use_knl_only=False):
     if not mad.endswith(', '):
         mad += ', '
     if (e.CLASS is 'SBEND' or e.CLASS is 'RBEND') and pd.notnull(e.get('FINT', None)):
-        mad += f", FINT={e['FINT']}"
+        mad += f", FINT={e['FINT']},"
     mad += ', '.join([f"{p}={e[p]}" for p in SUPPORTED_PROPERTIES if pd.notnull(e.get(p, None))])
     if not mad.endswith(', '):
         mad += ', '
