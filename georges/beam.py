@@ -132,9 +132,9 @@ class Beam:
 
     @property
     def std_bpm(self):
-        return self._std_bpm()
+        return self.fit_bpm()
 
-    def _std_bpm(self, **kwargs):
+    def fit_bpm(self, **kwargs):
         """TODO"""
         def gaussian(x, a, mu, sigma):
             return a * np.exp(-(x - mu) ** 2 / (2 * sigma ** 2)) / (np.sqrt(2*np.pi)*sigma)
