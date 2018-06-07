@@ -95,7 +95,7 @@ class BeamlineBuilder:
         self.__from_survey = True
         return self.add_from_survey_files([file], path, prefix, sep=sep)
 
-    def define_elements(self, e, sep=','):
+    def define_elements(self, e, sep=None):
         """Process the elements description argument."""
         # Some type inference to get the elements right
         # Elements as a file name
@@ -111,9 +111,16 @@ class BeamlineBuilder:
         self.__elements = pd.DataFrame(elements, sep)
         return self
 
-    def define_elements_from_file(self, file, sep=','):
+    def define_elements_from_file(self, file, sep=None):
         file = os.path.splitext(file)[0] + '.' + (os.path.splitext(file)[1] or DEFAULT_EXTENSION)
-        self.__elements = pd.read_csv(os.path.join(self.__path, file), index_col='NAME', sep=sep)
+        if sep is None:
+            try:
+                self.__elements = pd.read_csv(os.path.join(self.__path, file), sep=',')
+            except ValueError:
+                self.__elements = pd.read_csv(os.path.join(self.__path, file), sep=';')
+        else:
+            self.__elements = pd.read_csv(os.path.join(self.__path, file), sep=sep)
+        self.__elements = self.__elements.set_index('NAME')
         return self
 
     def build(self, name=None, extra_length=0.0):
