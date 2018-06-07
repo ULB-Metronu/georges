@@ -1,6 +1,7 @@
 import shutil
 import jinja2
 import os
+import os.path
 import sys
 
 
@@ -43,10 +44,11 @@ class Simulator:
         """Retrive the path to the simulator executable."""
         if self._path is not None:
             return os.path.join(self._path, self._exec)
-        elif sys.platform == 'win':
-            return shutil.which(self._exec)
         else:
-            return shutil.which(self._exec, path=".:/usr/local/bin:/usr/bin:/bin")
+            if os.path.isfile(f"{sys.prefix}/bin/{self._exec}"):
+                return f"{sys.prefix}/bin/{self._exec}"
+            else:
+                return shutil.which(self._exec)
 
     def _add_input(self, keyword, *args, **kwargs):
         """Uses the simulator's own syntax to add to the input"""

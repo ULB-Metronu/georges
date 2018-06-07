@@ -17,13 +17,7 @@ setup(
     license=lic,
     packages=find_packages(exclude=('tests', 'docs', 'examples')),
     install_requires=[
-        'numpy>=1.14.0',
-        'pandas>=0.22.0',
-        'scipy>=1.0.0',
-        'matplotlib>=2.1.1',
-        'jinja2>=2.9.6',
-        'xlrd>=1.1.0',
-        'lmfit>=0.9.7',
-        'm2r>=0.1.13',
+
     ],
+    data_files=[('bin/', ['bin/madx'])],  # Install MAD-X in f"{sys.prefix}/bin/madx"
 )

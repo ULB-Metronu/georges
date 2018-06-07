@@ -1,9 +1,19 @@
-name: pyiba
+name: ipy3
 channels:
   - intel
+  - conda-forge
+  - defaults
 dependencies:
   - python=3.6
   - intelpython3_full
+  - numpy>=1.14.0
+  - pandas>=0.22.0
+  - scipy>=1.0.0
+  - matplotlib>=2.1.1
+  - deap>=1.2.2
+  - jinja2>=2.9.6
+  - lmfit>=0.9.7
+  - dash
+  - xlrd>=1.1.0
   - pip:
-    - lmfit
-    - 
+    - m2r
