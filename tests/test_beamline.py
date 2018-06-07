@@ -1,7 +1,5 @@
 import unittest
-
 import pandas as pd
-
 from georges import beamline
 
 PREFIX = 'tests/test_data'
@@ -58,6 +56,7 @@ class TestBeamline(unittest.TestCase):
 
     def test_length(self):
         self.assertEqual(beamline.Beamline('test_beamline', prefix=PREFIX).length, 0.215)
+
 
 if __name__ == '__main__':
     unittest.main()
