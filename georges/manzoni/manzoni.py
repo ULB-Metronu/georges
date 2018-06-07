@@ -9,7 +9,7 @@ from .. import physics
 
 def convert_line(line, context={}, to_numpy=True, fermi_params={}):
     def class_conversion(e):
-        if e['CLASS'] in ('RFCAVITY', 'HKICKER'):
+        if e['CLASS'] in ('RFCAVITY'):
             e['CLASS_CODE'] = CLASS_CODES['DRIFT']
         if e['CLASS'] not in CLASS_CODES:
             e['CLASS_CODE'] = CLASS_CODES['NONE']
@@ -58,15 +58,15 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         return e
 
     def fermi_eyges_computations(e):
-        if e['CLASS'] != 'DEGRADER':
+        if e['CLASS'] != 'DEGRADER' and e['CLASS'] != 'SCATTERER':
             return e
         fe = fermi.compute_fermi_eyges(material=e['MATERIAL'],
                                        energy=e['ENERGY_IN'],
                                        thickness=100*e['LENGTH'],
                                        db=db,
                                        t=fermi.DifferentialMoliere,
-                                       with_dpp=fermi_params.get('with_dpp', False),
-                                       with_losses=fermi_params.get('with_losses', False),
+                                       with_dpp=fermi_params.get('with_dpp', True),
+                                       with_losses=fermi_params.get('with_losses', True),
                                        )
         e['FE_A0'] = fe['A'][0]
         e['FE_A1'] = fe['A'][1]
