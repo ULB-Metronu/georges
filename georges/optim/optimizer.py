@@ -1,12 +1,12 @@
-import numpy as np
 import scipy.optimize
 from .. import manzoni
 from ..model import Model, ManzoniModel
+from . import moga
 
 
 class Optimizer:
     LOCAL_METHODS = ['nelder-mead', 'powell']
-    GLOBAL_METHODS = ['bassinhopping', 'diffevolution', 'ga']
+    GLOBAL_METHODS = ['bassinhopping', 'diffevolution', 'moga']
 
     def __init__(self, model=None, cost=None, disp=True, debug=False, **kwargs):
         if not isinstance(model, Model):
@@ -138,5 +138,6 @@ class Optimizer:
                 return
 
             # Genetic algorithm
-            if self._method is 'ga':
+            if self._method is 'moga':
+                moga.genetic(self, x0=x0, **kwargs)
                 return
