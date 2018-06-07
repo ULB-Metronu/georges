@@ -103,12 +103,12 @@ class BeamlineBuilder:
             return self.define_elements_from_file(e, sep)
         # Elements as a list to be converted onto a DataFrame
         elif isinstance(e, list) and len(e) > 0:
-            return self.define_elements_from_list(e, sep)
+            return self.define_elements_from_list()
         elif not isinstance(self.__elements, pd.DataFrame):
             raise BeamlineBuilderException("Invalid data type for 'elements'.")
 
-    def define_elements_from_list(self, elements, sep=','):
-        self.__elements = pd.DataFrame(elements, sep)
+    def define_elements_from_list(self, elements):
+        self.__elements = pd.DataFrame(elements)
         return self
 
     def define_elements_from_file(self, file, sep=None):

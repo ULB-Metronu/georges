@@ -19,7 +19,6 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
 
     def circuit_conversion(e):
         if e['PLUG'] in INDEX and e['PLUG'] != 'APERTURE':
-            print(e['CIRCUIT'], context.get(e['CIRCUIT'], 0.0))
             e[e['PLUG']] = context.get(e['CIRCUIT'], 0.0)
         return e
 
