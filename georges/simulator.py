@@ -44,6 +44,8 @@ class Simulator:
         """Retrive the path to the simulator executable."""
         if self._path is not None:
             return os.path.join(self._path, self._exec)
+        elif sys.platform in ('win32', 'win64'):
+            return shutil.which(self._exec)
         else:
             if os.path.isfile(f"{sys.prefix}/bin/{self._exec}"):
                 return f"{sys.prefix}/bin/{self._exec}"
