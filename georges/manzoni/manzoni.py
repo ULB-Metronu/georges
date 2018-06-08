@@ -1,6 +1,7 @@
 import numpy as np
-from .transfer import transfer
-from .kick import kick
+from .matrices import matrices
+from .integrators import integrators
+from .mc import mc
 from .constants import *
 from .aperture import aperture_check
 from .. import fermi
@@ -153,27 +154,39 @@ def track(line, beam, turns=1, observer=None, **kwargs):
     # Initial call to the observer
     if observer is not None:
         observer.track_start(beam)
+
     # Main loop
-    for j in range(0, turns):
+    for turn in range(0, turns):
         for i in range(0, line.shape[0]):
-            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK and beam.shape[0] > 0:
-                # In place operation
-                beam = kick[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
-                matrices = transfer[int(line[i, INDEX_CLASS_CODE])]
+            if beam.shape[0] == 0:
+                break
+
+            # Symplectic integrators
+            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR:
+                beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+            # Monte-Carlo propagation
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MC:
+                beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+            # Linear transfert matrices
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
+                matrix = matrices[int(line[i, INDEX_CLASS_CODE])]
                 # For performance considerations, see
                 # https://stackoverflow.com/q/48474274/420892
                 # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
-                beam = beam.dot(matrices(line[i]).T)
+                beam = beam.dot(matrix(line[i]).T)
             beam = aperture_check(beam, line[i])
+
+            # Per element observation
             if observer is not None and observer.element_by_element_is_active is True:
-                if observer.elements is None:
-                    observer.element_by_element(j, i, beam)
-                elif i in observer.elements:
-                    observer.element_by_element(j, i, beam)
+                if observer.elements is None:  # call the observer for each element
+                    observer.element_by_element(turn, i, beam)
+                elif i in observer.elements:  # call the observer for given elements
+                    observer.element_by_element(turn, i, beam)
+        # Per turn observation
         if observer is not None and observer.turn_by_turn_is_active is True:
-            observer.turn_by_turn(j, i, beam)
+            observer.turn_by_turn(turn, i, beam)
+
     # Final call to the observer
     if observer is not None:
-        return observer.track_end(j, i, beam)
+        return observer.track_end(turn, i, beam)
     return
