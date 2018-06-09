@@ -50,31 +50,25 @@ def multipole(e, b, **kwargs):
 
 
 def hkicker(e, b, nst=1, **kwargs):
+    if e[INDEX_LENGTH] <= 1e-6:
+        nst = 1
     drift = _drift(e[INDEX_LENGTH] / nst)
+    k = e[INDEX_KICK] / nst
     for i in range(0, nst):
         b = b.dot(drift.T)
-        b += np.array(
-            [
-                0,
-                e[INDEX_KICK],
-                0,
-                0,
-                0
-            ]
-        )
+        b[:, XP] += k
     return b
 
 
-def vkicker(e, b, **kwargs):
-    return b + np.array(
-        [
-            0,
-            0,
-            0,
-            e[INDEX_KICK],
-            0
-        ]
-    )
+def vkicker(e, b, nst=1, **kwargs):
+    if e[INDEX_LENGTH] <= 1e-6:
+        nst = 1
+    drift = _drift(e[INDEX_LENGTH] / nst)
+    k = e[INDEX_KICK] / nst
+    for i in range(0, nst):
+        b = b.dot(drift.T)
+        b[:, YP] += k
+    return b
 
 
 integrators = {
