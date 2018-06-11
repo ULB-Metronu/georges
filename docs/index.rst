@@ -9,7 +9,7 @@ The succint *README* is linked to and reproduced below. The complete documentati
 
 .. toctree::
     :maxdepth: 1
-    :caption: Georges *README*:
+    :caption: Georges _README_:
 
     readme
 
