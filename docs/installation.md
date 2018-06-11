@@ -48,8 +48,12 @@ The installation procedure which follows creates a `conda` environment based on 
 
 5. Install Georges using `pip` from the `conda` environment
 
+        # Typical installation
         pip install . 
 
+        # Install with pip in editable mode to get access to the modifications on the git repository
+        pip install -e .
+        
 Georges can be subsequently updated by running
 
     cd path/to/georges
