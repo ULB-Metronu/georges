@@ -17,11 +17,13 @@ dependencies:
   - scipy>=1.0.0  # scipy from the Intel distribution, linked to MKL
   - scikit-learn>=0.19.1  # scikit-learn from the Intel distribution, linked to MKL and DAAL
   - matplotlib>=2.1.1  # https://matplotlib.org
+  - nb_conda=2  #  https://github.com/Anaconda-Platform/nb_conda
+  - nb_conda_kernels=2  # https://github.com/Anaconda-Platform/nb_conda_kernels
   - deap>=1.2.2  # http://deap.readthedocs.io/en/master/
   - jinja2>=2.9.6  # http://jinja.pocoo.org
   - lmfit>=0.9.7  # http://cars9.uchicago.edu/software/python/lmfit/
   - dash>=0.21.1  # https://dash.plot.ly
   - xlrd>=1.1.0  # http://www.python-excel.org
-  - pyarrow>=0.9.0  # https://arrow.apache.org/docs/python/
+  - pyarrow>=0.9.0  # git https://arrow.apache.org/docs/python/
   - pip:
     - m2r  # https://pypi.org/project/m2r/
