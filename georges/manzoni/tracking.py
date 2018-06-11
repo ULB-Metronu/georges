@@ -26,7 +26,7 @@ def track(line, beam, **kwargs):
 
     # Run Manzoni
     o = ElementByElementObserver()
-    manzoni.track(manzoni_line, manzoni_beam, observer=o)
+    manzoni.track(manzoni_line, manzoni_beam, observer=o, **kwargs)
 
     # Collect the results
     return Beamline(
