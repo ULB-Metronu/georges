@@ -9,19 +9,18 @@ The succint *README* is linked to and reproduced below. The complete documentati
 
 .. toctree::
     :maxdepth: 1
-    :caption: Georges _README_:
+    :caption: Georges README:
 
     readme
 
 Georges's documentation
 =======================
-The documentation is part of the Georges repository itself and is made available *via* Readthedocs_.
-It is hosted at `georges.readthedocs.io<http://georges.readthedocs.io/>`.
-.. _Readthedocs:: https://readthedocs.org.
+The documentation is part of the Georges repository itself and is made available *via* _Readthedocs_.
+It is hosted at [georges.readthedocs.io](http://georges.readthedocs.io/).
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Documentation:
 
    introduction
    authorship

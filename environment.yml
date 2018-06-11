@@ -24,6 +24,7 @@ dependencies:
   - lmfit>=0.9.7  # http://cars9.uchicago.edu/software/python/lmfit/
   - dash>=0.21.1  # https://dash.plot.ly
   - xlrd>=1.1.0  # http://www.python-excel.org
-  - pyarrow>=0.9.0  # git https://arrow.apache.org/docs/python/
+  - pyarrow>=0.9.0  # https://arrow.apache.org/docs/python/
+  - pytest>3  # https://pytest.org
   - pip:
     - m2r  # https://pypi.org/project/m2r/
