@@ -1,16 +1,21 @@
 # Installation
 
-:mod:`georges` submodules (in particular the :mod:`georges.manzoni` tracking code) are optimized to work with 
+The installation process to get Georges up and running is relatively simple: the whole library is ready to be installed with `pip`.
 
-[Using Intel distribution for Python with Anaconda](https://software.intel.com/en-us/articles/using-intel-distribution-for-python-with-anaconda)
+However, as the :mod:`georges` submodules (in particular the :mod:`georges.manzoni` tracking code) are optimized to work with the [Intel distribution for Python ](https://software.intel.com/en-us/articles/using-intel-distribution-for-python-with-anaconda), detailed installation instructions are provided to install :mod: georges with Conda. This is the recommended way for the installation.
 
 
-## Python installation with Anaconda and the Intel libraries
-If 
+## Installation with Anaconda and the Intel Python Distribution libraries
+The installation procedure which follows creates a Conda environment with all the necessary dependencies included and managed via conda itself. Georges is then installed using `pip` from that `conda` environment. The dependencies are coherent and the `pip` installation of Georges will find all the dependencies listed in `setup.py` to be already installed in the `conda` environment.
 
-### Dependencies
+1. Install [Conda](https://conda.io/docs/) for your operating system, follow the instructions for
+  * [Linux](https://conda.io/docs/user-guide/install/linux.html)
+  * [macOS](https://conda.io/docs/user-guide/install/macos.html)
+  * [Windows](https://conda.io/docs/user-guide/install/windows.html)
 
-Pandas >= 0.21 required.
+## Dependencies
+
+A coherent set of dependencies is listed in the Conda `environment.txt` file as well as in the `setup.py` file (for `setuptools` and `pip`). In this way, installation using either `conda` or `pip` is possible.
 
 ## Installation
 The easiest way to use `georges` is to clone it directly from Github:

@@ -195,7 +195,7 @@ def quadrupole(e):
         return drift(e)
 
 
-transfer = {
+matrices = {
     CLASS_CODES['DRIFT']: drift,
     CLASS_CODES['COLLIMATOR']: drift,
     CLASS_CODES['SBEND']: sbend,
