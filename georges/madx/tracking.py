@@ -47,24 +47,22 @@ def read_tracking(file):
     return df
 
 
-def track(**kwargs):
+def track(line=None, beam=None, context=None, **kwargs):
     """Compute the distribution of the beam as it propagates through the beamline..
     :param kwargs: parameters are:
         - line: the beamline on which twiss will be run
         - context: the associated context on which MAD-X is run
     """
     # Process arguments
-    line = kwargs.get('line', None).add_markers()
-    b = kwargs.get('beam', None)
-    if line is None or b is None:
+    if line is None or beam is None:
         raise TrackException("Beamline, Beam and MAD-X objects need to be defined.")
-    m = Madx(beamlines=[line], context=kwargs.get('context'))
+    m = Madx(beamlines=[line], context=context, optional_markers=kwargs.get("optional_markers"))
     # Create a new beamline to include the results
     line_tracking = line.line.copy()
 
     # Run MAD-X
     m.beam(line.name)
-    m.track(b.distribution,
+    m.track(beam.distribution,
             line,
             ptc_params=kwargs.get('ptc_params', {}),
             ptc=kwargs.get('ptc', True),

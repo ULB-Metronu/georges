@@ -2,6 +2,13 @@ import numpy as np
 from .constants import *
 
 
+class IntegratorException(Exception):
+    """Exception raised for errors in the Track module."""
+
+    def __init__(self, m):
+        self.message = m
+
+
 def _drift(l):
     """
     Transfer matrix of a drift.
@@ -49,6 +56,16 @@ def multipole(e, b, **kwargs):
     )
 
 
+def hkicker(e, b, order=1, nst=1, **kwargs):
+    if order == 1:
+        return _hickier1(e, b, nst, **kwargs)
+    elif order == 2:
+        return _hkicker2(e, b, nst, **kwargs)
+    elif order == 4:
+        return _hkicker4(e, b, nst, **kwargs)
+    else:
+        raise IntegratorException("Invalid integrator order.")
+
 def hkicker(e, b, nst=1, **kwargs):
     if e[INDEX_LENGTH] <= 1e-6:
         nst = 1
@@ -57,6 +74,29 @@ def hkicker(e, b, nst=1, **kwargs):
     for i in range(0, nst):
         b = b.dot(drift.T)
         b[:, XP] += k
+    return b
+
+
+def _hkicker2(e, b, nst=1, **kwargs):
+    if e[INDEX_LENGTH] <= 1e-6:
+        nst = 1
+    drift = _drift(e[INDEX_LENGTH] / nst / 2.0)
+    k = e[INDEX_KICK] / nst
+    for i in range(0, nst):
+        b = b.dot(drift.T)
+        b[:, XP] += k
+        b = b.dot(drift.T)
+    return b
+
+def _hkicker4(e, b, nst=1, **kwargs):
+    if e[INDEX_LENGTH] <= 1e-6:
+        nst = 1
+    drift = _drift(e[INDEX_LENGTH] / nst / 2.0)
+    k = e[INDEX_KICK] / nst
+    for i in range(0, nst):
+        b = b.dot(drift.T)
+        b[:, XP] += k
+        b = b.dot(drift.T)
     return b
 
 
