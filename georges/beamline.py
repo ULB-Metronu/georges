@@ -229,7 +229,7 @@ class Beamline:
                         apertype=pipe_apertype,
                         aperture=pipe_aperture,
                     )).append(e)
-                at_entry = e['AT_EXIT']
+            at_entry = e['AT_EXIT']
 
         negative_drifts = line_with_drifts.query("LENGTH < 0.0")
         if len(negative_drifts.index) > 0:
