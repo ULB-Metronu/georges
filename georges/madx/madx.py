@@ -189,7 +189,7 @@ def element_to_mad(e, ptc_use_knl_only=False):
                 or e.get('PLUG') == 'K2' \
                 or e.get('PLUG') == 'K3' \
                 or e.get('PLUG') == 'K4':
-            mad += f", {e['PLUG']}:={e['CIRCUIT']}/{e['BRHO']}"
+            mad += f", {e['PLUG']}:={e['CIRCUIT']}/{e['BRHO']}"  # Normalize the gradients
         else:
             mad += f", {e['PLUG']}:={e['CIRCUIT']}"
 
