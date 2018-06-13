@@ -130,7 +130,7 @@ class MadxException(Exception):
 
 
 def element_to_mad(e, ptc_use_knl_only=False):
-    """Convert a pandas.Series representation onto a MAD-X sequence element."""
+    """Convert a pandas.Series representation onto a MAD-X sequence element. Markers are automatically added."""
     if e.CLASS not in SUPPORTED_CLASSES:
         return ""
     mad = f"{e.name}: {e.CLASS}, "
