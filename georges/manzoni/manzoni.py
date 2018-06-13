@@ -158,14 +158,14 @@ def track(line, beam, turns=1, observer=None, **kwargs):
     # Main loop
     for turn in range(0, turns):
         for i in range(0, line.shape[0]):
-            if beam.shape[0] == 0:
-                break
+#             if beam.shape[0] == 0:
+#                 break
 
             # Symplectic integrators
-            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR:
+            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
                 beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             # Monte-Carlo propagation
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MC:
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MC and beam.shape[0]:
                 beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             # Linear transfert matrices
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:

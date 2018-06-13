@@ -73,7 +73,7 @@ def hkicker(e, b, nst=1, **kwargs):
     k = e[INDEX_KICK] / nst
     for i in range(0, nst):
         b = b.dot(drift.T)
-        b[:, XP] += k
+        b[:, PX] += k
     return b
 
 
@@ -107,7 +107,7 @@ def vkicker(e, b, nst=1, **kwargs):
     k = e[INDEX_KICK] / nst
     for i in range(0, nst):
         b = b.dot(drift.T)
-        b[:, YP] += k
+        b[:, PY] += k
     return b
 
 
