@@ -4,7 +4,7 @@ import os, ast
 
 def get_version_from_init():
     init_file = os.path.join(
-        os.path.dirname(__file__), 'madxpy', '__init__.py'
+        os.path.dirname(__file__), 'georges', '__init__.py'
     )
     with open(init_file, 'r') as fd:
         for line in fd:
