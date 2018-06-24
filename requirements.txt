@@ -1,1 +1,2 @@
+# run: pip install -i requirements.txt
 .

@@ -1,3 +1,4 @@
+# Run: conda env create --file environment.yml
 # Customized environment "Intel Python 3"
 name: ipy3
 channels:
@@ -8,7 +9,7 @@ channels:
   # https://conda-forge.org
   - conda-forge
   # Default distribution from Continuum/Anaconda
-  - defaults
+  - nodefaults
 dependencies:
   - python=3.6
   - intelpython3_full  # https://software.intel.com/en-us/articles/complete-list-of-packages-for-the-intel-distribution-for-python
@@ -27,4 +28,4 @@ dependencies:
   - pyarrow>=0.9.0  # https://arrow.apache.org/docs/python/
   - pytest>3  # https://pytest.org
   - pip:
-    - m2r  # https://pypi.org/project/m2r/
+    - m2r  # Markdown to RST for the documentation build, https://pypi.org/project/m2r/
