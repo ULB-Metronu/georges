@@ -158,9 +158,6 @@ def track(line, beam, turns=1, observer=None, **kwargs):
     # Main loop
     for turn in range(0, turns):
         for i in range(0, line.shape[0]):
-#             if beam.shape[0] == 0:
-#                 break
-
             # Symplectic integrators
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
                 beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
