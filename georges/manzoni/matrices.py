@@ -33,30 +33,33 @@ def drift(e):
     )
 
 
-def rbend(e):
+def rbend(e, multiply=True):
     """
     Transfer matrix of a rectangular bend (RBEND); a bend with pole-face angle.
     :param e: element definition
+    :param multiply: return
     :return: a numpy array representing the 5D transfer matrix
     """
-    return bend(e, e[INDEX_ANGLE]/2, e[INDEX_ANGLE]/2)
+    return bend(e, e[INDEX_ANGLE]/2, e[INDEX_ANGLE]/2, multiply)
 
 
-def sbend(e):
+def sbend(e, multiply=True):
     """
     Transfer matrix of a sector bend (SBEND); a bend with no pole-face angle.
     :param e: element definition
+    :param multiply: return
     :return: a numpy array representing the 5D transfer matrix
     """
-    return bend(e, 0, 0)
+    return bend(e, 0, 0, multiply)
 
 
-def bend(e, e1, e2):
+def bend(e, e1, e2, multiply=True):
     """
     Transfer matrix of a generic bend. Pole-face angles are optional.
     :param e: element definition
     :param e1: entrance pole-face angle (added to the element pole-face angle)
     :param e2: exit pole-face angle (added to the element pole-face angle)
+    :param multiply: return the
     :return: a numpy array representing the 5D transfer matrix
     """
     # Special case of a drift
@@ -149,7 +152,10 @@ def bend(e, e1, e2):
                 [0, 0, 0, 0, 1]
             ]
         )
-        return m_e2 @ m_b @ m_e1
+        if multiply:
+            return m_e2 @ m_b @ m_e1
+        else:
+            return [m_e2, m_b, m_e1]
 
 
 def quadrupole(e):
@@ -203,3 +209,4 @@ matrices = {
     CLASS_CODES['QUADRUPOLE']: quadrupole,
     CLASS_CODES['ROTATION']: rotation,
 }
+

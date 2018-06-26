@@ -6,6 +6,8 @@ INDEX = {k: i for i, k in enumerate(
         'ANGLE',
         'E1',
         'E2',
+        'H1',
+        'H2',
         'K1',
         'K2',
         'K3',
@@ -31,6 +33,8 @@ INDEX_LENGTH = INDEX['LENGTH']
 INDEX_ANGLE = INDEX['ANGLE']
 INDEX_E1 = INDEX['E1']
 INDEX_E2 = INDEX['E2']
+INDEX_H1 = INDEX['H1']
+INDEX_H2 = INDEX['H2']
 INDEX_K1 = INDEX['K1']
 INDEX_K2 = INDEX['K2']
 INDEX_K3 = INDEX['K3']
@@ -96,7 +100,8 @@ CLASS_CODE_MC = [
 # Define constants for aperture types
 APERTYPE_CODE_NONE = 0
 APERTYPE_CODE_CIRCLE = 1
-APERTYPE_CODE_RECTANGLE = 2
+APERTYPE_CODE_ELLIPSE = 2
+APERTYPE_CODE_RECTANGLE = 3
 
 # Coordinates
 X = 0
