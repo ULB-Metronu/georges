@@ -175,7 +175,7 @@ class Beamline:
         if len(markers) == 0:
             return self
         else:
-            return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')], sort=False).sort_values(by='AT_CENTER'))
+            return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
 
     def to_thin(self, element):
         bl = self.__beamline
