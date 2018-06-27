@@ -99,6 +99,7 @@ SUPPORTED_ELEMENTS = (
     'DEGRADER',
     'HKICKER',
     'VKICKER',
+    'SROTATION'
 )
 
 
@@ -160,7 +161,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                 geometryFile=context.get(f"{index}_file"),
                 x=context.get(f"{index}_x", 0.0),
                 y=context.get(f"{index}_y", 0.0),
-                z=element['AT_CENTER'],
+                z=context.get(f"{index}_z", element['AT_CENTER']),
                 phi=context.get(f"{index}_phi", 0.0),
                 psi=context.get(f"{index}_psi", 0.0),
                 theta=context.get(f"{index}_theta", 0.0)
@@ -177,6 +178,11 @@ def sequence_to_bdsim(sequence, **kwargs):
                          l=element['LENGTH'],
                          vkick=context.get(f"{index}_SCAN", 0)
                          )
+
+        if element['TYPE'] == "SROTATION":
+            m.AddTransform3D(name=index,
+                             phi=np.deg2rad(180-context.get(f"{index}_ANGLE", 0))
+                             )
 
         if element['TYPE'] == "SBEND":
 
@@ -265,23 +271,24 @@ class BDSim(Simulator):
         # Write the file
         self._bdsim_machine.Write(INPUT_FILENAME)
 
-        # not working for the time not self_exec ?
-        #if self._get_exec() is None:
-        #    raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+        if kwargs.get('run_simulations',True):
+            # not working for the time not self_exec ?
+            #if self._get_exec() is None:
+            #    raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
 
-        p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={INPUT_FILENAME} --batch --ngenerate={self._nparticles} --outfile={self._outputname}",
-                      stdin=sub.PIPE,
-                      stdout=sub.PIPE,
-                      stderr=sub.STDOUT,
-                      cwd=".",
-                      shell=True
-                      )
-        self._output = p.communicate()[0].decode()
-        self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
-        self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
-        self._last_context = kwargs.get("context", {})
-        if kwargs.get('debug', False):
-            print(self._output)
+            p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={INPUT_FILENAME} --batch --ngenerate={self._nparticles} --outfile={self._outputname}",
+                          stdin=sub.PIPE,
+                          stdout=sub.PIPE,
+                          stderr=sub.STDOUT,
+                          cwd=".",
+                          shell=True
+                          )
+            self._output = p.communicate()[0].decode()
+            self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
+            self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
+            self._last_context = kwargs.get("context", {})
+            if kwargs.get('debug', False):
+                print(self._output)
         return self
 
     def track(self, particles, p0):
