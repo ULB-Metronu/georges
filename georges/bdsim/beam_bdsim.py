@@ -4,7 +4,7 @@ from ..beam import Beam
 from .. import physics
 
 
-PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'P', 'ENERGY', 'PARENT_ID', 'PDG ID', 'WEIGHT']
+PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'P', 'ENERGY', 'PARENT_ID', 'PDG_ID', 'WEIGHT']
 
 
 class BeamBdsimException(Exception):
