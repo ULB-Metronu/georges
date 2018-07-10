@@ -7,7 +7,7 @@ def aperture_check(b, e):
     if e[INDEX_APERTYPE_CODE] == APERTYPE_CODE_CIRCLE:
         s = (b[:, 0]**2 + b[:, 2]**2) < e[INDEX_APERTURE]**2
     # Elliptical aperture
-    elif e[INDEX_APERTYPE_CODE] == APERTURE_CODE_ELLIPSE:
+    elif e[INDEX_APERTYPE_CODE] == APERTYPE_CODE_ELLIPSE:
         s = (b[:, 0]**2 + b[:, 2]**2) < e[INDEX_APERTURE]**2
     # Rectangular aperture
     elif e[INDEX_APERTYPE_CODE] == APERTYPE_CODE_RECTANGLE:

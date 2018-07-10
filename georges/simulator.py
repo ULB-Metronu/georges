@@ -36,9 +36,13 @@ class Simulator:
         for b in beamlines:
             self._attach(b, context=kwargs.get('context'))
 
-    def _attach(self, beamline):
+    def _attach(self, beamline, context=None):
         """Attach a beamline to the simulator instance."""
         self._beamlines.append(beamline)
+
+    @property
+    def executable(self):
+        return self._get_exec()
 
     def _get_exec(self):
         """Retrive the path to the simulator executable."""
@@ -50,7 +54,7 @@ class Simulator:
             if os.path.isfile(f"{sys.prefix}/bin/{self._exec}"):
                 return f"{sys.prefix}/bin/{self._exec}"
             else:
-                return shutil.which(self._exec)
+                return shutil.which(self._exec, path=os.path.join(os.environ['PATH'], '/usr/local/bin'))
 
     def _add_input(self, keyword, *args, **kwargs):
         """Uses the simulator's own syntax to add to the input"""

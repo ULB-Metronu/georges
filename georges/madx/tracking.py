@@ -56,7 +56,7 @@ def track(line=None, beam=None, context=None, **kwargs):
     # Process arguments
     if line is None or beam is None:
         raise TrackException("Beamline, Beam and MAD-X objects need to be defined.")
-    m = Madx(beamlines=[line], context=context, optional_markers=kwargs.get("optional_markers"))
+    m = Madx(beamlines=[line], context=context, optional_markers=kwargs.get("optional_markers", True))
     # Create a new beamline to include the results
     line_tracking = line.line.copy()
 
@@ -69,7 +69,7 @@ def track(line=None, beam=None, context=None, **kwargs):
             misalignment=kwargs.get('misalignment', False),
             start=kwargs.get('start', False)
             )
-    errors = m.run(**kwargs).fatals
+    errors = m.run(context=context, **kwargs).fatals
     if kwargs.get("debug", False):
         print(m.raw_input)
         print(m.input)
@@ -82,4 +82,3 @@ def track(line=None, beam=None, context=None, **kwargs):
         madx_track = read_tracking(os.path.join(".", 'tracking.outxone'))
     line_tracking = line_tracking.merge(madx_track, left_index=True, right_index=True, how='left')
     return beamline.Beamline(line_tracking)
-

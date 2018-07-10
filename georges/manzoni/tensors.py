@@ -29,6 +29,15 @@ def sbend(e):
     t[423] = 0
     return t
 
+def rbend(e):
+    """
+    Tensor for a rbend element.
+    :param e: element definition
+    :return: a numpy array representing the element's tensor
+    """
+    t = np.zeros(4, 4, 4)
+    return t
+
 
 tensors = {
     CLASS_CODES['DRIFT']: None,

@@ -208,9 +208,6 @@ def sequence_to_mad(sequence, optional_marker=True, ptc_use_knl_only=False):
         return ""
     m = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
     m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, optional_marker, ptc_use_knl_only), axis=1)) + '\n'
-    m += 'MAD_START: MARKER, AT = 0.0;\n'
-    m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, ptc_use_knl_only), axis=1)) + '\n'
-    m += f"MAD_END: MARKER, AT={sequence.length};\n"
     m += "ENDSEQUENCE;\n"
 
     processed_variables = set()
@@ -253,8 +250,8 @@ class Madx(Simulator):
         self._ptc_use_knl_only = kwargs.get('ptc_use_knl_only', False)
         self._optional_markers = kwargs.get('optional_markers', True)
         self._syntax = madx_syntax
-        self._exec = Madx.EXECUTABLE_NAME
         super().__init__(beamlines=beamlines, path=path, **kwargs)
+        self._exec = Madx.EXECUTABLE_NAME
 
     def _attach(self, beamline, context=None):
         super()._attach(beamline)

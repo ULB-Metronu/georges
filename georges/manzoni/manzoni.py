@@ -69,7 +69,10 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
     def fermi_eyges_computations(e):
         if e['CLASS'] != 'DEGRADER' and e['CLASS'] != 'SCATTERER':
             return e
-        fe = fermi.compute_fermi_eyges(material=e['MATERIAL'],
+        material = e['MATERIAL']
+        if material == '':
+            material = 'vacuum'
+        fe = fermi.compute_fermi_eyges(material=material,
                                        energy=e['ENERGY_IN'],
                                        thickness=100*e['LENGTH'],
                                        db=db,
@@ -187,7 +190,8 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
                 tensor = tensors[int(line[i, INDEX_CLASS_CODE])]
                 # For performance considerations, see
                 # https://stackoverflow.com/q/48474274/420892
-                # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
+                # Alternative
+                # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
                 if tensor is None:
                     beam = beam.dot(matrix(line[i]).T)
                 else:
@@ -238,9 +242,21 @@ def track2(line, beam, turns=1, observer=None, **kwargs):
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
                 ts = tensors[int(line[i, INDEX_CLASS_CODE])]
                 if ts is None:
+                    # For performance considerations, see
+                    # https://stackoverflow.com/q/48474274/420892
+                    # Alternative
+                    # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
                     r = matrices[int(line[i, INDEX_CLASS_CODE])](line[i], True)  # DO multiply
                     beam = beam.dot(r.T)
                 else:
+                    # For performance considerations, see
+                    # https://stackoverflow.com/q/51046917/420892
+                    # Alternatives
+                    # np.einsum('ijk,lj,lk->li', T, beam, beam)
+                    # ((beam[:, None, None, :]@T).squeeze()@x[..., None]).squeeze()
+                    # np.einsum('ijl,lj->li', T@beam.T, beam)
+                    #
+                    #
                     rs = matrices[int(line[i, INDEX_CLASS_CODE])](line[i], False)  # DO NOT multiply
                     for u in range(len(rs)):
                         beam = beam.dot(rs[i].T) + np.einsum('lj,ijk,lk->li', beam, ts[i], beam)
