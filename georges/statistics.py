@@ -32,7 +32,7 @@ def histogram_fit(data, bounds_binning=50, verbose=False, **kwargs):
     if model == "Lorentzian":
         mod = LorentzianModel()
 
-    result = mod.fit(data=y, x=x)
+    result = mod.fit(data=y, x=x, center=data.mean(), sigma=data.var())
 
     if verbose:
         print(result.fit_report())
