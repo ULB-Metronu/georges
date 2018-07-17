@@ -72,6 +72,7 @@ def read_tracking(element, evttree, **kwargs):
         bdsim_beam['PDG_ID'] = m[element.name + ".partID"].values
         bdsim_beam['Weight'] = m[element.name + ".weight"].values
         bdsim_beam.query('X == X', inplace=True)  # Remove None entries
+        bdsim_beam.query("PDG_ID == 2212", inplace=True)
         bdsim_beam['E'] = 1000*bdsim_beam['E'] - physics.PROTON_MASS
         bdsim_beam['P'] = physics.energy_to_momentum(bdsim_beam['E'])
 
@@ -79,23 +80,24 @@ def read_tracking(element, evttree, **kwargs):
         # TODO make a kwargs if we want to have an aperture (if using_collimators == TRUE)
         bdsim_beam["R"] = np.sqrt(bdsim_beam['X']**2 + bdsim_beam['Y']**2)
 
-        if element['APERTYPE'] == 'CIRCLE':
-            aperture = float(element['APERTURE'])
-            bdsim_beam.query("R < @aperture", inplace=True)
+        if kwargs.get("with_aperture", True):
+            if element['APERTYPE'] == 'CIRCLE':
+                aperture = float(element['APERTURE'])
+                bdsim_beam.query("R < @aperture", inplace=True)
 
-        if element['APERTYPE'] == 'RECTANGLE':
+            if element['APERTYPE'] == 'RECTANGLE':
 
-            if element['TYPE'] == 'SLITS':
-                context = kwargs.get('context', {})
-                aper1 = context.get(f"w{element.name}X", 0.1)
-                aper2 = context.get(f"w{element.name}Y", 0.1)
+                if element['TYPE'] == 'SLITS':
+                    context = kwargs.get('context', {})
+                    aper1 = context.get(f"w{element.name}X", 0.1)
+                    aper2 = context.get(f"w{element.name}Y", 0.1)
 
-            else:  #TODO Other case than bend ?
-                aperture = element['APERTURE'].split(",")
-                aper1 = 0.5*float(aperture[0])
-                aper2 = 0.5*float(aperture[1])
+                else:  # TODO Other case than bend ?
+                    aperture = element['APERTURE'].split(",")
+                    aper1 = 0.5*float(aperture[0])
+                    aper2 = 0.5*float(aperture[1])
 
-            bdsim_beam.query("abs(X) < @aper1 and abs(Y) < @aper2", inplace=True)
+                bdsim_beam.query("abs(X) < @aper1 and abs(Y) < @aper2", inplace=True)
 
         tmp = beam_bdsim.BeamBdsim(bdsim_beam[['X', 'PX', 'Y', 'PY', 'P', 'E', 'ParentID', 'PDG_ID', 'Weight']])
         return tmp
@@ -125,7 +127,7 @@ def track(**kwargs):
     bd_beam = b.distribution.copy()
     p0 = physics.energy_to_momentum(b.energy)
 
-    bd.track(bd_beam, p0)
+    bd.track(bd_beam, p0, **kwargs)
 
     # Add options for Bdsim
     bd.set_options(options)
@@ -135,6 +137,10 @@ def track(**kwargs):
 
     # Create a new beamline to include the results
     l = line.line.copy()
+
+    # TODO Make the extraction of the beam in MT : make with a kwargs
+    # num_cores = multiprocessing.cpu_count()
+    # results = Parallel(n_jobs=num_cores - 1)(delayed(extract_data)(i, line) for i, line in Data_simulation.iterrows())
 
     if kwargs.get("extract_beam", True):
 
