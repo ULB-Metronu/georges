@@ -102,4 +102,23 @@ class BeamBdsim(Beam):
             raise BeamBdsimException("Trying to initialize a beam distribution with invalid dimensions.")
         self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
 
+    @property
+    def halo(self):
+        """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
+
+        return pd.concat([
+            self.__distribution.quantile(0.01),
+            self.__distribution.quantile(0.05),
+            self.__distribution.quantile(1.0 - 0.842701),
+            self.__distribution.quantile(0.842701),
+            self.__distribution.quantile(0.95),
+            self.__distribution.quantile(0.99)
+        ], axis=1).rename(columns={0.01: '1%',
+                                   0.05: '5%',
+                                   1.0 - 0.842701: '20%',
+                                   0.842701: '80%',
+                                   0.95: '95%',
+                                   0.99: '99%'
+                                   }
+                          )
 
