@@ -31,7 +31,6 @@ class Beamline:
         # Default values
         self.__length = 0
         self.__name = name
-        self.__strengths = None
         self.__beamline = None
         self.__from_survey = from_survey
 
@@ -47,8 +46,6 @@ class Beamline:
             self.__convert_angles_to_radians()
             self.__expand_sequence_data()
             self.__convert_survey_to_sequence()
-            # Compute derived data until a fixed point sequence is reached,
-            # again to reexpand
 
         # Compute derived data until a fixed point sequence is reached
         if with_expansion:
@@ -145,6 +142,17 @@ class Beamline:
         self.__beamline.length = self.length
         return self.__beamline
 
+    def to_thin(self, element):
+        """Useful for MAD-X tracking"""
+        bl = self.__beamline
+        bl.at[element, 'LENGTH'] = 0.0
+        bl.at[element, 'ORBIT_LENGTH'] = 0.0
+        bl.at[element, 'AT_ENTRY'] = bl.loc[element]['AT_CENTER']
+        bl.at[element, 'AT_EXIT'] = bl.loc[element]['AT_CENTER']
+        bl.at[element, 'CLASS'] = 'QUADRUPOLE'
+        bl.at[element, 'APERTYPE'] = np.nan
+        bl.at[element, 'APERTURE'] = np.nan
+
     def add_markers(self):
         s = self.__beamline
         markers = []
@@ -175,17 +183,12 @@ class Beamline:
         if len(markers) == 0:
             return self
         else:
-            return Beamline(pd.concat([s, pd.DataFrame(markers).set_index('NAME')]).sort_values(by='AT_CENTER'))
-
-    def to_thin(self, element):
-        bl = self.__beamline
-        bl.at[element, 'LENGTH'] = 0.0
-        bl.at[element, 'ORBIT_LENGTH'] = 0.0
-        bl.at[element, 'AT_ENTRY'] = bl.loc[element]['AT_CENTER']
-        bl.at[element, 'AT_EXIT'] = bl.loc[element]['AT_CENTER']
-        bl.at[element, 'CLASS'] = 'QUADRUPOLE'
-        bl.at[element, 'APERTYPE'] = np.nan
-        bl.at[element, 'APERTURE'] = np.nan
+            return Beamline(
+                pd.concat([
+                    s,
+                    pd.DataFrame(markers).set_index('NAME')
+                ], sort=False).sort_values(by='AT_CENTER')
+            )
 
     def add_drifts(self, using_collimators=False, with_pipe=True, pipe_aperture=1.0, pipe_apertype='CIRCLE'):
         line_with_drifts = pd.DataFrame()
@@ -205,6 +208,7 @@ class Beamline:
                     'AT_EXIT': at + length,
                     'APERTYPE': apertype,
                     'APERTURE': aperture,
+                    'PHYSICAL': False,
                 }
             )
             s.name = name
@@ -214,17 +218,18 @@ class Beamline:
             i = r[0]
             e = r[1]
             diff = e['AT_ENTRY'] - at_entry
-            if diff == 0:
+            if diff <= 1e-6:
                 line_with_drifts = line_with_drifts.append(e)
             else:
-                line_with_drifts = line_with_drifts.append(create_drift(
-                    name=f"DRIFT_{i}",
-                    length=diff,
-                    at=at_entry,
-                    apertype=pipe_apertype,
-                    aperture=pipe_aperture,
-                )).append(e)
-                at_entry = e['AT_EXIT']
+                line_with_drifts = line_with_drifts.append(
+                    create_drift(
+                        name=f"DRIFT_{i}",
+                        length=diff,
+                        at=at_entry,
+                        apertype=pipe_apertype,
+                        aperture=pipe_aperture,
+                    )).append(e)
+            at_entry = e['AT_EXIT']
 
         negative_drifts = line_with_drifts.query("LENGTH < 0.0")
         if len(negative_drifts.index) > 0:

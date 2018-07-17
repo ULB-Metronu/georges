@@ -63,6 +63,8 @@ def draw_quad(ax, e):
 
 
 def draw_coll(ax, e, plane):
+    if 'PIPE' not in e:
+        return
     if not np.isnan(e['PIPE']):
         return
     ax.add_patch(

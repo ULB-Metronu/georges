@@ -18,12 +18,12 @@ class BeamException(Exception):
 class Beam:
     """Particle beam to be tracked in a beamline or accelerator model.
 
-    The internal representation is essentially a pandas DataFrame.
+    The internal representation is essentially a `pandas` `DataFrame`.
     """
 
     def __init__(self, distribution=None, particle='proton', energy=None, *args, **kwargs):
         """
-
+        Initialize a beam object from various sources of particle beam distribution.
         :param distribution: distribution of particles to initialize the beam with. Should be pandas.DataFrame() friendly.
         :param particle: the particle type (default: 'proton', must be 'proton', 'antiproton', 'electron' or 'positron').
         :param energy: the reference energy of the beam
@@ -40,6 +40,7 @@ class Beam:
         if self.__particle not in PARTICLE_TYPES:
             raise BeamException("Trying to initialize a beam with invalid particle type.")
         self.__energy = energy
+        self._halo = None  # To force the first computation of the halo
 
     @property
     def distribution(self):
@@ -132,14 +133,14 @@ class Beam:
 
     @property
     def std_bpm(self):
-        return self._std_bpm()
+        return self.fit_bpm()
 
-    def _std_bpm(self, **kwargs):
+    def fit_bpm(self, **kwargs):
         """TODO"""
         def gaussian(x, a, mu, sigma):
             return a * np.exp(-(x - mu) ** 2 / (2 * sigma ** 2)) / (np.sqrt(2*np.pi)*sigma)
 
-        def fit_bpm(d, ax=None):
+        def fit_bpm(d, ax=None, maxfev=10000):
             bs = np.array(
                 [-31, -19.8, -15.8, -11.8, -7.8, -5.8, -3.8, -1.8, 0.0, 1.8, 3.8, 5.8, 7.8, 11.8, 15.8, 19.8, 31]) / 1000
             bsp = (bs[1:] + bs[:-1]) / 2
@@ -154,7 +155,7 @@ class Beam:
             rms = np.std(x * y / np.sum(y) * len(y))
             popt, pcov = curve_fit(gaussian, x, y,
                                    p0=[ar, mean, rms],
-                                   maxfev=10000,
+                                   maxfev=maxfev,
                                    bounds=(
                                        (-np.inf, mean - 0.1 * np.abs(mean), 0.5 * rms),
                                        (np.inf, mean + 0.1 * np.abs(mean), 2 * rms)
@@ -185,24 +186,25 @@ class Beam:
         return {'X': [mean_x, error_x], 'Y': [mean_y, error_y]}
 
     @property
-    def halo(self):
+    def halo(self, dimensions=['X', 'Y', 'PX', 'PY']):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
-
-        return pd.concat([
-            self.__distribution.quantile(0.01),
-            self.__distribution.quantile(0.05),
-            self.__distribution.quantile(1.0-0.842701),
-            self.__distribution.quantile(0.842701),
-            self.__distribution.quantile(0.95),
-            self.__distribution.quantile(0.99)
-        ], axis=1).rename(columns={0.01: '1%',
-                                   0.05: '5%',
-                                   1.0-0.842701: '20%',
-                                   0.842701: '80%',
-                                   0.95: '95%',
-                                   0.99: '99%'
-                                   }
-                          )
+        if self._halo is None:
+            self._halo = pd.concat([
+                self.__distribution[dimensions].quantile(0.01),
+                self.__distribution[dimensions].quantile(0.05),
+                self.__distribution[dimensions].quantile(1.0-0.842701),
+                self.__distribution[dimensions].quantile(0.842701),
+                self.__distribution[dimensions].quantile(0.95),
+                self.__distribution[dimensions].quantile(0.99)
+            ], axis=1).rename(columns={0.01: '1%',
+                                       0.05: '5%',
+                                       1.0-0.842701: '20%',
+                                       0.842701: '80%',
+                                       0.95: '95%',
+                                       0.99: '99%'
+                                       }
+                              )
+        return self._halo
 
     @property
     def coupling(self):

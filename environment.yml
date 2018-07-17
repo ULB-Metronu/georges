@@ -1,9 +1,31 @@
-name: pyiba
+# Run: conda env create --file environment.yml
+# Customized environment "Intel Python 3"
+name: ipy3
 channels:
+  # Intel distribution for Python
+  # https://software.intel.com/en-us/distribution-for-python
   - intel
+  # Conda forge distribution
+  # https://conda-forge.org
+  - conda-forge
+  # Default distribution from Continuum/Anaconda
+  - nodefaults
 dependencies:
   - python=3.6
-  - intelpython3_full
+  - intelpython3_full  # https://software.intel.com/en-us/articles/complete-list-of-packages-for-the-intel-distribution-for-python
+  - numpy>=1.14.0  # numpy from the Intel distribution, linked to MKL
+  - pandas>=0.22.0  # pandas from the Intel distribution, linked to MKL
+  - scipy>=1.0.0  # scipy from the Intel distribution, linked to MKL
+  - scikit-learn>=0.19.1  # scikit-learn from the Intel distribution, linked to MKL and DAAL
+  - matplotlib>=2.1.1  # https://matplotlib.org
+  - nb_conda=2  #  https://github.com/Anaconda-Platform/nb_condag
+  - nb_conda_kernels=2  # https://github.com/Anaconda-Platform/nb_conda_kernels
+  - deap>=1.2.2  # http://deap.readthedocs.io/en/master/
+  - jinja2>=2.9.6  # http://jinja.pocoo.org
+  - lmfit>=0.9.7  # http://cars9.uchicago.edu/software/python/lmfit/
+  - dash>=0.21.1  # https://dash.plot.ly
+  - xlrd>=1.1.0  # http://www.python-excel.org
+  - pyarrow  # https://arrow.apache.org/docs/python/
+  - pytest>3  # https://pytest.org
   - pip:
-    - lmfit
-    - 
+    - m2r  # Markdown to RST for the documentation build, https://pypi.org/project/m2r/

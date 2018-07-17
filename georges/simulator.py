@@ -1,6 +1,7 @@
 import shutil
 import jinja2
 import os
+import os.path
 import sys
 
 
@@ -35,18 +36,25 @@ class Simulator:
         for b in beamlines:
             self._attach(b, context=kwargs.get('context'))
 
-    def _attach(self, beamline):
+    def _attach(self, beamline, context=None):
         """Attach a beamline to the simulator instance."""
         self._beamlines.append(beamline)
+
+    @property
+    def executable(self):
+        return self._get_exec()
 
     def _get_exec(self):
         """Retrive the path to the simulator executable."""
         if self._path is not None:
             return os.path.join(self._path, self._exec)
-        elif sys.platform == 'win':
+        elif sys.platform in ('win32', 'win64'):
             return shutil.which(self._exec)
         else:
-            return shutil.which(self._exec, path=".:/usr/local/bin:/usr/bin:/bin")
+            if os.path.isfile(f"{sys.prefix}/bin/{self._exec}"):
+                return f"{sys.prefix}/bin/{self._exec}"
+            else:
+                return shutil.which(self._exec, path=os.path.join(os.environ['PATH'], '/usr/local/bin'))
 
     def _add_input(self, keyword, *args, **kwargs):
         """Uses the simulator's own syntax to add to the input"""

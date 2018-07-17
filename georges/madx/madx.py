@@ -129,10 +129,13 @@ class MadxException(Exception):
         self.message = m
 
 
-def element_to_mad(e, ptc_use_knl_only=False):
-    """Convert a pandas.Series representation onto a MAD-X sequence element."""
+def element_to_mad(e, optional_marker=True, ptc_use_knl_only=False):
+    """Convert a pandas.Series representation onto a MAD-X sequence element. Markers are automatically added."""
     if e.CLASS not in SUPPORTED_CLASSES:
-        return ""
+        if optional_marker:
+            return f"{e.name}: MARKER, AT={e['AT_CENTER']};"
+        else:
+            return ""
     mad = f"{e.name}: {e.CLASS}, "
     if e.get('BENDING_ANGLE') is not None and not np.isnan(e['BENDING_ANGLE']):
         mad += f"ANGLE={e['BENDING_ANGLE']},"
@@ -189,7 +192,7 @@ def element_to_mad(e, ptc_use_knl_only=False):
                 or e.get('PLUG') == 'K2' \
                 or e.get('PLUG') == 'K3' \
                 or e.get('PLUG') == 'K4':
-            mad += f", {e['PLUG']}:={e['CIRCUIT']}/{e['BRHO']}"
+            mad += f", {e['PLUG']}:={e['CIRCUIT']}/{e['BRHO']}"  # Normalize the gradients
         else:
             mad += f", {e['PLUG']}:={e['CIRCUIT']}"
 
@@ -198,16 +201,13 @@ def element_to_mad(e, ptc_use_knl_only=False):
     return mad
 
 
-def sequence_to_mad(sequence, ptc_use_knl_only=False):
+def sequence_to_mad(sequence, optional_marker=True, ptc_use_knl_only=False):
     """Convert a pandas.DataFrame sequence onto a MAD-X input."""
     sequence.sort_values(by='AT_CENTER', inplace=True)
-    sequence.query("TYPE != 'SOLIDS' and TYPE != 'SLITS'", inplace=True)
-    if sequence is None:
+    if sequence.empty:
         return ""
     m = "{}: SEQUENCE, L={}, REFER=CENTER;\n".format(sequence.name, sequence.length)
-    m += 'MAD_START: MARKER, AT = 0.0;\n'
-    m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, ptc_use_knl_only), axis=1)) + '\n'
-    m += f"MAD_END: MARKER, AT={sequence.length};\n"
+    m += '\n'.join(sequence.apply(lambda x: element_to_mad(x, optional_marker, ptc_use_knl_only), axis=1)) + '\n'
     m += "ENDSEQUENCE;\n"
 
     processed_variables = set()
@@ -248,8 +248,9 @@ class Madx(Simulator):
 
     def __init__(self, beamlines=None, path=None, **kwargs):
         self._ptc_use_knl_only = kwargs.get('ptc_use_knl_only', False)
-        super().__init__(beamlines=beamlines, path=path, **kwargs)
+        self._optional_markers = kwargs.get('optional_markers', True)
         self._syntax = madx_syntax
+        super().__init__(beamlines=beamlines, path=path, **kwargs)
         self._exec = Madx.EXECUTABLE_NAME
 
     def _attach(self, beamline, context=None):
@@ -258,7 +259,10 @@ class Madx(Simulator):
             raise SimulatorException("Beamline length not defined.")
         if context is not None and context.get('BRHO'):
             beamline.line['BRHO'] = context['BRHO']
-        self._input += sequence_to_mad(beamline.line, ptc_use_knl_only=self._ptc_use_knl_only)
+        self._input += sequence_to_mad(beamline.line,
+                                       optional_marker=self._optional_markers,
+                                       ptc_use_knl_only=self._ptc_use_knl_only
+                                       )
 
     def run(self, **kwargs):
         """Run madx as a subprocess."""

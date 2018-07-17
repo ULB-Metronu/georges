@@ -6,9 +6,9 @@ Modules
    :caption: Contents:
 
    core
-   madx
-   bdsim
-   g4beamline
    manzoni
    fermi
    optim
+   madx
+   bdsim
+   g4beamline

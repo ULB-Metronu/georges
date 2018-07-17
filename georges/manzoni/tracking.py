@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 from ..beam import Beam
-
 from georges.beamline import Beamline
 from . import manzoni
 from .manzoni import convert_line
@@ -26,7 +25,7 @@ def track(line, beam, **kwargs):
 
     # Run Manzoni
     o = ElementByElementObserver()
-    manzoni.track(manzoni_line, manzoni_beam, observer=o)
+    manzoni.track(manzoni_line, manzoni_beam, observer=o, **kwargs)
 
     # Collect the results
     return Beamline(

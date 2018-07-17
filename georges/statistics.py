@@ -1,4 +1,3 @@
-""" Compute some functions for statistics as confidence bounds"""
 import numpy as np
 from lmfit.models import GaussianModel
 from lmfit.models import LorentzianModel

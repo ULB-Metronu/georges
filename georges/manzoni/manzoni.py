@@ -1,15 +1,24 @@
 import numpy as np
-from .transfer import transfer
-from .kick import kick
+from .matrices import matrices
+from .tensors import tensors
+from .integrators import integrators
+from .mc import mc
 from .constants import *
 from .aperture import aperture_check
 from .. import fermi
 from .. import physics
 
 
+class ManzoniException(Exception):
+    """Exception raised for errors in the Manzoni module."""
+
+    def __init__(self, m):
+        self.message = m
+
+
 def convert_line(line, context={}, to_numpy=True, fermi_params={}):
     def class_conversion(e):
-        if e['CLASS'] in ('RFCAVITY', 'HKICKER'):
+        if e['CLASS'] in ('RFCAVITY'):
             e['CLASS_CODE'] = CLASS_CODES['DRIFT']
         if e['CLASS'] not in CLASS_CODES:
             e['CLASS_CODE'] = CLASS_CODES['NONE']
@@ -58,15 +67,18 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         return e
 
     def fermi_eyges_computations(e):
-        if e['CLASS'] != 'DEGRADER':
+        if e['CLASS'] != 'DEGRADER' and e['CLASS'] != 'SCATTERER':
             return e
-        fe = fermi.compute_fermi_eyges(material=e['MATERIAL'],
+        material = e['MATERIAL']
+        if material == '':
+            material = 'vacuum'
+        fe = fermi.compute_fermi_eyges(material=material,
                                        energy=e['ENERGY_IN'],
                                        thickness=100*e['LENGTH'],
                                        db=db,
                                        t=fermi.DifferentialMoliere,
-                                       with_dpp=fermi_params.get('with_dpp', False),
-                                       with_losses=fermi_params.get('with_losses', False),
+                                       with_dpp=fermi_params.get('with_dpp', True),
+                                       with_losses=fermi_params.get('with_losses', True),
                                        )
         e['FE_A0'] = fe['A'][0]
         e['FE_A1'] = fe['A'][1]
@@ -139,7 +151,16 @@ def transform_elements(line, elements):
     return list(map(transform, elements))
 
 
-def track(line, beam, turns=1, observer=None, **kwargs):
+def track(line, beam, turns=1, observer=None, order=1, **kwargs):
+    if order == 1:
+        track1(line, beam, turns, observer, **kwargs)
+    elif order == 2:
+        track2(line, beam, turns, observer, **kwargs)
+    else:
+        raise ManzoniException("Invalid tracking order")
+
+
+def track1(line, beam, turns=1, observer=None, **kwargs):
     """
     Tracking through a beamline.
     Code optimized for performance.
@@ -153,27 +174,105 @@ def track(line, beam, turns=1, observer=None, **kwargs):
     # Initial call to the observer
     if observer is not None:
         observer.track_start(beam)
+
     # Main loop
-    for j in range(0, turns):
+    for turn in range(0, turns):
         for i in range(0, line.shape[0]):
-            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_KICK and beam.shape[0] > 0:
-                # In place operation
-                beam = kick[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
-                matrices = transfer[int(line[i, INDEX_CLASS_CODE])]
+            # Symplectic integrators
+            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
+                beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+            # Monte-Carlo propagation
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MC and beam.shape[0]:
+                beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+            # Transfert matrices and tensors
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
+                matrix = matrices[int(line[i, INDEX_CLASS_CODE])]
+                tensor = tensors[int(line[i, INDEX_CLASS_CODE])]
                 # For performance considerations, see
                 # https://stackoverflow.com/q/48474274/420892
-                # b = np.einsum('ij,kj->ik', b, matrix(line[i]))
-                beam = beam.dot(matrices(line[i]).T)
+                # Alternative
+                # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
+                if tensor is None:
+                    beam = beam.dot(matrix(line[i]).T)
+                else:
+                    beam = beam.dot(matrix(line[i]).T) + np.einsum('lj,ijk,lk->li', beam, tensor, beam)
             beam = aperture_check(beam, line[i])
+
+            # Per element observation
             if observer is not None and observer.element_by_element_is_active is True:
-                if observer.elements is None:
-                    observer.element_by_element(j, i, beam)
-                elif i in observer.elements:
-                    observer.element_by_element(j, i, beam)
+                if observer.elements is None:  # call the observer for each element
+                    observer.element_by_element(turn, i, beam)
+                elif i in observer.elements:  # call the observer for given elements
+                    observer.element_by_element(turn, i, beam)
+        # Per turn observation
         if observer is not None and observer.turn_by_turn_is_active is True:
-            observer.turn_by_turn(j, i, beam)
+            observer.turn_by_turn(turn, i, beam)
+
     # Final call to the observer
     if observer is not None:
-        return observer.track_end(j, i, beam)
+        return observer.track_end(turn, i, beam)
+    return
+
+
+def track2(line, beam, turns=1, observer=None, **kwargs):
+    """
+    Tracking through a beamline.
+    Code optimized for performance.
+    :param line: beamline description in Manzoni format
+    :param beam: initial beam
+    :param turns: number of tracking turns
+    :param observer: Observer object to witness and record the tracking data
+    :param kwargs: optional parameters
+    :return: Observer.track_end() return value
+    """
+    # Initial call to the observer
+    if observer is not None:
+        observer.track_start(beam)
+
+    # Main loop
+    for turn in range(0, turns):
+        for i in range(0, line.shape[0]):
+            # Symplectic integrators
+            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
+                beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+            # Monte-Carlo propagation
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MC and beam.shape[0]:
+                beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+            # Transfert matrices and tensors
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
+                ts = tensors[int(line[i, INDEX_CLASS_CODE])]
+                if ts is None:
+                    # For performance considerations, see
+                    # https://stackoverflow.com/q/48474274/420892
+                    # Alternative
+                    # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
+                    r = matrices[int(line[i, INDEX_CLASS_CODE])](line[i], True)  # DO multiply
+                    beam = beam.dot(r.T)
+                else:
+                    # For performance considerations, see
+                    # https://stackoverflow.com/q/51046917/420892
+                    # Alternatives
+                    # np.einsum('ijk,lj,lk->li', T, beam, beam)
+                    # ((beam[:, None, None, :]@T).squeeze()@x[..., None]).squeeze()
+                    # np.einsum('ijl,lj->li', T@beam.T, beam)
+                    #
+                    #
+                    rs = matrices[int(line[i, INDEX_CLASS_CODE])](line[i], False)  # DO NOT multiply
+                    for u in range(len(rs)):
+                        beam = beam.dot(rs[i].T) + np.einsum('lj,ijk,lk->li', beam, ts[i], beam)
+            beam = aperture_check(beam, line[i])
+
+            # Per element observation
+            if observer is not None and observer.element_by_element_is_active is True:
+                if observer.elements is None:  # call the observer for each element
+                    observer.element_by_element(turn, i, beam)
+                elif i in observer.elements:  # call the observer for given elements
+                    observer.element_by_element(turn, i, beam)
+        # Per turn observation
+        if observer is not None and observer.turn_by_turn_is_active is True:
+            observer.turn_by_turn(turn, i, beam)
+
+    # Final call to the observer
+    if observer is not None:
+        return observer.track_end(turn, i, beam)
     return
