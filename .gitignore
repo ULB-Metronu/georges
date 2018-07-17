@@ -3,6 +3,7 @@ __pycache__/
 .DS_Store
 .idea/
 georges.egg-info
+.pytest_cache
 /examples/.ipynb_checkpoints
 examples/Maxwellian_bend_for_ptc.txt
 examples/Maxwellian_bend_for_ptc_electric.txt
