@@ -48,10 +48,10 @@ class MaterialsDB:
         return self.__materials_db['projected_ranges']
 
     def density(self, material):
-        return self.__materials_db['density'].at[material, 'rho']
+        return self.__materials_db['density'].at[str(material), 'rho']
 
     def z(self, material):
-        return self.__materials_db['atomic'].at[material, 'Z']
+        return self.__materials_db['atomic'].at[str(material), 'Z']
 
     def a(self, material):
-        return self.__materials_db['atomic'].at[material, 'A']
+        return self.__materials_db['atomic'].at[str(material), 'A']

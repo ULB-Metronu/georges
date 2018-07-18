@@ -14,12 +14,16 @@ class TrackException(Exception):
         self.message = m
 
 
-def track(line, beam, **kwargs):
+def track(model=None, line=None, beam=None, **kwargs):
     """Compute the distribution of the beam as it propagates through the beamline.
     """
     # Process arguments
-    if line is None or beam is None:
-        raise TrackException("Beamline, Beam and MAD-X objects need to be defined.")
+    if model is None:
+        if line is None or beam is None:
+            raise TrackException("Beamline, Beam and MAD-X objects need to be defined.")
+    else:
+        line = model.beamline
+        beam = model.beam
     manzoni_line = convert_line(line.line, kwargs.get('context', {}))
     manzoni_beam = np.array(beam.distribution)
 
