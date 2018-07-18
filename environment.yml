@@ -27,5 +27,6 @@ dependencies:
   - xlrd>=1.1.0  # http://www.python-excel.org
   - pyarrow  # https://arrow.apache.org/docs/python/
   - pytest>3  # https://pytest.org
+  - jupyterlab  # https://github.com/jupyterlab/jupyterlab
   - pip:
     - m2r  # Markdown to RST for the documentation build, https://pypi.org/project/m2r/
