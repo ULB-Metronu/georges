@@ -41,5 +41,6 @@ setup(
         'deap>=1.2.2',
         'xlrd>=1.1',
     ],
+    package_data={'georges': ['fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
     data_files=[('bin/', ['bin/madx'])],  # Install MAD-X in f"{sys.prefix}/bin/madx"
 )
