@@ -1,5 +1,6 @@
 from setuptools import setup, find_packages
-import os, ast
+import os
+import ast
 
 
 def get_version_from_init():
@@ -42,5 +43,5 @@ setup(
         'xlrd>=1.1',
     ],
     package_data={'georges': ['fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
-    data_files=[('bin/', ['bin/madx'])],  # Install MAD-X in f"{sys.prefix}/bin/madx"
+    data_files=[('bin', [os.path.join('bin', 'madx')])],  # Install MAD-X in f"{sys.prefix}/bin/madx"
 )
