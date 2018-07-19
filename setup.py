@@ -41,6 +41,7 @@ setup(
         'm2r>=0.1.13',
         'deap>=1.2.2',
         'xlrd>=1.1',
+        'pyDOE>=0.3',
     ],
     package_data={'georges': ['fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
     data_files=[('bin', [os.path.join('bin', 'madx')])],  # Install MAD-X in f"{sys.prefix}/bin/madx"

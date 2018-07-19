@@ -26,6 +26,7 @@ dependencies:
   - dash>=0.21.1  # https://dash.plot.ly
   - xlrd>=1.1.0  # http://www.python-excel.org
   - pyarrow  # https://arrow.apache.org/docs/python/
+  - pyDOE  # https://pythonhosted.org/pyDOE/
   - pytest>3  # https://pytest.org
   - jupyterlab  # https://github.com/jupyterlab/jupyterlab
   - pip:
