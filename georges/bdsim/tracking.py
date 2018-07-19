@@ -3,6 +3,10 @@ import pandas as pd
 import numpy as np
 import ROOT
 import root_numpy
+import multiprocessing
+from joblib import Parallel, delayed
+
+
 from .. import beamline
 from .bdsim import BDSim
 from .. import physics
@@ -29,7 +33,7 @@ def get_array_value(x):
 def read_tracking(element, evttree, **kwargs):
     """Read a BDSIM Tracking 'one' file to a dataframe."""
 
-    if element['TYPE'] not in ['MARKER', 'SOLIDS', 'DEGRADER']:
+    if element['TYPE'] not in ['MARKER', 'SOLIDS', 'DEGRADER', 'SROTATION']:
         data_element = root_numpy.tree2array(evttree, branches=[element.name + ".x",
                                                                 element.name + ".y",
                                                                 element.name + ".xp",
@@ -139,15 +143,21 @@ def track(**kwargs):
     l = line.line.copy()
 
     # TODO Make the extraction of the beam in MT : make with a kwargs
-    # num_cores = multiprocessing.cpu_count()
-    # results = Parallel(n_jobs=num_cores - 1)(delayed(extract_data)(i, line) for i, line in Data_simulation.iterrows())
+    #
+    #
 
     if kwargs.get("extract_beam", True):
-
         # Open the ROOT file and get the events
+
         f = ROOT.TFile(bd._outputname+'.root')
         evttree = f.Get("Event")
-        # #
+
+        if kwargs.get("enable_mt", False):
+            num_cores = multiprocessing.cpu_count()
+            l['BEAM'] = Parallel(n_jobs=num_cores - 1)(delayed(read_tracking)(g, evttree) for _, g in l.iterrows())
+
+
+        #
         # # # Add columns which contains datas
         print("WRITE BEAM FILE")
         l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree, **kwargs), axis=1)
