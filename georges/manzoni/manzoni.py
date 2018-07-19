@@ -70,9 +70,9 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         if e['CLASS'] != 'DEGRADER' and e['CLASS'] != 'SCATTERER':
             return e
         material = e['MATERIAL']
-        if material == '':
-            material = 'vacuum'
-        fe = fermi.compute_fermi_eyges(material=material,
+        if str(material) == '' or str(material) == 'vacuum':
+            return e
+        fe = fermi.compute_fermi_eyges(material=str(material),
                                        energy=e['ENERGY_IN'],
                                        thickness=100*e['LENGTH'],
                                        db=db,
@@ -153,9 +153,9 @@ def transform_elements(line, elements):
 
 def track(line, beam, turns=1, observer=None, order=1, **kwargs):
     if order == 1:
-        track1(line, beam, turns, observer, **kwargs)
+        return track1(line, beam, turns, observer, **kwargs)
     elif order == 2:
-        track2(line, beam, turns, observer, **kwargs)
+        return track2(line, beam, turns, observer, **kwargs)
     else:
         raise ManzoniException("Invalid tracking order")
 
@@ -195,7 +195,7 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
                 if tensor is None:
                     beam = beam.dot(matrix(line[i]).T)
                 else:
-                    beam = beam.dot(matrix(line[i]).T) + np.einsum('lj,ijk,lk->li', beam, tensor, beam)
+                    beam = beam.dot(matrix(line[i]).T) #+ np.einsum('lj,ijk,lk->li', beam, tensor, beam)
             beam = aperture_check(beam, line[i])
 
             # Per element observation

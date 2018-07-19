@@ -20,7 +20,7 @@ def track(model=None, line=None, beam=None, **kwargs):
     # Process arguments
     if model is None:
         if line is None or beam is None:
-            raise TrackException("Beamline, Beam and MAD-X objects need to be defined.")
+            raise TrackException("Beamline and Beam objects need to be defined.")
     else:
         line = model.beamline
         beam = model.beam

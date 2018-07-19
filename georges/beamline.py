@@ -145,7 +145,7 @@ class Beamline:
         tmp = self.__beamline[self.__start:self.__stop].copy()
         tmp[['AT_ENTRY', 'AT_CENTER', 'AT_EXIT']] -= tmp.iloc[0]['AT_ENTRY']
         tmp.name = self.name
-        tmp.length = self.__beamline[self.__start:self.__stop].iloc[-1]['AT_EXIT']
+        tmp.length = tmp.iloc[-1]['AT_EXIT']
         return tmp
 
     def to_thin(self, element):
@@ -193,7 +193,7 @@ class Beamline:
                 pd.concat([
                     s,
                     pd.DataFrame(markers).set_index('NAME')
-                ], sort=False).sort_values(by='AT_CENTER'),
+                ]).sort_values(by='AT_CENTER'),
                 name=self.name,
                 start=self.__start,
                 stop=self.__stop
@@ -246,4 +246,7 @@ class Beamline:
         return Beamline(line_with_drifts, name=self.name, start=self.__start, stop=self.__stop)
 
     def __getitem__(self, key):
-        return Beamline(self, name=self.name, start=key.start, stop=key.stop)
+        return Beamline(self, start=key.start, stop=key.stop)
+
+    def __setitem__(self, key, value):
+        self.__beamline.at[key] = value
