@@ -187,7 +187,7 @@ class Beamline:
                 pd.concat([
                     s,
                     pd.DataFrame(markers).set_index('NAME')
-                ], sort=False).sort_values(by='AT_CENTER')
+                ]).sort_values(by='AT_CENTER')
             )
 
     def add_drifts(self, using_collimators=False, with_pipe=True, pipe_aperture=1.0, pipe_apertype='CIRCLE'):
