@@ -1,9 +1,10 @@
 import numpy as np
 from lmfit.models import GaussianModel
 from lmfit.models import LorentzianModel
+from lmfit.models import LinearModel
 
 
-REGISTERED_MODEL = ['Gaussian', 'Lorentzian']
+REGISTERED_MODEL = ['Gaussian', 'Lorentzian', 'Linear']
 
 
 class StatisticException(Exception):
@@ -32,6 +33,16 @@ def histogram_fit(data, bounds_binning=50, verbose=False, **kwargs):
         mod = LorentzianModel()
 
     result = mod.fit(data=y, x=x, center=data.mean(), sigma=data.var())
+
+    if verbose:
+        print(result.fit_report())
+    return x, result
+
+
+def linear_fit(x, data, verbose=False, **kwargs):
+
+    mod = LinearModel()
+    result = mod.fit(data=data, x=x)
 
     if verbose:
         print(result.fit_report())
