@@ -8,6 +8,8 @@ from .aperture import aperture_check
 from .. import fermi
 from .. import physics
 
+FERMI_DB = fermi.MaterialsDB()
+
 
 class ManzoniException(Exception):
     """Exception raised for errors in the Manzoni module."""
@@ -18,7 +20,7 @@ class ManzoniException(Exception):
 
 def convert_line(line, context={}, to_numpy=True, fermi_params={}):
     def class_conversion(e):
-        if e['CLASS'] in ('RFCAVITY'):
+        if e['CLASS'] in ('RFCAVITY',):
             e['CLASS_CODE'] = CLASS_CODES['DRIFT']
         if e['CLASS'] not in CLASS_CODES:
             e['CLASS_CODE'] = CLASS_CODES['NONE']
@@ -51,8 +53,8 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         if not isinstance(e['APERTURE'], str):
             if np.isnan(e['APERTURE']) and e['PLUG'] == 'APERTURE':
                 s = e['CIRCUIT'].strip('[{}]').split(',')
-                if context.get(s[0], 0):
-                    e['APERTURE'] = float(context.get(s[0], 1.0))
+                if context.get(s[0]) is not None:
+                    e['APERTURE'] = float(context.get(s[0]))
                 else:
                     e['APERTURE'] = 1.0
                 if len(s) > 1:
@@ -75,7 +77,7 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         fe = fermi.compute_fermi_eyges(material=str(material),
                                        energy=e['ENERGY_IN'],
                                        thickness=100*e['LENGTH'],
-                                       db=db,
+                                       db=FERMI_DB,
                                        t=fermi.DifferentialMoliere,
                                        with_dpp=fermi_params.get('with_dpp', True),
                                        with_losses=fermi_params.get('with_losses', True),
@@ -88,41 +90,39 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         return e
 
     # Create or copy missing columns
-    line = line.copy()
-    if 'CLASS' not in line and 'KEYWORD' in line:
-        line['CLASS'] = line['KEYWORD']
-    if 'CLASS' not in line and 'TYPE' in line:
-        line['CLASS'] = line['KEYWORD']
+    line_copy = line.copy()
+    if 'CLASS' not in line_copy and 'KEYWORD' in line_copy:
+        line_copy['CLASS'] = line_copy['KEYWORD']
+    if 'CLASS' not in line_copy and 'TYPE' in line_copy:
+        line_copy['CLASS'] = line_copy['KEYWORD']
 
     # Fill with zeros
     for i in INDEX.keys():
-        if i not in line:
-            line[i] = 0.0
-
+        if i not in line_copy:
+            line_copy[i] = 0.0
     # Perform the conversion
-    line = line.apply(class_conversion, axis=1)
-    line = line.apply(circuit_conversion, axis=1)
-    line = line.apply(apertype_conversion, axis=1)
+    line_copy = line_copy.apply(class_conversion, axis=1)
+    line_copy = line_copy.apply(circuit_conversion, axis=1)
+    line_copy = line_copy.apply(apertype_conversion, axis=1)
 
     # Energy tracking
-    db = fermi.MaterialsDB()
-    energy = 230  # Default value
-    if context.get('ENERGY'):
-        energy = context['ENERGY']
-    elif context.get('PC'):
-        energy = physics.momentum_to_energy(context['PC'])
-    fermi.track_energy(energy, line, db)
-    line['BRHO'] = physics.energy_to_brho(line['ENERGY_IN'])
+    if 'BRHO' not in line.columns:
+        if context.get('ENERGY'):
+            energy = context['ENERGY']
+        elif context.get('PC'):
+            energy = physics.momentum_to_energy(context['PC'])
+        fermi.track_energy(energy, line_copy, FERMI_DB)
+        line_copy['BRHO'] = physics.energy_to_brho(line_copy['ENERGY_IN'])
 
     # Compute Fermi-Eyges parameters
-    line = line.apply(fermi_eyges_computations, axis=1)
+    line_copy = line_copy.apply(fermi_eyges_computations, axis=1)
 
     # Adjustments for the final format
-    line = line.fillna(0.0)
+    line_copy = line_copy.fillna(0.0)
     if to_numpy:
-        return line[list(INDEX.keys())].values
+        return line_copy[list(INDEX.keys())].values
     else:
-        return line[list(INDEX.keys())]
+        return line_copy[list(INDEX.keys())]
 
 
 def transform_variables(line, variables):
@@ -207,7 +207,6 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
         # Per turn observation
         if observer is not None and observer.turn_by_turn_is_active is True:
             observer.turn_by_turn(turn, i, beam)
-
     # Final call to the observer
     if observer is not None:
         return observer.track_end(turn, i, beam)

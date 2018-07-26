@@ -246,7 +246,10 @@ class Beamline:
         return Beamline(line_with_drifts, name=self.name, start=self.__start, stop=self.__stop)
 
     def __getitem__(self, key):
-        return Beamline(self, start=key.start, stop=key.stop)
+        if isinstance(key, slice):
+            return Beamline(self, start=key.start, stop=key.stop)
+        else:
+            return self
 
     def __setitem__(self, key, value):
         self.__beamline.at[key] = value

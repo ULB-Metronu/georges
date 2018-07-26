@@ -20,6 +20,8 @@ class MaterialsDB:
             'csda_ranges': csda_ranges,
             'atomic': self._pdg_read_data("atomic.csv"),
             'density': self._pdg_read_data("density.csv"),
+            'radition_length': self._pdg_read_data("radiation_length.csv"),
+            'scattering_length': self._pdg_read_data("scattering_length.csv"),
         }
 
     def _star_read_data(self, m):

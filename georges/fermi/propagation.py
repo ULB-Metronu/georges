@@ -19,7 +19,7 @@ def track_energy(energy, line_fermi, db):
         if e['TYPE'] == 'slab' or e['TYPE'] == 'gap' or e['CLASS'] == 'DEGRADER':
             energy = residual_energy(
                 e['MATERIAL'], e['LENGTH'] * 100, energy, db=db
-            ) if str(e['MATERIAL']) is not 'vacuum' else energy
+            ) if str(e['MATERIAL']) != 'vacuum' else energy
             line_fermi.loc[i, 'ENERGY_OUT'] = energy
             line_fermi.loc[i, 'DeltaE'] = line_fermi.loc[i, 'ENERGY_IN'] - energy
         else:
@@ -36,7 +36,7 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
                 'A2': 0,
                 'B': 0
             }).rename(e.name)
-        # Do the actual computation with other materials
+        # Do the actual computation with other materials.py
         fe = compute_fermi_eyges(
             db=db,
             material=str(slab['MATERIAL']),

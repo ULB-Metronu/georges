@@ -122,9 +122,7 @@ class Beam:
 
     @property
     def beam_dpp(self):
-        # TODO what is this?
         """TO DO"""
-
         dpp = (self['P0'] - self['DPP']) / self['P0']
         return {
             'mean_dpp': dpp.mean(),

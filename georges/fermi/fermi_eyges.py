@@ -59,7 +59,7 @@ def compute_fermi_eyges(material, energy, thickness, db, t, with_dpp=True, with_
     if with_losses:
         loss = compute_losses(residual_energy(material, thickness, energy, db=db), material)
     else:
-        loss = 0
+        loss = 1.0
 
     return {
         'A': a,
