@@ -4,6 +4,7 @@ from .. import Beamline
 from .fermi_eyges import compute_fermi_eyges
 from .stopping import residual_energy
 from .mcs import DifferentialMoliere
+from .materials import Vacuum
 
 
 class FermiPropagateException(Exception):
@@ -29,7 +30,7 @@ def track_energy(energy, line_fermi, db):
 def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
     def compute_fermi_eyges_on_slab(slab):
         # If vacuum, return a null-element
-        if str(slab['MATERIAL']) == 'vacuum':
+        if str(slab['MATERIAL']) == Vacuum:
             return pd.Series({
                 'A0': 0,
                 'A1': 0,
@@ -50,6 +51,14 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
             'A2': fe['A'][2],
             'B': fe['B']
         }).rename(slab.name)
+
+    # Default beam
+    if beam is None:
+        beam = {
+            'A0': 0,
+            'A1': 0,
+            'A2': 0,
+        }
 
     # Do not modify the input beamline
     line_fermi = line.line.copy()

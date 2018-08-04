@@ -1,4 +1,4 @@
-from .manzoni import \
+from .common import \
     convert_line, \
     adjust_line, \
     transform_variables, \
@@ -6,3 +6,4 @@ from .manzoni import \
 from . import manzoni
 from .tracking import track
 from .observers import *
+from . import matrices

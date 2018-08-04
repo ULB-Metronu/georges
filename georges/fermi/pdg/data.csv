@@ -1,0 +1,13 @@
+material,Z,A,rho
+hydrogen, 1, 1,
+beryllium, 4, 9,1.85
+graphite, 6, 12,1.7
+diamond, 6, 12,3.5
+oxygen, 8, 16,
+aluminum, 13, 27,2.7
+titanium, 22, 47.867, 4.506
+copper, 29, 63.546,8.92
+water, 7.42, 18.01528,
+air, 7.372754, 28.965,1.205e-3
+tantalum, 73, 180.94, 16.66
+boroncarbide, 1.0, 1.0,2.52

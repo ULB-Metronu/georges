@@ -3,7 +3,7 @@ import pandas as pd
 from ..beam import Beam
 from georges.beamline import Beamline
 from . import manzoni
-from .manzoni import convert_line
+from .common import convert_line
 from .observers import ElementByElementObserver
 from .. import model as _model
 
@@ -23,19 +23,32 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
         if line is None or beam is None:
             raise TrackException("Beamline and Beam objects need to be defined.")
         else:
+            if isinstance(line, _model.ManzoniModel):
+                raise TrackException("The line must be a regular Beamline, not a converted Manzoni line.")
             manzoni_line = convert_line(line.line, context)
             manzoni_beam = np.array(beam.distribution)
     else:
-        if not isinstance(model, _model.Model) and hasattr(model, 'model'):
+        # Access the object's model
+        if not isinstance(model, _model.ManzoniModel) and hasattr(model, 'manzoni_model'):
+            if hasattr(model, 'model'):
+                line = model.model.beamline
+            else:
+                raise TrackException("The model must also contain a regular Beamline object.")
+            model = model.manzoni_model
+
+        elif not isinstance(model, _model.Model) and hasattr(model, 'model'):
             model = model.model
+
+        # Access or convert the beam and beamline to Manzoni's format
+        if isinstance(model, _model.ManzoniModel):
+            manzoni_line = model.beamline
+            manzoni_beam = model.beam
+        elif isinstance(model, _model.Model):
             line = model.beamline
             beam = model.beam
             context = model.context
             manzoni_line = convert_line(line.line, context)
             manzoni_beam = np.array(beam.distribution)
-        elif isinstance(model, model.ManzoniModel):
-            manzoni_line = model.beamline
-            manzoni_beam = model.beam
 
     # Run Manzoni
     o = ElementByElementObserver()
@@ -59,4 +72,3 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
             right_index=True,
             how='left'
         ).set_index('NAME'))
-

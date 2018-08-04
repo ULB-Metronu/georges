@@ -2,6 +2,18 @@ import numpy as np
 from .constants import *
 
 
+def rotation4(e):
+    angle = e[INDEX_ANGLE]
+    return np.array(
+        [
+            [np.cos(angle), 0, -np.sin(angle), 0],
+            [0, np.cos(angle), 0, -np.sin(angle)],
+            [np.sin(angle), 0, np.cos(angle), 0],
+            [0, np.sin(angle), 0, np.cos(angle)]
+        ]
+    )
+
+
 def rotation(e):
     angle = e[INDEX_ANGLE]
     return np.array(
@@ -11,6 +23,23 @@ def rotation(e):
             [np.sin(angle), 0, np.cos(angle), 0, 0],
             [0, np.sin(angle), 0, np.cos(angle), 0],
             [0, 0, 0, 0, 1],
+        ]
+    )
+
+
+def drift4(e):
+    """
+    Transfer matrix of a drift. 4D only.
+    :param e: element definition
+    :return: a numpy array representing the 4D transfer matrix
+    """
+    length = e[INDEX_LENGTH]
+    return np.array(
+        [
+            [1, length, 0, 0],
+            [0, 1, 0, 0],
+            [0, 0, 1, length],
+            [0, 0, 0, 1]
         ]
     )
 
@@ -158,6 +187,47 @@ def bend(e, e1, e2, multiply=True):
             return [m_e2, m_b, m_e1]
 
 
+def quadrupole4(e):
+    """
+    Quadrupole transfer matrix of an element. 4D only.
+    :param e: element definition
+    :return: a numpy array representing the DD transfer matrix
+    """
+    length = e[INDEX_LENGTH]
+    k = e[INDEX_K1] / e[INDEX_BRHO]
+    if k > 0:  # Focusing quadrupole
+        k = np.sqrt(k)
+        kl = k * length
+        s = np.sin(kl)
+        c = np.cos(kl)
+        sh = np.sinh(kl)
+        ch = np.cosh(kl)
+        return np.array(
+            [
+                [c, (1 / k) * s, 0, 0],
+                [-k * s, c, 0, 0],
+                [0, 0, ch, (1 / k) * sh,],
+                [0, 0, k * sh, ch],
+            ])
+    elif k < 0:  # Defocusing quadrupole
+        k *= -1
+        k = np.sqrt(k)
+        kl = k * length
+        s = np.sin(kl)
+        c = np.cos(kl)
+        sh = np.sinh(kl)
+        ch = np.cosh(kl)
+        return np.array(
+            [
+                [ch, (1 / k) * sh, 0, 0],
+                [k * sh, ch, 0, 0],
+                [0, 0, c, (1 / k) * s],
+                [0, 0, -k * s, c],
+            ])
+    else:  # Zero strengths, this is a drift
+        return drift(e)
+
+
 def quadrupole(e):
     """
     Quadrupole transfer matrix of an element.
@@ -210,3 +280,11 @@ matrices = {
     CLASS_CODES['ROTATION']: rotation,
 }
 
+matrices4 = {
+    CLASS_CODES['DRIFT']: drift4,
+    CLASS_CODES['COLLIMATOR']: drift4,
+    CLASS_CODES['SBEND']: drift4,
+    CLASS_CODES['RBEND']: drift4,
+    CLASS_CODES['QUADRUPOLE']: quadrupole4,
+    CLASS_CODES['ROTATION']: rotation4,
+}
