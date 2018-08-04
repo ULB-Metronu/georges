@@ -7,13 +7,33 @@ except ModuleNotFoundError:
     import numpy.random as nprandom
 
 
-def scatterer(e, b, **kwargs):
+def propagation_scatterer(e, b, **kwargs):
+    b[X, X] += e[INDEX_FE_A2] + b[X, PX] * e[INDEX_LENGTH] + b[1, 1] * e[INDEX_LENGTH]**2
+    b[X, PX] += e[INDEX_FE_A1] + b[PX, PX] * e[INDEX_LENGTH]
+    b[PX, X] = b[X, PX]
+    b[PX, PX] += e[INDEX_FE_A0]
+    
+    b[Y, Y] += e[INDEX_FE_A2] + b[Y, PY] * e[INDEX_LENGTH] + b[1, 1] * e[INDEX_LENGTH]**2
+    b[Y, PY] += e[INDEX_FE_A1] + b[PY, PY] * e[INDEX_LENGTH]
+    b[PY, Y] = b[Y, PY]
+    b[PY, PY] += e[INDEX_FE_A0]
+
+    return b
+
+
+def propagation_degrader(e, b, **kwargs):
+    b[PX, PX] += e[INDEX_FE_A0]
+    b[PY, PY] += e[INDEX_FE_A0]
+    return b
+
+
+def mc_scatterer(e, b, **kwargs):
     b[:,1] += nprandom.normal(0.0, e[INDEX_FE_A0], int(b.shape[0]))
     b[:,3] += nprandom.normal(0.0, e[INDEX_FE_A0], int(b.shape[0]))
     return b
 
 
-def degrader(e, b, **kwargs):
+def mc_degrader(e, b, **kwargs):
     # Remove particles
     # if e[INDEX_FE_LOSS] != 0:
     #     idx = np.random.randint(b.shape[0], size=int((e[INDEX_FE_LOSS]) * b.shape[0]))
@@ -34,6 +54,11 @@ def degrader(e, b, **kwargs):
 
 
 mc = {
-    CLASS_CODES['DEGRADER']: degrader,
-    CLASS_CODES['SCATTERER']: scatterer,
+    CLASS_CODES['DEGRADER']: mc_degrader,
+    CLASS_CODES['SCATTERER']: mc_scatterer,
+}
+
+fe = {
+    CLASS_CODES['DEGRADER']: propagation_degrader,
+    CLASS_CODES['SCATTERER']: propagation_scatterer,
 }

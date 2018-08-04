@@ -17,7 +17,7 @@ class FermiPropagateException(Exception):
 def track_energy(energy, line_fermi, db):
     for i, e in line_fermi.iterrows():
         line_fermi.loc[i, 'ENERGY_IN'] = energy
-        if e['TYPE'] == 'slab' or e['TYPE'] == 'gap' or e['CLASS'] == 'DEGRADER':
+        if (e['TYPE'] == 'slab' or e['TYPE'] == 'gap' or e['CLASS'] == 'DEGRADER') and e['LENGTH'] != 0:
             energy = residual_energy(
                 e['MATERIAL'], e['LENGTH'] * 100, energy, db=db
             ) if str(e['MATERIAL']) != 'vacuum' else energy

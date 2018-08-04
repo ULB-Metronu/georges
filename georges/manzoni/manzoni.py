@@ -1,8 +1,8 @@
 import numpy as np
-from .matrices import matrices
+from .matrices import matrices, matrices4
 from .tensors import tensors
 from .integrators import integrators
-from .mc import mc
+from .fe import mc, fe
 from .constants import *
 from .aperture import aperture_check
 
@@ -14,43 +14,31 @@ class ManzoniException(Exception):
         self.message = m
 
 
-def sigma(line, beam, observer=None, **kwargs):
+def sigma(line, beam, **kwargs):
     """
     Sigma-matrix tracking through a beamline.
     Code optimized for performance.
     :param line: beamline description in Manzoni format
     :param beam: initial beam sigma matrix
-    :param observer: Observer object to witness and record the tracking data
     :param kwargs: optional parameters
     :return: Observer.track_end() return value
     """
-    # Initial call to the observer
-    if observer is not None:
-        observer.track_start(beam)
-
+    sigmas = np.zeros([line.shape[0], 4, 4])
+    sigmas[0, :] = beam
     # Main loop
     for i in range(0, line.shape[0]):
-        # Obtain the transformation matrix
+        # Track
         if line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
             matrix = matrices4[int(line[i, INDEX_CLASS_CODE])](line[i])
+            beam = np.matmul(np.matmul(matrix, beam), matrix.T)
+        elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_FE:
+            beam = fe[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
         else:
             # Default to a drift
             matrix = matrices4[CLASS_CODES['DRIFT']](line[i])
-
-        # Track
-        beam = np.matmul(np.matmul(matrix, beam), matrix.T)
-
-        # Per element observation
-        if observer is not None and observer.element_by_element_is_active is True:
-            if observer.elements is None:  # call the observer for each element
-                observer.element_by_element(0, i, beam)
-            elif i in observer.elements:  # call the observer for given elements
-                observer.element_by_element(0, i, beam)
-
-        # Final call to the observer
-        if observer is not None:
-            return observer.track_end(0, i, beam)
-        return
+            beam = np.matmul(np.matmul(matrix, beam), matrix.T)
+        sigmas[i, :] = beam
+    return sigmas
 
 
 def track(line, beam, turns=1, observer=None, order=1, **kwargs):
@@ -61,6 +49,7 @@ def track(line, beam, turns=1, observer=None, order=1, **kwargs):
     :param beam: initial beam
     :param turns: number of tracking turns
     :param observer: Observer object to witness and record the tracking data
+    :param order: Integration order (default: 1)
     :param kwargs: optional parameters
     :return: Observer.track_end() return value
     """
@@ -94,7 +83,7 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
                 beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             # Monte-Carlo propagation
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MC and beam.shape[0]:
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_FE and beam.shape[0]:
                 beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             # Transfert matrices and tensors
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
@@ -147,7 +136,7 @@ def track2(line, beam, turns=1, observer=None, **kwargs):
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
                 beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             # Monte-Carlo propagation
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MC and beam.shape[0]:
+            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_FE and beam.shape[0]:
                 beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
             # Transfert matrices and tensors
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
