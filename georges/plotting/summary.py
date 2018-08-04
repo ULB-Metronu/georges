@@ -7,7 +7,9 @@ from .tracking import tracking
 from .losses import losses
 
 
-def tracking_summary(bl, context, fig=None):
+def tracking_summary(bl=None, context={}, fig=None):
+    if bl is None:
+        raise Exception("`bl` cannot be None.")
     if fig is None:
         fig = plt.figure(figsize=(12, 21))
     ax = fig.add_subplot(311)
