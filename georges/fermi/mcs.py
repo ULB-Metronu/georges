@@ -89,6 +89,12 @@ class DifferentialMoliere:
 
     @staticmethod
     def f_dm(p1v1, pv):
+        if pv <= 0:
+            raise ValueError("'pv' must be > 0.")
+        if p1v1 <= 0:
+            raise ValueError("'p1v1' must be > 0.")
+        if p1v1 <= pv:
+            raise ValueError("Initial 'p1v1' must be larger than final 'pv'.")
         return 0.5244 \
                + 0.1975 * np.log10(1 - (pv / p1v1) ** 2) \
                + 0.2320 * np.log10(pv) \
