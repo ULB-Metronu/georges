@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as _np
 
 PROTON_MASS = 938.2720813
 ELECTRON_MASS = 0.5109989461
@@ -64,7 +64,7 @@ def kinematics(units="MeV", **kwargs):
 
 def momentum_to_energy(p):
     """Return E [MeV/c^2] from P [MeV/c] (proton)."""
-    return np.sqrt(p**2+PROTON_MASS**2)-PROTON_MASS
+    return _np.sqrt(p ** 2 + PROTON_MASS ** 2) - PROTON_MASS
 
 
 def momentum_to_brho(p):
@@ -80,18 +80,18 @@ def energy_to_brho(e):
 def energy_to_momentum(ekin):
     """Return P [MeV/c] from E [MeV/c^2] (proton)."""
     E = PROTON_MASS + ekin
-    return np.sqrt(E**2-PROTON_MASS**2)
+    return _np.sqrt(E ** 2 - PROTON_MASS ** 2)
 
 
 def energy_to_beta(ekin):
     """Return beta relativistic from E [MeV/c^2] (proton)."""
     gamma = (PROTON_MASS + ekin) / PROTON_MASS
-    return np.sqrt((gamma ** 2 - 1) / gamma ** 2)
+    return _np.sqrt((gamma ** 2 - 1) / gamma ** 2)
 
 
 def beta_to_gamma(beta):
     """Return gamma relativistic from beta."""
-    return 1/(np.sqrt(1-beta**2))
+    return 1/(_np.sqrt(1 - beta ** 2))
 
 
 def gamma_to_energy(gamma):
@@ -113,8 +113,8 @@ def energy_to_pv(energy):
 def range_to_energy(r):
     """Return the kinetic energy [MeV] from the range [g/cm^2]."""
     a = 0.00169; b = -0.00490; c = 0.56137; d = 3.46405
-    return np.exp(
-        a * np.log(r)**3 + b * np.log(r)**2 + c * np.log(r) + d
+    return _np.exp(
+        a * _np.log(r) ** 3 + b * _np.log(r) ** 2 + c * _np.log(r) + d
     )
 
 
@@ -122,7 +122,7 @@ def energy_to_range(e):
     """Return the range [g/cm^2] from the kinetic energy [MeV]."""
     """IEC60601 energy to range in water"""
     b = 0.008539; c = 0.5271; d = 3.4917
-    return np.exp((-c + np.sqrt(c**2 - 4 * b * (d - np.log(e))))/(2*b))
+    return _np.exp((-c + _np.sqrt(c ** 2 - 4 * b * (d - _np.log(e)))) / (2 * b))
 
 
 def compute_ess_transmission(beam_sigma, slits, dispersion):
@@ -131,8 +131,8 @@ def compute_ess_transmission(beam_sigma, slits, dispersion):
     dx = 3.0/n_steps
     sigma = beam_sigma/2.8
     slits_at = slits/dispersion
-    error = np.arange(-1.5, 1.5, dx)
-    slits = np.zeros(n_steps)
-    slits[np.where((error < slits_at) & (error > -slits_at))] = 1.0
-    beam = np.exp(-(error/sigma)**2/2)
-    return np.roll(np.convolve(slits, beam, mode="same"), -1)/np.trapz(beam)
+    error = _np.arange(-1.5, 1.5, dx)
+    slits = _np.zeros(n_steps)
+    slits[_np.where((error < slits_at) & (error > -slits_at))] = 1.0
+    beam = _np.exp(-(error / sigma) ** 2 / 2)
+    return _np.roll(_np.convolve(slits, beam, mode="same"), -1) / _np.trapz(beam)
