@@ -253,3 +253,18 @@ class Beamline:
 
     def __setitem__(self, key, value):
         self.__beamline.at[key] = value
+
+    @staticmethod
+    def from_concatenation(beamlines):
+        offset = 0
+        names = []
+        bl = []
+        for b in beamlines:
+            tmp = b.line.copy()
+            names.append(b.name)
+            bl.append(tmp)
+            tmp['AT_ENTRY'] += offset
+            tmp['AT_CENTER'] += offset
+            tmp['AT_EXIT'] += offset
+            offset += b.length
+        return Beamline(bl, name='_'.join(names), with_expansion=False)

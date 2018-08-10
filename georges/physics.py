@@ -51,6 +51,13 @@ def kinematics(units="MeV", **kwargs):
         brho = momentum_to_brho(pc)
         r = energy_to_range(e)
         beta = energy_to_beta(e)
+    elif kwargs.get('brho'):
+        brho = kwargs.get('brho')
+        pc = brho_to_momentum(brho)
+        e = momentum_to_energy(pc)
+        r = energy_to_range(e)
+        beta = energy_to_beta(e)
+        gamma = beta_to_gamma(beta)
 
     return {
         'range': r,
@@ -70,6 +77,10 @@ def momentum_to_energy(p):
 def momentum_to_brho(p):
     """Return BRHO [T.m] from P [MeV/c] (proton)."""
     return 3.33564E-3 * p
+
+
+def brho_to_momentum(brho):
+    return brho / 3.33564E-3
 
 
 def energy_to_brho(e):
