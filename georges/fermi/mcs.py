@@ -53,7 +53,7 @@ class DifferentialHighland:
     def t(pv, p1v1, **kwargs):
         db = kwargs.get('db')
         material = kwargs.get('material')
-        es = 15.0  # MeV
+        es = 14.1  # MeV
         chi0 = radiation_length(db=db, material=material)
         x = thickness(material, k_out=pv, k_in=p1v1, db=db)
         return DifferentialHighland.f_dh(DifferentialHighland.l(x, chi0)) * (es / pv) ** 2 * (1 / chi0)
