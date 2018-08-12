@@ -73,7 +73,7 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
         air_gaps['TYPE'] = 'gap'
         air_gaps.dropna(inplace=True, subset=['LENGTH'])
         air_gaps.set_index('NAME', inplace=True)
-        with_gaps = pd.concat([line_fermi, air_gaps], sort=False).sort_values(by='AT_ENTRY')
+        with_gaps = pd.concat([line_fermi, air_gaps]).sort_values(by='AT_ENTRY').query("LENGTH != 0")
         line_fermi = with_gaps
 
     # Add columns as needed
