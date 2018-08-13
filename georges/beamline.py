@@ -142,7 +142,10 @@ class Beamline:
         """The beamline representation."""
         self.__beamline.name = self.name
         self.__beamline.length = self.length
-        tmp = self.__beamline[self.__start:self.__stop].copy()
+        if self.__start is None and self.__stop is None:
+            tmp = self.__beamline
+        else:
+            tmp = self.__beamline[self.__start:self.__stop].copy()
         tmp[['AT_ENTRY', 'AT_CENTER', 'AT_EXIT']] -= tmp.iloc[0]['AT_ENTRY']
         tmp.name = self.name
         tmp.length = tmp.iloc[-1]['AT_EXIT']

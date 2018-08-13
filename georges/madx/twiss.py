@@ -71,7 +71,7 @@ def twiss(**kwargs):
     line = kwargs.get('line', None)
     if line is None:
         raise TwissException("Beamline and MAD-X objects need to be defined.")
-    m = Madx(beamlines=[line], ptc_use_knl_only=kwargs.get('ptc_use_knl_only', False))
+    m = Madx(beamlines=[line], ptc_use_knl_only=kwargs.get('ptc_use_knl_only', False), context=kwargs.get('context'))
     m.beam(line.name)
     m.twiss(**kwargs)
     errors = m.run(**kwargs).fatals
