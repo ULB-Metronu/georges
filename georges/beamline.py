@@ -146,7 +146,7 @@ class Beamline:
             tmp = self.__beamline
         else:
             tmp = self.__beamline[self.__start:self.__stop].copy()
-        tmp[['AT_ENTRY', 'AT_CENTER', 'AT_EXIT']] -= tmp.iloc[0]['AT_ENTRY']
+            tmp[['AT_ENTRY', 'AT_CENTER', 'AT_EXIT']] -= tmp.iloc[0]['AT_ENTRY']
         tmp.name = self.name
         tmp.length = tmp.iloc[-1]['AT_EXIT']
         return tmp

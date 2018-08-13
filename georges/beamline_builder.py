@@ -162,6 +162,7 @@ class BeamlineBuilder:
     def build_sequence(s, start_drift=0.0, end_drift=0.0, inter_drift=0.0):
         def drift(l):
             return {
+                'CLASS': 'DRIFT',
                 'TYPE': 'DRIFT',
                 'LENGTH': l,
                 'ORBIT_LENGTH': l,

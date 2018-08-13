@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-def survey_style1(ax, bl, **kwargs):
+def survey_iba(ax, bl, **kwargs):
     ax.set_xlabel("X (m)")
     ax.set_ylabel("Y (m)")
     ax.set_xlim([0, np.max(bl.line['X']) / 1000])
@@ -61,7 +61,7 @@ ELEMENT_COLORS = {
 }
 
 
-def survey_style2(ax, bl):
+def survey_madx(ax, bl):
     x_edges = [
         np.min(list(map(np.abs, [bl.line['Z'].max(), bl.line['Z'].min()]))),
         np.max(list(map(np.abs, [bl.line['Z'].max(), bl.line['Z'].min()])))
@@ -132,10 +132,10 @@ def survey_style2(ax, bl):
         ax.add_patch(w)
 
 
-def survey(ax, bl, style='style2', **kwargs):
-    if style == 'style1':
-        survey_style1(ax, bl, **kwargs)
-    elif style == 'style2':
-        survey_style2(ax, bl)
+def survey(ax, bl, style='madx', **kwargs):
+    if style == 'iba_survey':
+        survey_iba(ax, bl, **kwargs)
+    elif style == 'madx':
+        survey_madx(ax, bl)
     else:
         raise Exception("Style not supported.")
