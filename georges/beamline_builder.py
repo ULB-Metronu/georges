@@ -186,9 +186,9 @@ class BeamlineBuilder:
         at_entry_list = []
         for i, e in self.__beamline.iterrows():
             if elements_names.get(e['NAME']) is None:
-                elements_names[e['NAME']] = 0
+                elements_names[self.__beamline.iloc[i]['NAME']] = 0
             else:
-                elements_names[e['NAME']] += 1
+                elements_names[self.__beamline.iloc[i]['NAME']] += 1
             self.__beamline.loc[i, 'NAME'] = f"{self.__beamline.iloc[i]['NAME']}_{elements_names[e['NAME']]}"
             at_entry_list.append(offset)
             offset += e[using]

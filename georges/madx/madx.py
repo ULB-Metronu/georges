@@ -448,7 +448,8 @@ class Madx(Simulator):
             self._add_input('ptc_misalign')
         if kwargs.get('periodic', False):
             if not ptc_params.get('co_guess'):
-                self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'), ptc_params.get('slice_magnets', PTC_DEFAULTS['SLICE_MAGNETS']),)
+                self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'),
+                                ptc_params.get('slice_magnets', PTC_DEFAULTS['SLICE_MAGNETS']), )
             else:
                 self._add_input('ptc_twiss_co_guess', kwargs.get('file', 'ptc_twiss.outx'), *ptc_params.get('co_guess'))
         else:

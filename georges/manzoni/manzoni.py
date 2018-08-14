@@ -88,15 +88,11 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
             # Transfert matrices and tensors
             elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
                 matrix = matrices[int(line[i, INDEX_CLASS_CODE])]
-                tensor = tensors[int(line[i, INDEX_CLASS_CODE])]
                 # For performance considerations, see
                 # https://stackoverflow.com/q/48474274/420892
                 # Alternative
                 # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
-                if tensor is None:
-                    beam = beam.dot(matrix(line[i]).T)
-                else:
-                    beam = beam.dot(matrix(line[i]).T) #+ np.einsum('lj,ijk,lk->li', beam, tensor, beam)
+                beam = beam.dot(matrix(line[i]).T)
             beam = aperture_check(beam, line[i])
 
             # Per element observation
