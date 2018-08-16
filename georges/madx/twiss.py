@@ -62,7 +62,7 @@ def read_ptc_twiss(file):
     return df
 
 
-def read_ptc_twiss_summary(file):
+def read_twiss_summary(file):
     """Read a MAD-X PTCS Twiss TFS file summary information (summary table) to a dictionary."""
     regex_header = re.compile("^@\s+(\S*)\s+\S+\s+(.*)$")
     summary = {}
@@ -110,7 +110,7 @@ def twiss(with_summary=False, **kwargs):
                                        suffixes=('_TWISS', '')
                                        ).sort_values(by='S')
     if with_summary:
-        madx_twiss_summary = read_ptc_twiss_summary(os.path.join(".", 'ptc_twiss.outx'))
+        madx_twiss_summary = read_twiss_summary(os.path.join(".", 'ptc_twiss.outx'))
         return {
             'line': beamline.Beamline(line_with_twiss),
             'summary': madx_twiss_summary,
