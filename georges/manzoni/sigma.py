@@ -3,7 +3,7 @@ import pandas as pd
 from ..beam import Beam
 from georges.beamline import Beamline
 from . import manzoni
-from .manzoni import convert_line
+from .common import convert_line
 from .observers import ElementByElementObserver
 from .. import model as _model
 

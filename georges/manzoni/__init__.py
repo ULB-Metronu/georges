@@ -5,5 +5,6 @@ from .common import \
     transform_elements
 from . import manzoni
 from .tracking import track
+from .twiss import twiss, TwissMap
 from .observers import *
 from . import matrices

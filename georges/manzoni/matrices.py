@@ -3,15 +3,7 @@ from .constants import *
 
 
 def rotation4(e):
-    angle = e[INDEX_ANGLE]
-    return np.array(
-        [
-            [np.cos(angle), 0, -np.sin(angle), 0],
-            [0, np.cos(angle), 0, -np.sin(angle)],
-            [np.sin(angle), 0, np.cos(angle), 0],
-            [0, np.sin(angle), 0, np.cos(angle)]
-        ]
-    )
+    return rotation(e)[0:4, 0:4]
 
 
 def rotation(e):
@@ -33,15 +25,7 @@ def drift4(e):
     :param e: element definition
     :return: a numpy array representing the 4D transfer matrix
     """
-    length = e[INDEX_LENGTH]
-    return np.array(
-        [
-            [1, length, 0, 0],
-            [0, 1, 0, 0],
-            [0, 0, 1, length],
-            [0, 0, 0, 1]
-        ]
-    )
+    return drift(e)[0:4, 0:4]
 
 
 def drift(e):
@@ -193,39 +177,7 @@ def quadrupole4(e):
     :param e: element definition
     :return: a numpy array representing the DD transfer matrix
     """
-    length = e[INDEX_LENGTH]
-    k = e[INDEX_K1] / e[INDEX_BRHO]
-    if k > 0:  # Focusing quadrupole
-        k = np.sqrt(k)
-        kl = k * length
-        s = np.sin(kl)
-        c = np.cos(kl)
-        sh = np.sinh(kl)
-        ch = np.cosh(kl)
-        return np.array(
-            [
-                [c, (1 / k) * s, 0, 0],
-                [-k * s, c, 0, 0],
-                [0, 0, ch, (1 / k) * sh,],
-                [0, 0, k * sh, ch],
-            ])
-    elif k < 0:  # Defocusing quadrupole
-        k *= -1
-        k = np.sqrt(k)
-        kl = k * length
-        s = np.sin(kl)
-        c = np.cos(kl)
-        sh = np.sinh(kl)
-        ch = np.cosh(kl)
-        return np.array(
-            [
-                [ch, (1 / k) * sh, 0, 0],
-                [k * sh, ch, 0, 0],
-                [0, 0, c, (1 / k) * s],
-                [0, 0, -k * s, c],
-            ])
-    else:  # Zero strengths, this is a drift
-        return drift(e)
+    return quadrupole(e)[0:4, 0:4]
 
 
 def quadrupole(e):

@@ -55,6 +55,7 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
     manzoni.track(manzoni_line, manzoni_beam, observer=o, **kwargs)
 
     # Collect the results
+    return o
     return Beamline(
         line.line.reset_index().merge(
             pd.DataFrame(
