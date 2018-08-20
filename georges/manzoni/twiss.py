@@ -130,7 +130,7 @@ def compute_twiss(m, alpha, beta, mu):
     :return:
     """
     return {
-        'beta': (1/beta) * ((m[0, 0] * beta - m[0, 1] * alpha) + m[0, 1]**2),
+        'beta': (1/beta) * ((m[0, 0] * beta - m[0, 1] * alpha)**2 + m[0, 1]**2),
         'alpha': -(1/beta) * (
             (m[0, 0] * beta - m[0, 1] * alpha) * (m[1, 0] * beta - m[1, 1] * alpha) + m[0, 1] * m[1, 0]
         ),

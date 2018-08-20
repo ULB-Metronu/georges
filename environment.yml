@@ -1,4 +1,7 @@
-# Run: conda env create --file environment.yml
+# Run:
+#    conda env create --file environment.yml
+# Run (overrides the environment name):
+#    conda env create --file environment.yml --name your_env_name
 # Customized environment "Intel Python 3"
 name: ipy3
 channels:
