@@ -138,7 +138,7 @@ def compute_twiss(m, alpha, beta, mu):
     }
 
 
-def twiss(model=None, line=None, context={}, periodic=True, **kwargs):
+def twiss(model=None, line=None, context={}, periodic=True, nst=3, **kwargs):
     """
     """
     # Process arguments
@@ -165,20 +165,19 @@ def twiss(model=None, line=None, context={}, periodic=True, **kwargs):
     twiss_h['mu'] = 0
     twiss_v = twiss_map.twiss_v
     twiss_v['mu'] = 0
+    l[:, INDEX_LENGTH] /= nst
+
+    m = pd.DataFrame()
+
     for i in range(0, l.shape[0]):
         if l[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
             m = matrices4[int(l[i, INDEX_CLASS_CODE])](l[i])
         else:
             # Default to a drift
             m = matrices4[CLASS_CODES['DRIFT']](l[i])
-        twiss_h = compute_twiss(m[0:2, 0:2], **twiss_h)
-        twiss_v = compute_twiss(m[2:4, 2:4], **twiss_v)
-        line.iat[i, line.columns.get_loc('BETA11')] = twiss_h['beta']
-        line.iat[i, line.columns.get_loc('BETA22')] = twiss_v['beta']
-        line.iat[i, line.columns.get_loc('ALPHA11')] = twiss_h['alpha']
-        line.iat[i, line.columns.get_loc('ALPHA22')] = twiss_v['alpha']
-        line.iat[i, line.columns.get_loc('MU1')] = twiss_h['mu']
-        line.iat[i, line.columns.get_loc('MU2')] = twiss_v['mu']
+        for n in range(0, nst):
+            twiss_h = compute_twiss(m[0:2, 0:2], **twiss_h)
+            twiss_v = compute_twiss(m[2:4, 2:4], **twiss_v)
 
     return {
         'map': twiss_map,

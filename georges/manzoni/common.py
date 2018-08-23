@@ -3,6 +3,8 @@ from .constants import *
 from .. import fermi
 from .. import physics
 from .. import model as _model
+from .. import Beamline
+from .. import Beam
 
 FERMI_DB = fermi.MaterialsDB()
 
@@ -63,7 +65,7 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         if e['CLASS'] != 'DEGRADER' and e['CLASS'] != 'SCATTERER':
             return e
         material = e['MATERIAL']
-        if str(material) == '' or str(material) == 'vacuum':
+        if str(material) == '' or str(material) == 'vacuum' or e['LENGTH'] == 0:
             return e
         fe = fermi.compute_fermi_eyges(material=str(material),
                                        energy=e['ENERGY_IN'],
@@ -142,28 +144,26 @@ def transform_elements(line, elements):
     return list(map(transform, elements))
 
 
-def _process_model_argument(model, line, beam, context, exception):
+def _process_model_argument(model, line, beam, context, exception=Exception):
     manzoni_line = None
     manzoni_beam = None
     if model is None:
         if line is None or beam is None:
             raise exception("Beamline and Beam objects need to be defined.")
         else:
-            if isinstance(line, _model.ManzoniModel):
-                raise exception("The line must be a regular Beamline, not a converted Manzoni line.")
-            manzoni_line = convert_line(line.line, context)
-            manzoni_beam = np.array(beam.distribution)
+            if isinstance(line, Beamline):
+                manzoni_line = convert_line(line.line, context)
+            else:
+                manzoni_line = line
+            if isinstance(beam, Beam):
+                manzoni_beam = np.array(beam.distribution)
+            else:
+                manzoni_beam = beam
     else:
         # Access the object's model
-        if not isinstance(model, _model.ManzoniModel) and hasattr(model, 'manzoni_model'):
+        if not isinstance(model, _model.Model) and hasattr(model, 'model'):
             if hasattr(model, 'model'):
-                line = model.model.beamline
-            else:
-                raise exception("The model must also contain a regular Beamline object.")
-            model = model.manzoni_model
-
-        elif not isinstance(model, _model.Model) and hasattr(model, 'model'):
-            model = model.model
+                model = model.model
 
         # Access or convert the beam and beamline to Manzoni's format
         if isinstance(model, _model.ManzoniModel):
@@ -176,7 +176,9 @@ def _process_model_argument(model, line, beam, context, exception):
             manzoni_line = convert_line(line.line, context)
             manzoni_beam = np.array(beam.distribution)
 
-        return {
-            'line': manzoni_line,
-            'beam': manzoni_beam,
-        }
+    return {
+        'line': line,
+        'beam': beam,
+        'manzoni_line': manzoni_line,
+        'manzoni_beam': manzoni_beam,
+    }

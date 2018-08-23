@@ -258,16 +258,16 @@ class Beamline:
         self.__beamline.at[key] = value
 
     @staticmethod
-    def from_concatenation(beamlines):
+    def concatenate(beamlines):
         offset = 0
         names = []
-        bl = []
+        bl = pd.DataFrame()
         for b in beamlines:
             tmp = b.line.copy()
-            names.append(b.name)
-            bl.append(tmp)
             tmp['AT_ENTRY'] += offset
             tmp['AT_CENTER'] += offset
             tmp['AT_EXIT'] += offset
+            names.append(b.name)
+            bl = pd.concat([bl, tmp])
             offset += b.length
         return Beamline(bl, name='_'.join(names), with_expansion=False)

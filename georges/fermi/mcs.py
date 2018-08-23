@@ -12,7 +12,6 @@ def radiation_length(**kwargs):
 
 
 def scattering_length(**kwargs):
-    # TODO modify to allow computation for composite materials
     # See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
     db = kwargs.get('db')
     material = kwargs['material']
