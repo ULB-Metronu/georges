@@ -104,6 +104,8 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
             energy = context['ENERGY']
         elif context.get('PC'):
             energy = physics.momentum_to_energy(context['PC'])
+        elif context.get('BRHO'):
+            energy = physics.brho_to_energy(context['BRHO'])
         fermi.track_energy(energy, line_copy, FERMI_DB)
         line_copy['BRHO'] = physics.energy_to_brho(line_copy['ENERGY_IN'])
 
@@ -147,38 +149,53 @@ def transform_elements(line, elements):
 def _process_model_argument(model, line, beam, context, exception=Exception):
     manzoni_line = None
     manzoni_beam = None
+    georges_line = None
+    georges_beam = None
+    georges_context = {}
     if model is None:
         if line is None or beam is None:
             raise exception("Beamline and Beam objects need to be defined.")
         else:
+            # Beamline
             if isinstance(line, Beamline):
+                georges_line = line
                 manzoni_line = convert_line(line.line, context)
             else:
-                manzoni_line = line
+                raise exception("'line' must be a Georges Beamline")
+            # Beam
             if isinstance(beam, Beam):
+                georges_beam = beam
                 manzoni_beam = np.array(beam.distribution)
             else:
-                manzoni_beam = beam
+                raise exception("'line' must be a Georges Beam")
+            # Context
+            georges_context = context
     else:
         # Access the object's model
-        if not isinstance(model, _model.Model) and hasattr(model, 'model'):
-            if hasattr(model, 'model'):
-                model = model.model
+        if (not isinstance(model, _model.Model) and not isinstance(model, _model.ManzoniModel)) \
+                and hasattr(model, 'model'):
+            model = model.model
 
-        # Access or convert the beam and beamline to Manzoni's format
         if isinstance(model, _model.ManzoniModel):
+            georges_line = model.gbeamline
+            georges_beam = model.gbeam
+            georges_context = model.context
             manzoni_line = model.beamline
             manzoni_beam = model.beam
         elif isinstance(model, _model.Model):
-            line = model.beamline
-            beam = model.beam
-            context = model.context
-            manzoni_line = convert_line(line.line, context)
-            manzoni_beam = np.array(beam.distribution)
+            georges_line = model.beamline
+            georges_beam = model.beam
+            georges_context = model.context
+            manzoni_model = _model.ManzoniModel(model)
+            manzoni_line = manzoni_model.beamline
+            manzoni_beam = manzoni_model.beam
+        else:
+            raise exception("'model' must be a Georges Model or a Georges ManzoniModel.")
 
     return {
-        'line': line,
-        'beam': beam,
+        'georges_context': georges_context,
+        'georges_line': georges_line,
+        'georges_beam': georges_beam,
         'manzoni_line': manzoni_line,
         'manzoni_beam': manzoni_beam,
     }

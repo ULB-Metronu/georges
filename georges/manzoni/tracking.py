@@ -26,7 +26,7 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
 
     # Collect the results
     return Beamline(
-        line.line.reset_index().merge(
+        v['georges_line'].line.reset_index().merge(
             pd.DataFrame(
                 list(
                     map(

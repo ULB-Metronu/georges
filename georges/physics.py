@@ -83,6 +83,10 @@ def brho_to_momentum(brho):
     return brho / 3.33564E-3
 
 
+def brho_to_energy(brho):
+    return momentum_to_energy(brho / 3.33564E-3)
+
+
 def energy_to_brho(e):
     """Return BRHO [T.m] from E [MeV] (proton)."""
     return 3.33564E-3 * energy_to_momentum(e)
