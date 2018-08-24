@@ -43,6 +43,6 @@ setup(
         'xlrd>=1.1',
         'pyDOE>=0.3',
     ],
-    package_data={'georges': ['fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
+    package_data={'georges': ['fermi/srim/*.csv', 'fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
     data_files=[('bin', [os.path.join('bin', 'madx')])],  # Install MAD-X in f"{sys.prefix}/bin/madx"
 )
