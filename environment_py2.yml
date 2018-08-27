@@ -1,0 +1,18 @@
+# Run:
+#    conda env create --file environment.yml
+# Run (overrides the environment name):
+#    conda env create --file environment.yml --name your_env_name
+# Customized environment "Intel Python 2"
+name: ipy2
+channels:
+  # Intel distribution for Python
+  # https://software.intel.com/en-us/distribution-for-python
+  - intel
+  # Conda forge distribution
+  # https://conda-forge.org
+  - conda-forge
+  # Default distribution from Continuum/Anaconda
+  - nodefaults
+dependencies:
+  - python=2.7
+  - intelpython2_full  # https://software.intel.com/en-us/articles/complete-list-of-packages-for-the-intel-distribution-for-python

@@ -6,9 +6,9 @@ def get_range_from_energy(material, energy, **kwargs):
     csda = kwargs.get("csda", False)
     projected = kwargs.get("projected", not csda)
     if projected and not csda:
-        return np.exp(db.projected_ranges[material](np.log(energy))) / db.density(material)
+        return np.exp(db.projected_ranges[str(material)](np.log(energy))) / db.density(material)
     elif csda and not projected:
-        return np.exp(db.csda_ranges[material](np.log(energy))) / db.density(material)
+        return np.exp(db.csda_ranges[str(material)](np.log(energy))) / db.density(material)
     else:
         raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 
@@ -19,9 +19,9 @@ def get_energy_from_range(material, r, **kwargs):
     projected = kwargs.get("projected", not csda)
     if projected and not csda:
         return \
-        np.exp(db.projected_ranges[material].solve(np.log(r * db.density(material)), extrapolate=False))[0]
+        np.exp(db.projected_ranges[str(material)].solve(np.log(r * db.density(material)), extrapolate=False))[0]
     elif csda and not projected:
-        return np.exp(db.csda_ranges[material].solve(np.log(r * db.density(material)), extrapolate=False))[0]
+        return np.exp(db.csda_ranges[str(material)].solve(np.log(r * db.density(material)), extrapolate=False))[0]
     else:
         raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 

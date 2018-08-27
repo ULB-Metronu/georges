@@ -438,7 +438,7 @@ def Mad8MakeCollimatorTemplate(inputFileName,outputFileName="collimator_template
     Read Twiss file and generate template of collimator file 
     inputFileName  = "twiss.tape"
     outputFileName = "collimator.dat"
-    collimator.dat must be edited to provide types and materials, apertures will be defined from lattice   
+    collimator.dat must be edited to provide types and materials.py, apertures will be defined from lattice
     '''
     # open mad output
     o = pymad8.Output.OutputReader()

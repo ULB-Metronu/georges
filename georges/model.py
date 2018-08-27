@@ -40,6 +40,22 @@ class Model:
     def elements(self):
         return self._elements
 
+    @property
+    def gbeam(self):
+        return self._beam
+
+    @property
+    def gbeamline(self):
+        return self._beamline
+
+    @property
+    def gvariables(self):
+        return self._variables
+
+    @property
+    def gelements(self):
+        return self._elements
+
 
 class ManzoniModel(Model):
     def __init__(self, *args, **kwargs):

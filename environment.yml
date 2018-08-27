@@ -1,4 +1,7 @@
-# Run: conda env create --file environment.yml
+# Run:
+#    conda env create --file environment.yml
+# Run (overrides the environment name):
+#    conda env create --file environment.yml --name your_env_name
 # Customized environment "Intel Python 3"
 name: ipy3
 channels:
@@ -26,6 +29,9 @@ dependencies:
   - dash>=0.21.1  # https://dash.plot.ly
   - xlrd>=1.1.0  # http://www.python-excel.org
   - pyarrow  # https://arrow.apache.org/docs/python/
+  - pyDOE  # https://pythonhosted.org/pyDOE/
   - pytest>3  # https://pytest.org
+  - jupyterlab  # https://github.com/jupyterlab/jupyterlab
+  - gitpython  # https://gitpython.readthedocs.io
   - pip:
     - m2r  # Markdown to RST for the documentation build, https://pypi.org/project/m2r/
