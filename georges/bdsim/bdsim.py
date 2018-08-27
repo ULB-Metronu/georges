@@ -84,7 +84,6 @@ SUPPORTED_OPTIONS = [
             'nSegmentsPerCircle',
         ]
 
-
 SUPPORTED_ELEMENTS = (
     'DRIFT',
     'GAP',
@@ -99,6 +98,7 @@ SUPPORTED_ELEMENTS = (
     'DEGRADER',
     'HKICKER',
     'VKICKER',
+    'SROTATION'
 )
 
 
@@ -146,8 +146,8 @@ def sequence_to_bdsim(sequence, **kwargs):
         if element['TYPE'] == "SLITS":
             m.AddRCol(index,
                       element['LENGTH'],
-                      xsize=0.5*context.get(f"w{index}X", 0.1),
-                      ysize=0.5*context.get(f"w{index}Y", 0.1),
+                      xsize=context.get(f"w{index}X", 0.1),
+                      ysize=context.get(f"w{index}Y", 0.1),
                       material="G4_Ni"
                       )
         if element['TYPE'] == "MARKER":
@@ -160,7 +160,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                 geometryFile=context.get(f"{index}_file"),
                 x=context.get(f"{index}_x", 0.0),
                 y=context.get(f"{index}_y", 0.0),
-                z=element['AT_CENTER'],
+                z=context.get(f"{index}_z", element['AT_CENTER']),
                 phi=context.get(f"{index}_phi", 0.0),
                 psi=context.get(f"{index}_psi", 0.0),
                 theta=context.get(f"{index}_theta", 0.0)
@@ -177,6 +177,11 @@ def sequence_to_bdsim(sequence, **kwargs):
                          l=element['LENGTH'],
                          vkick=context.get(f"{index}_SCAN", 0)
                          )
+
+        if element['TYPE'] == "SROTATION":
+            m.AddTransform3D(name=index,
+                             phi=np.deg2rad(-context.get(f"{index}_ANGLE", 0)-90)  # minus angle for gantry
+                             )
 
         if element['TYPE'] == "SBEND":
 
@@ -263,41 +268,50 @@ class BDSim(Simulator):
         """Run bdsim as a subprocess."""
 
         # Write the file
-        self._bdsim_machine.Write(INPUT_FILENAME)
+        self._bdsim_machine.Write(kwargs.get("input_filename", 'input')+".gmad",
+                                  kwargs.get("single_file", False)
+                                  )
 
-        # not working for the time not self_exec ?
-        #if self._get_exec() is None:
-        #    raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+        if kwargs.get('run_simulations', True):
+            # not working for the time not self_exec ?
+            if self._get_exec() is None:
+                raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+            input_filename = kwargs.get("input_filename", 'input')
+            p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={input_filename}.gmad "
+                          f"--batch --ngenerate={self._nparticles} "
+                          f"--outfile={self._outputname}",
+                          stdin=sub.PIPE,
+                          stdout=sub.PIPE,
+                          stderr=sub.STDOUT,
+                          cwd=".",
+                          shell=True
+                          )
 
-        p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={INPUT_FILENAME} --batch --ngenerate={self._nparticles} --outfile={self._outputname}",
-                      stdin=sub.PIPE,
-                      stdout=sub.PIPE,
-                      stderr=sub.STDOUT,
-                      cwd=".",
-                      shell=True
-                      )
-        self._output = p.communicate()[0].decode()
-        self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
-        self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
-        self._last_context = kwargs.get("context", {})
-        if kwargs.get('debug', False):
-            print(self._output)
+            self._output = p.communicate()[0].decode()
+            self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
+            self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
+            self._last_context = kwargs.get("context", {})
+            if kwargs.get('debug', False):
+                print(self._output)
         return self
 
-    def track(self, particles, p0):
+    def track(self, particles, p0, **kwargs):
         if len(particles) == 0:
             print("No particles to track... Doing nothing.")
             return
 
         particles['E'] = physics.momentum_to_energy(p0 * (particles['DPP'] + 1))
         particles['E'] = (particles['E']+physics.PROTON_MASS)/1000  # total energy in GeV
-        particles.to_csv('input_beam.dat', header=None,
+        beampath = kwargs.get("beam_path", '.')
+        beamfilename = kwargs.get("beam_filename", 'input_beam.dat')
+
+        particles.to_csv(f"{beampath}/{beamfilename}", header=None,
                          index=False,
                          sep='\t',
                          columns=['X', 'PX', 'Y', 'PY', 'E'])
 
         # Add the beam to the simulation
-        self.beam_from_file(physics.momentum_to_energy(p0), 'input_beam.dat')
+        self.beam_from_file(physics.momentum_to_energy(p0), beamfilename)
         self._nparticles = len(particles)
 
     def set_options(self, options):
