@@ -4,9 +4,8 @@ import numpy as np
 import ROOT
 import root_numpy
 import multiprocessing
-from joblib import Parallel, delayed
-
-
+from joblib import Parallel
+from joblib import delayed
 from .. import beamline
 from .bdsim import BDSim
 from .. import physics
@@ -60,7 +59,6 @@ def read_tracking(element, evttree, **kwargs):
                     m = df
             else:
                 # Remove df1 from df
-                # m = df.merge(df1, on=['part_number'])
                 m = pd.concat([df, df1]).drop_duplicates(keep=False)
 
         else:
@@ -76,7 +74,7 @@ def read_tracking(element, evttree, **kwargs):
         bdsim_beam['PDG_ID'] = m[element.name + ".partID"].values
         bdsim_beam['Weight'] = m[element.name + ".weight"].values
         bdsim_beam.query('X == X', inplace=True)  # Remove None entries
-        bdsim_beam.query("PDG_ID == 2212", inplace=True)
+        bdsim_beam.query("PDG_ID == 2212", inplace=True) # Keep protons
         bdsim_beam['E'] = 1000*bdsim_beam['E'] - physics.PROTON_MASS
         bdsim_beam['P'] = physics.energy_to_momentum(bdsim_beam['E'])
 
