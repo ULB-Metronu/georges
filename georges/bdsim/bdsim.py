@@ -285,6 +285,7 @@ class BDSim(Simulator):
                           cwd=".",
                           shell=True
                           )
+
             self._output = p.communicate()[0].decode()
             self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
             self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
