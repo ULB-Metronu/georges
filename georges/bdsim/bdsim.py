@@ -84,7 +84,6 @@ SUPPORTED_OPTIONS = [
             'nSegmentsPerCircle',
         ]
 
-
 SUPPORTED_ELEMENTS = (
     'DRIFT',
     'GAP',
@@ -275,10 +274,12 @@ class BDSim(Simulator):
 
         if kwargs.get('run_simulations', True):
             # not working for the time not self_exec ?
-            #if self._get_exec() is None:
-            #    raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+            if self._get_exec() is None:
+                raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
             input_filename = kwargs.get("input_filename", 'input')
-            p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={input_filename}.gmad --batch --ngenerate={self._nparticles} --outfile={self._outputname}",
+            p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={input_filename}.gmad "
+                          f"--batch --ngenerate={self._nparticles} "
+                          f"--outfile={self._outputname}",
                           stdin=sub.PIPE,
                           stdout=sub.PIPE,
                           stderr=sub.STDOUT,
