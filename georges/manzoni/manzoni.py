@@ -195,7 +195,8 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
                 if tensor is None:
                     beam = beam.dot(matrix(line[i]).T)
                 else:
-                    beam = beam.dot(matrix(line[i]).T) + np.einsum('lj,ijk,lk->li', beam, tensor, beam)
+                    beam = beam.dot(matrix(line[i]).T)
+                    # beam = beam.dot(matrix(line[i]).T) + np.einsum('lj,ijk,lk->li', beam, tensor, beam)
             beam = aperture_check(beam, line[i])
 
             # Per element observation
