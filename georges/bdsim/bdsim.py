@@ -88,6 +88,7 @@ SUPPORTED_ELEMENTS = (
     'DRIFT',
     'GAP',
     'SBEND',
+    'RBEND',
     'QUADRUPOLE',
     'SEXTUPOLE',
     'OCTUPOLE',
@@ -183,7 +184,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                              phi=np.deg2rad(-context.get(f"{index}_ANGLE", 0)-90)  # minus angle for gantry
                              )
 
-        if element['TYPE'] == "SBEND":
+        if element['TYPE'] == "SBEND" or element['TYPE'] == 'RBEND':
 
             # TODO improve the way to have the aperture
             if element['APERTYPE'] == 'RECTANGLE':
@@ -191,7 +192,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                 if context.get(f"{index}_B") is not None:  # add functionnality inside BDsim
                     m.AddDipole(
                         index,
-                        'sbend',
+                        element['TYPE'].lower(),
                         element['LENGTH'],
                         b=context.get(f"{index}_B"),
                         angle=element['ANGLE'],
@@ -204,7 +205,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                 else:
                     m.AddDipole(
                         index,
-                        'sbend',
+                        element['TYPE'].lower(),
                         element['LENGTH'],
                         angle=element['ANGLE'],
                         e1=element['E1'] if not np.isnan(element['E1']) else 0,
@@ -214,6 +215,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                         aper2=0.5*float(aperture[1]),
                         scaling=context.get(f"{index}_scale", 1)
                     )
+
     m.AddSampler("all")
     return m
 
