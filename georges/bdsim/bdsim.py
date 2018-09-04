@@ -6,6 +6,8 @@ from ..simulator import Simulator
 from ..simulator import SimulatorException
 from ..lib.pybdsim import pybdsim
 from .. import physics
+from . material_database import get_bdsim_material
+
 
 INPUT_FILENAME = 'input.gmad'
 
@@ -99,7 +101,8 @@ SUPPORTED_ELEMENTS = (
     'DEGRADER',
     'HKICKER',
     'VKICKER',
-    'SROTATION'
+    'SROTATION',
+    'SCATTERER',
 )
 
 
@@ -122,21 +125,24 @@ def sequence_to_bdsim(sequence, **kwargs):
                            apertureType=get_bdsim_aperture(element['APERTYPE']),
                            aper1=(element['APERTURE'], 'm')
                            )
+
         if (element['TYPE'] == 'DRIFT' and element['PIPE'] is False) or element['TYPE'] == 'GAP':
             m.AddGap(index, element['LENGTH'])
+
         if element['TYPE'] == 'QUADRUPOLE':
 
             m.AddQuadrupole(index,
                             element['LENGTH'],
                             k1=context.get(element['CIRCUIT'], 0.0)/element['BRHO'],
                             aper1=(float(element['APERTURE']), 'm'),
-                            apertureType="circular",
-                            magnetGeometryType="cylindrical")
+                            apertureType="circular")
 
         if element['TYPE'] == 'SEXTUPOLE':
             m.AddSextupole(index, element['LENGTH'], k2=context.get(f"{index}_K2", 0.0))
+
         if element['TYPE'] == 'OCTUPOLE':
             m.AddSextupole(index, element['LENGTH'], k3=context.get(f"{index}_K3", 0.0))
+
         if element['TYPE'] == 'COLLIMATOR':
             m.AddECol(index,
                       element['LENGTH'],
@@ -144,15 +150,27 @@ def sequence_to_bdsim(sequence, **kwargs):
                       ysize=float(element['APERTURE']),
                       material='G4_Ta',
                       )
+
         if element['TYPE'] == "SLITS":
             m.AddRCol(index,
                       element['LENGTH'],
-                      xsize=context.get(f"w{index}X", 0.1),
-                      ysize=context.get(f"w{index}Y", 0.1),
+                      xsize=context.get(f"w{index}_X", 0.1),
+                      ysize=context.get(f"w{index}_Y", 0.1),
                       material="G4_Ni"
                       )
+
         if element['TYPE'] == "MARKER":
             m.AddMarker(index)
+
+        if element['TYPE'] == "SCATTERER":
+            if element['LENGTH'] > 0:
+                print(element)
+                m.AddRCol(index,
+                          element['LENGTH'],
+                          xsize=0,
+                          ysize=0,
+                          material=get_bdsim_material(element['MATERIAL']),
+                          )
 
         if element['TYPE'] == "SOLIDS":
             m.AddGap(f"{index}_GAP", element['LENGTH'])
@@ -276,8 +294,8 @@ class BDSim(Simulator):
 
         if kwargs.get('run_simulations', True):
             # not working for the time not self_exec ?
-            if self._get_exec() is None:
-                raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+            #if self._get_exec() is None:
+            #    raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
             input_filename = kwargs.get("input_filename", 'input')
             p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={input_filename}.gmad "
                           f"--batch --ngenerate={self._nparticles} "
