@@ -164,7 +164,6 @@ def sequence_to_bdsim(sequence, **kwargs):
 
         if element['TYPE'] == "SCATTERER":
             if element['LENGTH'] > 0:
-                print(element)
                 m.AddRCol(index,
                           element['LENGTH'],
                           xsize=0,
