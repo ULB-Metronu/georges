@@ -33,5 +33,6 @@ dependencies:
   - pytest>3  # https://pytest.org
   - jupyterlab  # https://github.com/jupyterlab/jupyterlab
   - gitpython  # https://gitpython.readthedocs.io
+  - palettable  # https://jiffyclub.github.io/palettable/
   - pip:
     - m2r  # Markdown to RST for the documentation build, https://pypi.org/project/m2r/
