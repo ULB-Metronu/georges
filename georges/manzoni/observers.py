@@ -87,7 +87,7 @@ class ElementByElementObserver(Observer):
         else:
             n_elements = element
         super().track_end(turn, n_elements, beam)
-        self._data = np.array(self.data).reshape(turn+1, n_elements+1, -1, np.shape(beam)[1])
+        self._data = np.array(self.data).reshape(turn+1, n_elements+1, -1)
         return self
 
     def element_by_element(self, turn, element, beam):

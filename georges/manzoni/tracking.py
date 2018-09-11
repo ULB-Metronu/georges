@@ -33,7 +33,7 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
                         lambda x: Beam(
                             pd.DataFrame(x)
                         ),
-                        o.data[0, :]
+                        o.data[0, :, 0]
                     )
                 ),
                 columns=['BEAM']
