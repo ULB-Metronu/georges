@@ -41,27 +41,26 @@ def sigma(line, beam, **kwargs):
     return sigmas
 
 
-def track(line, beam, turns=1, observer=None, order=1, **kwargs):
+def track(line, beam, observer, order=1, **kwargs):
     """
     Tracking through a beamline.
     Code optimized for performance.
     :param line: beamline description in Manzoni format
     :param beam: initial beam
-    :param turns: number of tracking turns
     :param observer: Observer object to witness and record the tracking data
     :param order: Integration order (default: 1)
     :param kwargs: optional parameters
     :return: Observer.track_end() return value
     """
     if order == 1:
-        return track1(line, beam, turns, observer, **kwargs)
+        return track1(line, beam, observer, **kwargs)
     elif order == 2:
-        return track2(line, beam, turns, observer, **kwargs)
+        return track2(line, beam, observer, **kwargs)
     else:
         raise ManzoniException("Invalid tracking order")
 
 
-def track1(line, beam, turns=1, observer=None, **kwargs):
+def track1(line, beam, observer, **kwargs):
     """
     Tracking through a beamline.
     Code optimized for performance.
@@ -77,7 +76,8 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
         observer.track_start(beam)
 
     # Main loop
-    for turn in range(0, turns):
+    for turn in range(0, observer.turns):
+        nelem = 0
         for i in range(0, line.shape[0]):
             # Symplectic integrators
             if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
@@ -95,20 +95,12 @@ def track1(line, beam, turns=1, observer=None, **kwargs):
                 beam = beam.dot(matrix(line[i]).T)
             beam = aperture_check(beam, line[i])
 
-            # Per element observation
-            if observer is not None and observer.element_by_element_is_active is True:
-                if observer.elements is None:  # call the observer for each element
-                    observer.element_by_element(turn, i, beam)
-                elif i in observer.elements:  # call the observer for given elements
-                    observer.element_by_element(turn, i, beam)
-        # Per turn observation
-        if observer is not None and observer.turn_by_turn_is_active is True:
-            observer.turn_by_turn(turn, i, beam)
-    # Final call to the observer
-    if observer is not None:
-        return observer.track_end(turn, i, beam)
-    return
-
+            # Observation
+            if i in observer.elements:
+                observer.observe(turn, nelem, beam)
+                nelem += 1
+    # Return observer
+    return observer
 
 def track2(line, beam, turns=1, observer=None, **kwargs):
     """
