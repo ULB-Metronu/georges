@@ -162,7 +162,7 @@ def sequence_to_bdsim(sequence, **kwargs):
         if element['TYPE'] == "MARKER":
             m.AddMarker(index)
 
-        if element['TYPE'] == "SCATTERER":
+        if element['TYPE'] == "SCATTERER" or element['TYPE'] == 'DEGRADER':
             if element['LENGTH'] > 0:
                 m.AddRCol(index,
                           element['LENGTH'],
@@ -172,13 +172,14 @@ def sequence_to_bdsim(sequence, **kwargs):
                           )
 
         if element['TYPE'] == "SOLIDS":
-            m.AddGap(f"{index}_GAP", element['LENGTH'])
+            m.AddGap(f"{index}_GAP", element['LENGTH'])  # Don't remember why
             m.AddPlacement(
                 index,
                 geometryFile=context.get(f"{index}_file"),
                 x=context.get(f"{index}_x", 0.0),
                 y=context.get(f"{index}_y", 0.0),
-                z=context.get(f"{index}_z", element['AT_CENTER']),
+                z=context.get(f"{index}_z", 0.0),
+                s=context.get(f"{index}_s", element['AT_CENTER']),
                 phi=context.get(f"{index}_phi", 0.0),
                 psi=context.get(f"{index}_psi", 0.0),
                 theta=context.get(f"{index}_theta", 0.0)
@@ -191,7 +192,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                          )
 
         if element['TYPE'] == "VKICKER":
-            m.AddHKicker(index,
+            m.AddVKicker(index,
                          l=element['LENGTH'],
                          vkick=context.get(f"{index}_SCAN", 0)
                          )
