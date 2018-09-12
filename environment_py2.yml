@@ -16,3 +16,6 @@ channels:
 dependencies:
   - python=2.7
   - intelpython2_full  # https://software.intel.com/en-us/articles/complete-list-of-packages-for-the-intel-distribution-for-python
+  - pip:
+          - git+https://bitbucket.org/jairhul/pyg4ometry.git#egg=pyg4ometry
+
