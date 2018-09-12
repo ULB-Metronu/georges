@@ -71,12 +71,9 @@ def track1(line, beam, observer, **kwargs):
     :param kwargs: optional parameters
     :return: Observer.track_end() return value
     """
-    # Initial call to the observer
-    if observer is not None:
-        observer.track_start(beam)
 
     # Main loop
-    for turn in range(0, observer.turns):
+    for turn in range(0, observer._turns):
         nelem = 0
         for i in range(0, line.shape[0]):
             # Symplectic integrators
@@ -96,9 +93,10 @@ def track1(line, beam, observer, **kwargs):
             beam = aperture_check(beam, line[i])
 
             # Observation
-            if i in observer.elements:
-                observer.observe(turn, nelem, beam)
+            if i in observer._elements:
+                observer._observe(turn, nelem, beam)
                 nelem += 1
+
     # Return observer
     return observer
 

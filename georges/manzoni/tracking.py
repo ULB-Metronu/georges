@@ -21,7 +21,7 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
     v = _process_model_argument(model, line, beam, context, TrackException)
 
     # Run Manzoni
-    o = Observer(elements=list(range(len(line))))
+    o = Observer(elements=list(range(len(v['manzoni_line']))))
     manzoni.track(line=v['manzoni_line'], beam=v['manzoni_beam'], observer=o, **kwargs)
 
     # Collect the results
