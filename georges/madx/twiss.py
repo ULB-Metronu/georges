@@ -47,7 +47,7 @@ def read_madx_twiss(file):
     return df
 
 
-def read_ptc_twiss(file):
+def read_ptc_twiss(file) -> pd.DataFrame:
     """Read a MAD-X PTC Twiss TFS file to a dataframe."""
     headers = pd.read_csv(file, skiprows=PTC_TWISS_HEADERS_SKIP_ROWS, nrows=0, delim_whitespace=True)
     headers.drop(headers.columns[[0, 1]], inplace=True, axis=1)
