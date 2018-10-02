@@ -76,26 +76,36 @@ def track1(line, beam, observer, **kwargs):
     for turn in range(0, observer._turns):
         nelem = 0
         for i in range(0, line.shape[0]):
-            # Symplectic integrators
-            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
-                beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
-            # Monte-Carlo propagation
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_FE and beam.shape[0]:
-                beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
-            # Transfert matrices and tensors
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
-                matrix = matrices[int(line[i, INDEX_CLASS_CODE])]
-                # For performance considerations, see
-                # https://stackoverflow.com/q/48474274/420892
-                # Alternative
-                # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
-                beam = beam.dot(matrix(line[i]).T)
+            if beam.shape[0]:
+                if line[i, INDEX_MISALIGNEMENT_X] != 0:
+                    beam[:, X] += -line[i, INDEX_MISALIGNEMENT_X]
+                if line[i, INDEX_MISALIGNEMENT_Y] != 0:
+                    beam[:, Y] += -line[i, INDEX_MISALIGNEMENT_Y]
+                # Symplectic integrators
+                if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR:
+                    beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+                # Monte-Carlo propagation
+                elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_FE:
+                    beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+                # Transfert matrices and tensors
+                elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
+                    matrix = matrices[int(line[i, INDEX_CLASS_CODE])]
+                    # For performance considerations, see
+                    # https://stackoverflow.com/q/48474274/420892
+                    # Alternative
+                    # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
+                    beam = beam.dot(matrix(line[i]).T)
             beam = aperture_check(beam, line[i])
 
             # Observation
             if i in observer._elements:
                 observer._observe(turn, nelem, beam)
                 nelem += 1
+
+            if line[i, INDEX_MISALIGNEMENT_X] != 0:
+                beam[:, X] += line[i, INDEX_MISALIGNEMENT_X]
+            if line[i, INDEX_MISALIGNEMENT_Y] != 0:
+                beam[:, Y] += line[i, INDEX_MISALIGNEMENT_Y]
 
     # Return observer
     return observer
