@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from ..simulator import Simulator
 from ..simulator import SimulatorException
-from ..lib.pybdsim import pybdsim
+from georges.lib.pybdsim import pybdsim
 from .. import physics
 from . material_database import get_bdsim_material
 
@@ -114,7 +114,12 @@ def sequence_to_bdsim(sequence, **kwargs):
     m = pybdsim.Builder.Machine()
     context = kwargs.get('context', {})
     for index, element in sequence.iterrows():
-        if element['TYPE'] == 'DRIFT' and pd.notna(element['PIPE']):
+
+        if element['TYPE'] == 'DRIFT':  # and pd.notna(element['PIPE']):
+
+            if element['PIPE'] is False or element['PIPE'] == 0:
+                m.AddGap(index, element['LENGTH'])
+
             if pd.isna(element['APERTYPE']):
                 m.AddDrift(index,
                            element['LENGTH']
@@ -126,7 +131,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                            aper1=(element['APERTURE'], 'm')
                            )
 
-        if (element['TYPE'] == 'DRIFT' and element['PIPE'] is False) or element['TYPE'] == 'GAP':
+        if element['TYPE'] == 'GAP':
             m.AddGap(index, element['LENGTH'])
 
         if element['TYPE'] == 'QUADRUPOLE':
@@ -134,8 +139,7 @@ def sequence_to_bdsim(sequence, **kwargs):
             m.AddQuadrupole(index,
                             element['LENGTH'],
                             k1=context.get(element['CIRCUIT'], 0.0)/element['BRHO'],
-                            aper1=(float(element['APERTURE']), 'm'),
-                            apertureType="circular")
+                            aper1=(float(element['APERTURE']), 'm'))
 
         if element['TYPE'] == 'SEXTUPOLE':
             m.AddSextupole(index, element['LENGTH'], k2=context.get(f"{index}_K2", 0.0))
