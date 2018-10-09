@@ -14,6 +14,12 @@ def fermi_eyges_integrals(u, initial_energy, thickness, material, db, t, n):
 
 
 def compute_energy_dispersion(energy, material):
+    """
+    To Do
+    :param energy:
+    :param material:
+    :return:
+    """
     # Required transmitted energy as E
     # 4th degree polynomial fits of Robin data with no cuts
     E = energy
