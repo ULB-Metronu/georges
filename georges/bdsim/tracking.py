@@ -32,7 +32,7 @@ def get_array_value(x):
 def read_tracking(element, evttree, **kwargs):
     """Read a BDSIM Tracking 'one' file to a dataframe."""
 
-    if element['TYPE'] not in ['MARKER', 'SOLIDS', 'DEGRADER', 'SROTATION']:
+    if element['TYPE'] not in ['MARKER', 'SOLIDS', 'DEGRADER', 'SROTATION', 'SCATTERER']:
         data_element = root_numpy.tree2array(evttree, branches=[element.name + ".x",
                                                                 element.name + ".y",
                                                                 element.name + ".xp",
@@ -160,5 +160,7 @@ def track(**kwargs):
         # # # Add columns which contains datas
         print("WRITE BEAM FILE")
         l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree, **kwargs), axis=1)
-        #
+
+        # not a beautiful method
+        l['BEAM'].iloc[0] = beam_bdsim.BeamBdsim(bd_beam)
     return beamline.Beamline(l)

@@ -217,9 +217,12 @@ class Beam:
         return self.__distribution[item]
 
     @staticmethod
-    def from_file(file, path=''):
+    def from_file(file, path='', filetype='csv'):
         """Read a beam distribution from file."""
-        df = pd.read_csv(os.path.join(path, file))
+        if filetype == "csv":
+            df = pd.read_csv(os.path.join(path, file, filetype))
+        if filetype == "parquet":
+            df = pd.read_parquet(os.path.join(path, file+'.'+filetype))
         # TODO check that df contains only correct columns and dimensions
         return df
 
