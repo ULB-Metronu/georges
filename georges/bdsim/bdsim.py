@@ -2,6 +2,7 @@ import subprocess as sub
 import re
 import pandas as pd
 import numpy as np
+from .material_database import  get_bdsim_material
 from ..simulator import Simulator
 from ..simulator import SimulatorException
 from georges.lib.pybdsim import pybdsim
@@ -98,7 +99,8 @@ SUPPORTED_ELEMENTS = (
     'DEGRADER',
     'HKICKER',
     'VKICKER',
-    'SROTATION'
+    'SROTATION',
+    'PATIENT'
 )
 
 
@@ -109,26 +111,49 @@ def sequence_to_bdsim(sequence, **kwargs):
         raise BdsimException("Unsupported element type present in the sequence.")
     m = pybdsim.Builder.Machine()
     context = kwargs.get('context', {})
+
     for index, element in sequence.iterrows():
 
         if element['TYPE'] == 'DRIFT':  # and pd.notna(element['PIPE']):
 
+            # It is a gap
+
             if element['PIPE'] is False or element['PIPE'] == 0:
                 m.AddGap(index, element['LENGTH'])
 
-            if pd.isna(element['APERTYPE']):
-                m.AddDrift(index,
-                           element['LENGTH']
-                           )
+            # It is a drift
             else:
-                m.AddDrift(index,
-                           element['LENGTH'],
-                           apertureType=get_bdsim_aperture(element['APERTYPE']),
-                           aper1=(element['APERTURE'], 'm')
-                           )
+
+                if pd.isna(element['APERTYPE']):
+                    m.AddDrift(index,
+                               element['LENGTH']
+                               )
+                else:
+                    m.AddDrift(index,
+                               element['LENGTH'],
+                               apertureType=get_bdsim_aperture(element['APERTYPE']),
+                               aper1=(element['APERTURE'], 'm')
+                               )
 
         if element['TYPE'] == 'GAP':
             m.AddGap(index, element['LENGTH'])
+
+        if element['TYPE'] == 'DEGRADER':   # TODO: temproray, to improve, with context ?
+
+            if context.get(f"{index}") is None:
+                m.AddGap(index, element['LENGTH'])
+
+            else:
+                material = get_bdsim_material(element['MATERIAL'])
+                if material is None:
+                    material = 'G4_WATER'  # default is water
+
+                m.AddRCol(index,
+                          element['LENGTH'],
+                          xsize=0,
+                          ysize=0,
+                          material=material)
+
         if element['TYPE'] == 'QUADRUPOLE':
 
             m.AddQuadrupole(index,
@@ -137,9 +162,15 @@ def sequence_to_bdsim(sequence, **kwargs):
                             aper1=(float(element['APERTURE']), 'm'))
 
         if element['TYPE'] == 'SEXTUPOLE':
-            m.AddSextupole(index, element['LENGTH'], k2=context.get(f"{index}_K2", 0.0))
+            m.AddSextupole(index,
+                           element['LENGTH'],
+                           k2=context.get(f"{index}_K2", 0.0))
+
         if element['TYPE'] == 'OCTUPOLE':
-            m.AddSextupole(index, element['LENGTH'], k3=context.get(f"{index}_K3", 0.0))
+            m.AddOctupole(index,
+                          element['LENGTH'],
+                          k3=context.get(f"{index}_K3", 0.0))
+
         if element['TYPE'] == 'COLLIMATOR':
             m.AddECol(index,
                       element['LENGTH'],
@@ -147,6 +178,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                       ysize=float(element['APERTURE']),
                       material='G4_Ta',
                       )
+
         if element['TYPE'] == "SLITS":
             m.AddRCol(index,
                       element['LENGTH'],
@@ -154,6 +186,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                       ysize=context.get(f"w{index}Y", 0.1),
                       material="G4_Ni"
                       )
+
         if element['TYPE'] == "MARKER":
             m.AddMarker(index)
 
@@ -177,7 +210,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                          )
 
         if element['TYPE'] == "VKICKER":
-            m.AddHKicker(index,
+            m.AddVKicker(index,
                          l=element['LENGTH'],
                          vkick=context.get(f"{index}_SCAN", 0)
                          )
@@ -218,6 +251,24 @@ def sequence_to_bdsim(sequence, **kwargs):
                         aper2=0.5*float(aperture[1]),
                         scaling=context.get(f"{index}_scale", 1)
                     )
+
+        if element['TYPE'] == "PATIENT":  # TODO to improve, with GDML or ...
+
+            # m.AddRCol(index,
+            #           0.4,
+            #           xsize=0,
+            #           ysize=0,
+            #           material='G4_WATER')
+
+            nslice = 50
+            for i in range(nslice):
+                m.AddRCol(index+'_'+str(i),
+                          element['LENGTH']/nslice,
+                          xsize=0,
+                          ysize=0,
+                          material='G4_WATER',
+                          )
+
     m.AddSampler("all")
     return m
 
@@ -278,8 +329,8 @@ class BDSim(Simulator):
 
         if kwargs.get('run_simulations', True):
             # not working for the time not self_exec ?
-            if self._get_exec() is None:
-                raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
+            # if self._get_exec() is None:
+            #     raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
             input_filename = kwargs.get("input_filename", 'input')
             p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={input_filename}.gmad "
                           f"--batch --ngenerate={self._nparticles} "
