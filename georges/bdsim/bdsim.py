@@ -140,7 +140,7 @@ def sequence_to_bdsim(sequence, **kwargs):
 
         if element['TYPE'] == 'DEGRADER':   # TODO: temproray, to improve, with context ?
 
-            if context.get(f"{index}") is None:
+            if context.get(f"{index}", False) is False:
                 m.AddGap(index, element['LENGTH'])
 
             else:
@@ -172,11 +172,22 @@ def sequence_to_bdsim(sequence, **kwargs):
                           k3=context.get(f"{index}_K3", 0.0))
 
         if element['TYPE'] == 'COLLIMATOR':
+
+            if 'MATERIAL' in element:
+                if element['MATERIAL'] is not None:
+                    coll_mat = get_bdsim_material(element['MATERIAL'])
+
+                else:
+                    coll_mat = 'G4_Ta'
+
+            else:
+                coll_mat = 'G4_Ta'
+
             m.AddECol(index,
                       element['LENGTH'],
                       xsize=float(element['APERTURE']),
                       ysize=float(element['APERTURE']),
-                      material='G4_Ta',
+                      material=coll_mat,
                       )
 
         if element['TYPE'] == "SLITS":
@@ -260,13 +271,14 @@ def sequence_to_bdsim(sequence, **kwargs):
             #           ysize=0,
             #           material='G4_WATER')
 
-            nslice = 50
+            nslice = 100
             for i in range(nslice):
                 m.AddRCol(index+'_'+str(i),
                           element['LENGTH']/nslice,
                           xsize=0,
                           ysize=0,
                           material='G4_WATER',
+                          colour='blue',
                           )
 
     m.AddSampler("all")
