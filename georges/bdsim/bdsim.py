@@ -117,7 +117,6 @@ def sequence_to_bdsim(sequence, **kwargs):
         if element['TYPE'] == 'DRIFT':  # and pd.notna(element['PIPE']):
 
             # It is a gap
-
             if element['PIPE'] is False or element['PIPE'] == 0:
                 m.AddGap(index, element['LENGTH'])
 
@@ -173,15 +172,9 @@ def sequence_to_bdsim(sequence, **kwargs):
 
         if element['TYPE'] == 'COLLIMATOR':
 
-            if 'MATERIAL' in element:
-                if element['MATERIAL'] is not None:
-                    coll_mat = get_bdsim_material(element['MATERIAL'])
-
-                else:
-                    coll_mat = 'G4_Ta'
-
-            else:
-                coll_mat = 'G4_Ta'
+            coll_mat = 'G4_Ta'
+            if 'MATERIAL' in element and element['MATERIAL'] is not None:
+                coll_mat = get_bdsim_material(element['MATERIAL'])
 
             m.AddECol(index,
                       element['LENGTH'],
@@ -202,7 +195,6 @@ def sequence_to_bdsim(sequence, **kwargs):
             m.AddMarker(index)
 
         if element['TYPE'] == "SOLIDS":
-            m.AddGap(f"{index}_GAP", element['LENGTH'])
             m.AddPlacement(
                 index,
                 geometryFile=context.get(f"{index}_file"),
@@ -271,7 +263,7 @@ def sequence_to_bdsim(sequence, **kwargs):
             #           ysize=0,
             #           material='G4_WATER')
 
-            nslice = 100
+            nslice = 250
             for i in range(nslice):
                 m.AddRCol(index+'_'+str(i),
                           element['LENGTH']/nslice,
