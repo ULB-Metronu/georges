@@ -3,7 +3,7 @@ import numpy as np
 from ..beam import Beam
 from .. import physics
 
-
+#TODO can go into georges/beam
 PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'P', 'ENERGY', 'PARENT_ID', 'PDG_ID', 'WEIGHT']
 
 

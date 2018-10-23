@@ -42,27 +42,7 @@ def read_tracking(element, evttree, **kwargs):
                                                                 element.name + ".partID",
                                                                 element.name + ".weight"])
         df = pd.DataFrame(data=data_element)
-        df = df.applymap(lambda x: get_array_value(x))
-
-        # TODO Improve the selection for the transport change for s position but wait for Laurie
-        if kwargs.get("only_transport", False):
-            exit = element['AT_EXIT']
-            df['part_number'] = list(range(0, len(df)))
-            prim = root_numpy.tree2array(evttree, branches=["PrimaryFirstHit.S"])
-            df1 = pd.DataFrame(data=prim)
-            df1 = df1.applymap(lambda x: get_array_value(x))
-            df1["part_number"] = list(range(0, len(df1)))
-            df1["pos_s"] = df1["PrimaryFirstHit.S"]
-            # Only get particles which suffer an interaction before the element
-            df1.query("pos_s > 0 and pos_s <= @exit", inplace=True)
-            if df1.empty:
-                    m = df
-            else:
-                # Remove df1 from df
-                m = pd.concat([df, df1]).drop_duplicates(keep=False)
-
-        else:
-            m = df
+        m = df.applymap(lambda x: get_array_value(x))
 
         bdsim_beam = pd.DataFrame(columns=['X', 'PX', 'Y', 'PY', 'P', 'E', 'ParentID', 'PDG_ID', 'Weight'])
         bdsim_beam['X'] = m[element.name + ".x"].values
