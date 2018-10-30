@@ -5,14 +5,11 @@
 # Customized environment "Python 3.7"
 name: py37
 channels:
-  # Anaconda
-  - anaconda
+  # Default distribution from Continuum/Anaconda
+  - default
   # Conda forge distribution
   # https://conda-forge.org
   - conda-forge
-  # Default distribution from Continuum/Anaconda
-  - default
 dependencies:
   - anaconda
   - python=3.7
-
