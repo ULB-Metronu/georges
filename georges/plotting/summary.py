@@ -27,7 +27,6 @@ def tracking_summary(bl=None, context={}, fig=None):
     losses(ax, bl)
 
     plt.tight_layout()
-    return fig
 
 
 def summary(bl, bl_track, context, element='ISO'):
