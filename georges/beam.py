@@ -214,12 +214,17 @@ class Beam:
             raise BeamException("Trying to access an invalid data from a beam.")
         return self.__distribution[item]
 
-    @staticmethod
-    def from_file(file, path=''):
-        """Read a beam distribution from file."""
-        df = pd.read_csv(os.path.join(path, file))
-        # TODO check that df contains only correct columns and dimensions
-        return df
+    def from_csv(self, fname):
+        """Read a beam distribution from a csv file."""
+        self.__initialize_distribution(distribution=pd.read_csv(fname)[['X', 'PX', 'Y', 'PY', 'DPP']])
+        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
+        return self
+
+    def from_parquet(self, fname):
+        """Read a beam distribution from a parquet file."""
+        self.__initialize_distribution(distribution=pd.read_parquet(fname)[['X', 'PX', 'Y', 'PY', 'DPP']])
+        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
+        return self
 
     def __initialize_distribution(self, distribution=None, *args, **kwargs):
         """Try setting the internal pandas.DataFrame with a distribution."""
