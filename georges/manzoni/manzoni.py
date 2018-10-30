@@ -151,8 +151,6 @@ def track2(line, beam, turns=1, observer=None, **kwargs):
                     # np.einsum('ijk,lj,lk->li', T, beam, beam)
                     # ((beam[:, None, None, :]@T).squeeze()@x[..., None]).squeeze()
                     # np.einsum('ijl,lj->li', T@beam.T, beam)
-                    #
-                    #
                     rs = matrices[int(line[i, INDEX_CLASS_CODE])](line[i], False)  # DO NOT multiply
                     for u in range(len(rs)):
                         beam = beam.dot(rs[i].T) + np.einsum('lj,ijk,lk->li', beam, ts[i], beam)

@@ -1,4 +1,3 @@
-import numpy as np
 import pandas as pd
 from . import manzoni
 from .common import _process_model_argument
