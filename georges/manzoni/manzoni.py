@@ -66,14 +66,13 @@ def track1(line, beam, observer, **kwargs):
     Code optimized for performance.
     :param line: beamline description in Manzoni format
     :param beam: initial beam
-    :param turns: number of tracking turns
     :param observer: Observer object to witness and record the tracking data
     :param kwargs: optional parameters
     :return: Observer.track_end() return value
     """
 
     # Main loop
-    for turn in range(0, observer._turns):
+    for turn in range(0, observer.turns):
         nelem = 0
         for i in range(0, line.shape[0]):
             if beam.shape[0]:
