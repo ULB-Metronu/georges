@@ -42,6 +42,6 @@ setup(
         'deap>=1.2.2',
         'pyDOE>=0.3',
     ],
-    package_data={'georges': ['fermi/srim/*.csv', 'fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
+    package_data={'georges': ['fermi/srim/*.txt', 'fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
     data_files=[('bin', [os.path.join('bin', 'madx')])],  # Install MAD-X in f"{sys.prefix}/bin/madx"
 )
