@@ -1,8 +1,7 @@
-import numpy as np
 import pandas as pd
 from . import manzoni
 from .common import _process_model_argument
-from .observers import ElementByElementObserver
+from .observers import Observer
 from .. import Beamline
 from .. import Beam
 
@@ -21,8 +20,8 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
     v = _process_model_argument(model, line, beam, context, TrackException)
 
     # Run Manzoni
-    o = ElementByElementObserver()
-    manzoni.track(v['manzoni_line'], v['manzoni_beam'], observer=o, **kwargs)
+    o = Observer(elements=list(range(len(v['manzoni_line']))))
+    manzoni.track(line=v['manzoni_line'], beam=v['manzoni_beam'], observer=o, **kwargs)
 
     # Collect the results
     return Beamline(
@@ -33,7 +32,7 @@ def track(model=None, line=None, beam=None, context={}, **kwargs):
                         lambda x: Beam(
                             pd.DataFrame(x)
                         ),
-                        o.data[0, :, 0]
+                        o.data[0, :]
                     )
                 ),
                 columns=['BEAM']

@@ -29,8 +29,9 @@ def tracking_summary(bl=None, context={}, fig=None):
     plt.tight_layout()
 
 
-def summary(bl, bl_track, context, element='ISO'):
-    fig = plt.figure(figsize=(20, 20))
+def summary(bl, bl_track, context, element='ISO', fig=None):
+    if fig is None:
+        fig = plt.figure(figsize=(20, 20))
     # Define the left bottom corner block
     space = 0.02
     width, height = 0.25, 0.25

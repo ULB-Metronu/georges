@@ -1,2 +1,12 @@
 # Run: pip install -i requirements.txt
 .
+numpy
+pandas
+scipy
+matplotlib
+jinja2
+xlrd
+lmfit
+m2r
+deap
+pyDOE

@@ -41,74 +41,73 @@ def sigma(line, beam, **kwargs):
     return sigmas
 
 
-def track(line, beam, turns=1, observer=None, order=1, **kwargs):
+def track(line, beam, observer, order=1, **kwargs):
     """
     Tracking through a beamline.
     Code optimized for performance.
     :param line: beamline description in Manzoni format
     :param beam: initial beam
-    :param turns: number of tracking turns
     :param observer: Observer object to witness and record the tracking data
     :param order: Integration order (default: 1)
     :param kwargs: optional parameters
     :return: Observer.track_end() return value
     """
     if order == 1:
-        return track1(line, beam, turns, observer, **kwargs)
+        return track1(line, beam, observer, **kwargs)
     elif order == 2:
-        return track2(line, beam, turns, observer, **kwargs)
+        return track2(line, beam, observer, **kwargs)
     else:
         raise ManzoniException("Invalid tracking order")
 
 
-def track1(line, beam, turns=1, observer=None, **kwargs):
+def track1(line, beam, observer, **kwargs):
     """
     Tracking through a beamline.
     Code optimized for performance.
     :param line: beamline description in Manzoni format
     :param beam: initial beam
-    :param turns: number of tracking turns
     :param observer: Observer object to witness and record the tracking data
     :param kwargs: optional parameters
     :return: Observer.track_end() return value
     """
-    # Initial call to the observer
-    if observer is not None:
-        observer.track_start(beam)
 
     # Main loop
-    for turn in range(0, turns):
+    for turn in range(0, observer.turns):
+        nelem = 0
         for i in range(0, line.shape[0]):
-            # Symplectic integrators
-            if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR and beam.shape[0]:
-                beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
-            # Monte-Carlo propagation
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_FE and beam.shape[0]:
-                beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
-            # Transfert matrices and tensors
-            elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX and beam.shape[0]:
-                matrix = matrices[int(line[i, INDEX_CLASS_CODE])]
-                # For performance considerations, see
-                # https://stackoverflow.com/q/48474274/420892
-                # Alternative
-                # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
-                beam = beam.dot(matrix(line[i]).T)
+            if beam.shape[0]:
+                if line[i, INDEX_MISALIGNEMENT_X] != 0:
+                    beam[:, X] += -line[i, INDEX_MISALIGNEMENT_X]
+                if line[i, INDEX_MISALIGNEMENT_Y] != 0:
+                    beam[:, Y] += -line[i, INDEX_MISALIGNEMENT_Y]
+                # Symplectic integrators
+                if line[i, INDEX_CLASS_CODE] in CLASS_CODE_INTEGRATOR:
+                    beam = integrators[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+                # Monte-Carlo propagation
+                elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_FE:
+                    beam = mc[int(line[i, INDEX_CLASS_CODE])](line[i], beam, **kwargs)
+                # Transfert matrices and tensors
+                elif line[i, INDEX_CLASS_CODE] in CLASS_CODE_MATRIX:
+                    matrix = matrices[int(line[i, INDEX_CLASS_CODE])]
+                    # For performance considerations, see
+                    # https://stackoverflow.com/q/48474274/420892
+                    # Alternative
+                    # beam = np.einsum('ij,kj->ik', beam, matrix(line[i]))
+                    beam = beam.dot(matrix(line[i]).T)
             beam = aperture_check(beam, line[i])
 
-            # Per element observation
-            if observer is not None and observer.element_by_element_is_active is True:
-                if observer.elements is None:  # call the observer for each element
-                    observer.element_by_element(turn, i, beam)
-                elif i in observer.elements:  # call the observer for given elements
-                    observer.element_by_element(turn, i, beam)
-        # Per turn observation
-        if observer is not None and observer.turn_by_turn_is_active is True:
-            observer.turn_by_turn(turn, i, beam)
-    # Final call to the observer
-    if observer is not None:
-        return observer.track_end(turn, i, beam)
-    return
+            # Observation
+            if i in observer._elements:
+                observer._observe(turn, nelem, beam)
+                nelem += 1
 
+            if line[i, INDEX_MISALIGNEMENT_X] != 0:
+                beam[:, X] += line[i, INDEX_MISALIGNEMENT_X]
+            if line[i, INDEX_MISALIGNEMENT_Y] != 0:
+                beam[:, Y] += line[i, INDEX_MISALIGNEMENT_Y]
+
+    # Return observer
+    return observer
 
 def track2(line, beam, turns=1, observer=None, **kwargs):
     """
@@ -151,8 +150,6 @@ def track2(line, beam, turns=1, observer=None, **kwargs):
                     # np.einsum('ijk,lj,lk->li', T, beam, beam)
                     # ((beam[:, None, None, :]@T).squeeze()@x[..., None]).squeeze()
                     # np.einsum('ijl,lj->li', T@beam.T, beam)
-                    #
-                    #
                     rs = matrices[int(line[i, INDEX_CLASS_CODE])](line[i], False)  # DO NOT multiply
                     for u in range(len(rs)):
                         beam = beam.dot(rs[i].T) + np.einsum('lj,ijk,lk->li', beam, ts[i], beam)

@@ -1,7 +1,7 @@
 # Run:
-#    conda env create --file environment.yml
+#    conda env create --file environment_ipy2.yml
 # Run (overrides the environment name):
-#    conda env create --file environment.yml --name your_env_name
+#    conda env create --file environment_ipy2.yml --name your_env_name
 # Customized environment "Intel Python 2"
 name: ipy2
 channels:
