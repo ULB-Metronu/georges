@@ -36,5 +36,6 @@ dependencies:
   - palettable  # https://jiffyclub.github.io/palettable/
   - quaternion  # https://github.com/moble/quaternion
   - pyside2  # https://wiki.qt.io/Qt_for_Python
+  - pylint  # https://www.pylint.org
   - pip:
     - m2r  # Markdown to RST for the documentation build, https://pypi.org/project/m2r/

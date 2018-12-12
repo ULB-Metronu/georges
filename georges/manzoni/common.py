@@ -1,3 +1,4 @@
+import logging
 import numpy as np
 from .constants import *
 from .. import fermi
@@ -108,6 +109,10 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
             energy = physics.brho_to_energy(context['BRHO'])
         fermi.track_energy(energy, line_copy, FERMI_DB)
         line_copy['BRHO'] = physics.energy_to_brho(line_copy['ENERGY_IN'])
+    logging.info(f"Energies: max = {line_copy['ENERGY_IN'].max()}, "
+                 f"min = {line_copy['ENERGY_IN'].min()}, "
+                 f"loss = {line_copy['ENERGY_IN'].max() - line_copy['ENERGY_IN'].min()}"
+                 )
 
     # Compute Fermi-Eyges parameters
     line_copy = line_copy.apply(fermi_eyges_computations, axis=1)
