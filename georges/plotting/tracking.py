@@ -6,10 +6,11 @@ import numpy as np
 
 def tracking(ax, bl, mean=True, std=True, halo=True, **kwargs):
     """Plot the beam envelopes from tracking data."""
+    if kwargs.get("plane") is None:
+        raise Exception("Plane (plane='X' or plane='Y') must be specified.")
 
     plane = kwargs.get("plane")
-    palette = kwargs.get("palette", 'X')
-
+    palette = kwargs.get("palette", common_palette)
     if plane is None:
         raise Exception("The 'plane' keyword argument must be set to 'X' or 'Y'.")
     halo_99 = kwargs.get("halo99", halo)
@@ -31,23 +32,23 @@ def tracking(ax, bl, mean=True, std=True, halo=True, **kwargs):
         return
 
     if halo:
-        filled_plot(ax, t['S'], t['5%'], t['95%'], common_palette[palette], True, alpha=0.3)
-        filled_plot(ax, t['S'], t['mean'] - t['std'], t['mean'] + t['std'], common_palette[palette], True, alpha=0.3)
+        filled_plot(ax, t['S'], t['5%'], t['95%'], palette[plane], True, alpha=0.3)
+        filled_plot(ax, t['S'], t['mean'] - t['std'], t['mean'] + t['std'], palette[plane], True, alpha=0.3)
         if halo_99:
-            filled_plot(ax, t['S'], t['1%'], t['99%'], common_palette[palette], True, alpha=0.3)
+            filled_plot(ax, t['S'], t['1%'], t['99%'], palette[plane], True, alpha=0.3)
 
     if std:
         ax.plot(t['S'], t['mean'] + t['std'],
                 '^-',
-                color=common_palette[palette],
-                markeredgecolor=common_palette[palette],
+                color=palette[plane],
+                markeredgecolor=palette[plane],
                 markersize=2,
                 linewidth=1
                 )
         ax.plot(t['S'], t['mean'] - t['std'],
                 'v-',
-                color=common_palette[palette],
-                markeredgecolor=common_palette[palette],
+                color=palette[plane],
+                markeredgecolor=palette[plane],
                 markersize=2,
                 linewidth=1
                 )
@@ -67,9 +68,10 @@ def tracking(ax, bl, mean=True, std=True, halo=True, **kwargs):
                     color=palette['green'])
 
     if mean:
-        ax.plot(t['S'], t['mean'], '*-',
-                color=common_palette[plane],
-                markeredgecolor=common_palette[plane],
+        ax.plot(t['S'], t['mean'],
+                '*-',
+                color=palette[plane],
+                markeredgecolor=palette[plane],
                 markersize=2,
                 linewidth=1,
                 label=kwargs.get("label")
