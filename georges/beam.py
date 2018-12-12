@@ -6,7 +6,7 @@ from scipy.optimize import curve_fit
 
 PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'positron'}
 PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'DPP', 'DT']
-
+DEFAULT_N_PARTICLES = 1e5
 
 class BeamException(Exception):
     """Exception raised for errors in the Beam module."""
@@ -102,6 +102,8 @@ class Beam:
         """Return the sigma matrix of the beam"""
         return self.__distribution.cov()
 
+    covariance = sigma
+
     @property
     def twiss(self):
         """Return the Twiss parameters of the beam"""
@@ -122,9 +124,7 @@ class Beam:
 
     @property
     def beam_dpp(self):
-        # TODO what is this?
         """TO DO"""
-
         dpp = (self['P0'] - self['DPP']) / self['P0']
         return {
             'mean_dpp': dpp.mean(),
@@ -216,15 +216,17 @@ class Beam:
             raise BeamException("Trying to access an invalid data from a beam.")
         return self.__distribution[item]
 
-    @staticmethod
-    def from_file(file, path='', filetype='csv'):
-        """Read a beam distribution from file."""
-        if filetype == "csv":
-            df = pd.read_csv(os.path.join(path, file, filetype))
-        if filetype == "parquet":
-            df = pd.read_parquet(os.path.join(path, file+'.'+filetype))
-        # TODO check that df contains only correct columns and dimensions
-        return df
+    def from_csv(self, fname):
+        """Read a beam distribution from a csv file."""
+        self.__initialize_distribution(distribution=pd.read_csv(fname)[['X', 'PX', 'Y', 'PY', 'DPP']])
+        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
+        return self
+
+    def from_parquet(self, fname):
+        """Read a beam distribution from a parquet file."""
+        self.__initialize_distribution(distribution=pd.read_parquet(fname)[['X', 'PX', 'Y', 'PY', 'DPP']])
+        self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
+        return self
 
     def __initialize_distribution(self, distribution=None, *args, **kwargs):
         """Try setting the internal pandas.DataFrame with a distribution."""
@@ -246,12 +248,10 @@ class Beam:
             raise BeamException("Trying to initialize a beam distribution with invalid dimensions.")
         self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
 
-    def from_5d_multigaussian_distribution(self, n, **kwargs):
+    def from_5d_multigaussian_distribution(self, **kwargs):
         """Initialize a beam with a 5D particle distribution."""
-        keys = {'X', 'PX', 'Y', 'PY', 'DPP', 'XRMS', 'PXRMS', 'YRMS', 'PYRMS', 'DPPRMS'}
-        if any([k not in keys for k in kwargs.keys()]):
-            raise BeamException("Invalid argument for a multigaussian distribution.")
-        self.from_5d_sigma_matrix(n,
+        keys = {'n', 'X', 'PX', 'Y', 'PY', 'DPP', 'XRMS', 'PXRMS', 'YRMS', 'PYRMS', 'DPPRMS'}
+        self.from_5d_sigma_matrix(n=kwargs.get('n', DEFAULT_N_PARTICLES),
                                   X=kwargs.get('X', 0),
                                   PX=kwargs.get('PX', 0),
                                   Y=kwargs.get('Y', 0),
@@ -267,9 +267,9 @@ class Beam:
                                   )
         return self
 
-    def from_twiss_parameters(self, n, **kwargs):
+    def from_twiss_parameters(self, **kwargs):
         """Initialize a beam with a 5D particle distribution from Twiss parameters."""
-        keys = {'X', 'PX', 'Y', 'PY', 'DPP', 'DPPRMS', 'BETAX', 'ALPHAX', 'BETAY', 'ALPHAY', 'EMITX', 'EMITY'}
+        keys = {'n', 'X', 'PX', 'Y', 'PY', 'DPP', 'DPPRMS', 'BETAX', 'ALPHAX', 'BETAY', 'ALPHAY', 'EMITX', 'EMITY'}
         if any([k not in keys for k in kwargs.keys()]):
             raise BeamException("Invalid argument for a twiss distribution.")
         betax = kwargs.get('BETAX', 1)
@@ -279,7 +279,7 @@ class Beam:
         alphay = kwargs.get('ALPHAY', 0)
         gammay = (1 + alphay ** 2) / betay
 
-        self.from_5d_sigma_matrix(n,
+        self.from_5d_sigma_matrix(n=kwargs.get('n', DEFAULT_N_PARTICLES),
                                   X=kwargs.get('X', 0),
                                   PX=kwargs.get('PX', 0),
                                   Y=kwargs.get('Y', 0),
@@ -296,7 +296,7 @@ class Beam:
         return self
 
     @staticmethod
-    def generate_from_5d_sigma_matrix(n, **kwargs):
+    def generate_from_5d_sigma_matrix(**kwargs):
         # For performance considerations, see
         # https://software.intel.com/en-us/blogs/2016/06/15/faster-random-number-generation-in-intel-distribution-for-python
         try:
@@ -346,12 +346,12 @@ class Beam:
                 [s41, s42, s43, s44, s45],
                 [s51, s52, s53, s54, s55]
             ]),
-            int(n)
+            int(kwargs.get('n', DEFAULT_N_PARTICLES))
         )
 
-    def from_5d_sigma_matrix(self, n, **kwargs):
+    def from_5d_sigma_matrix(self, **kwargs):
         """Initialize a beam with a 5D particle distribution from a \Sigma matrix."""
-        distribution = Beam.generate_from_5d_sigma_matrix(n, **kwargs)
+        distribution = Beam.generate_from_5d_sigma_matrix(**kwargs)
         self.__initialize_distribution(pd.DataFrame(distribution))
         self.__distribution.columns = PHASE_SPACE_DIMENSIONS[:self.__dims]
         return self

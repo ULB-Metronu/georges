@@ -14,6 +14,12 @@ def fermi_eyges_integrals(u, initial_energy, thickness, material, db, t, n):
 
 
 def compute_energy_dispersion(energy, material):
+    """
+    To Do
+    :param energy:
+    :param material:
+    :return:
+    """
     # Required transmitted energy as E
     # 4th degree polynomial fits of Robin data with no cuts
     E = energy
@@ -46,6 +52,18 @@ def compute_losses(energy, material):
 
 
 def compute_fermi_eyges(material, energy, thickness, db, t, with_dpp=True, with_losses=True, **kwargs):
+    """
+    Compute the Fermi-Eyges parameters A0, A1, A2 and B (emittance).
+    :param material:
+    :param energy:
+    :param thickness: material thickness in centimeters
+    :param db:
+    :param t:
+    :param with_dpp:
+    :param with_losses:
+    :param kwargs:
+    :return:
+    """
     a = [
         quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 0))[0],  # Order 0
         1e-2*quad(fermi_eyges_integrals, 0, thickness, args=(energy, thickness, material, db, t, 1))[0],  # Order 1
@@ -59,7 +77,7 @@ def compute_fermi_eyges(material, energy, thickness, db, t, with_dpp=True, with_
     if with_losses:
         loss = compute_losses(residual_energy(material, thickness, energy, db=db), material)
     else:
-        loss = 0
+        loss = 1.0
 
     return {
         'A': a,

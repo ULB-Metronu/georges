@@ -135,9 +135,7 @@ def track(**kwargs):
             num_cores = multiprocessing.cpu_count()
             l['BEAM'] = Parallel(n_jobs=num_cores - 1)(delayed(read_tracking)(g, evttree) for _, g in l.iterrows())
 
-
-        #
-        # # # Add columns which contains datas
+        # Add columns which contains datas
         print("WRITE BEAM FILE")
         l['BEAM'] = l.apply(lambda g: read_tracking(g, evttree, **kwargs), axis=1)
 

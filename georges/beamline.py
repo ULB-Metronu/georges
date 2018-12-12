@@ -18,7 +18,7 @@ class Beamline:
     The internal representation is essentially a pandas DataFrames.
     """
 
-    def __init__(self, beamline, name=None, from_survey=False, with_expansion=True):
+    def __init__(self, beamline, name=None, from_survey=False, with_expansion=True, start=None, stop=None):
         """
         :param beamline: defines the beamline to be created. It can be
             - a single pandas Dataframe
@@ -32,6 +32,8 @@ class Beamline:
         self.__length = 0
         self.__name = name
         self.__beamline = None
+        self.__start = start
+        self.__stop = stop
         self.__from_survey = from_survey
 
         # Process the beamline argument
@@ -140,7 +142,14 @@ class Beamline:
         """The beamline representation."""
         self.__beamline.name = self.name
         self.__beamline.length = self.length
-        return self.__beamline
+        if self.__start is None and self.__stop is None:
+            tmp = self.__beamline
+        else:
+            tmp = self.__beamline[self.__start:self.__stop].copy()
+            tmp[['AT_ENTRY', 'AT_CENTER', 'AT_EXIT']] -= tmp.iloc[0]['AT_ENTRY']
+        tmp.name = self.name
+        tmp.length = tmp.iloc[-1]['AT_EXIT']
+        return tmp
 
     def to_thin(self, element):
         """Useful for MAD-X tracking"""
@@ -187,7 +196,10 @@ class Beamline:
                 pd.concat([
                     s,
                     pd.DataFrame(markers).set_index('NAME')
-                ]).sort_values(by='AT_CENTER')
+                ]).sort_values(by='AT_CENTER'),
+                name=self.name,
+                start=self.__start,
+                stop=self.__stop
             )
 
     def add_drifts(self, using_collimators=False, with_pipe=True, pipe_aperture=1.0, pipe_apertype='CIRCLE'):
@@ -234,4 +246,28 @@ class Beamline:
         negative_drifts = line_with_drifts.query("LENGTH < 0.0")
         if len(negative_drifts.index) > 0:
             raise BeamlineException(f"Negative drift detected for elements {negative_drifts.index.values}.")
-        return Beamline(line_with_drifts)
+        return Beamline(line_with_drifts, name=self.name, start=self.__start, stop=self.__stop)
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return Beamline(self, start=key.start, stop=key.stop)
+        else:
+            return self
+
+    def __setitem__(self, key, value):
+        self.__beamline.at[key] = value
+
+    @staticmethod
+    def concatenate(beamlines):
+        offset = 0
+        names = []
+        bl = pd.DataFrame()
+        for b in beamlines:
+            tmp = b.line.copy()
+            tmp['AT_ENTRY'] += offset
+            tmp['AT_CENTER'] += offset
+            tmp['AT_EXIT'] += offset
+            names.append(b.name)
+            bl = pd.concat([bl, tmp])
+            offset += b.length
+        return Beamline(bl, name='_'.join(names), with_expansion=False)

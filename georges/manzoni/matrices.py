@@ -2,6 +2,10 @@ import numpy as np
 from .constants import *
 
 
+def rotation4(e):
+    return rotation(e)[0:4, 0:4]
+
+
 def rotation(e):
     angle = e[INDEX_ANGLE]
     return np.array(
@@ -13,6 +17,15 @@ def rotation(e):
             [0, 0, 0, 0, 1],
         ]
     )
+
+
+def drift4(e):
+    """
+    Transfer matrix of a drift. 4D only.
+    :param e: element definition
+    :return: a numpy array representing the 4D transfer matrix
+    """
+    return drift(e)[0:4, 0:4]
 
 
 def drift(e):
@@ -158,6 +171,15 @@ def bend(e, e1, e2, multiply=True):
             return [m_e2, m_b, m_e1]
 
 
+def quadrupole4(e):
+    """
+    Quadrupole transfer matrix of an element. 4D only.
+    :param e: element definition
+    :return: a numpy array representing the DD transfer matrix
+    """
+    return quadrupole(e)[0:4, 0:4]
+
+
 def quadrupole(e):
     """
     Quadrupole transfer matrix of an element.
@@ -210,3 +232,11 @@ matrices = {
     CLASS_CODES['ROTATION']: rotation,
 }
 
+matrices4 = {
+    CLASS_CODES['DRIFT']: drift4,
+    CLASS_CODES['COLLIMATOR']: drift4,
+    CLASS_CODES['SBEND']: drift4,
+    CLASS_CODES['RBEND']: drift4,
+    CLASS_CODES['QUADRUPOLE']: quadrupole4,
+    CLASS_CODES['ROTATION']: rotation4,
+}

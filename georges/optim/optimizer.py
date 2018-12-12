@@ -1,3 +1,4 @@
+import numpy as np
 import scipy.optimize
 from .. import manzoni
 from ..model import Model, ManzoniModel
@@ -83,9 +84,6 @@ class Optimizer:
                                  callback=None,
                                  accept_test=None,
                                  ):
-
-
-
         # Default value for the initial guess
         if x0 is None:
             x0 = np.zeros(len(self._model.variables))

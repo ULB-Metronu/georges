@@ -1,0 +1,25 @@
+# Run:
+#    conda env create --file environment_py2.yml
+# Run (overrides the environment name):
+#    conda env create --file environment_py2.yml --name your_env_name
+# Customized environment "Python 2.7"
+name: py27
+channels:
+  # Anaconda
+  - anaconda
+  # Conda forge distribution
+  # https://conda-forge.org
+  - conda-forge
+  # Default distribution from Continuum/Anaconda
+  - default
+dependencies:
+  - anaconda
+  - python=2.7
+  - pip:
+    - argparse>=1.1  # Conda deps require python=2.6 so install it with pip
+    - git+https://bitbucket.org/jairhul/pyg4ometry.git#egg=pyg4ometry
+    - git+https://bitbucket.org/jairhul/pytransport.git#egg=pytransport
+    - git+https://bitbucket.org/jairhul/pymadx.git#egg=pymadx
+    - git+https://bitbucket.org/jairhul/pymad8.git#egg=pymad8
+    - git+https://bitbucket.org/jairhul/pybdsim.git#egg=pybdsim
+

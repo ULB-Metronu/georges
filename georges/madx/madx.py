@@ -119,6 +119,7 @@ PTC_DEFAULTS = {
     'TOTALPATH': False,
     'RADIATION': False,
     'ENVELOPE': False,
+    'SLICE_MAGNETS': True,
 }
 
 
@@ -161,14 +162,14 @@ def element_to_mad(e, optional_marker=True, ptc_use_knl_only=False):
     if not mad.endswith(', '):
         mad += ', '
 
-    def transform_ptc_k(k, l):
+    def transform_ptc_k(k, l, brho):
         kk = k.strip('{}').split(',')
-        kkl = [f"{k}*{l}" for k in kk]
+        kkl = [f"{k}*{l}/{brho}" for k in kk]
         return '{' + ', '.join(kkl) + '}'
 
     mad += ', '.join(
         [
-            f"{p}:={transform_ptc_k(e[p], e['LENGTH'])}" for p in SUPPORTED_PTC_K_PROPERTIES if
+            f"{p}:={transform_ptc_k(e[p], e['LENGTH'], e['BRHO'])}" for p in SUPPORTED_PTC_K_PROPERTIES if
             pd.notnull(e.get(p, None))
         ]
     )
@@ -411,7 +412,7 @@ class Madx(Simulator):
         # self.raw("SELECT, FLAG=sectormap, range='P2E';")
         options = ""
         for k, v in kwargs.items():
-            if k not in ['ptc', 'start', 'line', 'ptc_params', 'context', 'debug']:
+            if k not in ['ptc', 'start', 'line', 'ptc_params', 'context', 'debug', 'periodic']:
                 options += ",%s=%s" % (k, v)
         if kwargs.get('periodic', False):
             self._add_input('twiss', kwargs.get('file', 'twiss.outx'), options)
@@ -447,7 +448,8 @@ class Madx(Simulator):
             self._add_input('ptc_misalign')
         if kwargs.get('periodic', False):
             if not ptc_params.get('co_guess'):
-                self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'), )
+                self._add_input('ptc_twiss', kwargs.get('file', 'ptc_twiss.outx'),
+                                ptc_params.get('slice_magnets', PTC_DEFAULTS['SLICE_MAGNETS']), )
             else:
                 self._add_input('ptc_twiss_co_guess', kwargs.get('file', 'ptc_twiss.outx'), *ptc_params.get('co_guess'))
         else:

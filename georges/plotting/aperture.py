@@ -3,6 +3,9 @@ import matplotlib.patches
 import numpy as np
 from .common import palette
 
+STYLE_BEND_HATCH = '/'
+STYLE_QUAD_HATCH = ''
+
 
 def xy_from_string(a, i, c):
     def convert(x):
@@ -47,7 +50,7 @@ def draw_quad(ax, e):
             (e['AT_ENTRY'], 1000 * e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             100,  # height
-            hatch='.', facecolor=palette['quad']
+            hatch=STYLE_QUAD_HATCH, facecolor=palette['quad']
         )
     )
 
@@ -56,7 +59,7 @@ def draw_quad(ax, e):
             (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             -100,  # height
-            hatch='.', facecolor=palette['quad']
+            hatch=STYLE_QUAD_HATCH, facecolor=palette['quad']
         )
     )
     draw_chamber(ax, e)
@@ -87,20 +90,22 @@ def draw_coll(ax, e, plane):
 
 
 def draw_bend(ax, e):
+    tmp = 1000 * e['APERTURE_UP'] + e['CHAMBER_UP']
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], 1000 * e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
+            (e['AT_ENTRY'], tmp if tmp < 55 else 55),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             100,  # height
-            hatch='/', facecolor=palette['bend']
+            hatch=STYLE_BEND_HATCH, facecolor=palette['bend']
         )
     )
+    tmp = -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
+            (e['AT_ENTRY'], tmp if tmp < 55 else 55),  # (x,y)
             e['ORBIT_LENGTH'],  # width
             -100,  # height
-            hatch='/', facecolor=palette['bend']
+            hatch=STYLE_BEND_HATCH, facecolor=palette['bend']
         )
     )
     draw_chamber(ax, e)

@@ -27,7 +27,6 @@ def ellipse(ra, rb, angle, x0, y0, **kwargs):
     """
     width = ra
     height = rb
-
     return patches.Ellipse((x0, y0), width, height,
                            angle=angle,
                            linewidth=kwargs.get('linewidth', 2),
@@ -103,8 +102,8 @@ def phase_space(fig, data, **kwargs):
     ymax = max(ylims)
     # Make the 'main' beam plot
     # Define the number of bins
-    nxbins = 50
-    nybins = 50
+    nxbins = 100
+    nybins = 100
     xbins = linspace(start=xmin, stop=xmax, num=nxbins)
     ybins = linspace(start=ymin, stop=ymax, num=nybins)
     h, xedges, yedges = np.histogram2d(y, x, bins=(ybins, xbins))
@@ -119,27 +118,21 @@ def phase_space(fig, data, **kwargs):
     ang_annotx = np.cos(np.radians(ang))
     ang_annoty = np.sin(np.radians(ang))
     if kwargs.get('draw_ellipse', True):
-        ax_global.add_patch(ellipse(X_r[0], Y_r[0], ang, X_mean, Y_mean, **kwargs))
-        ax_global.add_patch(ellipse(X_r[1], Y_r[1], ang, X_mean, Y_mean, **kwargs))
-        # ax_global.add_patch(ellipse(X_r[2], Y_r[2], ang, X_mean, Y_mean, **kwargs))
-        pos1 = kwargs.get("pos1", (X_r[0] / 2 * ang_annotx, Y_r[0] / 2 * ang_annoty))
-        pos2= kwargs.get("pos2", (X_r[1] / 2 * ang_annotx, Y_r[1] / 2 * ang_annoty))
-        ax_global.annotate('$1\\sigma$', xy=pos1,
-                           xytext=pos1,
+        ax_global.add_patch(ellipse(X_r[0], Y_r[0], ang, X_mean, Y_mean))
+        ax_global.add_patch(ellipse(X_r[1], Y_r[1], ang, X_mean, Y_mean))
+        ax_global.add_patch(ellipse(X_r[2], Y_r[2], ang, X_mean, Y_mean))
+        ax_global.annotate('$1\\sigma$', xy=(X_r[0] / 2 * ang_annotx, Y_r[0] / 2 * ang_annoty),
+                           xytext=(X_r[0] / 2 * ang_annotx, Y_r[0] / 2 * ang_annoty),
                            horizontalalignment='center', verticalalignment='center',
                            fontsize=15, color=contourcolor)
-        ax_global.annotate('$2\\sigma$', xy=pos2,
-                           xytext=pos2,
+        ax_global.annotate('$2\\sigma$', xy=(X_r[1] / 2 * ang_annotx, Y_r[1] / 2 * ang_annoty),
+                           xytext=(X_r[1] / 2 * ang_annotx, Y_r[1] / 2 * ang_annoty),
                            horizontalalignment='center', verticalalignment='center',
                            fontsize=15, color=contourcolor)
-        # ax_global.annotate('$3\\sigma$', xy=(X_r[2] / 2 * ang_annotx, Y_r[2] / 2 * ang_annoty),
-        #                    xytext=(X_r[2] / 2 * ang_annotx, Y_r[2] / 2 * ang_annoty),
-        #                    horizontalalignment='center', verticalalignment='center',
-        #                    fontsize=15, color=contourcolor)
-
-        xlims = kwargs.get("xlims", xlims)
-        ylims = kwargs.get("ylims", ylims)
-
+        ax_global.annotate('$3\\sigma$', xy=(X_r[2] / 2 * ang_annotx, Y_r[2] / 2 * ang_annoty),
+                           xytext=(X_r[2] / 2 * ang_annotx, Y_r[2] / 2 * ang_annoty),
+                           horizontalalignment='center', verticalalignment='center',
+                           fontsize=15, color=contourcolor)
     # Plot the axes labels
     ax_global.set_xlabel(data.columns[0] + ' ' + unit_col_0, fontsize=18)
     ax_global.set_ylabel(data.columns[1] + ' ' + unit_col_1, fontsize=18)
@@ -155,7 +148,6 @@ def phase_space(fig, data, **kwargs):
     ax_histx.set_xlim(xlims)
     ax_histy.set_ylim(ylims)
     if kwargs.get('gaussian_fit', False):
-
         limx = np.arange(xlims[0], xlims[1], (xlims[1] - xlims[0]) / nxbins)
         bin_centerx, fitresults_x = statistics.histogram_fit(x, bounds_binning=limx,
                                                              verbose=kwargs.get("verbose", False))
@@ -266,7 +258,7 @@ def phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, data, elt, dim):
                           aspect='auto', cmap='gist_gray_r'))
     # Plot the beam plot contours
     ang = rotation_angle(Eval, Evec)
-    ang_annotx = np.cos(np.radians(ang))
+    ang_annotx = np.cos(np.radians(ang));
     ang_annoty = np.sin(np.radians(ang))
     ax_global.add_patch(ellipse(X_r[0], Y_r[0], ang, X_mean, Y_mean, color='red', label='$1\\sigma$'))
     ax_global.add_patch(ellipse(X_r[1], Y_r[1], ang, X_mean, Y_mean, color='blue', label='$2\\sigma$'))

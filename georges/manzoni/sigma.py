@@ -1,38 +1,40 @@
+import numpy as np
 import pandas as pd
+from ..beam import Beam
+from georges.beamline import Beamline
 from . import manzoni
-from .common import _process_model_argument
-from .observers import Observer
-from .. import Beamline
-from .. import Beam
+from .common import convert_line
+from .observers import ElementByElementObserver
+from .. import model as _model
 
 
-class TrackException(Exception):
+class SigmaException(Exception):
     """Exception raised for errors in the Track module."""
 
     def __init__(self, m):
         self.message = m
 
 
-def track(model=None, line=None, beam=None, context={}, **kwargs):
+def sigma(model=None, line=None, beam=None, context={}, **kwargs):
     """Compute the distribution of the beam as it propagates through the beamline.
     """
     # Process arguments
-    v = _process_model_argument(model, line, beam, context, TrackException)
+
 
     # Run Manzoni
-    o = Observer(elements=list(range(len(v['manzoni_line']))))
-    manzoni.track(line=v['manzoni_line'], beam=v['manzoni_beam'], observer=o, **kwargs)
+    o = ElementByElementObserver()
+    manzoni.track(manzoni_line, manzoni_beam, observer=o, **kwargs)
 
     # Collect the results
     return Beamline(
-        v['georges_line'].line.reset_index().merge(
+        line.line.reset_index().merge(
             pd.DataFrame(
                 list(
                     map(
                         lambda x: Beam(
                             pd.DataFrame(x)
                         ),
-                        o.data[0, :]
+                        o.data[0, :, 0]
                     )
                 ),
                 columns=['BEAM']

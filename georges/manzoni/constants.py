@@ -24,6 +24,8 @@ INDEX = {k: i for i, k in enumerate(
         'FE_DPP',
         'FE_LOSS',
         'BRHO',
+        'MISALIGNEMENT_X',
+        'MISALIGNEMENT_Y',
     )
 )}
 
@@ -51,6 +53,8 @@ INDEX_FE_A2 = INDEX['FE_A2']
 INDEX_FE_DPP = INDEX['FE_DPP']
 INDEX_FE_LOSS = INDEX['FE_LOSS']
 INDEX_BRHO = INDEX['BRHO']
+INDEX_MISALIGNEMENT_X = INDEX['MISALIGNEMENT_X']
+INDEX_MISALIGNEMENT_Y = INDEX['MISALIGNEMENT_Y']
 
 # Define constants for elements types
 CLASS_CODES = {k: i for i, k in enumerate(
@@ -92,7 +96,7 @@ CLASS_CODE_INTEGRATOR = [
     CLASS_CODES['VKICKER'],
 ]
 
-CLASS_CODE_MC = [
+CLASS_CODE_FE = [
     CLASS_CODES['DEGRADER'],
     CLASS_CODES['SCATTERER'],
 ]

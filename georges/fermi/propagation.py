@@ -4,6 +4,7 @@ from .. import Beamline
 from .fermi_eyges import compute_fermi_eyges
 from .stopping import residual_energy
 from .mcs import DifferentialMoliere
+from .materials import Vacuum
 
 
 class FermiPropagateException(Exception):
@@ -16,10 +17,10 @@ class FermiPropagateException(Exception):
 def track_energy(energy, line_fermi, db):
     for i, e in line_fermi.iterrows():
         line_fermi.loc[i, 'ENERGY_IN'] = energy
-        if e['TYPE'] == 'slab' or e['TYPE'] == 'gap' or e['CLASS'] == 'DEGRADER':
+        if (e['TYPE'] == 'slab' or e['TYPE'] == 'gap' or e['CLASS'] == 'DEGRADER') and e['LENGTH'] != 0:
             energy = residual_energy(
                 e['MATERIAL'], e['LENGTH'] * 100, energy, db=db
-            ) if e['MATERIAL'] is not 'vacuum' else energy
+            ) if str(e['MATERIAL']) != 'vacuum' else energy
             line_fermi.loc[i, 'ENERGY_OUT'] = energy
             line_fermi.loc[i, 'DeltaE'] = line_fermi.loc[i, 'ENERGY_IN'] - energy
         else:
@@ -29,17 +30,17 @@ def track_energy(energy, line_fermi, db):
 def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
     def compute_fermi_eyges_on_slab(slab):
         # If vacuum, return a null-element
-        if slab['MATERIAL'] == 'vacuum':
+        if str(slab['MATERIAL']) == Vacuum:
             return pd.Series({
                 'A0': 0,
                 'A1': 0,
                 'A2': 0,
                 'B': 0
             }).rename(e.name)
-        # Do the actual computation with other materials
+        # Do the actual computation with other materials.py
         fe = compute_fermi_eyges(
             db=db,
-            material=slab['MATERIAL'],
+            material=str(slab['MATERIAL']),
             energy=slab['ENERGY_IN'],
             thickness=slab['LENGTH'] * 100,
             t=model
@@ -50,6 +51,14 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
             'A2': fe['A'][2],
             'B': fe['B']
         }).rename(slab.name)
+
+    # Default beam
+    if beam is None:
+        beam = {
+            'A0': 0,
+            'A1': 0,
+            'A2': 0,
+        }
 
     # Do not modify the input beamline
     line_fermi = line.line.copy()
@@ -64,7 +73,7 @@ def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
         air_gaps['TYPE'] = 'gap'
         air_gaps.dropna(inplace=True, subset=['LENGTH'])
         air_gaps.set_index('NAME', inplace=True)
-        with_gaps = pd.concat([line_fermi, air_gaps], sort=False).sort_values(by='AT_ENTRY')
+        with_gaps = pd.concat([line_fermi, air_gaps]).sort_values(by='AT_ENTRY').query("LENGTH != 0")
         line_fermi = with_gaps
 
     # Add columns as needed

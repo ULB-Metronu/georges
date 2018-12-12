@@ -36,19 +36,14 @@ def twiss(ax, bl, **kwargs):
 def beta(ax, bl, **kwargs):
     """Plot the Twiss beta functions."""
     if kwargs.get('ptc', False):
-        twiss_function_plot(ax, bl, ['BET'])
+        twiss_function_plot(ax, bl, ['BETA'], x='11', y='22', **kwargs)
     else:
-        ax.plot(bl.line['S'], bl.line['BETA11'], color=palette['X'])
-        ax.plot(bl.line['S'], bl.line['BETA22'], color=palette['Y'])
+        twiss_function_plot(ax, bl, ['BET'], **kwargs)
 
 
 def alpha(ax, bl, **kwargs):
     """Plot the Twiss alpha functions."""
-    if kwargs.get('ptc', False):
-        twiss_function_plot(ax, bl, ['ALF'])
-    else:
-        ax.plot(bl.line['S'], bl.line['ALFA11'], color=palette['X'])
-        ax.plot(bl.line['S'], bl.line['ALFA22'], color=palette['Y'])
+    twiss_function_plot(ax, bl, ['ALF'], **kwargs)
 
 
 def dispersion(ax, bl, planes='both', rel_beta=1, **kwargs):
@@ -71,8 +66,8 @@ def twiss_function_plot(ax, bl, functions, planes='both', **kwargs):
     bl = bl.line
 
     if kwargs.get('ptc', False):
-        x = '1'
-        y = '3'
+        x = kwargs.get('x', '1')
+        y = kwargs.get('y', '3')
     else:
         x = 'X'
         y = 'Y'

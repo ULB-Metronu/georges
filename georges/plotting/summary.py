@@ -7,8 +7,31 @@ from .tracking import tracking
 from .losses import losses
 
 
-def summary(bl, bl_track, context, element='ISO'):
-    fig = plt.figure(figsize=(20, 20))
+def tracking_summary(bl=None, context={}, fig=None):
+    if bl is None:
+        raise Exception("`bl` cannot be None.")
+    if fig is None:
+        fig = plt.figure(figsize=(12, 21))
+    ax = fig.add_subplot(311)
+    prepare(ax, bl, size_arrows=False)
+    aperture(ax, bl, context, plane='X')
+    tracking(ax, bl, plane='X')
+
+    ax = fig.add_subplot(312)
+    prepare(ax, bl, size_arrows=False)
+    aperture(ax, bl, context, plane='Y')
+    tracking(ax, bl, plane='Y')
+
+    ax = fig.add_subplot(313)
+    prepare(ax, bl, size_arrows=False)
+    losses(ax, bl)
+
+    plt.tight_layout()
+
+
+def summary(bl, bl_track, context, element='ISO', fig=None):
+    if fig is None:
+        fig = plt.figure(figsize=(20, 20))
     # Define the left bottom corner block
     space = 0.02
     width, height = 0.25, 0.25

@@ -7,6 +7,8 @@ from ..simulator import Simulator
 from ..simulator import SimulatorException
 from georges.lib.pybdsim import pybdsim
 from .. import physics
+from . material_database import get_bdsim_material
+
 
 INPUT_FILENAME = 'input.gmad'
 
@@ -89,6 +91,7 @@ SUPPORTED_ELEMENTS = (
     'DRIFT',
     'GAP',
     'SBEND',
+    'RBEND',
     'QUADRUPOLE',
     'SEXTUPOLE',
     'OCTUPOLE',
@@ -186,13 +189,22 @@ def sequence_to_bdsim(sequence, **kwargs):
         if element['TYPE'] == "SLITS":
             m.AddRCol(index,
                       element['LENGTH'],
-                      xsize=context.get(f"w{index}X", 0.1),
-                      ysize=context.get(f"w{index}Y", 0.1),
+                      xsize=context.get(f"w{index}_X", 0.1),
+                      ysize=context.get(f"w{index}_Y", 0.1),
                       material="G4_Ni"
                       )
 
         if element['TYPE'] == "MARKER":
             m.AddMarker(index)
+
+        if element['TYPE'] == "SCATTERER" or element['TYPE'] == 'DEGRADER':
+            if element['LENGTH'] > 0:
+                m.AddRCol(index,
+                          element['LENGTH'],
+                          xsize=0,
+                          ysize=0,
+                          material=get_bdsim_material(element['MATERIAL']),
+                          )
 
         if element['TYPE'] == "SOLIDS":
             m.AddPlacement(
@@ -200,7 +212,8 @@ def sequence_to_bdsim(sequence, **kwargs):
                 geometryFile=context.get(f"{index}_file"),
                 x=context.get(f"{index}_x", 0.0),
                 y=context.get(f"{index}_y", 0.0),
-                z=context.get(f"{index}_z", element['AT_CENTER']),
+                z=context.get(f"{index}_z", 0.0),
+                s=context.get(f"{index}_s", element['AT_CENTER']),
                 phi=context.get(f"{index}_phi", 0.0),
                 psi=context.get(f"{index}_psi", 0.0),
                 theta=context.get(f"{index}_theta", 0.0)
@@ -223,7 +236,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                              phi=np.deg2rad(-context.get(f"{index}_ANGLE", 0)-90)  # minus angle for gantry
                              )
 
-        if element['TYPE'] == "SBEND":
+        if element['TYPE'] == "SBEND" or element['TYPE'] == 'RBEND':
 
             # TODO improve the way to have the aperture
             if element['APERTYPE'] == 'RECTANGLE':
@@ -231,7 +244,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                 if context.get(f"{index}_B") is not None:  # add functionnality inside BDsim
                     m.AddDipole(
                         index,
-                        'sbend',
+                        element['TYPE'].lower(),
                         element['LENGTH'],
                         b=context.get(f"{index}_B"),
                         angle=element['ANGLE'],
@@ -244,7 +257,7 @@ def sequence_to_bdsim(sequence, **kwargs):
                 else:
                     m.AddDipole(
                         index,
-                        'sbend',
+                        element['TYPE'].lower(),
                         element['LENGTH'],
                         angle=element['ANGLE'],
                         e1=element['E1'] if not np.isnan(element['E1']) else 0,
