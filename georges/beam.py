@@ -102,6 +102,8 @@ class Beam:
         """Return the sigma matrix of the beam"""
         return self.__distribution.cov()
 
+    covariance = sigma
+
     @property
     def twiss(self):
         """Return the Twiss parameters of the beam"""
@@ -249,9 +251,6 @@ class Beam:
     def from_5d_multigaussian_distribution(self, **kwargs):
         """Initialize a beam with a 5D particle distribution."""
         keys = {'n', 'X', 'PX', 'Y', 'PY', 'DPP', 'XRMS', 'PXRMS', 'YRMS', 'PYRMS', 'DPPRMS'}
-        if any([k not in keys for k in kwargs.keys()]):
-            print(kwargs.keys())
-            raise BeamException("Invalid argument for a multigaussian distribution.")
         self.from_5d_sigma_matrix(n=kwargs.get('n', DEFAULT_N_PARTICLES),
                                   X=kwargs.get('X', 0),
                                   PX=kwargs.get('PX', 0),

@@ -1,13 +1,13 @@
-from typing import Callable
-import numpy as np
+from typing import Callable as _Callable
+import numpy as _np
 
 _ = lambda x: x.copy()
 
 
 class Observer:
 
-    def __init__(self, turns: int=1, elements=[], func: Callable=_):
-        self._data = np.empty(shape=(turns, max((len(elements), 1))), dtype=object)
+    def __init__(self, turns: int=1, elements=[], func: _Callable=_):
+        self._data = _np.empty(shape=(turns, max((len(elements), 1))), dtype=object)
         self._turns = turns
         self._elements = elements
         self._func = func
