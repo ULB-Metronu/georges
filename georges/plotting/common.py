@@ -31,10 +31,10 @@ palette['bend'] = palette['red']
 palette['coll'] = palette['yellow']
 palette['X'] = palette['cyan']
 palette['Y'] = palette['orange']
-palette['X_MADX'] = palette['cyan']
+palette['X_MADX'] = palette['blue']
 palette['Y_MADX'] = palette['orange']
-palette['X_G4BL'] = palette['magenta']
-palette['Y_G4BL'] = palette['green']
+palette['X_BDSIM'] = palette['magenta']
+palette['Y_BDSIM'] = palette['green']
 palette['QUADRUPOLE'] = palette['orange']
 palette['SEXTUPOLE'] = palette['green']
 palette['OCTUPOLE'] = palette['green']
@@ -70,6 +70,7 @@ def draw_beamline(ax, bl, context):
     ax2.set_ylim([0, 1])
     ax2.hlines(offset, 0, bl.length, clip_on=False)
     for i, e in bl.line.query("TYPE=='SBEND' or TYPE=='RBEND'").iterrows():
+        print(e)
         if e['ANGLE'] > 0:
             fc = 'r'
         elif e['ANGLE'] < 0:
@@ -108,9 +109,9 @@ def draw_beamline(ax, bl, context):
 
 
 def prepare(ax, bl, **kwargs):
-    bl = bl.line
-    ticks_locations = beamline_get_ticks_locations(bl)
-    ticks_labels = beamline_get_ticks_labels(bl)
+
+    ticks_locations = beamline_get_ticks_locations(bl.line)
+    ticks_labels = beamline_get_ticks_labels(bl.line)
     ax.tick_params(axis='both', which='major')
     ax.tick_params(axis='x', labelsize=6)
     ax.xaxis.set_major_locator(FixedLocator(ticks_locations))

@@ -55,13 +55,13 @@ pybdsim - python tool for BDSIM
 from . import Beam
 from . import Builder
 from . import Constants
-from . import Convert
-from . import Compare
+# from . import Convert
+# from . import Compare
 from . import Field
 from . import Data
 from . import Gmad
 from . import Options
-from . import Plot
+# from . import Plot
 from . import Run
 from . import ModelProcessing
 from . import Visualisation

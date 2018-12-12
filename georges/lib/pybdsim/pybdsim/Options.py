@@ -88,11 +88,17 @@ class Options(dict):
 
     def SetPhysicsList(self,physicslist=''):
         physicslistlist = [
+            'decay',
             'em',
+            'em_extra',
+            'ion',
+            'stopping',
             'em_low',
             'synchrad',
             'optical',
             'hadronic',
+            'hadronic_elastic',
+            'hadronic_elastic_hp'
             'hadronichp',
             'qgsp_bert',
             'qgsp_bert_hp',
@@ -127,8 +133,8 @@ class Options(dict):
     def SetBeamPipeThickness(self,bpt,unitsstring='mm'):
         self['beampipeThickness'] = str(bpt) + '*' + unitsstring
 
-    def SetPipeMaterial(self,bpm):
-        self['pipeMaterial'] = '"' + str(bpm) + '"'
+    def SetPipeMaterial(self, bpm):
+        self['beampipeMaterial'] = str(bpm)
 
     def SetVacuumMaterial(self,vm):
         self['vacMaterial'] = '"' + str(vm) + '"'
@@ -355,6 +361,18 @@ class Options(dict):
         else:
             self['storeNeutronTrajectory'] = 0
 
+    def SetStoreElossStepLength(self):
+        self['storeElossStepLength'] = 1
+
+    def SetStoreElossLinks(self):
+        self['storeElossLinks'] = 1
+
+    def SetStoreElossGlobal(self):
+        self['storeElossGlobal'] = 1
+
+    def SetStoreElossPreStepKineticEnergy(self):
+        self['storeElossPreStepKineticEnergy']=1
+
     def SetTrajectoryCutGTZ(self,gtz=0.0,unitsstring='m'):
         self['trajCutGTZ'] = str(gtz) + '*' + unitsstring
 
@@ -382,6 +400,15 @@ class Options(dict):
     def SetDefaultBiasMaterial(self, biases=""):
         self["defaultBiasMaterial"] = biases
 
-class Editor :
+    def SetWorldMaterial(self, material="vacuum"):
+        self["worldMaterial"] = '"'+material+'"'
+
+    def SetPreprocessGDML(self, process="False"):
+        self["preprocessGDML"] = int(process)
+
+
+
+
+class Editor:
     def __init__(self, fileName) :
         self.fileName = fileName
