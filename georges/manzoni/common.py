@@ -7,10 +7,10 @@ from .. import model as _model
 from .. import Beamline
 from .. import Beam
 
-FERMI_DB = fermi.MaterialsDB()
+FERMI_DB: fermi.MaterialsDB = fermi.MaterialsDB()
 
 
-def convert_line(line, context={}, to_numpy=True, fermi_params={}):
+def convert_line(line: Beamline, context={}, to_numpy: bool = True, fermi_params={}):
     def class_conversion(e):
         if e['CLASS'] in ('RFCAVITY',):
             e['CLASS_CODE'] = CLASS_CODES['DRIFT']
@@ -125,7 +125,7 @@ def convert_line(line, context={}, to_numpy=True, fermi_params={}):
         return line_copy[list(INDEX.keys())+['ENERGY_IN', 'ENERGY_OUT']]
 
 
-def transform_variables(line, variables):
+def transform_variables(line, variables) -> list:
     ll = line.reset_index()
 
     def transform(v):
@@ -143,7 +143,7 @@ def adjust_line(line, variables, parameters):
     return line
 
 
-def transform_elements(line, elements):
+def transform_elements(line, elements) -> list:
     ll = line.reset_index()
 
     def transform(e):
@@ -151,7 +151,7 @@ def transform_elements(line, elements):
     return list(map(transform, elements))
 
 
-def _process_model_argument(model, line, beam, context, exception=Exception):
+def _process_model_argument(model: _model.Model, line: Beamline, beam: Beam, context, exception=Exception) -> dict:
     manzoni_line = None
     manzoni_beam = None
     georges_line = None
@@ -163,17 +163,20 @@ def _process_model_argument(model, line, beam, context, exception=Exception):
         else:
             # Beamline
             if isinstance(line, Beamline):
+                global georges_line, manzoni_line
                 georges_line = line
                 manzoni_line = convert_line(line.line, context)
             else:
                 raise exception("'line' must be a Georges Beamline")
             # Beam
             if isinstance(beam, Beam):
+                global georges_beam, manzoni_beam
                 georges_beam = beam
                 manzoni_beam = np.array(beam.distribution)
             else:
                 raise exception("'line' must be a Georges Beam")
             # Context
+            global georges_context
             georges_context = context
     else:
         # Access the object's model

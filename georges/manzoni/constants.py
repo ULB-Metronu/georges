@@ -1,5 +1,7 @@
+from typing import Dict
+
 # Define constants for indexing in numpy arrays
-INDEX = {k: i for i, k in enumerate(
+INDEX: Dict[str, int] = {k: i for i, k in enumerate(
     (
         'CLASS_CODE',
         'LENGTH',
@@ -57,7 +59,7 @@ INDEX_MISALIGNEMENT_X = INDEX['MISALIGNEMENT_X']
 INDEX_MISALIGNEMENT_Y = INDEX['MISALIGNEMENT_Y']
 
 # Define constants for elements types
-CLASS_CODES = {k: i for i, k in enumerate(
+CLASS_CODES: Dict[str, int] = {k: i for i, k in enumerate(
     (
         'NONE',
         'DRIFT',
@@ -102,14 +104,14 @@ CLASS_CODE_FE = [
 ]
 
 # Define constants for aperture types
-APERTYPE_CODE_NONE = 0
-APERTYPE_CODE_CIRCLE = 1
-APERTYPE_CODE_ELLIPSE = 2
-APERTYPE_CODE_RECTANGLE = 3
+APERTYPE_CODE_NONE: int = 0
+APERTYPE_CODE_CIRCLE: int = 1
+APERTYPE_CODE_ELLIPSE: int = 2
+APERTYPE_CODE_RECTANGLE: int = 3
 
 # Coordinates
-X = 0
-PX = 1
-Y = 2
-PY = 3
-DPP = 4
+X: int = 0
+PX: int = 1
+Y: int = 2
+PY: int = 3
+DPP: int = 4

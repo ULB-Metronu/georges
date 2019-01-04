@@ -1,3 +1,4 @@
+from typing import Dict
 import pandas as pd
 from . import manzoni
 from .common import _process_model_argument
@@ -9,11 +10,11 @@ from .. import Beam
 class TrackException(Exception):
     """Exception raised for errors in the Track module."""
 
-    def __init__(self, m):
+    def __init__(self, m: str):
         self.message = m
 
 
-def track(model=None, line=None, beam=None, context={}, **kwargs):
+def track(model=None, line: Beamline = None, beam: Beam = None, context: Dict = {}, **kwargs) -> Beamline:
     """Compute the distribution of the beam as it propagates through the beamline.
     """
     # Process arguments

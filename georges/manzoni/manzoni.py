@@ -109,6 +109,7 @@ def track1(line, beam, observer, **kwargs):
     # Return observer
     return observer
 
+
 def track2(line, beam, turns=1, observer=None, **kwargs):
     """
     Tracking through a beamline.

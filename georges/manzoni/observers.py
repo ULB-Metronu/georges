@@ -1,12 +1,15 @@
-from typing import Callable as _Callable
+from typing import List
+from typing import Callable
 import numpy as _np
 
-_ = lambda x: x.copy()
+
+def identity_copy(x: _np.array) -> _np.array:
+    return x.copy()
 
 
 class Observer:
 
-    def __init__(self, turns: int=1, elements=[], func: _Callable=_):
+    def __init__(self, turns: int = 1, elements: List[int] = [], func: Callable = identity_copy):
         self._data = _np.empty(shape=(turns, max((len(elements), 1))), dtype=object)
         self._turns = turns
         self._elements = elements

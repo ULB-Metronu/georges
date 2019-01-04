@@ -48,9 +48,9 @@ def match(**kwargs):
 
 def process_match_output(output):
     regex_target = re.compile("Final Penalty Function =   (.*)")
-    regex_variable = re.compile("(.+)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)")
+    regex_variable = re.compile(r"(.+)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)\s+(-?\d\.\d*e.\d\d)")
     regex_constraints = re.compile(
-        "(.+):?\d?\s+(betx)\s+(\d)\s+(-?\d\.\d*E.\d\d)\s+(-?\d\.\d*E.\d\d)\s+(-?\d\.\d*E.\d\d)")
+        r"(.+):?\d?\s+(betx)\s+(\d)\s+(-?\d\.\d*E.\d\d)\s+(-?\d\.\d*E.\d\d)\s+(-?\d\.\d*E.\d\d)")
 
     match_flag = False
     match_variables = {}

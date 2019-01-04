@@ -1,4 +1,4 @@
-__version__ = "2018.3"
+__version__ = "2019.1"
 from .beam import Beam
 from .beamline import Beamline
 from .beamline_builder import BeamlineBuilder

@@ -14,7 +14,7 @@ class SectormapException(Exception):
         self.message = m
 
 
-def read_madx_sectormap(file):
+def read_madx_sectormap(file) -> pd.DataFrame:
     """Read a MAD-X Sectormap TFS file to a dataframe."""
     headers = pd.read_csv(file, skiprows=MADX_SECTORMAP_HEADERS_SKIP_ROWS, nrows=0, delim_whitespace=True)
     headers.drop(headers.columns[[0, 1]], inplace=True, axis=1)
@@ -41,7 +41,7 @@ def sectormap(**kwargs):
     # Process arguments
     line = kwargs.get('line', None)
     if line is None:
-        raise TwissException("Beamline and MAD-X objects need to be defined.")
+        raise SectormapException("Beamline and MAD-X objects need to be defined.")
     m = Madx(beamlines=[line])
     m.beam(line.name)
     m.sectormap(name=line.name,

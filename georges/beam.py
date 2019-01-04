@@ -1,4 +1,3 @@
-import os
 import pandas as pd
 import numpy as np
 from . import physics
@@ -7,6 +6,7 @@ from scipy.optimize import curve_fit
 PARTICLE_TYPES = {'proton', 'antiproton', 'electron', 'positron'}
 PHASE_SPACE_DIMENSIONS = ['X', 'PX', 'Y', 'PY', 'DPP', 'DT']
 DEFAULT_N_PARTICLES = 1e5
+
 
 class BeamException(Exception):
     """Exception raised for errors in the Beam module."""
