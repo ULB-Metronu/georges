@@ -1,9 +1,10 @@
+from typing import List
 import os
 import pandas as pd
 import numpy as np
 import scipy.interpolate
 
-STAR_COLUMNS = ['K', 'eS', 'nS', 'tS', 'csda', 'prange', 'factor']
+STAR_COLUMNS: List[str] = ['K', 'eS', 'nS', 'tS', 'csda', 'prange', 'factor']
 
 
 class MaterialsDB:
@@ -40,14 +41,14 @@ class MaterialsDB:
             'pdg_data': pdg_data,
         }
 
-    def _star_read_data(self, m):
+    def _star_read_data(self, m) -> pd.DataFrame:
         return pd.read_table(os.path.join(self.db_path, "pstar", f"{m}.txt"),
                              skiprows=7,
                              delimiter=' ',
                              names=STAR_COLUMNS,
                              index_col=False)
 
-    def _srim_read_data(self, m, pdg_data):
+    def _srim_read_data(self, m, pdg_data) -> pd.DataFrame:
         data = pd.read_csv(
             os.path.join(self.db_path, "srim", f"{m}.txt"),
             skiprows=23,
@@ -87,7 +88,7 @@ class MaterialsDB:
 
         return data
 
-    def _pdg_read_data(self, data):
+    def _pdg_read_data(self, data) -> pd.DataFrame:
         return pd.read_table(os.path.join(self.db_path, "pdg", data),
                              delimiter=',',
                              index_col='material'

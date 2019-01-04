@@ -14,7 +14,7 @@ class FermiPropagateException(Exception):
         self.message = m
 
 
-def track_energy(energy, line_fermi, db):
+def track_energy(energy: float, line_fermi, db):
     for i, e in line_fermi.iterrows():
         line_fermi.loc[i, 'ENERGY_IN'] = energy
         if (e['TYPE'] == 'slab' or e['TYPE'] == 'gap' or e['CLASS'] == 'DEGRADER') and e['LENGTH'] != 0:
@@ -27,7 +27,7 @@ def track_energy(energy, line_fermi, db):
             line_fermi.loc[i, 'ENERGY_OUT'] = energy
 
 
-def propagate(line, beam, db, model=DifferentialMoliere, gaps='vacuum'):
+def propagate(line, beam, db, model=DifferentialMoliere, gaps: type = Vacuum):
     def compute_fermi_eyges_on_slab(slab):
         # If vacuum, return a null-element
         if str(slab['MATERIAL']) == Vacuum:

@@ -11,6 +11,3 @@ The library design strongly follows conventions and typical uses of the *Pandas*
 Beamlines are loaded, converted (if necessary) and then transformed using functions split in packages (one package per beam physics code, *e.g.* MAD-X or G4Geamline). Those functional packages are supported by a series of *proxy classes* for each external computation code.
  
 Support tools are also provided, notably a plotting library (entirely based on *Matplotlib*) which provides plotting capabilities for various optics computation (beam envelope, Twiss parameters, etc.).
-
-
-

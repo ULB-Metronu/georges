@@ -2,19 +2,15 @@ import numpy as np
 from .stopping import thickness
 
 
-def radiation_length(**kwargs):
+def radiation_length(db, material):
     # See "reference"
-    db = kwargs.get('db')
-    material = kwargs['material']
     a = db.a(material)
     z = db.z(material)
     return 716.4 * a * (1 / (z * (z + 1) * (np.log(287 / np.sqrt(z)))))
 
 
-def scattering_length(**kwargs):
+def scattering_length(db, material):
     # See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
-    db = kwargs.get('db')
-    material = kwargs['material']
     rho = db.density(material)
     if material is 'water':
         return 46.88/rho
@@ -31,7 +27,7 @@ def scattering_length(**kwargs):
 class FermiRossi:
     """"""
     @staticmethod
-    def t(pv, p1v1, **kwargs):
+    def t(pv: float, p1v1: float, **kwargs):
         es = 15.0  # MeV
         chi_0 = 19.32
         return (es/pv) ** 2 * (1/chi_0)
@@ -49,7 +45,7 @@ class DifferentialHighland:
         return 0.970 * (1 + (np.log(l) / 20.7)) * (1 + (np.log(l) / 22.7))
 
     @staticmethod
-    def t(pv, p1v1, **kwargs):
+    def t(pv: float, p1v1: float, **kwargs):
         db = kwargs.get('db')
         material = kwargs.get('material')
         es = 14.1  # MeV
@@ -61,14 +57,14 @@ class DifferentialHighland:
 class ICRU:
     """"""
     @staticmethod
-    def t(pv, p1v1, **kwargs):
+    def t(pv: float, p1v1: float, **kwargs):
         pass
 
 
 class ICRUProtons:
     """"""
     @staticmethod
-    def t(pv, p1v1, **kwargs):
+    def t(pv: float, p1v1: float, **kwargs):
         db = kwargs.get('db')
         material = kwargs['material']
         es = 15.0  # MeV
@@ -79,7 +75,7 @@ class ICRUProtons:
 class DifferentialMoliere:
     """"""
     @staticmethod
-    def t(pv, p1v1, **kwargs):
+    def t(pv: float, p1v1: float, **kwargs):
         db = kwargs.get('db')
         material = kwargs['material']
         es = 15.0  # MeV
@@ -87,7 +83,7 @@ class DifferentialMoliere:
         return DifferentialMoliere.f_dm(p1v1, pv) * (es / pv) ** 2 * (1 / chi_s)
 
     @staticmethod
-    def f_dm(p1v1, pv):
+    def f_dm(p1v1: float, pv: float):
         if pv <= 0:
             raise ValueError("'pv' must be > 0.")
         if p1v1 <= 0:
