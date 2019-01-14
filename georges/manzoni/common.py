@@ -151,7 +151,7 @@ def transform_elements(line, elements) -> list:
     return list(map(transform, elements))
 
 
-def _process_model_argument(model: _model.Model, line: Beamline, beam: Beam, context, exception=Exception) -> dict:
+def _process_model_argument(model, line: Beamline, beam: Beam, context, exception=Exception) -> dict:
     manzoni_line = None
     manzoni_beam = None
     georges_line = None
@@ -163,20 +163,17 @@ def _process_model_argument(model: _model.Model, line: Beamline, beam: Beam, con
         else:
             # Beamline
             if isinstance(line, Beamline):
-                global georges_line, manzoni_line
                 georges_line = line
                 manzoni_line = convert_line(line.line, context)
             else:
                 raise exception("'line' must be a Georges Beamline")
             # Beam
             if isinstance(beam, Beam):
-                global georges_beam, manzoni_beam
                 georges_beam = beam
                 manzoni_beam = np.array(beam.distribution)
             else:
                 raise exception("'line' must be a Georges Beam")
             # Context
-            global georges_context
             georges_context = context
     else:
         # Access the object's model
