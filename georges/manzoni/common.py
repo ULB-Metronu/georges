@@ -1,3 +1,4 @@
+from typing import Optional, List, Dict
 import logging
 import numpy as np
 from .constants import *
@@ -10,7 +11,14 @@ from .. import Beam
 FERMI_DB: fermi.MaterialsDB = fermi.MaterialsDB()
 
 
-def convert_line(line: Beamline, context={}, to_numpy: bool = True, fermi_params={}):
+def convert_line(line: Beamline,
+                 context: Optional[Dict] = None,
+                 to_numpy: bool = True,
+                 fermi_params: Optional[Dict] = None
+                 ):
+    context = context or {}
+    fermi_params = fermi_params or {}
+
     def class_conversion(e):
         if e['CLASS'] in ('RFCAVITY',):
             e['CLASS_CODE'] = CLASS_CODES['DRIFT']
@@ -136,6 +144,8 @@ def transform_variables(line, variables) -> list:
 
 
 def adjust_line(line, variables, parameters):
+    if len(parameters) == 0:
+        return line
     it = np.nditer(parameters, flags=['f_index'])
     while not it.finished:
         line[variables[it.index][0], variables[it.index][1]] = it[0]
@@ -143,7 +153,8 @@ def adjust_line(line, variables, parameters):
     return line
 
 
-def transform_elements(line, elements) -> list:
+def transform_elements(line, elements: List[str]) -> List[int]:
+    """Convert a list of elements (referenced by names) onto a list of indices"""
     ll = line.reset_index()
 
     def transform(e):
@@ -151,12 +162,21 @@ def transform_elements(line, elements) -> list:
     return list(map(transform, elements))
 
 
-def _process_model_argument(model, line: Beamline, beam: Beam, context, exception=Exception) -> dict:
-    manzoni_line = None
-    manzoni_beam = None
-    georges_line = None
-    georges_beam = None
-    georges_context = {}
+def _process_model_argument(model,
+                            line: Optional[Beamline],
+                            beam: Optional[Beam],
+                            context: Optional[Dict],
+                            exception: type = Exception,
+                            ) -> dict:
+    """
+
+    :param model:
+    :param line:
+    :param beam:
+    :param context:
+    :param exception:
+    :return:
+    """
     if model is None:
         if line is None or beam is None:
             raise exception("Beamline and Beam objects need to be defined.")

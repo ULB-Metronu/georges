@@ -5,6 +5,7 @@ from .integrators import integrators
 from .fe import mc, fe
 from .constants import *
 from .aperture import aperture_check
+from .observers import Observer
 
 
 class ManzoniException(Exception):
@@ -41,7 +42,7 @@ def sigma(line, beam, **kwargs):
     return sigmas
 
 
-def track(line, beam, observer, order=1, **kwargs):
+def track(line, beam, observer, order=1, **kwargs) -> Observer:
     """
     Tracking through a beamline.
     Code optimized for performance.
@@ -60,7 +61,7 @@ def track(line, beam, observer, order=1, **kwargs):
         raise ManzoniException("Invalid tracking order")
 
 
-def track1(line, beam, observer, **kwargs):
+def track1(line, beam, observer, **kwargs) -> Observer:
     """
     Tracking through a beamline.
     Code optimized for performance.
@@ -98,7 +99,7 @@ def track1(line, beam, observer, **kwargs):
 
             # Observation
             if i in observer._elements:
-                observer._observe(turn, nelem, beam)
+                observer(turn, nelem, beam)
                 nelem += 1
 
             if line[i, INDEX_MISALIGNEMENT_X] != 0:
@@ -110,7 +111,7 @@ def track1(line, beam, observer, **kwargs):
     return observer
 
 
-def track2(line, beam, turns=1, observer=None, **kwargs):
+def track2(line, beam, turns=1, observer=None, **kwargs) -> Observer:
     """
     Tracking through a beamline.
     Code optimized for performance.

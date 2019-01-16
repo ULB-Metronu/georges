@@ -1,8 +1,12 @@
+from typing import Optional, Dict, List
+import numpy as _np
 from . import manzoni
+from .beam import Beam
+from .beamline import Beamline
 
 
 class Model:
-    def __init__(self, model=None, beam=None, beamline=None, context={}, variables=[], elements=[]):
+    def __init__(self, model=None, beam=None, beamline=None, context=None, variables=None, elements=None):
         if model is not None and isinstance(model, Model):
             self._beam = model.beam
             self._beamline = model.beamline
@@ -12,20 +16,20 @@ class Model:
         else:
             self._beam = beam
             self._beamline = beamline
-            self._context = context
-            self._variables = variables
-            self._elements = elements
+            self._context = context or {}
+            self._variables = variables or []
+            self._elements = elements or []
 
     @property
-    def beam(self):
+    def beam(self) -> Beam:
         return self._beam
 
     @property
-    def beamline(self):
+    def beamline(self) -> Beamline:
         return self._beamline
 
     @property
-    def context(self):
+    def context(self) -> Dict:
         return self._context
 
     @context.setter
@@ -33,28 +37,15 @@ class Model:
         self._context = c
 
     @property
-    def variables(self):
+    def variables(self) -> List:
         return self._variables
 
     @property
     def elements(self):
         return self._elements
 
-    @property
-    def gbeam(self):
-        return self._beam
-
-    @property
-    def gbeamline(self):
-        return self._beamline
-
-    @property
-    def gvariables(self):
-        return self._variables
-
-    @property
-    def gelements(self):
-        return self._elements
+    def track(self, **kwargs):
+        return manzoni.track(self, **kwargs)
 
 
 class ManzoniModel(Model):
@@ -103,3 +94,16 @@ class ManzoniModel(Model):
         if self._manzoni_elements is None:
             self._manzoni_elements = manzoni.transform_elements(self.get_beamline(to_numpy=False), self._elements)
         return self._manzoni_elements
+
+    def adjust_beamline(self, values):
+        manzoni.adjust_line(self.beamline, self.variables, _np.array(values))
+
+    def adjust_beam(self, beam):
+        try:
+            self._manzoni_beam = beam.distribution.values
+        except AttributeError:
+            self._manzoni_beam = beam
+
+    def track(self, observer: Optional[manzoni.Observer] = None, **kwargs):
+        observer = observer or manzoni.Observer(elements=self.elements)
+        return manzoni.manzoni.track(self.beamline, self.beam, observer, **kwargs)

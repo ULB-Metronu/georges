@@ -58,7 +58,7 @@ def multipole(e, b, **kwargs):
 
 def hkicker(e, b, order=1, nst=1, **kwargs):
     if order == 1:
-        return _hickier1(e, b, nst, **kwargs)
+        return _hkicker1(e, b, nst, **kwargs)
     elif order == 2:
         return _hkicker2(e, b, nst, **kwargs)
     elif order == 4:
@@ -66,7 +66,8 @@ def hkicker(e, b, order=1, nst=1, **kwargs):
     else:
         raise IntegratorException("Invalid integrator order.")
 
-def hkicker(e, b, nst=1, **kwargs):
+
+def _hkicker1(e, b, nst=1, **kwargs):
     if e[INDEX_LENGTH] <= 1e-6:
         nst = 1
     drift = _drift(e[INDEX_LENGTH] / nst)
@@ -84,9 +85,10 @@ def _hkicker2(e, b, nst=1, **kwargs):
     k = e[INDEX_KICK] / nst
     for i in range(0, nst):
         b = b.dot(drift.T)
-        b[:, XP] += k
+        b[:, PX] += k
         b = b.dot(drift.T)
     return b
+
 
 def _hkicker4(e, b, nst=1, **kwargs):
     if e[INDEX_LENGTH] <= 1e-6:
@@ -95,7 +97,7 @@ def _hkicker4(e, b, nst=1, **kwargs):
     k = e[INDEX_KICK] / nst
     for i in range(0, nst):
         b = b.dot(drift.T)
-        b[:, XP] += k
+        b[:, PX] += k
         b = b.dot(drift.T)
     return b
 
