@@ -15,7 +15,15 @@ class TrackException(Exception):
 
 
 def track(model=None, line: Beamline = None, beam: Beam = None, context: Dict = {}, **kwargs) -> Beamline:
-    """Compute the distribution of the beam as it propagates through the beamline.
+    """
+    Compute the distribution of the beam as it propagates through the beamline.
+
+    :param model:
+    :param line:
+    :param beam:
+    :param context:
+    :param kwargs:
+    :return:
     """
     # Process arguments
     v = _process_model_argument(model, line, beam, context, TrackException)

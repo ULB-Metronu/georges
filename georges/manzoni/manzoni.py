@@ -69,7 +69,7 @@ def track1(line, beam, observer, **kwargs) -> Observer:
     :param beam: initial beam
     :param observer: Observer object to witness and record the tracking data
     :param kwargs: optional parameters
-    :return: Observer.track_end() return value
+    :return: Observer
     """
 
     # Main loop
