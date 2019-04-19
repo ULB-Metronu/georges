@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Optional, List
 import logging
 import numpy as np
 from .constants import *
@@ -102,6 +102,7 @@ def convert_line(line: Beamline,
     for i in INDEX.keys():
         if i not in line_copy:
             line_copy[i] = 0.0
+
     # Perform the conversion
     line_copy = line_copy.apply(class_conversion, axis=1)
     line_copy = line_copy.apply(circuit_conversion, axis=1)

@@ -38,6 +38,7 @@ def mc_degrader(e, b, **kwargs):
     # if e[INDEX_FE_LOSS] != 0:
     #     idx = np.random.randint(b.shape[0], size=int((e[INDEX_FE_LOSS]) * b.shape[0]))
     #     b = b[idx, :]
+
     # Transport
     matrix = np.array(
         [
@@ -49,6 +50,7 @@ def mc_degrader(e, b, **kwargs):
         ]
     )
     b = b.dot(matrix.T)
+
     # Interactions
     b += nprandom.multivariate_normal(
         [0.0, 0.0, 0.0, 0.0, 0.0],
