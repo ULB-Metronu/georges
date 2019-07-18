@@ -1,9 +1,9 @@
 Georges' documentation
 =========================
 
-.. image:: _static/zgoubidoo.png
+.. image:: _static/georges.png
    :width: 300 px
-   :alt: Zgoubidoo's logo
+   :alt: Georges' logo
    :align: right
 
 .. automodule:: georges
@@ -13,8 +13,8 @@ Georges' documentation
    :caption: Contents:
 
    news
+   authors
    installation
-   gettingstarted
 
 Indices and tables
 ==================
