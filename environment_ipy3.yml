@@ -18,6 +18,7 @@ dependencies:
   - intelpython3_full  # https://software.intel.com/en-us/articles/complete-list-of-packages-for-the-intel-distribution-for-python
   - numpy>=1.14.0  # numpy from the Intel distribution, linked to MKL
   - pandas>=0.22.0  # pandas from the Intel distribution, linked to MKL
+  - pip
   - scipy>=1.0.0  # scipy from the Intel distribution, linked to MKL
   - scikit-learn>=0.19.1  # scikit-learn from the Intel distribution, linked to MKL and DAAL
   - matplotlib>=2.1.1  # https://matplotlib.org
