@@ -33,6 +33,7 @@ setup(
     license=lic,
     packages=find_packages(exclude=('tests', 'docs', 'examples')),
     install_requires=[
+        'georges-core',
         'matplotlib',
         'mypy',
         'numba',

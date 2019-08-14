@@ -1,3 +1,5 @@
+georges-core
 cpymad
 numba
 numpy
+pint
