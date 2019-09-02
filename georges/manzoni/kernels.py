@@ -49,7 +49,16 @@ def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.ndarray):
     Returns:
 
     """
-    pass
+    r = kargs[0]
+    t = kargs[1]
+    for l in _nb.prange(b1.shape[0]):
+        for i in range(t.shape[0]):
+            s = 0.0
+            for j in range(t.shape[1]):
+                for k in range(t.shape[2]):
+                    s += t[i, j, k] * b1[l, j] * b2[l, k]
+            b2[l, i] = s
+    return b1, b2
 
 
 @njit(parallel=True)
@@ -64,7 +73,17 @@ def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.nd
     Returns:
 
     """
-    pass
+    r = kargs[0]
+    t = kargs[0]
+    for l in _nb.prange(b1.shape[0]):
+        for i in range(t.shape[0]):
+            s = 0.0
+            for j in range(t.shape[1]):
+                s += r[i, j] * b1[l, j]
+                for k in range(t.shape[2]):
+                    s += t[i, j, k] * b1[l, j] * b1[l, k]
+            b2[l, i] = s
+    return b1, b2
 
 
 @njit
