@@ -2,13 +2,26 @@
 TODO
 """
 from __future__ import annotations
-from typing import Optional, Any, Tuple, Dict, Callable
+from typing import Optional, Any, Tuple, Dict, Callable, List
 import inspect
 import uuid
 import numpy as _np
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
-from georges_core import
+from ..kernels import IntegratorType, FirstOrderIntegrator
+from georges_core.patchable import Patchable as _Patchable
+
+
+class ManzoniException(Exception):
+    """Exception raised for errors in the Manzoni elements module."""
+
+    def __init__(self, m):
+        self.message = m
+
+
+class ManzoniAttributeException(ManzoniException):
+    """Exception raised for errors in the Manzoni elements module."""
+    pass
 
 
 class ElementType(type):
@@ -22,7 +35,10 @@ class ElementType(type):
     def __new__(mcs, name: str, bases: Tuple[ElementType, type, ...], dct: Dict[str, Any]):
         # Insert a default initializer (constructor) in case one is not present
         if '__init__' not in dct:
-            def default_init(self, label1: str = '', *params, **kwargs):
+            def default_init(self,
+                             label1: str = '',
+                             integrator: IntegratorType = FirstOrderIntegrator,
+                             *params, **kwargs):
                 """Default initializer for all Commands."""
                 defaults = {}
                 if 'post_init' in dct:
@@ -31,7 +47,11 @@ class ElementType(type):
                         for parameter_name, parameter_value in inspect.signature(dct['post_init']).parameters.items()
                         if parameter_value.default is not inspect.Parameter.empty
                     }
-                bases[0].__init__(self, label1, dct.get('PARAMETERS', {}), *params, **{**defaults, **kwargs})
+                bases[0].__init__(self,
+                                  label1,
+                                  integrator,
+                                  dct.get('PARAMETERS', {}),
+                                  *params, **{**defaults, **kwargs})
                 if 'post_init' in dct:
                     dct['post_init'](self, **kwargs)
 
@@ -186,7 +206,7 @@ class Element(metaclass=ElementType):
         else:
             k_ = k.rstrip('_')
             if k_ not in self._attributes.keys():
-                raise ZgoubidooAttributeException(f"The parameter {k_} is not part of the {self.__class__.__name__} "
+                raise ManzoniAttributeException(f"The parameter {k_} is not part of the {self.__class__.__name__} "
                                                   f"definition.")
 
             default = self._retrieve_default_parameter_value(k_)
@@ -207,10 +227,10 @@ class Element(metaclass=ElementType):
                 dimension = _ureg.Quantity(1).dimensionality  # No dimension
             try:
                 if default is not None and dimension != _ureg.Quantity(default).dimensionality:
-                    raise ZgoubidooAttributeException(f"Invalid dimension ({dimension} "
-                                                      f"instead of {_ureg.Quantity(default).dimensionality}) "
-                                                      f"for parameter {k_}={v} of {self.__class__.__name__}."
-                                                      )
+                    raise ManzoniAttributeException(f"Invalid dimension ({dimension} "
+                                                    f"instead of {_ureg.Quantity(default).dimensionality}) "
+                                                    f"for parameter {k_}={v} of {self.__class__.__name__}."
+                                                    )
             except (ValueError, TypeError, _UndefinedUnitError):
                 pass
             self._attributes[k_] = v
@@ -280,42 +300,120 @@ class Element(metaclass=ElementType):
 
 class ManzoniElement(Element, _Patchable):
 
-    def __init__(self, label1: str = '', *params, **kwargs):
+    def __init__(self, label1: str = '', integrator: IntegratorType = FirstOrderIntegrator, *params, **kwargs):
         """
 
         Args:
             label1:
+            integrator:
             *params:
             **kwargs:
         """
         super().__init__(label1, *params, **kwargs)
+        self._integrator = integrator
         self._kernel: Optional[Callable] = None
-        self._kernel_arguments: Optional[_np.ndarray] = None
+        self._kernel_arguments: Optional[List[_np.ndarray]] = None
+        self._aperture: Optional[Callable] = None
         self._frozen: bool = False
 
     def build_kernel(self):
+        """
+
+        Returns:
+
+        """
         pass
 
     def propagate(self, beam: _np.ndarray, out: Optional[_np.ndarray] = None) -> Tuple[_np.ndarray, _np.ndarray]:
+        """
+
+        Args:
+            beam:
+            out:
+
+        Returns:
+
+        """
         if not self.frozen:
             self.build_kernel()
-        return beam, self._kernel(beam, out, self._kernel_arguments)
+        return beam, self._kernel(beam, out, *self._kernel_arguments)
+
+    def aperture(self, beam: _np.ndarray, out: _np.ndarray):
+        """
+
+        Args:
+            beam:
+            out:
+
+        Returns:
+
+        """
+        if self._aperture is not None:
+            out = _np.compress(
+                self._aperture_check(beam),
+                beam,
+                axis=0,
+            )
+        return beam, out
 
     def freeze(self):
+        """
+
+        Returns:
+
+        """
         self.build_kernel_arguments()
         self._frozen = True
 
     def unfreeze(self):
+        """
+
+        Returns:
+
+        """
         self._frozen = False
 
     @property
     def frozen(self):
+        """
+
+        Returns:
+
+        """
         return self._frozen
 
     @property
+    def unfrozen(self):
+        """
+
+        Returns:
+
+        """
+        return not self._frozen
+
+    @property
     def kernel(self) -> Callable:
+        """
+
+        Returns:
+
+        """
         return self._kernel
 
     @property
-    def kernel_arguments(self) -> _np.ndarray:
+    def kernel_arguments(self) -> Optional[List[_np.ndarray]]:
+        """
+
+        Returns:
+
+        """
         return self._kernel_arguments
+
+    @property
+    def integrator(self) -> IntegratorType:
+        """
+
+        Returns:
+
+        """
+        return self._integrator
