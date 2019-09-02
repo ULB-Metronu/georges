@@ -1,7 +1,7 @@
 """
 TODO
 """
-from typing import Optional, Callable
+from typing import Callable
 import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
