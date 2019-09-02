@@ -95,15 +95,16 @@ class Quadrupole(_ManzoniElement):
             elif self.integrator == SecondOrderIntegrator:
                 self._kernel = batched_vector_matrix_tensor
                 if k > 0.0:
-                    pass
+                    self._kernel_arguments.append(_np.zeros((3, 3, 3)))
                 else:
-                    pass
+                    self._kernel_arguments.append(_np.zeros((3, 3, 3)))
 
 
 class Bend(_ManzoniElement):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Bending angle.'),
         'K1': (0.0 * _ureg.m**-2, 'Quadrupolar normalized gradient.'),
+        'K2': (0.0 * _ureg.m**-3, 'Sextupolar normalized gradient.'),
         'L': (0.0 * _ureg.m, 'Magnet length.'),
         'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
         'E2': (0.0 * _ureg.radian, 'Exirt face angle.'),

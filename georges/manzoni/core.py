@@ -5,7 +5,7 @@ from .input import Input as _Input
 from .observers import Observer
 
 
-def track(beamline: _Input, beam: _np.ndarray, observer: Optional[Observer]):
+def track(beamline: _Input, beam: _np.ndarray, observer: Optional[Observer] = None):
     """
 
     Args:
@@ -22,7 +22,8 @@ def track(beamline: _Input, beam: _np.ndarray, observer: Optional[Observer]):
         b1, b2 = e.propagate(b1, b2)
         b1, b2 = e.aperture(b1, b2)
         b2 = _np.zeros(b1.shape)
-        observer(e, b1, b2)
+        if observer is not None:
+            observer(e, b1, b2)
 
 
 def twiss():

@@ -20,11 +20,11 @@ class Observer(metaclass=ObserverType):
         return _pd.DataFrame(self.data)
 
 
-class BeamObserver:
+class BeamObserver(Observer):
     def __call__(self, element, b1, b2):
         self.data[element.LABEL1] = (b1, b2)
 
 
-class SigmaObserver:
+class SigmaObserver(Observer):
     def __call__(self, element, b1, b2):
         self.data[element.LABEL1] = _np.array()
