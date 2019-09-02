@@ -2,4 +2,5 @@ georges-core
 cpymad
 numba
 numpy
+pandas
 pint
