@@ -23,65 +23,62 @@ class SecondOrderIntegrator(Integrator):
 
 
 @njit(parallel=True)
-def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.ndarray):
+def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray):
     """
 
     Args:
         b1: a numpy array containing all the particles
         b2: explicit destination for the result
-        kargs: the transfer matrix as a numpy array
+        matrix: the transfer matrix as a numpy array
 
     Returns:
         the destination (result) array
     """
-    return _np.dot(b1, kargs.T, out=b2)
+    return _np.dot(b1, matrix.T, out=b2)
 
 
 @njit(parallel=True)
-def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.ndarray):
+def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray):
     """
 
     Args:
         b1:
         b2:
-        kargs:
+        tensor:
 
     Returns:
 
     """
-    r = kargs[0]
-    t = kargs[1]
     for l in _nb.prange(b1.shape[0]):
-        for i in range(t.shape[0]):
+        for i in range(tensor.shape[0]):
             s = 0.0
-            for j in range(t.shape[1]):
-                for k in range(t.shape[2]):
-                    s += t[i, j, k] * b1[l, j] * b2[l, k]
+            for j in range(tensor.shape[1]):
+                for k in range(tensor.shape[2]):
+                    s += tensor[i, j, k] * b1[l, j] * b2[l, k]
             b2[l, i] = s
     return b1, b2
 
 
 @njit(parallel=True)
-def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.ndarray):
+def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray, tensor: _np.ndarray):
     """
 
     Args:
         b1:
         b2:
-        kargs:
+        matrix:
+        tensor:
 
     Returns:
 
     """
-    r = kargs[0]
-    t = kargs[0]
     for l in _nb.prange(b1.shape[0]):
-        for i in range(t.shape[0]):
+        for i in range(tensor.shape[0]):
             s = 0.0
-            for j in range(t.shape[1]):
-                s += r[i, j] * b1[l, j]
-                for k in range(t.shape[2]):
-                    s += t[i, j, k] * b1[l, j] * b1[l, k]
+            for j in range(tensor.shape[1]):
+                s += matrix[i, j] * b1[l, j]
+                for k in range(tensor.shape[2]):
+                    s += tensor[i, j, k] * b1[l, j] * b1[l, k]
             b2[l, i] = s
     return b1, b2
 
