@@ -28,7 +28,7 @@ def track(**kwargs):
     if options is None:
         print("Warning : no options is provided")
 
-    bd = BDSim(beamline=[line], **kwargs)
+    bd = BDSim(beamlines=[line], **kwargs)
 
     # Write the input file for bdsim
     bd_beam = b.distribution.copy()
@@ -38,4 +38,7 @@ def track(**kwargs):
 
     # Add options for Bdsim
     bd.set_options(options)
+
+    # Write bdsim input
+    errors = bd.run(**kwargs).fatals
 
