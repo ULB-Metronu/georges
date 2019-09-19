@@ -343,28 +343,6 @@ class BDSim(Simulator):
         self._bdsim_machine.Write(kwargs.get("input_filename", 'input')+".gmad",
                                   kwargs.get("single_file", False)
                                   )
-
-        if kwargs.get('run_simulations', True):
-            # not working for the time not self_exec ?
-            # if self._get_exec() is None:
-            #     raise BdsimException("Can't run BDSim if no valid path and executable are defined.")
-            input_filename = kwargs.get("input_filename", 'input')
-            p = sub.Popen(f"{BDSim.EXECUTABLE_NAME} --file={input_filename}.gmad "
-                          f"--batch --ngenerate={self._nparticles} "
-                          f"--outfile={self._outputname}",
-                          stdin=sub.PIPE,
-                          stdout=sub.PIPE,
-                          stderr=sub.STDOUT,
-                          cwd=".",
-                          shell=True
-                          )
-
-            self._output = p.communicate()[0].decode()
-            self._warnings = [line for line in self._output.split('\n') if re.search('warning|fatal', line)]
-            self._fatals = [line for line in self._output.split('\n') if re.search('fatal', line)]
-            self._last_context = kwargs.get("context", {})
-            if kwargs.get('debug', False):
-                print(self._output)
         return self
 
     def track(self, particles, p0, **kwargs):
