@@ -8,7 +8,7 @@ import uuid
 import numpy as _np
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
-from ..kernels import IntegratorType, FirstOrderIntegrator
+from ..integrators import IntegratorType, SecondOrderTaylorMadIntegrator
 from georges_core.patchable import Patchable as _Patchable
 
 
@@ -37,7 +37,7 @@ class ElementType(type):
         if '__init__' not in dct:
             def default_init(self,
                              label1: str = '',
-                             integrator: IntegratorType = FirstOrderIntegrator,
+                             integrator: IntegratorType = SecondOrderTaylorMadIntegrator,
                              *params, **kwargs):
                 """Default initializer for all Commands."""
                 defaults = {}
@@ -300,7 +300,7 @@ class Element(metaclass=ElementType):
 
 class ManzoniElement(Element, _Patchable):
 
-    def __init__(self, label1: str = '', integrator: IntegratorType = FirstOrderIntegrator, *params, **kwargs):
+    def __init__(self, label1: str = '', integrator: IntegratorType = SecondOrderTaylorMadIntegrator, *params, **kwargs):
         """
 
         Args:
@@ -311,18 +311,9 @@ class ManzoniElement(Element, _Patchable):
         """
         super().__init__(label1, *params, **kwargs)
         self._integrator = integrator
-        self._kernel: Optional[Callable] = None
-        self._kernel_arguments: Optional[List[_np.ndarray]] = None
+        self._cache: Optional[Any] = None
         self._aperture: Optional[Callable] = None
         self._frozen: bool = False
-
-    def build_kernel(self):
-        """
-
-        Returns:
-
-        """
-        pass
 
     def propagate(self, beam: _np.ndarray, out: Optional[_np.ndarray] = None) -> Tuple[_np.ndarray, _np.ndarray]:
         """
@@ -334,9 +325,7 @@ class ManzoniElement(Element, _Patchable):
         Returns:
 
         """
-        if not self.frozen:
-            self.build_kernel()
-        return beam, self._kernel(beam, out, *self._kernel_arguments)
+        return self.integrator.propagate(self, beam, out)
 
     def aperture(self, beam: _np.ndarray, out: _np.ndarray):
         """
@@ -362,7 +351,7 @@ class ManzoniElement(Element, _Patchable):
         Returns:
 
         """
-        self.build_kernel_arguments()
+        self.cache
         self._frozen = True
 
     def unfreeze(self):
@@ -392,24 +381,6 @@ class ManzoniElement(Element, _Patchable):
         return not self._frozen
 
     @property
-    def kernel(self) -> Callable:
-        """
-
-        Returns:
-
-        """
-        return self._kernel
-
-    @property
-    def kernel_arguments(self) -> Optional[List[_np.ndarray]]:
-        """
-
-        Returns:
-
-        """
-        return self._kernel_arguments
-
-    @property
     def integrator(self) -> IntegratorType:
         """
 
@@ -417,3 +388,13 @@ class ManzoniElement(Element, _Patchable):
 
         """
         return self._integrator
+
+    @property
+    def parameters(self) -> list:
+        return []
+
+    @property
+    def cache(self) -> list:
+        if self._cache is None:
+            self._cache = self.integrator.cache(self)
+        return self._cache

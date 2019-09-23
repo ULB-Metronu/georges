@@ -30,6 +30,10 @@ class BeamObserver(Observer):
         self.data.append((element.LABEL1, b1, b2))
 
 
+class MeanObserver(Observer):
+    pass
+
+
 class SigmaObserver(Observer):
     def __init__(self):
         super().__init__()

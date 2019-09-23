@@ -6,22 +6,6 @@ import numba as _nb
 from numba import njit
 
 
-class IntegratorType(type):
-    pass
-
-
-class Integrator(metaclass=IntegratorType):
-    pass
-
-
-class FirstOrderIntegrator(Integrator):
-    pass
-
-
-class SecondOrderIntegrator(Integrator):
-    pass
-
-
 @njit(parallel=True)
 def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray):
     """
@@ -34,7 +18,7 @@ def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray)
     Returns:
         the destination (result) array
     """
-    return _np.dot(b1, matrix.T, out=b2)
+    return b1, _np.dot(b1, matrix.T, out=b2)
 
 
 @njit(parallel=True)
@@ -54,7 +38,7 @@ def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray)
             s = 0.0
             for j in range(tensor.shape[1]):
                 for k in range(tensor.shape[2]):
-                    s += tensor[i, j, k] * b1[l, j] * b2[l, k]
+                    s += tensor[i, j, k] * b1[l, j] * b1[l, k]
             b2[l, i] = s
     return b1, b2
 
@@ -86,86 +70,3 @@ def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.n
 @njit
 def matrix_matrix(m1, m2):
     return _np.matmul(m1, m2)
-
-
-def drift_kick_drift():
-    pass
-
-
-def matrix_kick_matrix():
-    pass
-
-
-@njit(parallel=True)
-def drift2(b1: _np.ndarray, b2: _np.ndarray, length: float):
-    for i in _nb.prange(0, b1.shape[0]):
-        b2[i, 0] = length * b1[i, 1]
-
-
-@njit(parallel=True)
-def drift4(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.ndarray):
-    """
-    Performance tests on MBP i9 show that the explicit loop is faster, both at compile-time and at runtime
-    than the nb broadcast variant.
-
-    Args:
-        b1: a numpy array containing all the particles
-        b2: explicit destination for the result
-        kargs: the drift length (in meters)
-
-    Returns:
-        the destination (result) array
-    """
-    for i in _nb.prange(0, b1.shape[0]):
-        b2[i, 0] = b1[i, 0] + kargs[0] * b1[i, 1]
-        b2[i, 1] = b1[i, 1]
-        b2[i, 2] = b1[i, 2] + kargs[0] * b1[i, 3]
-        b2[i, 3] = b1[i, 3]
-    return b2
-
-
-@njit(parallel=True)
-def drift5(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.ndarray):
-    """
-    Performance tests on MBP i9 show that the explicit loop is faster, both at compile-time and at runtime
-    than the nb broadcast variant.
-
-    Args:
-        b1: a numpy array containing all the particles
-        b2: explicit destination for the result
-        kargs: the drift length (in meters)
-
-    Returns:
-        the destination (result) array
-    """
-    for i in _nb.prange(0, b1.shape[0]):
-        b2[i, 0] = b1[i, 0] + kargs[0] * b1[i, 1]
-        b2[i, 1] = b1[i, 1]
-        b2[i, 2] = b1[i, 2] + kargs[0] * b1[i, 3]
-        b2[i, 3] = b1[i, 3]
-        b2[i, 4] = b1[i, 4]
-    return b2
-
-
-@njit(parallel=True)
-def drift6(b1: _np.ndarray, b2: _np.ndarray, kargs: _np.ndarray):
-    """
-    Performance tests on MBP i9 show that the explicit loop is faster, both at compile-time and at runtime
-    than the nb broadcast variant.
-
-    Args:
-        b1: a numpy array containing all the particles
-        b2: explicit destination for the result
-        kargs: the drift length (in meters)
-
-    Returns:
-        the destination (result) array
-    """
-    for i in _nb.prange(0, b1.shape[0]):
-        b2[i, 0] = b1[i, 0] + kargs[0] * b1[i, 1]
-        b2[i, 1] = b1[i, 1]
-        b2[i, 2] = b1[i, 2] + kargs[0] * b1[i, 3]
-        b2[i, 3] = b1[i, 3]
-        b2[i, 4] = b1[i, 4]
-        b2[i, 5] = b1[i, 5]
-    return b2
