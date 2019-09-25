@@ -4,8 +4,6 @@ TODO
 import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
-from ..kernels import batched_vector_matrix, batched_vector_matrix_tensor
-from ..integrators import FirstOrderTaylorMadIntegrator, SecondOrderTaylorMadIntegrator
 
 
 class Marker(_ManzoniElement):
@@ -29,6 +27,12 @@ class Rotation(_ManzoniElement):
         'ANGLE': (0.0 * _ureg.radian, 'Angle of rotation along the s-axis.')
     }
     """Parameters of the element, with their default value and their descriptions."""
+
+    @property
+    def parameters(self) -> list:
+        return [
+            self.ANGLE.m_as('radian')
+        ]
 
 
 class Quadrupole(_ManzoniElement):
