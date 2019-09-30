@@ -24,6 +24,8 @@ def track(beamline: _Input, beam: _np.ndarray, observer: Optional[Observer] = No
         b2 = _np.zeros(b1.shape)
         if observer is not None:
             observer(e, b1, b2)
+        b1 = b2
+        b2 = _np.zeros(b1.shape)
 
 
 def twiss(beamline: _Input, periodic: bool = False):
