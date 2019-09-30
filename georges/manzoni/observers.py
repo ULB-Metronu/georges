@@ -24,7 +24,7 @@ class Observer(metaclass=ObserverType):
 class BeamObserver(Observer):
     def __init__(self):
         super().__init__()
-        self.headers = ('LABEL1', 'BEAM_OUT', 'BEAM_IN')
+        self.headers = ('LABEL1', 'BEAM_IN', 'BEAM_OUT')
 
     def __call__(self, element, b1, b2):
         self.data.append((element.LABEL1, b1, b2))
@@ -37,7 +37,7 @@ class MeanObserver(Observer):
 class SigmaObserver(Observer):
     def __init__(self):
         super().__init__()
-        self.headers = ('LABEL1', 'BEAM_OUT_X', 'BEAM_IN')
+        self.headers = ('LABEL1', 'BEAM_IN_X', 'BEAM_OUT')
 
     def __call__(self, element, b1, b2):
         self.data.append((element.LABEL1, b1[0].std(), b2[0].std()))

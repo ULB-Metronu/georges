@@ -5,7 +5,8 @@ import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
 from ..kernels import batched_vector_matrix, batched_vector_matrix_tensor
-from ..integrators import FirstOrderTaylorMadIntegrator, SecondOrderTaylorMadIntegrator
+from ..integrators import FirstOrderTaylorMadIntegrator, SecondOrderTaylorMadIntegrator, MadIntegrator, \
+    TransportIntegrator
 
 
 class Marker(_ManzoniElement):
@@ -59,9 +60,14 @@ class Bend(_ManzoniElement):
 
     @property
     def parameters(self) -> list:
-        return [
-            self.L.m_as('m'), self.ANGLE.m_as('radian'), self.K1.m_as('m**-2'), self.K2.m_as('m**-3'), 0.9
-        ]
+        if issubclass(self.integrator,  MadIntegrator):
+            return [
+                self.L.m_as('m'), self.ANGLE.m_as('radian'), self.K1.m_as('m**-2'), self.K2.m_as('m**-3'), 0.9
+            ]
+        if issubclass(self.integrator,  TransportIntegrator):
+            return [
+                self.L.m_as('m'), self.ANGLE.m_as('radian'), self.K1.m_as('m**-2'), self.K2.m_as('m**-3'),
+            ]
 
 
 class SBend(Bend):
