@@ -6,7 +6,7 @@ import numba as _nb
 from numba import njit
 
 
-@njit(parallel=True)
+@njit(parallel=True, nogil=True)
 def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray):
     """
 
@@ -21,7 +21,7 @@ def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray)
     return b1, _np.dot(b1, matrix.T, out=b2)
 
 
-@njit(parallel=True)
+@njit(parallel=True, nogil=True)
 def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray):
     """
 
@@ -43,7 +43,7 @@ def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray)
     return b1, b2
 
 
-@njit(parallel=True)
+@njit(parallel=True, nogil=True)
 def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray, tensor: _np.ndarray):
     """
 

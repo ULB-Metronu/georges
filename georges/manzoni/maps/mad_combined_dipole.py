@@ -3,7 +3,7 @@ import numpy as np
 from numpy import cos, sin, cosh, sinh, sqrt
 
 
-@njit
+@njit(cache=True)
 def compute_mad_combined_dipole_matrix(L: float, alpha: float, K1: float, K2: float, beta: float) -> np.ndarray:
     gamma = 1 / sqrt(1 - beta ** 2)
     h = alpha / L

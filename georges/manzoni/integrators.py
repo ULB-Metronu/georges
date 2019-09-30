@@ -4,6 +4,7 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_quadrupole_tensor
 from .kernels import batched_vector_matrix, batched_vector_matrix_tensor
 
+
 class IntegratorType(type):
     pass
 
