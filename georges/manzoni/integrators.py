@@ -5,7 +5,11 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_transport_combined_dipole_matrix, \
     compute_transport_combined_dipole_tensor, \
     compute_transport_quadrupole_matrix, \
-    compute_transport_quadrupole_tensor
+    compute_transport_quadrupole_tensor, \
+    compute_transport_multipole_matrix, \
+    compute_transport_multipole_tensor, \
+    compute_transport_sextupole_matrix, \
+    compute_transport_sextupole_tensor
 from .kernels import batched_vector_matrix, batched_vector_matrix_tensor
 
 
@@ -68,6 +72,8 @@ class FirstOrderTransportIntegrator(TransportIntegrator):
     MATRICES = {
         'BEND': compute_transport_combined_dipole_matrix,
         'QUADRUPOLE': compute_transport_quadrupole_matrix,
+        'SEXTUPOLE': compute_transport_sextupole_matrix,
+        'MULTIPOLE': compute_transport_multipole_matrix,
     }
 
     @classmethod
@@ -85,6 +91,8 @@ class SecondOrderTransportIntegrator(FirstOrderTransportIntegrator):
     TENSORS = {
         'BEND': compute_transport_combined_dipole_tensor,
         'QUADRUPOLE': compute_transport_quadrupole_tensor,
+        'SEXTUPOLE': compute_transport_sextupole_tensor,
+        'MULTIPOLE': compute_transport_multipole_tensor,
     }
 
     @classmethod

@@ -5,6 +5,8 @@ from .elements import Marker, \
     RBend, \
     SBend, \
     Quadrupole, \
+    Multipole, \
+    Sextupole, \
     Rotation, \
     CircularCollimator, \
     RectangularCollimator
