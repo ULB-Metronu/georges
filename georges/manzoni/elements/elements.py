@@ -9,7 +9,10 @@ import numpy as _np
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
 from ..integrators import IntegratorType, SecondOrderTaylorMadIntegrator
-from ..apertures import circular_aperture_check
+from ..apertures import circular_aperture_check, \
+    rectangular_aperture_check, \
+    elliptical_aperture_check, \
+    phase_space_aperture_check
 from georges_core.patchable import Patchable as _Patchable
 
 
@@ -412,6 +415,27 @@ class ManzoniElement(Element, _Patchable):
                 circular_aperture_check,
                 _np.array([
                     self.APERTURE[0]
+                ])
+            )
+        elif self.APERTYPE == 'RECTANGULAR':
+            return (
+                rectangular_aperture_check,
+                _np.array([
+                    self.APERTURE[0], self.APERTURE[1]
+                ])
+            )
+        elif self.APERTYPE == 'ELLIPTICAL':
+            return (
+                elliptical_aperture_check,
+                _np.array([
+                    self.APERTURE[0], self.APERTURE[1]
+                ])
+            )
+        elif self.APERTYPE == 'PHASE':
+            return (
+                phase_space_aperture_check,
+                _np.array([
+                    self.APERTURE[0], self.APERTURE[1], self.APERTURE[2], self.APERTURE[3]
                 ])
             )
         else:

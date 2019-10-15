@@ -1,24 +1,29 @@
 """
 TODO
 """
-from ... import ureg as _ureg
-from .elements import ManzoniElement as _ManzoniElement
-from ..apertures import circular_aperture_check, rectangular_aperture_check
+from .magnets import Drift as _Drift
 
 
-class Collimator(_ManzoniElement):
+class Collimator(_Drift):
     PARAMETERS = {
-        'APERTYPE:': ('', 'Aperture type'),
+        'APERTYPE': (None, 'Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)'),
+        'APERTURE': ([], ''),
     }
 
 
 class CircularCollimator(Collimator):
     PARAMETERS = {
-        'APERTYPE': ('', 'Aperture type'),
+        'APERTYPE': ('CIRCULAR', 'Aperture type'),
+    }
+
+
+class EllipticalCollimator(Collimator):
+    PARAMETERS = {
+        'APERTYPE': ('ELLIPTICAL', 'Aperture type'),
     }
 
 
 class RectangularCollimator(Collimator):
     PARAMETERS = {
-        'APERTYPE': ('', 'Aperture type'),
+        'APERTYPE': ('RECTANGULAR', 'Aperture type'),
     }

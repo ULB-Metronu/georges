@@ -11,9 +11,9 @@ class Marker(_ManzoniElement):
     """
     TODO
     """
-    def propagate(self, beam: _np.ndarray, out: _np.ndarray = None):
-        _np.copyto(out, beam, casting='no')
-        return out
+    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None):
+        _np.copyto(dst=beam_out, src=beam_in, casting='no')
+        return beam_in, beam_out
 
 
 class Drift(_ManzoniElement):
@@ -25,7 +25,11 @@ class Drift(_ManzoniElement):
         self._integrator = None
 
     def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None):
-        return _drift6(beam_in, beam_out, *self.parameters)
+        if self.L.magnitude == 0:
+            _np.copyto(dst=beam_out, src=beam_in, casting='no')
+            return beam_in, beam_out
+        else:
+            return _drift6(beam_in, beam_out, *self.parameters)
 
     @property
     def parameters(self) -> list:
@@ -51,6 +55,7 @@ class Magnet(_ManzoniElement):
     PARAMETERS = {
         'APERTYPE': (None, 'Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)'),
         'APERTURE': ([], ''),
+        'KINEMATICS': (None, 'Reference kinematics')
     }
 
 
@@ -83,7 +88,11 @@ class Bend(Magnet):
     @property
     def parameters(self) -> list:
         return [
-            self.L.m_as('m'), self.ANGLE.m_as('radian'), self.K1.m_as('m**-2'), self.K2.m_as('m**-3'), 0.9
+            self.L.m_as('m'),
+            self.ANGLE.m_as('radian'),
+            self.K1.m_as('m**-2'),
+            self.K2.m_as('m**-3'),
+            self.KINEMATICS.beta or 1.0
         ]
 
 
