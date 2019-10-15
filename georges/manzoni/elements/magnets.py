@@ -4,6 +4,7 @@ TODO
 import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
+from ..maps import drift6 as _drift6
 
 
 class Marker(_ManzoniElement):
@@ -11,7 +12,7 @@ class Marker(_ManzoniElement):
     TODO
     """
     def propagate(self, beam: _np.ndarray, out: _np.ndarray = None):
-        _np.copyto(out, beam, 'no')
+        _np.copyto(out, beam, casting='no')
         return out
 
 
@@ -20,6 +21,17 @@ class Drift(_ManzoniElement):
         'L': (0.0 * _ureg.m, 'Drift length.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
+    def post_init(self, **kwargs):
+        self._integrator = None
+
+    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None):
+        return _drift6(beam_in, beam_out, *self.parameters)
+
+    @property
+    def parameters(self) -> list:
+        return [
+            self.L.m_as('meter')
+        ]
 
 
 class Rotation(_ManzoniElement):
@@ -35,7 +47,14 @@ class Rotation(_ManzoniElement):
         ]
 
 
-class Quadrupole(_ManzoniElement):
+class Magnet(_ManzoniElement):
+    PARAMETERS = {
+        'APERTYPE': (None, 'Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)'),
+        'APERTURE': ([], ''),
+    }
+
+
+class Quadrupole(Magnet):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Quadrupole length.'),
         'K1': (0.0 * _ureg.m**-2, 'Normalized gradient.'),
@@ -50,7 +69,7 @@ class Quadrupole(_ManzoniElement):
         ]
 
 
-class Bend(_ManzoniElement):
+class Bend(Magnet):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Bending angle.'),
         'K1': (0.0 * _ureg.m**-2, 'Quadrupolar normalized gradient.'),
@@ -76,7 +95,7 @@ class RBend(Bend):
     pass
 
 
-class Solenoid(_ManzoniElement):
+class Solenoid(Magnet):
     pass
 
 

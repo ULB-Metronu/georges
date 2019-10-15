@@ -9,6 +9,7 @@ import numpy as _np
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
 from ..integrators import IntegratorType, SecondOrderTaylorMadIntegrator
+from ..apertures import circular_aperture_check
 from georges_core.patchable import Patchable as _Patchable
 
 
@@ -300,7 +301,12 @@ class Element(metaclass=ElementType):
 
 class ManzoniElement(Element, _Patchable):
 
-    def __init__(self, label1: str = '', integrator: IntegratorType = SecondOrderTaylorMadIntegrator, *params, **kwargs):
+    def __init__(self,
+                 label1: str = '',
+                 integrator: IntegratorType = SecondOrderTaylorMadIntegrator,
+                 *params,
+                 **kwargs
+                 ):
         """
 
         Args:
@@ -312,10 +318,12 @@ class ManzoniElement(Element, _Patchable):
         super().__init__(label1, *params, **kwargs)
         self._integrator = integrator
         self._cache: Optional[Any] = None
-        self._aperture: Optional[Callable] = None
         self._frozen: bool = False
 
-    def propagate(self, beam: _np.ndarray, out: Optional[_np.ndarray] = None) -> Tuple[_np.ndarray, _np.ndarray]:
+    def propagate(self,
+                  beam: _np.ndarray,
+                  out: Optional[_np.ndarray] = None
+                  ) -> Tuple[_np.ndarray, _np.ndarray]:
         """
 
         Args:
@@ -327,7 +335,10 @@ class ManzoniElement(Element, _Patchable):
         """
         return self.integrator.propagate(self, beam, out)
 
-    def aperture(self, beam: _np.ndarray, out: _np.ndarray):
+    def check_aperture(self,
+                       beam: _np.ndarray,
+                       out: _np.ndarray
+                       ):
         """
 
         Args:
@@ -337,9 +348,10 @@ class ManzoniElement(Element, _Patchable):
         Returns:
 
         """
-        if self._aperture is not None:
+        if self.APERTYPE is not None:
+            aperture_check, aperture_parameters = self.aperture
             out = _np.compress(
-                self._aperture_check(beam),
+                aperture_check(beam, aperture_parameters),
                 beam,
                 axis=0,
             )
@@ -351,7 +363,7 @@ class ManzoniElement(Element, _Patchable):
         Returns:
 
         """
-        self.cache
+        self.cache  # Call it!
         self._frozen = True
 
     def unfreeze(self):
@@ -392,6 +404,18 @@ class ManzoniElement(Element, _Patchable):
     @property
     def parameters(self) -> list:
         return []
+
+    @property
+    def aperture(self) -> Optional[Tuple[Callable, _np.ndarray]]:
+        if self.APERTYPE == 'CIRCULAR':
+            return (
+                circular_aperture_check,
+                _np.array([
+                    self.APERTURE[0]
+                ])
+            )
+        else:
+            return None
 
     @property
     def cache(self) -> list:

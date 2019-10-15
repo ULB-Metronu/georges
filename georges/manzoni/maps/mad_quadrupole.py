@@ -33,14 +33,14 @@ def compute_mad_quadrupole_matrix(L: float, K1: float, beta: float) -> np.ndarra
         sy = sin(sqrt(-K1) * L) / sqrt(-K1)
 
     # Definition of the matrix elements
-    R[0, 0] = cos(sqrt(K1) * L)
-    R[0, 1] = sin(sqrt(K1) * L) / sqrt(K1)
-    R[1, 0] = -(sqrt(K1) * sin(sqrt(K1) * L))
-    R[1, 1] = cos(sqrt(K1) * L)
-    R[2, 2] = cos(sqrt(-K1) * L)
-    R[2, 3] = sin(sqrt(-K1) * L) / sqrt(-K1)
-    R[3, 2] = (K1 * sin(sqrt(-K1) * L)) / sqrt(-K1)
-    R[3, 3] = cos(sqrt(-K1) * L)
+    R[0, 0] = cx
+    R[0, 1] = sx
+    R[1, 0] = -sqrt(K1) * sx
+    R[1, 1] = cx
+    R[2, 2] = cy
+    R[2, 3] = sy
+    R[3, 2] = -sqrt(K1) * sy
+    R[3, 3] = cy
     R[4, 4] = 1
     R[5, 5] = 1
 
