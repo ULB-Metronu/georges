@@ -70,7 +70,7 @@ class Quadrupole(Magnet):
     @property
     def parameters(self) -> list:
         return [
-            self.L.m_as('m'), self.K1.m_as('m**-2'), 0.9
+            self.L.m_as('m'), self.K1.m_as('m**-2'), 0.59581
         ]
 
 

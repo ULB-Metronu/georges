@@ -77,18 +77,26 @@ class SigmaObserver(Observer):
                         'BEAM_OUT_DPP',
                         )
 
+    def cut(self, b, radius):
+        beam = _pd.DataFrame(data=b, columns=['X', 'PX', 'Y', 'PY', 'T', 'DPP'])
+        idx = beam.query(f"""(X**2 + Y**2) >= {radius ** 2}""").index
+        beam = beam.drop(idx)
+        return beam.values
+
     def __call__(self, element, b1, b2):
+        b1 = self.cut(b1, 0.02975)
+        b2 = self.cut(b2, 0.02975)
         self.data.append((element.LABEL1,
-                          b1[0].std(),
-                          b2[0].std(),
-                          b1[2].std(),
-                          b2[2].std(),
-                          b1[1].std(),
-                          b2[1].std(),
-                          b1[3].std(),
-                          b2[3].std(),
-                          b1[4].std(),
-                          b2[4].std(),
+                          b1[:, 0].std(),
+                          b2[:, 0].std(),
+                          b1[:, 2].std(),
+                          b2[:, 2].std(),
+                          b1[:, 1].std(),
+                          b2[:, 1].std(),
+                          b1[:, 3].std(),
+                          b2[:, 3].std(),
+                          b1[:, 4].std(),
+                          b2[:, 4].std(),
                           ))
 
 
