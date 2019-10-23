@@ -1,6 +1,13 @@
 georges-core
 cpymad
+matplotlib
+mypy
 numba
 numpy
 pandas
 pint
+plotly
+pyarrow
+pyyaml
+scipy
+uproot
