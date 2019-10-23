@@ -1,5 +1,9 @@
+import logging
 import os
-import uproot as _uproot
+try:
+    import uproot as _uproot
+except (ImportError, ImportWarning):
+    logging.error("Uproot is required for this module to work.")
 import pandas as _pd
 
 
@@ -9,28 +13,52 @@ class OutputType(type):
 
 class Output(metaclass=OutputType):
     def __init__(self, filename: str = 'output.root', path: str = '.'):
+        """
+
+        Args:
+            filename:
+            path:
+        """
         self._file = _uproot.open(os.path.join(path, filename))
 
 
 class BDSimOutput(Output):
     def __init__(self, filename: str = 'output.root', path: str = '.'):
+        """
+
+        Args:
+            filename:
+            path:
+        """
         super().__init__(filename, path)
 
     @property
     def model(self):
+        """"""
         return BDSimOutput.Model(self._file['Model'])
 
     @property
     def event(self):
+        """"""
         return BDSimOutput.Event(self._file['Event'])
 
     class _Branch:
         def __init__(self, branch):
+            """
+
+            Args:
+                branch:
+            """
             self._branch = branch
 
     class Model(_Branch):
 
         def extract_geometry(self) -> _pd.DataFrame:
+            """
+
+            Returns:
+
+            """
             model_geometry_df = _pd.DataFrame(
                 columns=['Name', 'Type', 'Material', 'Length', 'Start_s', 'Mid_s', 'End_s', 'Start_x', 'Start_y',
                          'Start_z', 'Mid_x', 'Mid_y', 'Mid_z', 'End_x', 'End_y', 'End_z']
