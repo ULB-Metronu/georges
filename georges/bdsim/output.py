@@ -59,51 +59,33 @@ class BDSimOutput(Output):
             Returns:
 
             """
-            model_geometry_df = _pd.DataFrame(
-                columns=['Name', 'Type', 'Material', 'Length', 'Start_s', 'Mid_s', 'End_s', 'Start_x', 'Start_y',
-                         'Start_z', 'Mid_x', 'Mid_y', 'Mid_z', 'End_x', 'End_y', 'End_z']
-            )
+            model_geometry_df = _pd.DataFrame()
 
-            # Branch Names corresponding to string elements
-            Branches_dico_type0 = {'Model.componentName': 'Name', 'Model.componentType': 'Type',
-                                   'Model.material': 'Material'}
+            # Names and strings
+            for branch, name in {'Model.componentName': 'NAME',
+                                 'Model.componentType': 'TYPE',
+                                 'Model.material': 'MATERIAL'}.items():
+                data = [_.decode('utf-8') for _ in self._branch.array(branch=[branch])[0]]
+                model_geometry_df[name] = data
 
-            # Branch Names corresponding to general float values
-            Branches_dico_type1 = {'Model.length': 'Length', 'Model.staS': 'Start_s', 'Model.midS': 'Mid_s',
-                                   'Model.endS': 'End_s'}
+            # Scalar
+            for branch, name in {'Model.length': 'LENGTH',
+                                 'Model.staS': 'AT_ENTRY',
+                                 'Model.midS': 'AT_CENTER',
+                                 'Model.endS': 'AT_EXIT'}.items():
+                model_geometry_df[name] = self._branch.array(branch=[branch])[0]
 
-            # Branch Names corresponding to 3D position float values
-            Branches_dico_type2 = {'Model.staPos': 'Start_', 'Model.midPos': 'Mid_', 'Model.endPos': 'End_'}
+            # Vectors
+            geometry_branches = {'Model.staPos': 'ENTRY_',
+                                 'Model.midPos': 'CENTER_',
+                                 'Model.endPos': 'EXIT_'}
+            data = self._branch.pandas.df(branches=geometry_branches.keys(), flatten=True)
+            for branch, name in geometry_branches.items():
+                data.rename({f"{branch}.fX": f"{name}X", f"{branch}.fY": f"{name}Y", f"{branch}.fZ": f"{name}Z"},
+                            axis='columns', inplace=True)
 
-            # Filling of the BDSIM geometry model DataFrame for the different types of information
-
-            for branch in Branches_dico_type0.keys():
-                df = self._branch.pandas.df(branches=[branch])
-                branch_list = df[branch][0]
-                branch_list = [x.decode('utf-8') for x in branch_list]
-
-                model_geometry_df[Branches_dico_type0[branch]] = branch_list
-
-            for branch in Branches_dico_type1.keys():
-                df = self._branch.pandas.df(branches=[branch])
-                branch_list = df[branch][0].tolist()
-
-                model_geometry_df[Branches_dico_type1[branch]] = branch_list
-
-            for branch in Branches_dico_type2.keys():
-                df = self._branch.pandas.df(branches=[branch])
-
-                # X position
-                branch_list = df[branch + '.fX'][0].tolist()
-                model_geometry_df[Branches_dico_type2[branch] + 'x'] = branch_list
-
-                # Y position
-                branch_list = df[branch + '.fY'][0].tolist()
-                model_geometry_df[Branches_dico_type2[branch] + 'y'] = branch_list
-
-                # Z position
-                branch_list = df[branch + '.fZ'][0].tolist()
-                model_geometry_df[Branches_dico_type2[branch] + 'z'] = branch_list
+            # Concatenate
+            return _pd.concat([model_geometry_df, data.loc[0]], axis='columns', sort=False).set_index('NAME')
 
     class Event(_Branch):
         pass
