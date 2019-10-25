@@ -1,6 +1,7 @@
 """
 TODO
 """
+from typing import Tuple
 import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
@@ -20,21 +21,23 @@ class Drift(_ManzoniElement):
         'L': (0.0 * _ureg.m, 'Drift length.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
-    def post_init(self, **kwargs):
-        self._integrator = None
 
-    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None, parameters: list = None):
+    def propagate(self,
+                  beam_in: _np.ndarray,
+                  beam_out: _np.ndarray = None,
+                  global_parameters: list = None,
+                  ) -> Tuple[_np.ndarray, _np.ndarray]:
         if self.L.magnitude == 0:
             _np.copyto(dst=beam_out, src=beam_in, casting='no')
             return beam_in, beam_out
         else:
-            super().propagate(beam_in, beam_out, parameters)
+            return self.integrator.propagate(self, beam_in, beam_out, global_parameters)
 
     @property
     def parameters(self) -> list:
-        return [
-            float(self.L.m_as('meter')),
-        ]
+        return list(map(float, [
+            self.L.m_as('meter'),
+        ]))
 
 
 class Rotation(_ManzoniElement):

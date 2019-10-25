@@ -42,7 +42,9 @@ class MadXIntegrator(Integrator):
 
     @classmethod
     def propagate(cls, element, beam_in: _np.ndarray, beam_out: _np.ndarray, global_parameters: list):
-        return cls.METHODS.get(element.__class__.__name__.upper())(beam_in, beam_out, element.cache, global_parameters)
+        return cls.METHODS.get(element.__class__.__name__.upper())(
+            beam_in, beam_out, element.cache, global_parameters
+        )
 
     @classmethod
     def cache(cls, element) -> list:

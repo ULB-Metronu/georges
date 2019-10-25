@@ -8,7 +8,7 @@ import uuid
 import numpy as _np
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
-from ..integrators import IntegratorType, Mad8SecondOrderTaylorIntegrator
+from ..integrators import IntegratorType, MadXIntegrator
 from ..apertures import circular_aperture_check, \
     rectangular_aperture_check, \
     elliptical_aperture_check, \
@@ -41,7 +41,7 @@ class ElementType(type):
         if '__init__' not in dct:
             def default_init(self,
                              label1: str = '',
-                             integrator: IntegratorType = Mad8SecondOrderTaylorIntegrator,
+                             integrator: IntegratorType = MadXIntegrator,
                              *params, **kwargs):
                 """Default initializer for all Commands."""
                 defaults = {}
@@ -306,7 +306,7 @@ class ManzoniElement(Element, _Patchable):
 
     def __init__(self,
                  label1: str = '',
-                 integrator: IntegratorType = Mad8SecondOrderTaylorIntegrator,
+                 integrator: IntegratorType = MadXIntegrator,
                  *params,
                  **kwargs
                  ):
@@ -338,6 +338,7 @@ class ManzoniElement(Element, _Patchable):
         Returns:
 
         """
+
         return self.integrator.propagate(self, beam, out, global_parameters)
 
     def check_aperture(self,
@@ -413,8 +414,8 @@ class ManzoniElement(Element, _Patchable):
         self._integrator = integrator
 
     @property
-    def parameters(self) -> dict:
-        return {}
+    def parameters(self) -> list:
+        return []
 
     @property
     def aperture(self) -> Optional[Tuple[Callable, _np.ndarray]]:
