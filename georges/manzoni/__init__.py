@@ -1,4 +1,5 @@
 from .input import Input
+from .beam import Beam
 from .elements import Marker, \
     Drift, \
     Bend, \

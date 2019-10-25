@@ -4,14 +4,13 @@ TODO
 import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
-from ..maps import drift6 as _drift6
 
 
 class Marker(_ManzoniElement):
     """
     TODO
     """
-    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None):
+    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None, parameters: list = None):
         _np.copyto(dst=beam_out, src=beam_in, casting='no')
         return beam_in, beam_out
 
@@ -24,17 +23,17 @@ class Drift(_ManzoniElement):
     def post_init(self, **kwargs):
         self._integrator = None
 
-    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None):
+    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None, parameters: list = None):
         if self.L.magnitude == 0:
             _np.copyto(dst=beam_out, src=beam_in, casting='no')
             return beam_in, beam_out
         else:
-            return _drift6(beam_in, beam_out, *self.parameters)
+            super().propagate(beam_in, beam_out, parameters)
 
     @property
     def parameters(self) -> list:
         return [
-            self.L.m_as('meter')
+            float(self.L.m_as('meter')),
         ]
 
 
@@ -46,9 +45,9 @@ class Rotation(_ManzoniElement):
 
     @property
     def parameters(self) -> list:
-        return [
-            self.ANGLE.m_as('radian')
-        ]
+        return list(map(float, [
+            self.ANGLE.m_as('radian'),
+        ]))
 
 
 class Magnet(_ManzoniElement):
@@ -69,9 +68,10 @@ class Quadrupole(Magnet):
 
     @property
     def parameters(self) -> list:
-        return [
-            self.L.m_as('m'), self.K1.m_as('m**-2'), 0.9
-        ]
+        return list(map(float, [
+            self.L.m_as('m'),
+            self.K1.m_as('m**-2'),
+        ]))
 
 
 class Bend(Magnet):
@@ -87,13 +87,13 @@ class Bend(Magnet):
 
     @property
     def parameters(self) -> list:
-        return [
+        return list(map(float, [
             self.L.m_as('m'),
             self.ANGLE.m_as('radian'),
             self.K1.m_as('m**-2'),
             self.K2.m_as('m**-3'),
             self.KINEMATICS.beta or 1.0
-        ]
+        ]))
 
 
 class SBend(Bend):

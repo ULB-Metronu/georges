@@ -11,3 +11,13 @@ class Input:
     @property
     def sequence(self):
         return self._sequence
+
+    def freeze(self):
+        for e in self._sequence:
+            e.freeze()
+        return self
+
+    def unfreeze(self):
+        for e in self._sequence:
+            e.unfreeze()
+        return self
