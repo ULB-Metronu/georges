@@ -63,14 +63,16 @@ class Mad8FirstOrderTaylorIntegrator(Mad8Integrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out):
-        return batched_vector_matrix(beam_in, beam_out, *element.cache)
+    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+        return batched_vector_matrix(
+            beam_in,
+            beam_out,
+            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+        )
 
     @classmethod
     def cache(cls, element) -> List:
-        return [
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.parameters)
-        ]
+        return element.parameters
 
 
 class Mad8SecondOrderTaylorIntegrator(Mad8FirstOrderTaylorIntegrator):
@@ -81,15 +83,17 @@ class Mad8SecondOrderTaylorIntegrator(Mad8FirstOrderTaylorIntegrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out):
-        return batched_vector_matrix_tensor(beam_in, beam_out, *element.cache)
+    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+        return batched_vector_matrix_tensor(
+            beam_in,
+            beam_out,
+            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters),
+            cls.TENSORS.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+        )
 
     @classmethod
     def cache(cls, element) -> List:
-        return [
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.parameters),
-            cls.TENSORS.get(element.__class__.__name__.upper())(*element.parameters)
-        ]
+        return element.parameters
 
 
 class TransportIntegrator(Integrator):

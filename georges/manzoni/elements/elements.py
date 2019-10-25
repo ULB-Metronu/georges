@@ -450,6 +450,9 @@ class ManzoniElement(Element, _Patchable):
         else:
             return None
 
+    def clear_cache(self):
+        self._cache = None
+
     @property
     def cache(self) -> list:
         if self._cache is None:
