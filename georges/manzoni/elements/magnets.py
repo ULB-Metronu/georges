@@ -65,7 +65,8 @@ class Quadrupole(Magnet):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Quadrupole length.'),
         'K1': (0.0 * _ureg.m**-2, 'Normalized gradient.'),
-        'K1L': (0.0 * _ureg.m**-1, 'Normalized integrated gradient.'),
+        'K1S': (0.0 * _ureg.m**-1, 'Normalized skew gradient.'),
+        'TILT': (0.0 * _ureg.radian, 'Magnet tilt.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
@@ -74,6 +75,8 @@ class Quadrupole(Magnet):
         return list(map(float, [
             self.L.m_as('m'),
             self.K1.m_as('m**-2'),
+            self.K1S.m_as('m**-2'),
+            self.TILT.m_as('radian'),
         ]))
 
 

@@ -1,4 +1,4 @@
-from numpy import sin, cos, sinh, cosh, sqrt
+from numpy import sin, cos, sinh, cosh, sqrt, atan2
 from numba import njit, prange
 
 
@@ -55,6 +55,17 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
     """
     length = element_parameters[0]
     k1 = element_parameters[1]
+    k1s = element_parameters[2]
+    tilt = element_parameters[3]
+
+    if k1s != 0.0 or tilt != 0.0:
+        tilt += -atan2(k1s, k1) / 2
+        k1 = sqrt(k1**2 + k1s**2)
+
+    if tilt != 0.0:
+        st = sin(tilt)
+        ct = cos(tilt)
+
     if k1 == 0:
         return track_madx_drift(b1, b2, element_parameters, global_parameters)
 
@@ -64,6 +75,14 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
         xp = b1[i, 1] / delta_plus_1  #
         y = b1[i, 2]
         yp = b1[i, 3] / delta_plus_1
+
+        if tilt != 0.0:
+            tmp = x
+            x = ct * x + st * y
+            y = ct * y - st * tmp
+            tmp = px
+            px = ct * px + st * py
+            py = ct * py - st * tmp
 
         k1_ = k1 / delta_plus_1  # This is the key point to remember
         if k1_ > 0:
@@ -83,6 +102,14 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
         xp_ = (-(sqrt(k1_) * sx) * x + cx * xp) * delta_plus_1
         y_ = cy * y + sy * yp
         yp_ = (sqrt(k1_) * sy * y + cy * yp) * delta_plus_1
+
+        if tilt != 0.0:
+            tmp = x_
+            x_ = ct * x_ - st * y_
+            y_ = ct * y_ + st * tmp
+            tmp = px_
+            px_ = ct * px_ - st * py_
+            py_ = ct * py_ + st * tmp
 
         b2[i, 0] = x_
         b2[i, 1] = xp_
