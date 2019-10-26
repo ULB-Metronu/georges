@@ -65,8 +65,8 @@ class Quadrupole(Magnet):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Quadrupole length.'),
         'K1': (0.0 * _ureg.m**-2, 'Normalized gradient.'),
-        'K1S': (0.0 * _ureg.m**-1, 'Normalized skew gradient.'),
-        'TILT': (0.0 * _ureg.radian, 'Magnet tilt.'),
+        'K1S': (0.0 * _ureg.m**-2, 'Normalized skew gradient.'),
+        'TILT': (0.0 * _ureg.radian, 'Magnet tilt angle.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
@@ -88,6 +88,7 @@ class Bend(Magnet):
         'L': (0.0 * _ureg.m, 'Magnet length.'),
         'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
         'E2': (0.0 * _ureg.radian, 'Exirt face angle.'),
+        'TILT': (0.0 * _ureg.radian, 'Magnet tilt angle.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
@@ -98,7 +99,9 @@ class Bend(Magnet):
             self.ANGLE.m_as('radian'),
             self.K1.m_as('m**-2'),
             self.K2.m_as('m**-3'),
-            self.KINEMATICS.beta or 1.0
+            self.TILT.m_as('radian'),
+            self.E1.m_as('radian'),
+            self.E2.m_as('radian'),
         ]))
 
 

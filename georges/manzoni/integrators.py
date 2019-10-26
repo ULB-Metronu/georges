@@ -5,7 +5,8 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_quadrupole_matrix, \
     compute_mad_quadrupole_tensor, \
     track_madx_quadrupole, \
-    track_madx_drift
+    track_madx_drift, \
+    track_madx_bend
 from .kernels import batched_vector_matrix, batched_vector_matrix_tensor
 
 __ALL__ = [
@@ -35,7 +36,7 @@ class Integrator(metaclass=IntegratorType):
 class MadXIntegrator(Integrator):
     METHODS = {
         'BEND': None,
-        'SBEND': None,
+        'SBEND': track_madx_bend,
         'DRIFT': track_madx_drift,
         'QUADRUPOLE': track_madx_quadrupole,
     }
