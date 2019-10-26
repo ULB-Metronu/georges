@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 import cpymad.madx
 from georges import ureg as _
@@ -6,52 +7,461 @@ from georges_core import Kinematics
 from georges.manzoni.integrators import MadXIntegrator
 
 
-def test_sbend():
-    k = Kinematics(230 * _.MeV)
+def get_madx_tracking_data_drift(x: float,
+                                 px: float,
+                                 y: float,
+                                 py: float,
+                                 pt: float,
+                                 beta: float,
+                                 length: float,
+                                 ) -> np.ndarray:
+    m = cpymad.madx.Madx(stdout=False)
+    m.input(f"""
+        BEAM, PARTICLE=PROTON, BETA={beta};
+
+        SEQ: SEQUENCE, REFER=ENTRY, L={length};
+          D1: DRIFT, AT=0.0, L={length};
+          M1: MARKER, AT={length};
+        ENDSEQUENCE;
+
+        USE, SEQUENCE=SEQ;
+        """)
+    m.command.track(DELTAP=0.0, ONEPASS=True, ONETABLE=True, QUANTUM=False)
+    m.command.start(x=x, px=px, y=y, py=py, t=0.0, pt=pt)
+    m.command.observe(place='M1')
+    m.command.run(turns=1)
+    return m.table.trackone.dframe().loc['m1'][['x', 'px', 'y', 'py', 'pt']].values[0:4]
+
+
+def get_madx_tracking_data_quadrupole(x: float,
+                                      px: float,
+                                      y: float,
+                                      py: float,
+                                      pt: float,
+                                      beta: float,
+                                      length: float,
+                                      k1: float,
+                                      k1s: float,
+                                      tilt: float,
+                                      ) -> np.ndarray:
+    m = cpymad.madx.Madx(stdout=False)
+    m.input(f"""
+        BEAM, PARTICLE=PROTON, BETA={beta};
+
+        SEQ: SEQUENCE, REFER=ENTRY, L={length};
+          Q1: QUADRUPOLE, AT=0.0, L={length}, K1={k1}, K1S={k1s}, TILT={tilt};
+          M1: MARKER, AT={length};
+        ENDSEQUENCE;
+
+        USE, SEQUENCE=SEQ;
+        """)
+    m.command.track(DELTAP=0.0, ONEPASS=True, ONETABLE=True, QUANTUM=False)
+    m.command.start(x=x, px=px, y=y, py=py, t=0.0, pt=pt)
+    m.command.observe(place='M1')
+    m.command.run(turns=1)
+    m.command.endtrack()
+    return m.table.trackone.dframe().loc['m1'][['x', 'px', 'y', 'py', 'pt']].values[0:4]
+
+
+def get_madx_tracking_data_sbend(x: float,
+                                 px: float,
+                                 y: float,
+                                 py: float,
+                                 pt: float,
+                                 beta: float,
+                                 length: float,
+                                 angle: float,
+                                 k1: float,
+                                 e1: float = 0.0,
+                                 e2: float = 0.0,
+                                 hgap: float = 0.0,
+                                 fint: float = 0.0,
+                                 fintx: float = 0.0,
+                                 ) -> np.ndarray:
+    m = cpymad.madx.Madx(stdout=False)
+    m.input(f"""
+    BEAM, PARTICLE=PROTON, BETA={beta};
+
+    SEQ: SEQUENCE, REFER=ENTRY, L={length};
+      B1: SBEND, AT=0.0, THICK=true, L={length}, ANGLE={angle}, K1={k1}, E1={e1}, E2={e2}, HGAP={hgap}, FINT={fint}, FINTX={fintx};
+      M1: MARKER, AT={length};
+    ENDSEQUENCE;
+
+    USE, SEQUENCE=SEQ;
+        """)
+    m.command.track(DELTAP=0.0, ONEPASS=True, ONETABLE=True, QUANTUM=False)
+    m.command.start(x=x, px=px, y=y, py=py, t=0.0, pt=pt)
+    m.command.observe(place='M1')
+    m.command.run(turns=1)
+    m.command.endtrack()
+    return m.table.trackone.dframe().loc['m1'][['x', 'px', 'y', 'py', 'pt']].values[0:4]
+
+
+def get_madx_tracking_data_dipedge(x: float,
+                                   px: float,
+                                   y: float,
+                                   py: float,
+                                   pt: float,
+                                   beta: float,
+                                   h: float,
+                                   e1: float,
+                                   hgap: float,
+                                   fint: float,
+                                   ) -> np.ndarray:
+    m = cpymad.madx.Madx(stdout=False)
+    m.input(f"""
+    BEAM, PARTICLE=PROTON, BETA={beta};
+
+    SEQ: SEQUENCE, REFER=ENTRY, L=1.0;
+      D1: DRIFT, AT=0.0, L=0.5;
+      DE1: DIPEDGE, AT=0.5, H={h}, E1={e1}, HGAP={hgap}, FINT={fint};
+      D2: DRIFT, AT=0.5, L=0.5;
+      M1: MARKER, AT={1.0};
+    ENDSEQUENCE;
+
+    USE, SEQUENCE=SEQ;
+        """)
+    m.command.track(DELTAP=0.0, ONEPASS=True, ONETABLE=True, QUANTUM=False)
+    m.command.start(x=x, px=px, y=y, py=py, t=0.0, pt=pt)
+    m.command.observe(place='M1')
+    m.command.run(turns=1)
+    m.command.endtrack()
+    return m.table.trackone.dframe().loc['m1'][['x', 'px', 'y', 'py', 'pt']].values[0:4]
+
+
+@pytest.mark.parametrize("x, px, y, py, pt, beta, length", [
+    (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0),
+    (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 10.0),
+    (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 100.0),
+    (0.1, 0.0, 0.0, 0.0, 0.0, 0.9, 1.0),
+    (0.1, 0.0, 0.0, 0.0, 0.0, 0.9, 10.0),
+    (0.1, 0.0, 0.0, 0.0, 0.0, 0.9, 100.0),
+    (1.0, 0.0, 0.0, 0.0, 0.0, 0.5, 100.0),
+    (0.0, 0.1, 0.0, 0.0, 0.0, 0.5, 100.0),
+    (0.0, 0.0, 1.0, 0.0, 0.0, 0.5, 100.0),
+    (0.0, 0.0, 0.0, 0.1, 0.0, 0.5, 100.0),
+    (0.0, 0.0, 0.0, 0.0, 1.0, 0.5, 100.0),
+    (1.0, 0.1, 0.0, 0.0, 0.0, 0.5, 100.0),
+    (1.0, 0.1, 1.0, 0.0, 0.0, 0.5, 100.0),
+    (1.0, 0.1, 1.0, 0.0, 0.0, 0.5, 100.0),
+    (1.0, 0.1, 1.0, 0.1, 0.1, 0.5, 51.0),
+    (1.0, 0.1, 1.0, 0.1, 0.1, 0.5, 11.0),
+    (0.0, -0.01, 0.0, 0.0, 0.01, 0.999999999999, 1.0),
+    (1.0, 0.0, 1.0, 0.0, 0.1, 0.99, 51.0),
+    (1.0, 0.1, 1.0, 0.1, 0.1, 0.99, 11.0),
+    (0.0, 0.1, 0.0, 0.1, 0.1, 0.99, 101.0),
+    (1.0, 0.0, 1.0, 0.0, 0.1, 0.5, 100.0),
+    (1.0, 0.0, 1.0, 0.0, 1.0, 0.5, 100.0),
+    (1.0, 0.1, 1.0, 0.1, 0.0, 0.5, 100.0),
+])
+def test_madx_drift(x, px, y, py, pt, beta, length):
+    k = Kinematics(beta)
     mi = manzoni.Input(sequence=[
-        manzoni.SBend('B1', integrator=MadXIntegrator, L=2.0 * _.m, ANGLE=1 * _.radian, K1=1 * _.m ** -2),
+        manzoni.Drift('B1', integrator=MadXIntegrator, L=length * _.m),
     ]).freeze()
-    pt = 0.02
-    deltap = np.sqrt(pt ** 2 + 2 * pt / k.beta + 1) - 1
-    distribution = b = np.array([
-        [0.1, 0.1, 0.1, 0.1, deltap, pt]
+    deltap = np.sqrt(pt ** 2 + 2 * pt / beta + 1) - 1
+    distribution = np.array([
+        [x, px, y, py, deltap, pt],
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
     manzoni.track(beamline=mi, beam=beam, observer=observer)
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
-    b = np.array([
-        [0.1, 0.1, 0.1, 0.1, 0.02]
+    assert np.all(np.isclose(get_madx_tracking_data_drift(
+        x, px, y, py, pt, beta, length
+    ), r[:, 0:4]))
+
+
+@pytest.mark.parametrize(
+    "x, px, y, py, pt, beta, length, k1, k1s, tilt", [
+        # Field free quadrupole
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, 0.0, 0.0, 0.0),
+
+        # Regular quadrupole
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        (0.1, 0.0, 0.0, 0.0, 0.2, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.2, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.2, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.2, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.2, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        (0.1, 0.1, 0.1, 0.0, 0.2, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.2, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.2, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.2, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.2, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, -1.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 10.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, -10.0, 0.0, 0.0),
+
+        # Quadrupole with pure skew component
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 1.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, -1.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 10.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, -10.0, 0.0),
+
+        # Quadrupole with mixed normal and skew components
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -1.0, -1.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 10.0, 10.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -10.0, -10.0, 0.0),
+
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 1.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -1.0, -1.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 10.0, 10.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -10.0, -10.0, 0.0),
+
+        # Quadrupole with tilt
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 0.0, 0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -1.0, 0.0, 0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 10.0, 0.0, 0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -10.0, 0.0, 0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, -0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 1.0, 0.0, -0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -1.0, 0.0, -0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 10.0, 0.0, -0.1),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, -10.0, 0.0, -0.1),
     ])
-    m = cpymad.madx.Madx(stdout=False)
-    m.input(f"""
-    OPTION, SYNRAD=false;
-    OPTION, RBARC=false;
-    BEAM, PARTICLE=PROTON, BETA={k.beta};
+def test_madx_quadrupole(x, px, y, py, pt, beta, length, k1, k1s, tilt):
+    k = Kinematics(beta)
+    mi = manzoni.Input(sequence=[
+        manzoni.Quadrupole('B1',
+                           integrator=MadXIntegrator,
+                           L=length * _.m,
+                           K1=k1 * _.m**-2,
+                           K1S=k1s * _.m**-2,
+                           TILT=tilt * _.radian
+                           ),
+    ]).freeze()
+    deltap = np.sqrt(pt ** 2 + 2 * pt / beta + 1) - 1
+    distribution = np.array([
+        [x, px, y, py, deltap, pt],
+    ])
+    beam = manzoni.Beam(kinematics=k, distribution=distribution)
+    observer = manzoni.BeamObserver()
+    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    r = observer.to_df().iloc[-1]['BEAM_OUT']
 
-    SEQ: SEQUENCE, REFER=ENTRY, L=2.0;
-      B1: SBEND, AT=0.0, L=2.0, ANGLE=1, K1=1;
-      M1: MARKER, AT=2.0;
-    ENDSEQUENCE;
+    assert np.all(np.isclose(get_madx_tracking_data_quadrupole(
+        x, px, y, py, pt, beta, length, k1, k1s, tilt
+    ), r[:, 0:4]))
 
-    USE, SEQUENCE=SEQ;
-    """)
 
-    # #
-    # D1: DRIFT, AT=0.0, L=1.0;
-    #   Q1: QUADRUPOLE, AT=1.0, L=1.6, K1=-16, TILT=0.2;
+@pytest.mark.parametrize(
+    "x, px, y, py, pt, beta, length, angle, k1", [
+        # Regular bend
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0),
+        pytest.param(0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        pytest.param(0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        pytest.param(0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        (0.0, 0.0, 0.0, 0.0, 0.1, 0.5, 1.0, 0.0, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.1, 0.5, 1.0, 0.0, 0.0),
+        pytest.param(0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        pytest.param(0.1, 0.1, 0.1, 0.0, 0.1, 0.5, 1.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        pytest.param(0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, 0.0, 0.0, marks=pytest.mark.xfail),
 
-    m.command.track(DELTAP=0.0, ONEPASS=True, ONETABLE=True, QUANTUM=False)
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.0, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.1, 0.1, 0.0, 0.1, 0.5, 1.0, 0.1, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, 0.1, 0.0),
 
-    for i in range(b.shape[0]):
-        m.command.start(x=b[i, 0], px=b[i, 1], y=b[i, 2], py=b[i, 3], t=0.0, pt=b[i, 4])
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.1, 0.1, 0.0, 0.0, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.0),
+        (0.0, 0.0, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.0, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.1, 0.1, 0.0, 0.1, 0.5, 1.0, 0.1, 1.0),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, 0.1, 1.0),
+    ])
+def test_madx_sbend(x, px, y, py, pt, beta, length, angle, k1):
+    k = Kinematics(beta)
+    mi = manzoni.Input(sequence=[
+        manzoni.SBend('B1',
+                      integrator=MadXIntegrator,
+                      L=length * _.m,
+                      K1=k1 * _.m ** -2,
+                      ANGLE=angle * _.radian,
+                      ),
+    ]).freeze()
+    deltap = np.sqrt(pt ** 2 + 2 * pt / beta + 1) - 1
+    distribution = np.array([
+        [x, px, y, py, deltap, pt],
+    ])
+    beam = manzoni.Beam(kinematics=k, distribution=distribution)
+    observer = manzoni.BeamObserver()
+    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    r = observer.to_df().iloc[-1]['BEAM_OUT']
 
-    m.command.observe(place='M1')
+    assert np.all(np.isclose(get_madx_tracking_data_sbend(
+        x, px, y, py, pt, beta, length, angle, k1
+    ), r[:, 0:4]))
 
-    m.command.run(turns=1)
-    df = m.table.trackone.dframe()
-    mr = df.loc['m1'][['x', 'px', 'y', 'py', 'pt']].values
-    mr
 
-    assert np.all(np.isclose(mr[0:4], r[:, 0:4])), True
+@pytest.mark.parametrize(
+    "x, px, y, py, pt, beta, length, angle, k1, e1, e2, hgap, fint, fintx", [
+        # X    PX   Y    PY   PT  BETA  L   ANG   K1   E1  E2   HGAP FINT FINTX
+        # No bending angle
+        pytest.param(0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.0, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        pytest.param(0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.0, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        pytest.param(0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        pytest.param(0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, 0.0, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0, marks=pytest.mark.xfail),
+        # Only E1
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, 0.1, 1.3, 0.1, 0.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, -0.1, 0.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, -0.1, 0.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 1.3, -0.1, 0.0, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, 0.1, 1.3, -0.1, 0.0, 0.0, 0.0, 0.0),
+        # Only E2
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.0, 0.1, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.0, 0.1, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.0, 0.1, 0.1, 0.1, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.0, 0.1, 0.1, 0.0, 0.1),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.0, -0.1, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.0, -0.1, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.0, -0.1, 0.1, 0.1, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.0, -0.1, 0.1, 0.0, 0.1),
+        # E1 and E2
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.1, 0.1, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.1, 0.1, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, -0.1, -0.1, 0.0, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, -0.1, -0.1, 0.0, 0.0, 0.0),
+        # With field integral (entrance) only
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.0, 0.0, 0.1, 0.5, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.0, 0.0, 0.1, 0.5, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 1.3, 0.0, 0.0, 0.1, 0.5, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.2, 0.5, 1.0, 0.1, 1.3, 0.0, 0.0, 0.1, 0.5, 0.0),
+        # With field integral (exit) only
+        (0.1, 0.1, 0.1, 0.1, 0.0, 0.5, 1.0, 0.1, 1.3, 0.0, 0.0, 0.1, 0.0, 0.5),
+        (0.1, 0.1, 0.1, 0.1, 0.2, 0.5, 1.0, 0.1, 1.3, 0.0, 0.0, 0.1, 0.0, 0.5),
+    ])
+def test_madx_sbend_fringe(x, px, y, py, pt, beta, length, angle, k1, e1, e2, hgap, fint, fintx):
+    k = Kinematics(beta)
+    mi = manzoni.Input(sequence=[
+        manzoni.SBend('B1',
+                      integrator=MadXIntegrator,
+                      L=length * _.m,
+                      K1=k1 * _.m ** -2,
+                      ANGLE=angle * _.radian,
+                      E1=e1 * _.radian,
+                      E2=e2 * _.radian,
+                      HGAP=hgap * _.m,
+                      FINT=fint,
+                      FINTX=fintx,
+                      ),
+    ]).freeze()
+    deltap = np.sqrt(pt ** 2 + 2 * pt / beta + 1) - 1
+    distribution = np.array([
+        [x, px, y, py, deltap, pt],
+    ])
+    beam = manzoni.Beam(kinematics=k, distribution=distribution)
+    observer = manzoni.BeamObserver()
+    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    r = observer.to_df().iloc[-1]['BEAM_OUT']
+
+    assert np.all(np.isclose(get_madx_tracking_data_sbend(
+        x, px, y, py, pt, beta, length, angle, k1, e1, e2, hgap, fint, fintx
+    ), r[:, 0:4]))
+
+
+@pytest.mark.parametrize(
+    "x, px, y, py, pt, beta, h, e1, hgap, fint", [
+        # X   PX    Y    PY   PT  BETA H    E1  HGAP  FINT
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, 0.1, 0.1, 0.5),
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, 0.0, 0.1, 0.5),
+        (0.0, 0.0, 0.1, 0.1, 0.1, 0.5, 1.0, 0.1, 0.0, 0.0),
+        (0.0, 0.0, 0.1, 0.1, 0.1, 0.5, 1.0, 0.1, 0.1, 0.5),
+        (0.0, 0.0, 0.1, 0.1, 0.1, 0.5, 1.0, 0.0, 0.1, 0.5),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, 0.1, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, 0.1, 0.1, 0.5),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, 0.0, 0.1, 0.5),
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, -0.1, 0.0, 0.0),
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, -0.1, 0.1, 0.5),
+        (0.1, 0.1, 0.0, 0.0, 0.1, 0.5, 1.0, -0.0, 0.1, 0.5),
+        (0.0, 0.0, 0.1, 0.1, 0.1, 0.5, 1.0, -0.1, 0.0, 0.0),
+        (0.0, 0.0, 0.1, 0.1, 0.1, 0.5, 1.0, -0.1, 0.1, 0.5),
+        (0.0, 0.0, 0.1, 0.1, 0.1, 0.5, 1.0, -0.0, 0.1, 0.5),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, -0.1, 0.0, 0.0),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, -0.1, 0.1, 0.5),
+        (0.1, 0.1, 0.1, 0.1, 0.1, 0.5, 1.0, -0.0, 0.1, 0.5),
+    ])
+def test_madx_dipedge(x, px, y, py, pt, beta, h, e1, hgap, fint):
+    k = Kinematics(beta)
+    mi = manzoni.Input(sequence=[
+        manzoni.Drift('D1', L=0.5 * _.m),
+        manzoni.DipEdge('DE1',
+                        integrator=MadXIntegrator,
+                        H=h * _.m ** -1,
+                        E1=e1 * _.radian,
+                        HGAP=hgap * _.m,
+                        FINT=fint,
+                        ),
+        manzoni.Drift('D2', L=0.5 * _.m),
+    ]).freeze()
+    deltap = np.sqrt(pt ** 2 + 2 * pt / beta + 1) - 1
+    distribution = np.array([
+        [x, px, y, py, deltap, pt],
+    ])
+    beam = manzoni.Beam(kinematics=k, distribution=distribution)
+    observer = manzoni.BeamObserver()
+    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    r = observer.to_df().iloc[-1]['BEAM_OUT']
+
+    assert np.all(np.isclose(get_madx_tracking_data_dipedge(
+        x, px, y, py, pt, beta, h, e1, hgap, fint
+    ), r[:, 0:4]))
