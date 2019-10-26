@@ -50,15 +50,16 @@ def track_madx_drift(b1, b2, element_parameters: list, global_parameters: list):
     Returns:
 
     """
-    length = element_parameters[0]
+    length: float = element_parameters[0]
+    beta = global_parameters[0]
     time_of_flight: bool = b1.shape[0] == 7
     for i in prange(b1.shape[0]):
-        beta = global_parameters[0]
         px = b1[i, 1]
         py = b1[i, 3]
         pt = b1[i, 5]
 
-        lpz = length / sqrt(1 + 2 * pt / beta + pt**2 - px**2 - py**2)
+        lpz = length / sqrt(1.0 + 2.0 * pt / beta + pt**2.0 - px**2.0 - py**2.0)
+
         b2[i, 0] = b1[i, 0] + lpz * px
         b2[i, 1] = b1[i, 1]
         b2[i, 2] = b1[i, 2] + lpz * py
@@ -66,7 +67,7 @@ def track_madx_drift(b1, b2, element_parameters: list, global_parameters: list):
         b2[i, 4] = b1[i, 4]
         b2[i, 5] = b1[i, 5]
         if time_of_flight:
-            b2[i, 6] = b1[i, 6] + (length - (1 + beta * pt) * lpz) / beta
+            b2[i, 6] = b1[i, 6] + (length - (1.0 + beta * pt) * lpz) / beta
 
     return b1, b2
 
@@ -93,12 +94,7 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
     """
     length = element_parameters[0]
     k1 = element_parameters[1]
-    k1s = element_parameters[2]
-    tilt = element_parameters[3]
-
-    if k1s != 0.0 or tilt != 0.0:
-        tilt += -arctan2(k1s, k1) / 2
-        k1 = sqrt(k1**2 + k1s**2)
+    tilt = element_parameters[2]
 
     if tilt != 0.0:
         st = sin(tilt)
@@ -110,7 +106,7 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
     for i in prange(b1.shape[0]):
         delta_plus_1 = b1[i, 4] + 1
         x = b1[i, 0]
-        xp = b1[i, 1] / delta_plus_1  #
+        xp = b1[i, 1] / delta_plus_1
         y = b1[i, 2]
         yp = b1[i, 3] / delta_plus_1
 
@@ -170,30 +166,46 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
     k1: float = element_parameters[2]
     #k2 = element_parameters[3]
     tilt: float = element_parameters[4]
-    e1: float = element_parameters[5]
-    e2: float = element_parameters[6]
-    h: float = angle / length
-    k0: float = h
+    h: float = element_parameters[5]
+    k0: float = element_parameters[6]
+    entrance_fringe_x: float = element_parameters[7]
+    entrance_fringe_y: float = element_parameters[8]
+    exit_fringe_x: float = element_parameters[9]
+    exit_fringe_y: float = element_parameters[10]
 
     if tilt != 0.0:
         st: float = sin(tilt)
         ct: float = cos(tilt)
 
     if angle == 0:
-        return track_madx_quadrupole(b1, b2, element_parameters, global_parameters)
+        return track_madx_quadrupole(b1,
+                                     b2,
+                                     [
+                                         length, k1, 0.0, tilt
+                                     ],
+                                     global_parameters)
 
     for i in prange(b1.shape[0]):
-        delta_plus_1: float = b1[i, 4] + 1
+        delta_plus_1: float = b1[i, 4] + 1.0
         x: float = b1[i, 0]
-        xp: float = b1[i, 1] / delta_plus_1  #
+        xp: float = b1[i, 1]
         y: float = b1[i, 2]
-        yp: float = b1[i, 3] / delta_plus_1
+        yp: float = b1[i, 3]
 
+        # Apply magnet rotation
         if tilt != 0.0:
             xp, xp, y, yp = _apply_tilt_rotation(x, xp, y, yp, ct, st, 1)
 
+        # Apply entrance fringe field
+        xp += entrance_fringe_x * x
+        yp += entrance_fringe_y * y
+
+        xp /= delta_plus_1
+        yp /= delta_plus_1
+
+        # Body of the magnet
         k0_ = k0 / delta_plus_1
-        k1_ = k1 / delta_plus_1  # This is the key point to remember
+        k1_ = k1 / delta_plus_1
         kx = k0_ * h + k1_
         ky = -k1_
 
@@ -227,10 +239,15 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
         yp_: float = (-ky * sy * y + cy * yp) * delta_plus_1
 
         if kx != 0.0:
-            x_ = x_ + (k0_ - h) * (cx - 1) / kx
+            x_ = x_ + (k0_ - h) * (cx - 1.0) / kx
         else:
             x_ = x_ - (k0_ - h) * 0.5 * length**2
 
+        # Apply exit fringe field
+        xp_ += exit_fringe_x * x_
+        yp_ += exit_fringe_y * y_
+
+        # Apply magnet rotation
         if tilt != 0.0:
             x_, xp_, y_, yp_ = _apply_tilt_rotation(x_, xp_, y_, yp_, ct, st, -1)
 
@@ -238,6 +255,31 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
         b2[i, 1] = xp_
         b2[i, 2] = y_
         b2[i, 3] = yp_
+        b2[i, 4] = b1[i, 4]
+        b2[i, 5] = b1[i, 5]
+
+    return b1, b2
+
+
+@njit(parallel=True, fastmath=True)
+def track_madx_dipedge(b1, b2, element_parameters: list, global_parameters: list):
+    fringe_x: float = element_parameters[0]
+    fringe_y: float = element_parameters[1]
+
+    for i in prange(b1.shape[0]):
+        x: float = b1[i, 0]
+        xp: float = b1[i, 1]
+        y: float = b1[i, 2]
+        yp: float = b1[i, 3]
+
+        # Apply entrance fringe field
+        xp += fringe_x * x
+        yp += fringe_y * y
+
+        b2[i, 0] = x
+        b2[i, 1] = xp
+        b2[i, 2] = y
+        b2[i, 3] = yp
         b2[i, 4] = b1[i, 4]
         b2[i, 5] = b1[i, 5]
 

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 import numpy as _np
 from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_combined_dipole_tensor, \
@@ -6,7 +6,8 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_quadrupole_tensor, \
     track_madx_quadrupole, \
     track_madx_drift, \
-    track_madx_bend
+    track_madx_bend, \
+    track_madx_dipedge
 from .kernels import batched_vector_matrix, batched_vector_matrix_tensor
 
 __ALL__ = [
@@ -29,13 +30,19 @@ class IntegratorType(type):
 
 class Integrator(metaclass=IntegratorType):
     @classmethod
-    def propagate(cls, element, beam_in: _np.ndarray, beam_out: _np.ndarray, global_parameters: list):
+    def propagate(cls,
+                  element,
+                  beam_in: _np.ndarray,
+                  beam_out: _np.ndarray,
+                  global_parameters: list
+                  ) -> Tuple[_np.ndarray, _np.ndarray]:
         return beam_in, beam_out
 
 
 class MadXIntegrator(Integrator):
     METHODS = {
-        'BEND': None,
+        'DIPEDGE': track_madx_dipedge,
+        'RBEND': None,
         'SBEND': track_madx_bend,
         'DRIFT': track_madx_drift,
         'QUADRUPOLE': track_madx_quadrupole,

@@ -8,6 +8,7 @@ from .elements import Marker, \
     Quadrupole, \
     Rotation, \
     CircularCollimator, \
-    RectangularCollimator
+    RectangularCollimator, \
+    DipEdge
 from .core import track, twiss
 from .observers import Observer, BeamObserver, SigmaObserver
