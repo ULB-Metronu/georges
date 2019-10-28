@@ -210,25 +210,19 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
             klx = sqrt(kx) * length
             sx = sin(klx) / sqrt(kx)
             cx = cos(klx)
-        elif kx < 0:
+        else:
             klx = sqrt(-kx) * length
             sx = sinh(klx) / sqrt(-kx)
             cx = cosh(klx)
-        else:
-            cx = 1
-            sx = length
 
         if ky > 0:
             kly = sqrt(ky) * length
             sy = sin(kly) / sqrt(ky)
             cy = cos(kly)
-        elif ky < 0:
+        else:
             kly = sqrt(-ky) * length
             sy = sinh(kly) / sqrt(-ky)
             cy = cosh(kly)
-        else:
-            cy = 1
-            sy = length
 
         xp /= delta_plus_1
         yp /= delta_plus_1
