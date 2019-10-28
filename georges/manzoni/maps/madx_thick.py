@@ -173,10 +173,6 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
     exit_fringe_x: float = element_parameters[9]
     exit_fringe_y: float = element_parameters[10]
 
-    if tilt != 0.0:
-        st: float = sin(tilt)
-        ct: float = cos(tilt)
-
     if angle == 0:
         return track_madx_quadrupole(b1,
                                      b2,
@@ -184,6 +180,10 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
                                          length, k1, 0.0, tilt
                                      ],
                                      global_parameters)
+
+    if tilt != 0.0:
+        st: float = sin(tilt)
+        ct: float = cos(tilt)
 
     for i in prange(b1.shape[0]):
         delta_plus_1: float = b1[i, 4] + 1.0
@@ -199,9 +199,6 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
         # Apply entrance fringe field
         xp += entrance_fringe_x * x
         yp += entrance_fringe_y * y
-
-        xp /= delta_plus_1
-        yp /= delta_plus_1
 
         # Body of the magnet
         k0_ = k0 / delta_plus_1
@@ -232,6 +229,9 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
         else:
             cy = 1
             sy = length
+
+        xp /= delta_plus_1
+        yp /= delta_plus_1
 
         x_: float = cx * x + sx * xp
         xp_: float = ((-kx * x - k0_ + h) * sx + cx * xp) * delta_plus_1

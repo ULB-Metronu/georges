@@ -42,7 +42,7 @@ class Integrator(metaclass=IntegratorType):
 class MadXIntegrator(Integrator):
     METHODS = {
         'DIPEDGE': track_madx_dipedge,
-        'RBEND': None,
+        'RBEND': track_madx_bend,
         'SBEND': track_madx_bend,
         'DRIFT': track_madx_drift,
         'QUADRUPOLE': track_madx_quadrupole,

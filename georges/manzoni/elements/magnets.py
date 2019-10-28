@@ -1,7 +1,7 @@
 """
 TODO
 """
-from typing import Tuple
+from typing import Optional, Tuple
 import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
@@ -103,35 +103,43 @@ class Bend(Magnet):
     }
     """Parameters of the element, with their default value and their descriptions."""
 
+    @staticmethod
+    def compute_fringe(h: float, e: float, hgap: float, fint: float) -> Tuple[float, float]:
+        fringe_x = h * _np.tan(e)
+        corr = (h + h) * hgap * fint  # This is incorrect but kept for compatibility with MAD-X
+        # corr = h * 2 * hgap * fint
+        psi = e - corr * (1.0 / _np.cos(e)) * (1 + _np.sin(e) ** 2)
+        fringe_y = - h * _np.tan(psi)
+        return fringe_x, fringe_y
+
+    @property
+    def length(self) -> float:
+        return self.L.m_as('m')
+
+    @property
+    def edges(self) -> Tuple[float, float]:
+        return self.E1.m_as('radian'), self.E2.m_as('radian')
+
+    @property
+    def fringe_field_integrals(self) -> Tuple[float, float]:
+        fint = self.FINT
+        fintx = self.FINTX if self.FINTX >= 0 else fint  # For exact compatibility with MAD-X
+        return fint, fintx
+
     @property
     def parameters(self) -> list:
         # Generic parameters
-        h = self.ANGLE.m_as('radian') / self.L.m_as('m')
+        length = self.length
+        h = self.ANGLE.m_as('radian') / self.length
         k0 = self.K0.m_as('m**-1') or h
-
-        # Compute entrance fringe fields
-        e1 = self.E1.m_as('radian')
         hgap = self.HGAP.m_as('m')
-        fint = self.FINT
-        entrance_fringe_x = h * _np.tan(e1)
-        corr = (h + h) * hgap * fint
-        psi = e1 - corr * (1.0/_np.cos(e1)) * (1 + _np.sin(e1)**2)
-        # edge - corr * secedg * (one + sin(edge)**2)
-        entrance_fringe_y = - h * _np.tan(psi)
-
-        # Compute exit fringe fields
-        e2 = self.E2.m_as('radian')
-        if self.FINTX >= 0:  # For exact compatibility with MAD-X
-            fintx = self.FINTX
-        else:
-            fintx = fint
-        exit_fringe_x = h * _np.tan(e2)
-        corr = (h + h) * hgap * fintx
-        psi = e2 - corr * (1.0 / _np.cos(e2)) * (1 + _np.sin(e2) ** 2)
-        exit_fringe_y = - h * _np.tan(psi)
+        e1, e2 = self.edges
+        fint, fintx = self.fringe_field_integrals
+        entrance_fringe_x, entrance_fringe_y = Bend.compute_fringe(h, e1, hgap, fint)
+        exit_fringe_x, exit_fringe_y = Bend.compute_fringe(h, e2, hgap, fintx)
 
         return list(map(float, [
-            self.L.m_as('m'),  # 0
+            length,  # 0
             self.ANGLE.m_as('radian'),  # 1
             self.K1.m_as('m**-2'),  # 2
             self.K2.m_as('m**-3'),  # 3
@@ -150,7 +158,19 @@ class SBend(Bend):
 
 
 class RBend(Bend):
-    pass
+    @property
+    def length(self) -> float:
+        l = self.L.m_as('m')
+        angle = self.ANGLE.m_as('rad')
+        if angle > 1e-8:
+            return l * angle / (2.0 * _np.sin(angle/2.0))
+        else:
+            return l
+
+    @property
+    def edges(self) -> Tuple[float, float]:
+        alpha = self.ANGLE.m_as('radian') / 2.0
+        return self.E1.m_as('radian') + alpha, self.E2.m_as('radian') + alpha
 
 
 class DipEdge(Magnet):
@@ -168,15 +188,7 @@ class DipEdge(Magnet):
         e1 = self.E1.m_as('radian')
         hgap = self.HGAP.m_as('m')
         fint = self.FINT
-        fringe_x = h * _np.tan(e1)
-        corr = (h + h) * hgap * fint
-        psi = e1 - corr * (1.0/_np.cos(e1)) * (1 + _np.sin(e1)**2)
-        fringe_y = - h * _np.tan(psi)
-
-        return list(map(float, [
-            fringe_x,  # 0
-            fringe_y,  # 1
-        ]))
+        return list(Bend.compute_fringe(h, e1, hgap, fint))
 
 
 class Solenoid(Magnet):
