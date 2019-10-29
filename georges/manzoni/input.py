@@ -2,10 +2,12 @@
 TODO
 """
 from typing import Optional, List
+from georges_core.sequences import Sequence as _Sequence
+from . import elements
 
 
 class Input:
-    def __init__(self, sequence: Optional[List] = None):
+    def __init__(self, sequence: Optional[List[elements.elements.ManzoniElement]] = None):
         self._sequence = sequence
 
     @property
@@ -21,3 +23,16 @@ class Input:
         for e in self._sequence:
             e.unfreeze()
         return self
+
+    @classmethod
+    def from_sequence(cls,
+                      sequence: _Sequence,
+                      ):
+        input_sequence = list()
+        for name, element in sequence.df.iterrows():
+            element_class = getattr(elements, element['CLASS'].capitalize())
+            parameters = set(list(element.index.values)).intersection(element_class.PARAMETERS.keys())
+            input_sequence.append(
+                element_class(name, **element[parameters])
+            )
+        return cls(sequence=input_sequence)

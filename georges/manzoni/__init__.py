@@ -10,5 +10,5 @@ from .elements import Marker, \
     CircularCollimator, \
     RectangularCollimator, \
     DipEdge
-from .core import track, twiss
+from .core import track, match
 from .observers import Observer, BeamObserver, SigmaObserver

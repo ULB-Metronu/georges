@@ -25,13 +25,46 @@ def _apply_tilt_rotation(x: float,
     Returns:
 
     """
-    tmp = x
-    x = ct * x + sign * st * y
-    y = ct * y - sign * st * tmp
-    tmp = xp
-    px = ct * xp + sign * st * yp
-    py = ct * yp - sign * st * tmp
-    return x, px, y, py
+    x_ = ct * x + sign * st * y
+    y_ = ct * y - sign * st * x
+    px_ = ct * xp + sign * st * yp
+    py_ = ct * yp - sign * st * xp
+    return x_, px_, y_, py_
+
+
+@njit(parallel=True, fastmath=True)
+def track_madx_rotation(b1, b2, element_parameters: list, global_parameters: list):
+    """
+
+    Args:
+        b1:
+        b2:
+        element_parameters:
+        global_parameters:
+
+    Returns:
+
+    """
+    tilt: float = element_parameters[0]
+    if tilt < 1e-8:
+        b2 = b1.copy()
+    else:
+        st = sin(tilt)
+        ct = cos(tilt)
+        for i in prange(b1.shape[0]):
+            x = b1[i, 0]
+            px = b1[i, 1]
+            y = b1[i, 2]
+            py = b1[i, 3]
+            x_, px_, y_, py_ = _apply_tilt_rotation(x, px, y, py, ct, st, 1)
+            b2[i, 0] = x_
+            b2[i, 1] = px_
+            b2[i, 2] = y_
+            b2[i, 3] = py_
+            b2[i, 4] = b1[i, 4]
+            b2[i, 5] = b1[i, 5]
+
+    return b1, b2
 
 
 @njit(parallel=True, fastmath=True)
@@ -96,12 +129,12 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
     k1 = element_parameters[1]
     tilt = element_parameters[2]
 
+    if k1 == 0:
+        return track_madx_drift(b1, b2, element_parameters, global_parameters)
+
     if tilt != 0.0:
         st = sin(tilt)
         ct = cos(tilt)
-
-    if k1 == 0:
-        return track_madx_drift(b1, b2, element_parameters, global_parameters)
 
     for i in prange(b1.shape[0]):
         delta_plus_1 = b1[i, 4] + 1

@@ -455,6 +455,6 @@ class ManzoniElement(Element, _Patchable):
 
     @property
     def cache(self) -> list:
-        if self._cache is None:
+        if not self.frozen:
             self._cache = self.integrator.cache(self)
         return self._cache

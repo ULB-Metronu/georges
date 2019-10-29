@@ -27,7 +27,7 @@ class BeamObserver(Observer):
         self.headers = ('LABEL1', 'BEAM_OUT', 'BEAM_IN')
 
     def __call__(self, element, b1, b2):
-        self.data.append((element.LABEL1, b1, b2))
+        self.data.append((element.LABEL1, b1.copy(), b2.copy()))
 
 
 class MeanObserver(Observer):

@@ -25,7 +25,7 @@ def track(beamline: _Input,
     global_parameters = [
         beam.kinematics.beta
     ]
-    b1 = beam.distribution
+    b1 = beam.distribution.copy()
     b2 = _np.zeros(b1.shape)
     for e in beamline.sequence:
         b1, b2 = e.propagate(b1, b2, global_parameters)
@@ -34,17 +34,9 @@ def track(beamline: _Input,
         else:
             b2, b1 = b1, b2
         if observer is not None:
-            observer(e, b1, b2)
+            observer(e, b2, b1)
 
 
-def twiss(beamline: _Input, periodic: bool = False):
-    """
-
-    Args:
-        beamline:
-        periodic:
-
-    Returns:
-
-    """
+def match(beamline: _Input,
+          beam: _Beam,):
     pass
