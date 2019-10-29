@@ -44,6 +44,7 @@ setup(
         'pyarrow',
         'pyyaml',
         'scipy>=1.0.0',
+        'uproot',
     ],
     package_data={'georges': []},
 )

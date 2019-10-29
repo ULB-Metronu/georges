@@ -1,4 +1,5 @@
 from .input import Input
+from .beam import Beam
 from .elements import Marker, \
     Drift, \
     Bend, \
@@ -9,6 +10,7 @@ from .elements import Marker, \
     Sextupole, \
     Rotation, \
     CircularCollimator, \
-    RectangularCollimator
+    RectangularCollimator, \
+    DipEdge
 from .core import track, twiss
 from .observers import Observer, BeamObserver, SigmaObserver

@@ -90,4 +90,3 @@ def compute_mad_quadrupole_tensor(L: float, K1: float, beta: float) -> np.ndarra
     T[4, 5, 5] = (-3*L)/(2*beta**3*gamma**2)
     
     return T
-

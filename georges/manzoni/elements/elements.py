@@ -2,13 +2,13 @@
 TODO
 """
 from __future__ import annotations
-from typing import Optional, Any, Tuple, Dict, Callable, List
+from typing import Optional, Any, Tuple, Dict, Callable
 import inspect
 import uuid
 import numpy as _np
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
-from ..integrators import IntegratorType, SecondOrderTaylorMadIntegrator
+from ..integrators import IntegratorType, MadXIntegrator
 from ..apertures import circular_aperture_check, \
     rectangular_aperture_check, \
     elliptical_aperture_check, \
@@ -41,7 +41,7 @@ class ElementType(type):
         if '__init__' not in dct:
             def default_init(self,
                              label1: str = '',
-                             integrator: IntegratorType = SecondOrderTaylorMadIntegrator,
+                             integrator: IntegratorType = MadXIntegrator,
                              *params, **kwargs):
                 """Default initializer for all Commands."""
                 defaults = {}
@@ -306,7 +306,7 @@ class ManzoniElement(Element, _Patchable):
 
     def __init__(self,
                  label1: str = '',
-                 integrator: IntegratorType = SecondOrderTaylorMadIntegrator,
+                 integrator: IntegratorType = MadXIntegrator,
                  *params,
                  **kwargs
                  ):
@@ -325,18 +325,21 @@ class ManzoniElement(Element, _Patchable):
 
     def propagate(self,
                   beam: _np.ndarray,
-                  out: Optional[_np.ndarray] = None
+                  out: Optional[_np.ndarray] = None,
+                  global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
         """
 
         Args:
             beam:
             out:
+            global_parameters:
 
         Returns:
 
         """
-        return self.integrator.propagate(self, beam, out)
+
+        return self.integrator.propagate(self, beam, out, global_parameters)
 
     def check_aperture(self,
                        beam: _np.ndarray,
@@ -366,8 +369,9 @@ class ManzoniElement(Element, _Patchable):
         Returns:
 
         """
-        self.cache  # Call it!
+        self.cache  # Calls it!
         self._frozen = True
+        return self
 
     def unfreeze(self):
         """
@@ -376,6 +380,7 @@ class ManzoniElement(Element, _Patchable):
 
         """
         self._frozen = False
+        return self
 
     @property
     def frozen(self):
@@ -403,6 +408,10 @@ class ManzoniElement(Element, _Patchable):
 
         """
         return self._integrator
+
+    @integrator.setter
+    def integrator(self, integrator: IntegratorType):
+        self._integrator = integrator
 
     @property
     def parameters(self) -> list:
@@ -440,6 +449,9 @@ class ManzoniElement(Element, _Patchable):
             )
         else:
             return None
+
+    def clear_cache(self):
+        self._cache = None
 
     @property
     def cache(self) -> list:

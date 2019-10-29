@@ -37,7 +37,7 @@ def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray)
         for i in range(tensor.shape[0]):
             s = 0.0
             for j in range(tensor.shape[1]):
-                for k in range(tensor.shape[2]):
+                for k in range(j, tensor.shape[2]):  # Assume upper triangular matrix Mjk = Ti::
                     s += tensor[i, j, k] * b1[l, j] * b1[l, k]
             b2[l, i] = s
     return b1, b2
@@ -56,12 +56,12 @@ def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.n
     Returns:
 
     """
-    for l in _nb.prange(b1.shape[0]):
+    for l in range(b1.shape[0]):
         for i in range(tensor.shape[0]):
-            s = 0.0
+            s = 0
             for j in range(tensor.shape[1]):
                 s += matrix[i, j] * b1[l, j]
-                for k in range(tensor.shape[2]):
+                for k in range(j, tensor.shape[2]):  # Assume upper triangular matrix Mjk = Ti::
                     s += tensor[i, j, k] * b1[l, j] * b1[l, k]
             b2[l, i] = s
     return b1, b2
