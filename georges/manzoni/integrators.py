@@ -125,14 +125,16 @@ class FirstOrderTransportIntegrator(TransportIntegrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out):
-        return batched_vector_matrix(beam_in, beam_out, *element.cache)
+    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+        return batched_vector_matrix(
+            beam_in,
+            beam_out,
+            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+        )
 
     @classmethod
-    def cache(cls, element):
-        return [
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.parameters)
-        ]
+    def cache(cls, element) -> List:
+        return element.parameters
 
 
 class SecondOrderTransportIntegrator(FirstOrderTransportIntegrator):
@@ -144,15 +146,17 @@ class SecondOrderTransportIntegrator(FirstOrderTransportIntegrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out):
-        return batched_vector_matrix_tensor(beam_in, beam_out, *element.cache)
+    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+        return batched_vector_matrix_tensor(
+            beam_in,
+            beam_out,
+            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters),
+            cls.TENSORS.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+        )
 
     @classmethod
-    def cache(cls, element):
-        return [
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.parameters),
-            cls.TENSORS.get(element.__class__.__name__.upper())(*element.parameters)
-        ]
+    def cache(cls, element) -> List:
+        return element.parameters
 
 
 class PTCIntegrator(Integrator):

@@ -4,7 +4,7 @@ from numpy import cos, sin, cosh, sinh, sqrt
 
 
 @njit
-def compute_mad_quadrupole_matrix(L: float, K1: float, beta: float) -> np.ndarray:
+def compute_mad_quadrupole_matrix(L: float, K1: float, tilt: float, beta: float) -> np.ndarray:
     gamma = 1 / sqrt(1-beta**2)
     R = np.zeros((6, 6))
 
@@ -46,7 +46,7 @@ def compute_mad_quadrupole_matrix(L: float, K1: float, beta: float) -> np.ndarra
 
 
 @njit
-def compute_mad_quadrupole_tensor(L: float, K1: float, beta: float) -> np.ndarray:
+def compute_mad_quadrupole_tensor(L: float, K1: float, tilt: float, beta: float) -> np.ndarray:
     gamma = 1 / sqrt(1-beta**2)
     T = np.zeros((6, 6, 6))
 
