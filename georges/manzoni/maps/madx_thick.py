@@ -33,7 +33,7 @@ def _apply_tilt_rotation(x: float,
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_rotation(b1, b2, element_parameters: list, global_parameters: list):
+def track_madx_srotation(b1, b2, element_parameters: list, global_parameters: list):
     """
 
     Args:

@@ -7,4 +7,4 @@ from .madx_thick import \
     track_madx_drift, \
     track_madx_bend, \
     track_madx_dipedge, \
-    track_madx_rotation
+    track_madx_srotation

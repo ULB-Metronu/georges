@@ -8,7 +8,7 @@ from .maps import compute_mad_combined_dipole_matrix, \
     track_madx_drift, \
     track_madx_bend, \
     track_madx_dipedge, \
-    track_madx_rotation
+    track_madx_srotation
 from .kernels import batched_vector_matrix, batched_vector_matrix_tensor
 
 __ALL__ = [
@@ -47,7 +47,7 @@ class MadXIntegrator(Integrator):
         'SBEND': track_madx_bend,
         'DRIFT': track_madx_drift,
         'QUADRUPOLE': track_madx_quadrupole,
-        'ROTATION': track_madx_rotation,
+        'ROTATION': track_madx_srotation,
     }
 
     @classmethod

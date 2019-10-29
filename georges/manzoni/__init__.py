@@ -6,7 +6,7 @@ from .elements import Marker, \
     RBend, \
     SBend, \
     Quadrupole, \
-    Rotation, \
+    SRotation, \
     CircularCollimator, \
     RectangularCollimator, \
     DipEdge

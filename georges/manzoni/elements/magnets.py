@@ -40,7 +40,7 @@ class Drift(_ManzoniElement):
         ]))
 
 
-class Rotation(_ManzoniElement):
+class SRotation(_ManzoniElement):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Angle of rotation along the s-axis.')
     }
@@ -160,12 +160,12 @@ class SBend(Bend):
 class RBend(Bend):
     @property
     def length(self) -> float:
-        l = self.L.m_as('m')
+        length = self.L.m_as('m')
         angle = self.ANGLE.m_as('rad')
         if angle > 1e-8:
-            return l * angle / (2.0 * _np.sin(angle/2.0))
+            return length * angle / (2.0 * _np.sin(angle/2.0))
         else:
-            return l
+            return length
 
     @property
     def edges(self) -> Tuple[float, float]:
@@ -212,4 +212,20 @@ class Decapole(_ManzoniElement):
 
 
 class Dodecapole(_ManzoniElement):
+    pass
+
+
+class Kicker(_ManzoniElement):
+    pass
+
+
+class TKicker(Kicker):
+    pass
+
+
+class HKicker(_ManzoniElement):
+    pass
+
+
+class VKicker(_ManzoniElement):
     pass
