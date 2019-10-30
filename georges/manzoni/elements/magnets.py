@@ -11,7 +11,7 @@ class Marker(_ManzoniElement):
     """
     TODO
     """
-    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray, parameters: list = None):
+    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None, parameters: list = None):
         _np.copyto(dst=beam_out, src=beam_in, casting='no')
         return beam_in, beam_out
 
@@ -72,7 +72,6 @@ class Quadrupole(Magnet):
 
     @property
     def parameters(self) -> list:
-
         k1 = self.K1.m_as('m**-2')
         k1s = self.K1S.m_as('m**-2')
         tilt = self.TILT.m_as('radian')
@@ -129,7 +128,6 @@ class Bend(Magnet):
 
     @property
     def parameters(self) -> list:
-
         # Generic parameters
         length = self.length
         h = self.ANGLE.m_as('radian') / self.length
@@ -202,32 +200,31 @@ class Multipole(_ManzoniElement):
         'L': (0.0 * _ureg.m, 'Magnet length.'),
         'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
         'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
-        'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
-        'E2': (0.0 * _ureg.radian, 'Exit face angle.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> list:
-        return [
-            self.L.m_as('m'),  self.K1.m_as('m**-2'), self.K2.m_as('m**-3'), 0.9
-        ]
+        return list(map(float, [
+            self.L.m_as('m'),
+            self.K1.m_as('m**-2'),
+            self.K2.m_as('m**-3')
+        ]))
 
 
 class Sextupole(_ManzoniElement):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Magnet length.'),
         'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
-        'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
-        'E2': (0.0 * _ureg.radian, 'Exit face angle.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> list:
-        return [
-            self.L.m_as('m'), self.K2.m_as('m**-3'), 0.9
-        ]
+        return list(map(float, [
+            self.L.m_as('m'),
+            self.K2.m_as('m**-3'),
+        ]))
 
 
 class Octupole(_ManzoniElement):

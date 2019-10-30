@@ -3,7 +3,7 @@ import numpy as np
 
 
 @njit(cache=True)
-def compute_transport_multipole_matrix(L: float, K1: float, *args) -> np.ndarray:
+def compute_transport_multipole_matrix(L: float, K1: float) -> np.ndarray:
 
     R = np.zeros((6, 6))
 
@@ -30,8 +30,9 @@ def compute_transport_multipole_matrix(L: float, K1: float, *args) -> np.ndarray
 
     return R
 
+
 @njit(cache=True)
-def compute_transport_multipole_tensor(L: float, K1: float, K2: float, *args) -> np.ndarray:
+def compute_transport_multipole_tensor(L: float, K1: float, K2: float) -> np.ndarray:
 
     T = np.zeros((6, 6, 6))
 

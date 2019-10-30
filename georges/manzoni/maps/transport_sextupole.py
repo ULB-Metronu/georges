@@ -3,7 +3,7 @@ import numpy as np
 
 
 @njit
-def compute_transport_sextupole_matrix(L: float, *args) -> np.ndarray:
+def compute_transport_sextupole_matrix(L: float) -> np.ndarray:
 
     R = np.zeros((6, 6))
 
@@ -22,7 +22,7 @@ def compute_transport_sextupole_matrix(L: float, *args) -> np.ndarray:
 
 
 @njit
-def compute_transport_sextupole_tensor(L: float, K2: float, *args) -> np.ndarray:
+def compute_transport_sextupole_tensor(L: float, K2: float) -> np.ndarray:
     T = np.zeros((6, 6, 6))
 
     T[0, 0, 0] = -(1 / 2) * K2 * L ** 2

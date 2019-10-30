@@ -4,7 +4,7 @@ from numpy import cos, sin, cosh, sinh, sqrt
 
 
 @njit(cache=True)
-def compute_transport_combined_dipole_matrix(L: float, alpha: float, K1: float, K2: float, *args) -> np.ndarray:
+def compute_transport_combined_dipole_matrix(L: float, alpha: float, K1: float, K2: float) -> np.ndarray:
     h = alpha / L
     kx2 = h ** 2 + K1
     ky2 = -K1
@@ -120,7 +120,7 @@ def compute_transport_combined_dipole_matrix(L: float, alpha: float, K1: float, 
 
 
 @njit(cache=True)
-def compute_transport_combined_dipole_tensor(L: float, alpha: float, K1: float, K2: float, *args) -> np.ndarray:
+def compute_transport_combined_dipole_tensor(L: float, alpha: float, K1: float, K2: float) -> np.ndarray:
     h = alpha / L
     kx2 = h ** 2 + K1
     ky2 = -K1
