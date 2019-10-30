@@ -27,6 +27,6 @@ class MadX(cpymad.madx.Madx):
                 set(list(map(lambda _: _.upper(),
                              self._libmadx.get_defined_command(element['CLASS'].lower())['data'].keys())))
             )])
-            self.input((f"{name}: {element['CLASS'].lower()}, AT={element['AT_ENTRY']}, " + ', '.join([f"{k}={v}" for k, v in parameters.items()]) + ';').strip())
+            self.input((f"{name}: {element['CLASS'].lower()}, AT={element['AT_ENTRY']}, " + ', '.join([f"{k}={str(v).strip('[]')}" for k, v in parameters.items()]) + ';').strip())
         self.input("ENDSEQUENCE;")
         self.input(f"USE, SEQUENCE={sequence.name or 'SEQ'};")

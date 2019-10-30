@@ -7,7 +7,7 @@ from . import elements
 
 
 class Input:
-    def __init__(self, sequence: Optional[List[elements.elements.ManzoniElement]] = None):
+    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None):
         self._sequence = sequence
 
     @property
