@@ -13,4 +13,8 @@ except ModuleNotFoundError:
     ureg.define('electronvolt_per_c = eV / c = eV_c')
     ureg.define('electronvolt_per_c2 = eV / c**2 = eV_c2')
 
-from .manzoni import *
+try:
+    from georges_core import Kinematics
+    from georges_core.sequences import *
+except ModuleNotFoundError:
+    pass
