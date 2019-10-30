@@ -11,7 +11,7 @@ class Marker(_ManzoniElement):
     """
     TODO
     """
-    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None, parameters: list = None):
+    def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray, parameters: list = None):
         _np.copyto(dst=beam_out, src=beam_in, casting='no')
         return beam_in, beam_out
 

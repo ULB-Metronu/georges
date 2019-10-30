@@ -24,10 +24,10 @@ class Observer(metaclass=ObserverType):
 class BeamObserver(Observer):
     def __init__(self):
         super().__init__()
-        self.headers = ('LABEL1', 'BEAM_OUT', 'BEAM_IN')
+        self.headers = ('LABEL1', 'BEAM_IN', 'BEAM_OUT')
 
     def __call__(self, element, b1, b2):
-        self.data.append((element.LABEL1, b1.copy(), b2.copy()))
+        self.data.append((element.LABEL1, _np.copy(b1), _np.copy(b2)))
 
 
 class MeanObserver(Observer):
@@ -48,16 +48,16 @@ class MeanObserver(Observer):
 
     def __call__(self, element, b1, b2):
         self.data.append((element.LABEL1,
-                          b1[0].mean(),
-                          b2[0].mean(),
-                          b1[2].mean(),
-                          b2[2].mean(),
-                          b1[1].mean(),
-                          b2[1].mean(),
-                          b1[3].mean(),
-                          b2[3].mean(),
-                          b1[4].mean(),
-                          b2[4].mean(),
+                          b1[:, 0].mean(),
+                          b2[:, 0].mean(),
+                          b1[:, 2].mean(),
+                          b2[:, 2].mean(),
+                          b1[:, 1].mean(),
+                          b2[:, 1].mean(),
+                          b1[:, 3].mean(),
+                          b2[:, 3].mean(),
+                          b1[:, 4].mean(),
+                          b2[:, 4].mean(),
                           ))
 
 
@@ -79,16 +79,16 @@ class SigmaObserver(Observer):
 
     def __call__(self, element, b1, b2):
         self.data.append((element.LABEL1,
-                          b1[0].std(),
-                          b2[0].std(),
-                          b1[2].std(),
-                          b2[2].std(),
-                          b1[1].std(),
-                          b2[1].std(),
-                          b1[3].std(),
-                          b2[3].std(),
-                          b1[4].std(),
-                          b2[4].std(),
+                          b1[:, 0].std(),
+                          b2[:, 0].std(),
+                          b1[:, 2].std(),
+                          b2[:, 2].std(),
+                          b1[:, 1].std(),
+                          b2[:, 1].std(),
+                          b1[:, 3].std(),
+                          b2[:, 3].std(),
+                          b1[:, 4].std(),
+                          b2[:, 4].std(),
                           ))
 
 

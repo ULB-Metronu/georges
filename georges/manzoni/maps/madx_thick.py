@@ -128,6 +128,8 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
     length = element_parameters[0]
     k1 = element_parameters[1]
     tilt = element_parameters[2]
+    st: float
+    ct: float
 
     if k1 == 0:
         return track_madx_drift(b1, b2, element_parameters, global_parameters)
@@ -243,19 +245,25 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
             klx = sqrt(kx) * length
             sx = sin(klx) / sqrt(kx)
             cx = cos(klx)
-        else:
+        elif kx < 0:
             klx = sqrt(-kx) * length
             sx = sinh(klx) / sqrt(-kx)
             cx = cosh(klx)
+        else:
+            sx = length
+            cx = 1
 
         if ky > 0:
             kly = sqrt(ky) * length
             sy = sin(kly) / sqrt(ky)
             cy = cos(kly)
-        else:
+        elif ky < 0:
             kly = sqrt(-ky) * length
             sy = sinh(kly) / sqrt(-ky)
             cy = cosh(kly)
+        else:
+            sy = length
+            cy = 1
 
         xp /= delta_plus_1
         yp /= delta_plus_1
