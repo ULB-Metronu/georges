@@ -72,6 +72,7 @@ class Quadrupole(Magnet):
 
     @property
     def parameters(self) -> list:
+
         k1 = self.K1.m_as('m**-2')
         k1s = self.K1S.m_as('m**-2')
         tilt = self.TILT.m_as('radian')
@@ -128,6 +129,7 @@ class Bend(Magnet):
 
     @property
     def parameters(self) -> list:
+
         # Generic parameters
         length = self.length
         h = self.ANGLE.m_as('radian') / self.length
@@ -196,11 +198,36 @@ class Solenoid(Magnet):
 
 
 class Multipole(_ManzoniElement):
-    pass
+    PARAMETERS = {
+        'L': (0.0 * _ureg.m, 'Magnet length.'),
+        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
+        'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
+        'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
+        'E2': (0.0 * _ureg.radian, 'Exit face angle.'),
+    }
+    """Parameters of the element, with their default value and their descriptions."""
+
+    @property
+    def parameters(self) -> list:
+        return [
+            self.L.m_as('m'),  self.K1.m_as('m**-2'), self.K2.m_as('m**-3'), 0.9
+        ]
 
 
 class Sextupole(_ManzoniElement):
-    pass
+    PARAMETERS = {
+        'L': (0.0 * _ureg.m, 'Magnet length.'),
+        'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
+        'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
+        'E2': (0.0 * _ureg.radian, 'Exit face angle.'),
+    }
+    """Parameters of the element, with their default value and their descriptions."""
+
+    @property
+    def parameters(self) -> list:
+        return [
+            self.L.m_as('m'), self.K2.m_as('m**-3'), 0.9
+        ]
 
 
 class Octupole(_ManzoniElement):

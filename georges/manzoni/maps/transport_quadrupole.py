@@ -40,7 +40,7 @@ def compute_transport_quadrupole_matrix(L: float, K1: float, *args) -> np.ndarra
     return R
 
 
-#@njit
+@njit
 def compute_transport_quadrupole_tensor(L: float, K1: float, *args) -> np.ndarray:
     kq2 = K1
     T = np.zeros((6, 6, 6))
@@ -65,7 +65,7 @@ def compute_transport_quadrupole_tensor(L: float, K1: float, *args) -> np.ndarra
 
     T[0, 0, 5] = (1 / 2) * kq2 * L * sq(kq2, L)
     T[0, 1, 5] = (1 / 2) * sq(kq2, L) - (L / 2) * cq(kq2, L)
-    T[1, 0, 5] = (kq2 * L / 2) * cq(kq2, L) - kq2 * sq(kq2, L) / 2
+    T[1, 0, 5] = (kq2 * L / 2) * cq(kq2, L) + kq2 * sq(kq2, L) / 2
     T[1, 1, 5] = kq2 * L * sq(kq2, L) / 2
     T[2, 2, 5] = -kq2 * L * sq(-kq2, L) / 2
     T[2, 3, 5] = sq(-kq2, L) / 2 - L * cq(-kq2, L) / 2

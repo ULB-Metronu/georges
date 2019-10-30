@@ -22,12 +22,13 @@ class Observer(metaclass=ObserverType):
 
 
 class BeamObserver(Observer):
-    def __init__(self):
+    def __init__(self, with_input_beams: bool = False):
         super().__init__()
+        self._with_input_beams = with_input_beams
         self.headers = ('LABEL1', 'BEAM_IN', 'BEAM_OUT')
 
     def __call__(self, element, b1, b2):
-        self.data.append((element.LABEL1, _np.copy(b1), _np.copy(b2)))
+        self.data.append((element.LABEL1, _np.copy(b1) if self._with_input_beams else None, _np.copy(b2)))
 
 
 class MeanObserver(Observer):

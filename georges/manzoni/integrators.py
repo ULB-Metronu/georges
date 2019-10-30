@@ -4,6 +4,14 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_combined_dipole_tensor, \
     compute_mad_quadrupole_matrix, \
     compute_mad_quadrupole_tensor, \
+    compute_transport_combined_dipole_matrix, \
+    compute_transport_combined_dipole_tensor, \
+    compute_transport_multipole_matrix, \
+    compute_transport_multipole_tensor, \
+    compute_transport_quadrupole_matrix, \
+    compute_transport_quadrupole_tensor, \
+    compute_transport_sextupole_matrix, \
+    compute_transport_sextupole_tensor, \
     track_madx_quadrupole, \
     track_madx_drift, \
     track_madx_bend, \
@@ -110,12 +118,47 @@ class TransportIntegrator(Integrator):
     pass
 
 
-class TransportFirstOrderIntegrator(TransportIntegrator):
-    pass
+class FirstOrderTransportIntegrator(TransportIntegrator):
+    MATRICES = {
+        'BEND': compute_transport_combined_dipole_matrix,
+        'QUADRUPOLE': compute_transport_quadrupole_matrix,
+        'SEXTUPOLE': compute_transport_sextupole_matrix,
+        'MULTIPOLE': compute_transport_multipole_matrix,
+    }
+
+    @classmethod
+    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+        return batched_vector_matrix(
+            beam_in,
+            beam_out,
+            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+        )
+
+    @classmethod
+    def cache(cls, element) -> List:
+        return element.parameters
 
 
-class TransportSecondOrderIntegrator(TransportFirstOrderIntegrator):
-    pass
+class SecondOrderTransportIntegrator(FirstOrderTransportIntegrator):
+    TENSORS = {
+        'BEND': compute_transport_combined_dipole_tensor,
+        'QUADRUPOLE': compute_transport_quadrupole_tensor,
+        'SEXTUPOLE': compute_transport_sextupole_tensor,
+        'MULTIPOLE': compute_transport_multipole_tensor,
+    }
+
+    @classmethod
+    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+        return batched_vector_matrix_tensor(
+            beam_in,
+            beam_out,
+            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters),
+            cls.TENSORS.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+        )
+
+    @classmethod
+    def cache(cls, element) -> List:
+        return element.parameters
 
 
 class PTCIntegrator(Integrator):
