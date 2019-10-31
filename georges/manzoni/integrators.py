@@ -131,7 +131,7 @@ class FirstOrderTransportIntegrator(TransportIntegrator):
         return batched_vector_matrix(
             beam_in,
             beam_out,
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+            cls.MATRICES.get(element.__class__.__name__.upper())(element.cache)
         )
 
     @classmethod
@@ -152,8 +152,8 @@ class SecondOrderTransportIntegrator(FirstOrderTransportIntegrator):
         return batched_vector_matrix_tensor(
             beam_in,
             beam_out,
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters),
-            cls.TENSORS.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+            cls.MATRICES.get(element.__class__.__name__.upper())(element.cache),
+            cls.TENSORS.get(element.__class__.__name__.upper())(element.cache)
         )
 
     @classmethod
