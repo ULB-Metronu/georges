@@ -30,7 +30,7 @@ class Input:
                       ):
         input_sequence = list()
         for name, element in sequence.df.iterrows():
-            element_class = getattr(elements, element['CLASS'].capitalize())
+            element_class = getattr(elements, element['CLASS'])
             parameters = set(list(element.index.values)).intersection(element_class.PARAMETERS.keys())
             input_sequence.append(
                 element_class(name, **element[parameters])

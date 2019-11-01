@@ -55,9 +55,12 @@ def compute_transport_combined_dipole_matrix(element_parameters: list) -> np.nda
     return R
 
 
-
-@njit(cache=True)
-def compute_transport_combined_dipole_tensor(L: float, alpha: float, K1: float, K2: float) -> np.ndarray:
+@njit
+def compute_transport_combined_dipole_tensor(element_parameters: list) -> np.ndarray:
+    L: float = element_parameters[0]
+    alpha: float = element_parameters[1]
+    K1: float = element_parameters[2]
+    K2: float = element_parameters[3]
     h = alpha / L
     kx2 = h ** 2 + K1
     ky2 = -K1

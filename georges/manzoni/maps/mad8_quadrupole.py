@@ -4,7 +4,10 @@ from numpy import cos, sin, cosh, sinh, sqrt
 
 
 @njit
-def compute_mad_quadrupole_matrix(L: float, K1: float, beta: float) -> np.ndarray:
+def compute_mad_quadrupole_matrix(element_parameters: list, global_parameters: list) -> np.ndarray:
+    L: float = element_parameters[0]
+    K1: float = element_parameters[1]
+    beta: float = global_parameters[0]
     gamma = 1 / sqrt(1-beta**2)
     R = np.zeros((6, 6))
 
@@ -46,7 +49,10 @@ def compute_mad_quadrupole_matrix(L: float, K1: float, beta: float) -> np.ndarra
 
 
 @njit
-def compute_mad_quadrupole_tensor(L: float, K1: float, beta: float) -> np.ndarray:
+def compute_mad_quadrupole_tensor(element_parameters: list, global_parameters: list) -> np.ndarray:
+    L: float = element_parameters[0]
+    K1: float = element_parameters[1]
+    beta: float = global_parameters[0]
     gamma = 1 / sqrt(1-beta**2)
     T = np.zeros((6, 6, 6))
 
@@ -79,7 +85,7 @@ def compute_mad_quadrupole_tensor(L: float, K1: float, beta: float) -> np.ndarra
     T[1, 1, 5] = (K1*L*sx)/(2*beta)
     T[2, 2, 5] = -(K1*L*sy)/(2*beta)
     T[2, 3, 5] = (-(cy*L) - sy)/(2*beta)
-    T[3, 2, 3] = (K1*(-(cy*L) + sy))/(2*beta)
+    T[3, 2, 5] = (K1*(-(cy*L) + sy))/(2*beta)
     T[3, 3, 5] = -(K1*L*sy)/(2*beta)
     T[4, 0, 0] = -(K1*(L - cx*sx))/(4*beta)
     T[4, 0, 1] = (K1*sx**2)/(2*beta)

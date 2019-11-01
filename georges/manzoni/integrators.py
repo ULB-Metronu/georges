@@ -27,8 +27,8 @@ __ALL__ = [
     'Mad8FirstOrderTaylorIntegrator',
     'Mad8SecondOrderTaylorIntegrator',
     'TransportIntegrator',
-    'TransportFirstOrderIntegrator',
-    'TransportSecondOrderIntegrator',
+    'TransportFirstOrderTaylorIntegrator',
+    'TransportSecondOrderTaylorIntegrator',
     'PTCIntegrator',
 ]
 
@@ -85,7 +85,7 @@ class Mad8FirstOrderTaylorIntegrator(Mad8Integrator):
         return batched_vector_matrix(
             beam_in,
             beam_out,
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+            cls.MATRICES.get(element.__class__.__name__.upper())(element.cache, global_parameters)
         )
 
     @classmethod
@@ -105,8 +105,8 @@ class Mad8SecondOrderTaylorIntegrator(Mad8FirstOrderTaylorIntegrator):
         return batched_vector_matrix_tensor(
             beam_in,
             beam_out,
-            cls.MATRICES.get(element.__class__.__name__.upper())(*element.cache, *global_parameters),
-            cls.TENSORS.get(element.__class__.__name__.upper())(*element.cache, *global_parameters)
+            cls.MATRICES.get(element.__class__.__name__.upper())(element.cache, global_parameters),
+            cls.TENSORS.get(element.__class__.__name__.upper())(element.cache, global_parameters)
         )
 
     @classmethod
@@ -118,9 +118,10 @@ class TransportIntegrator(Integrator):
     pass
 
 
-class FirstOrderTransportIntegrator(TransportIntegrator):
+class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
     MATRICES = {
         'BEND': compute_transport_combined_dipole_matrix,
+        'SBEND': compute_transport_combined_dipole_matrix,
         'QUADRUPOLE': compute_transport_quadrupole_matrix,
         'SEXTUPOLE': compute_transport_sextupole_matrix,
         'MULTIPOLE': compute_transport_multipole_matrix,
@@ -139,9 +140,10 @@ class FirstOrderTransportIntegrator(TransportIntegrator):
         return element.parameters
 
 
-class SecondOrderTransportIntegrator(FirstOrderTransportIntegrator):
+class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
     TENSORS = {
         'BEND': compute_transport_combined_dipole_tensor,
+        'SBEND': compute_transport_combined_dipole_tensor,
         'QUADRUPOLE': compute_transport_quadrupole_tensor,
         'SEXTUPOLE': compute_transport_sextupole_tensor,
         'MULTIPOLE': compute_transport_multipole_tensor,

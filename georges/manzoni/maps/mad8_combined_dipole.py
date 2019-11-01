@@ -4,7 +4,12 @@ from numpy import cos, sin, cosh, sinh, sqrt
 
 
 @njit(cache=True)
-def compute_mad_combined_dipole_matrix(L: float, alpha: float, K1: float, K2: float, beta: float) -> np.ndarray:
+def compute_mad_combined_dipole_matrix(element_parameters: list, global_parameters: list) -> np.ndarray:
+    L: float = element_parameters[0]
+    alpha: float = element_parameters[1]
+    K1: float = element_parameters[2]
+    K2: float = element_parameters[3]
+    beta: float = global_parameters[0]
     gamma = 1 / sqrt(1 - beta ** 2)
     h = alpha / L
     kx2 = h ** 2 + K1
@@ -66,7 +71,12 @@ def compute_mad_combined_dipole_matrix(L: float, alpha: float, K1: float, K2: fl
 
 
 @njit
-def compute_mad_combined_dipole_tensor(L: float, alpha: float, K1: float, K2: float, beta: float) -> np.ndarray:
+def compute_mad_combined_dipole_tensor(element_parameters: list, global_parameters: list) -> np.ndarray:
+    L: float = element_parameters[0]
+    alpha: float = element_parameters[1]
+    K1: float = element_parameters[2]
+    K2: float = element_parameters[3]
+    beta: float = global_parameters[0]
     gamma = 1 / sqrt(1 - beta ** 2)
     h = alpha / L
     kx2 = h ** 2 + K1

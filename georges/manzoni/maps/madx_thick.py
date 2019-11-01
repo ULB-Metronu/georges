@@ -84,7 +84,7 @@ def track_madx_drift(b1, b2, element_parameters: list, global_parameters: list):
 
     """
     length: float = element_parameters[0]
-    beta = global_parameters[0]
+    beta: float = global_parameters[0]
     time_of_flight: bool = b1.shape[0] == 7
     for i in prange(b1.shape[0]):
         px = b1[i, 1]
