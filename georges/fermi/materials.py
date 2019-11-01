@@ -1,7 +1,7 @@
 """
 TODO
 """
-from typing import List, Callable
+from typing import List
 import os
 import sys
 import numpy as _np
@@ -17,6 +17,13 @@ from georges_core.kinematics import ekin_to_pv as _ekin_to_pv
 
 def __pdg_read_data(path: str) -> _pd.DataFrame:
     return _pd.read_csv(os.path.join(path, "pdg", "data.csv"),
+                        delimiter=',',
+                        index_col='material'
+                        )
+
+
+def __bdsim_read_data(path: str) -> _pd.DataFrame:
+    return _pd.read_csv(os.path.join(path, "bdsim", "data.csv"),
                         delimiter=',',
                         index_col='material'
                         )
@@ -78,15 +85,25 @@ def __srim_read_data(path: str, material_name: str, pdg_data) -> _pd.DataFrame:
 
 class MaterialType(type):
     @property
+    def valid_data(cls):
+        return cls.pdg_data is not None and cls.projected_range is not None and cls.csda_range is not None
+
+    @property
     def atomic_a(cls) -> float:
+        if cls.pdg_data is None:
+            return None
         return cls.pdg_data['A']
 
     @property
     def atomic_z(cls) -> float:
+        if cls.pdg_data is None:
+            return None
         return cls.pdg_data['Z']
 
     @property
     def density(cls) -> float:
+        if cls.pdg_data is None:
+            return None
         return cls.pdg_data['rho']
 
     def range(cls, kinetic_energy: _ureg.Quantity, csda: bool = False, projected: bool = True) -> _ureg.Quantity:
@@ -100,6 +117,8 @@ class MaterialType(type):
         Returns:
 
         """
+        if not cls.valid_data:
+            return None
         energy = kinetic_energy.m_as('MeV')
         if projected and not csda:
             return _np.exp(cls.projected_range(_np.log(energy))) / cls.density * _ureg.cm
@@ -119,6 +138,8 @@ class MaterialType(type):
         Returns:
 
         """
+        if not cls.valid_data:
+            return None
         r = range.m_as('cm')
         if projected and not csda:
             return _Kinematics(
@@ -143,6 +164,8 @@ class MaterialType(type):
         Returns:
 
         """
+        if not cls.valid_data:
+            return None
         return cls.solve_range(cls.residual_range(thickness, kinetic_energy))
 
     def residual_range(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> _ureg.Quantity:
@@ -155,6 +178,8 @@ class MaterialType(type):
         Returns:
 
         """
+        if not cls.valid_data:
+            return None
         return cls.range(kinetic_energy) - thickness
 
     def required_thickness(cls,
@@ -173,6 +198,8 @@ class MaterialType(type):
         Returns:
 
         """
+        if not cls.valid_data:
+            return None
         return cls.range(kinetic_energy_in, csda=csda, projected=projected) \
                - cls.range(kinetic_energy_out, csda=csda, projected=projected)
 
@@ -191,6 +218,14 @@ class MaterialType(type):
         Returns:
 
         """
+        if not cls.valid_data:
+            return {
+                'A': (0.0, 0.0, 0.0),
+                'B': 0.0,
+                'TWISS_ALPHA': _np.nan,
+                'TWISS_BETA': _np.nan,
+                'TWISS_GAMMA': _np.nan,
+            }
         thickness = thickness.m_as('cm')
 
         def integrand(u: float,
@@ -230,11 +265,13 @@ class MaterialType(type):
         Returns:
 
         """
-        c0 = cls.energy_dispersion['C0']
-        c1 = cls.energy_dispersion['C1']
-        c2 = cls.energy_dispersion['C2']
-        c3 = cls.energy_dispersion['C3']
-        c4 = cls.energy_dispersion['C4']
+        if not cls._energy_dispersion:
+            return None
+        c0 = cls.bdsim_data['C0']
+        c1 = cls.bdsim_data['C1']
+        c2 = cls.bdsim_data['C2']
+        c3 = cls.bdsim_data['C3']
+        c4 = cls.bdsim_data['C4']
         return c4 * energy**4 + c3 * energy**3 + c2 * energy**2 + c1 * energy + c0
 
     def losses(cls, energy):
@@ -247,20 +284,28 @@ class MaterialType(type):
         Returns:
 
         """
-        c0 = cls.loss_factors['C0']
-        c1 = cls.loss_factors['C1']
-        c2 = cls.loss_factors['C2']
-        c3 = cls.loss_factors['C3']
-        c4 = cls.loss_factors['C4']
+        if not cls._loss_factors:
+            return None
+        c0 = cls.bdsim_data['C0']
+        c1 = cls.bdsim_data['C1']
+        c2 = cls.bdsim_data['C2']
+        c3 = cls.bdsim_data['C3']
+        c4 = cls.bdsim_data['C4']
         return c4 * energy ** 4 + c3 * energy ** 3 + c2 * energy ** 2 + c1 * energy + c0
 
 
 class Material(metaclass=MaterialType):
-    def __init_subclass__(cls, csda_range_data, projected_range_data, pdg_data, **kwargs):
+    def __init_subclass__(cls,
+                          csda_range_data,
+                          projected_range_data,
+                          pdg_data,
+                          bdsim_data,
+                          **kwargs):
         super().__init_subclass__(**kwargs)
         cls.csda_range = csda_range_data
         cls.projected_range = projected_range_data
         cls.pdg_data = pdg_data
+        cls.bdsim_data = bdsim_data
 
     def __str__(self):
         return self.__class__.__name__.lower()
@@ -289,6 +334,9 @@ def __initialize_materials_database():
         m: __srim_read_data(db_path, m, pdg_data) for m in srim_data_files
     }
 
+    # Read BDSIM data
+    bdsim_data = __bdsim_read_data(db_path)
+
     # Create the interpolated functions for the projected ranges
     projected_ranges_pstar = {
         k: scipy.interpolate.CubicSpline(_np.log(v['K']), _np.log(v['prange'])) for k, v in
@@ -314,4 +362,6 @@ def __initialize_materials_database():
                                                                csda_range_data=csda_ranges.get(m, None),
                                                                pdg_data=pdg_data.loc[
                                                                    m] if m in pdg_data.index else None,
+                                                               bdsim_data=bdsim_data.loc[
+                                                                   m] if m in bdsim_data.index else None
                                                                ))
