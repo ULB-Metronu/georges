@@ -21,6 +21,18 @@ class Output(metaclass=OutputType):
         """
         self._file = _uproot.open(os.path.join(path, filename))
 
+    class _Tree:
+        def __init__(self, tree):
+            """
+
+            Args:
+                tree:
+            """
+            self._tree = tree
+
+    class _Branch:
+        pass
+
 
 class BDSimOutput(Output):
     def __init__(self, filename: str = 'output.root', path: str = '.'):
@@ -33,25 +45,45 @@ class BDSimOutput(Output):
         super().__init__(filename, path)
 
     @property
+    def header(self):
+        """"""
+        return BDSimOutput.Header(self._file['Header'])
+
+    @property
+    def beam(self):
+        """"""
+        return BDSimOutput.Beam(self._file['Beam'])
+
+    @property
+    def options(self):
+        """"""
+        return BDSimOutput.Options(self._file['Options'])
+
+    @property
     def model(self):
         """"""
         return BDSimOutput.Model(self._file['Model'])
+
+    @property
+    def run(self):
+        """"""
+        return BDSimOutput.Run(self._file['Run'])
 
     @property
     def event(self):
         """"""
         return BDSimOutput.Event(self._file['Event'])
 
-    class _Branch:
-        def __init__(self, branch):
-            """
+    class Header(Output._Tree):
+        pass
 
-            Args:
-                branch:
-            """
-            self._branch = branch
+    class Beam(Output._Tree):
+        pass
 
-    class Model(_Branch):
+    class Options(Output._Tree):
+        pass
+
+    class Model(Output._Tree):
 
         def extract_geometry(self) -> _pd.DataFrame:
             """
@@ -87,15 +119,53 @@ class BDSimOutput(Output):
             # Concatenate
             return _pd.concat([model_geometry_df, data.loc[0]], axis='columns', sort=False).set_index('NAME')
 
-    class Event(_Branch):
-        pass
+    class Run(Output._Tree):
+        def __init__(self):
+            super().__init__()
+
+        class Summary(Output._Branch):
+            def __init__(self):
+                pass
+
+    class Event(Output._Tree):
+        def __init__(self):
+            super().__init__()
+            self._eloss = BDSimOutput.Event.ELoss()
+            self._eloss_vacuum = BDSimOutput.Event.ELossVacuum()
+            self._eloss_tunnel = BDSimOutput.Event.ELossTunnel()
+            self._eloss_world = BDSimOutput.Event.ELossWorld()
+            self._eloss_world_exit = BDSimOutput.Event.ELossWorldExit()
+
+        @property
+        def eloss(self):
+            return self._eloss
+
+        class ELoss(Output._Branch):
+            def __init__(self):
+                pass
+
+        class ELossVacuum(Output._Branch):
+            def __init__(self):
+                pass
+
+        class ELossTunnel(Output._Branch):
+            pass
+
+        class ELossWorld(Output._Branch):
+            pass
+
+        class ELossWorldExit(Output._Branch):
+            pass
+
+        class PrimaryFirstHit(Output._Branch):
+            pass
+
+        class PrimaryLastHit(Output._Branch):
+            pass
+
+        class ApertureImpacts(Output._Branch):
+            pass
 
 
 class ReBDSimOutput(Output):
     pass
-
-
-
-
-
-
