@@ -1,9 +1,14 @@
 """
 TODO
 """
-from typing import Optional, List
+from __future__ import annotations
+from typing import TYPE_CHECKING, Optional, List
 from georges_core.sequences import Sequence as _Sequence
 from . import elements
+from .core import track
+if TYPE_CHECKING:
+    from .beam import Beam as _Beam
+    from .observers import Observer as _Observer
 
 
 class Input:
@@ -23,6 +28,10 @@ class Input:
         for e in self._sequence:
             e.unfreeze()
         return self
+
+    def track(self, beam: _Beam, observer: Optional[_Observer] = None, check_apertures: bool = True) -> _Observer:
+        track(self, beam, observer, check_apertures)
+        return observer
 
     @classmethod
     def from_sequence(cls,

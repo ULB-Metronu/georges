@@ -1,14 +1,15 @@
 from __future__ import annotations
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 import numpy as _np
 from .input import Input as _Input
-from .beam import Beam as _Beam
-from .observers import Observer
+if TYPE_CHECKING:
+    from .beam import Beam as _Beam
+    from .observers import Observer as _Observer
 
 
 def track(beamline: _Input,
           beam: _Beam,
-          observer: Optional[Observer] = None,
+          observer: Optional[_Observer] = None,
           check_apertures: bool = True
           ):
     """
