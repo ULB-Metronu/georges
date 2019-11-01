@@ -30,3 +30,6 @@ class MadX(cpymad.madx.Madx):
             self.input((f"{name}: {element['CLASS'].lower()}, AT={element['AT_ENTRY']}, " + ', '.join([f"{k}={str(v).strip('[]')}" for k, v in parameters.items()]) + ';').strip())
         self.input("ENDSEQUENCE;")
         self.input(f"USE, SEQUENCE={sequence.name or 'SEQ'};")
+
+    def track(self):
+        pass
