@@ -1,7 +1,7 @@
 """
 TODO
 """
-from typing import List
+from typing import List, Mapping
 import os
 import sys
 import numpy as _np
@@ -206,7 +206,7 @@ class MaterialType(type):
     def scattering(cls,
                    kinetic_energy: _ureg.Quantity,
                    thickness: _ureg.Quantity,
-                   model: _ScatteringModelType = _DifferentialMoliere):
+                   model: _ScatteringModelType = _DifferentialMoliere) -> Mapping[str, float]:
         """
         Compute the Fermi-Eyges parameters A0, A1, A2 and B (emittance).
 
