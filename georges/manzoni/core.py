@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING, Optional
 import numpy as _np
-from .input import Input as _Input
 if TYPE_CHECKING:
+    from .input import Input as _Input
     from .beam import Beam as _Beam
     from .observers import Observer as _Observer
 
