@@ -166,7 +166,7 @@ def compute_mad_combined_dipole_tensor(element_parameters: list, global_paramete
                     -2 * sqrt(-K1) + sqrt(h ** 2 + K1)))) / (-2 * sqrt(-K1) + sqrt(h ** 2 + K1)) ** 2
 
     # Compute the basic integrals - Integrals J1, J2 and J3
-    if kx2 * L ** 2 < 1e-2:
+    if abs(kx2 * L ** 2) < 1e-2:
         j1 = L ** 3 / 6 - (kx2 * L ** 5) / 120 + (kx2 ** 2 * L ** 7) / 5040
         j2 = L ** 5 / 20 - (kx2 * L ** 7) / 168 + (kx2 ** 2 * L ** 9) / 2880
         j3 = L ** 7 / 56 - (kx2 * L ** 9) / 288 + (7 * kx2 ** 2 * L ** 11) / 21120
@@ -176,7 +176,7 @@ def compute_mad_combined_dipole_tensor(element_parameters: list, global_paramete
         j3 = (15 * L - 22 * sx + 9 * cx * sx - 2 * cx ** 2 * sx) / (6 * kx2 ** 3)
 
     # Compute the basic integrals - Integrals JC, JS, JD, JF
-    if max(kx2, 4 * ky2) < 1e-2 or (kx2 - 4 * ky2) < 1e-6:
+    if max(kx2, 4 * ky2) < 1e-2 or abs(kx2 - 4 * ky2) < 1e-6:
         jc = L ** 2 / 2 + ((4 * K1 - kx2) * L ** 4) / 24 + ((16 * K1 ** 2 - 4 * K1 * kx2 + kx2 ** 2) * L ** 6) / 720
         js = L ** 3 / 6 + ((4 * K1 - kx2) * L ** 5) / 120 + ((16 * K1 ** 2 - 4 * K1 * kx2 + kx2 ** 2) * L ** 7) / 5040
         jd = L ** 4 / 24 + ((4 * K1 - kx2) * L ** 6) / 720 + ((16 * K1 ** 2 - 4 * K1 * kx2 + kx2 ** 2) * L ** 8) / 40320

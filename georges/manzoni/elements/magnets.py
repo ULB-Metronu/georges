@@ -106,8 +106,7 @@ class Bend(Magnet):
     @staticmethod
     def compute_fringe(h: float, e: float, hgap: float, fint: float) -> Tuple[float, float]:
         fringe_x = h * _np.tan(e)
-        corr = (h + h) * hgap * fint  # This is incorrect but kept for compatibility with MAD-X
-        # corr = h * 2 * hgap * fint
+        corr = h * (2 * hgap) * fint
         psi = e - corr * (1.0 / _np.cos(e)) * (1 + _np.sin(e) ** 2)
         fringe_y = - h * _np.tan(psi)
         return fringe_x, fringe_y
