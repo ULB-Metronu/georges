@@ -12,24 +12,51 @@ if TYPE_CHECKING:
 
 
 class Input:
-    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None):
+    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None, beam: Optional[_Beam] = None):
         self._sequence = sequence
+        self._beam = beam
 
     @property
     def sequence(self):
         return self._sequence
 
+    @property
+    def beam(self):
+        return self._beam
+
     def freeze(self):
+        """
+        Freezes all elements in the input sequence.
+
+        Returns:
+            `self` to allow method chaining
+        """
         for e in self._sequence:
             e.freeze()
         return self
 
     def unfreeze(self):
+        """
+        Unfreezes all elements in the input sequence.
+
+        Returns:
+            `self` to allow method chaining
+        """
         for e in self._sequence:
             e.unfreeze()
         return self
 
     def track(self, beam: _Beam, observer: Optional[_Observer] = None, check_apertures: bool = True) -> _Observer:
+        """
+
+        Args:
+            beam:
+            observer:
+            check_apertures:
+
+        Returns:
+            the `Observer` object containing the tracking results.
+        """
         track(self, beam, observer, check_apertures)
         return observer
 
@@ -37,6 +64,15 @@ class Input:
     def from_sequence(cls,
                       sequence: _Sequence,
                       ):
+        """
+        Creates a new `Input` from a generic sequence from `georges_core`.
+
+        Args:
+            sequence:
+
+        Returns:
+
+        """
         input_sequence = list()
         for name, element in sequence.df.iterrows():
             element_class = getattr(elements, element['CLASS'])
