@@ -70,7 +70,7 @@ def compute_mad_combined_dipole_matrix(element_parameters: list, global_paramete
     return R
 
 
-@njit
+@njit(cache=True)
 def compute_mad_combined_dipole_tensor(element_parameters: list, global_parameters: list) -> np.ndarray:
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]
@@ -118,10 +118,10 @@ def compute_mad_combined_dipole_tensor(element_parameters: list, global_paramete
         sy = L
         dy = L ** 2 / 2
         fy = L ** 3 / 6
-        c2y = 2
-        s2y = 2 * L
-        d2y = L ** 2
-        f2y = L ** 3 / 3
+        c2y = 1
+        s2y = L
+        d2y = L ** 2 / 2
+        f2y = L ** 3 / 6
     elif K1 > 0:
         cy = cosh(sqrt(K1) * L)
         sy = sinh(sqrt(K1) * L) / sqrt(K1)
@@ -229,9 +229,9 @@ def compute_mad_combined_dipole_tensor(element_parameters: list, global_paramete
     T[1, 3, 3] = js * K2 - (h * sx) / 2
     T[2, 0, 2] = (h * K1 * sx * sy) / 2 + (K2 * (cy * jc - 2 * js * K1 * sy)) / 2
     T[2, 0, 3] = (cy * h * sx) / 2 + (K2 * (-2 * cy * js + jc * sy)) / 2
-    T[2, 1, 2] = (cy * dx * h) / 2 + (K2 * (cy * js - 2 * jd * K1 * sy)) / 2
+    T[2, 1, 2] = (dx * h * K1 * sy) / 2 + (K2 * (cy * js - 2 * jd * K1 * sy)) / 2
     T[2, 1, 3] = (cy * dx * h) / 2 + (K2 * (-2 * cy * jd + js * sy)) / 2
-    T[2, 2, 5] = (h ** 2 * j1 * K1 * sy) / (2 * beta) - (cy * L + sy) / (4 * beta) + (
+    T[2, 2, 5] = (h ** 2 * j1 * K1 * sy) / (2 * beta) - (K1 * L * sy) / (4 * beta) + (
                 h * K2 * (cy * jd - 2 * jf * K1 * sy)) / (2 * beta)
     T[2, 3, 5] = (cy * h ** 2 * j1) / (2 * beta) - (cy * L + sy) / (4 * beta) + (h * K2 * (-2 * cy * jf + jd * sy)) / (
                 2 * beta)
