@@ -31,15 +31,28 @@ class Output(metaclass=OutputType):
                 tree:
             """
             self._tree = tree
+            self._df: Optional[_pd.DataFrame] = None
+
+        def read_df(self):
+            pass
 
         @property
         def numentries(self):
             return self._tree.numentries
 
+        @property
+        def df(self):
+            if self._df is None:
+                return self.read_df()
+            return self._df
+
     class _Branch:
         def __init__(self, tree: Output._Tree):
             self._tree: Output._Tree = tree
             self._df: Optional[_pd.DataFrame] = None
+
+        def read_df(self):
+            pass
 
         @property
         def df(self):
@@ -57,36 +70,12 @@ class BDSimOutput(Output):
             path:
         """
         super().__init__(filename, path)
-
-    @property
-    def header(self):
-        """"""
-        return BDSimOutput.Header(self._file['Header'])
-
-    @property
-    def beam(self):
-        """"""
-        return BDSimOutput.Beam(self._file['Beam'])
-
-    @property
-    def options(self):
-        """"""
-        return BDSimOutput.Options(self._file['Options'])
-
-    @property
-    def model(self):
-        """"""
-        return BDSimOutput.Model(self._file['Model'])
-
-    @property
-    def run(self):
-        """"""
-        return BDSimOutput.Run(self._file['Run'])
-
-    @property
-    def event(self):
-        """"""
-        return BDSimOutput.Event(self._file['Event'])
+        self.header = BDSimOutput.Header(tree=self._file['Header'])
+        self.beam = BDSimOutput.Beam(tree=self._file['Beam'])
+        self.options = BDSimOutput.Options(tree=self._file['Options'])
+        self.model = BDSimOutput.Model(tree=self._file['Model'])
+        self.run = BDSimOutput.Run(tree=self._file['Run'])
+        self.event = BDSimOutput.Event(tree=self._file['Event'])
 
     class Header(Output._Tree):
         pass
@@ -99,7 +88,7 @@ class BDSimOutput(Output):
 
     class Model(Output._Tree):
 
-        def read(self) -> _pd.DataFrame:
+        def read_df(self) -> _pd.DataFrame:
             """
 
             Returns:
@@ -131,15 +120,17 @@ class BDSimOutput(Output):
                             axis='columns', inplace=True)
 
             # Concatenate
-            return _pd.concat([model_geometry_df, data.loc[0]], axis='columns', sort=False).set_index('NAME')
+            self._df = _pd.concat([model_geometry_df, data.loc[0]], axis='columns', sort=False).set_index('NAME')
+
+            self._df.columns = self._df.columns.str.lstrip(self.__class__.__name__ + '.')
+            return self._df
 
     class Run(Output._Tree):
         def __init__(self, tree):
             super().__init__(tree)
 
         class Summary(Output._Branch):
-            def __init__(self):
-                pass
+            pass
 
     class Event(Output._Tree):
         def __init__(self, tree):
@@ -152,6 +143,9 @@ class BDSimOutput(Output):
             self.primary_first_hit = BDSimOutput.Event.PrimaryFirstHit(self)
             self.primary_last_hit = BDSimOutput.Event.PrimaryLastHit(self)
             self.aperture_impacts = BDSimOutput.Event.ApertureImpacts(self)
+
+        def read_df(self):
+            pass
 
         class ELoss(Output._Branch):
             pass
