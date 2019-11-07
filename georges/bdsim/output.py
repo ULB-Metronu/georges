@@ -116,7 +116,8 @@ class BDSimOutput(Output):
             # Names and strings
             for branch, name in {'Model.componentName': 'NAME',
                                  'Model.componentType': 'TYPE',
-                                 'Model.material': 'MATERIAL'
+                                 'Model.material': 'MATERIAL',
+                                 'Model.beamPipeType': 'APERTYPE',
                                  }.items():
                 data = [_.decode('utf-8') for _ in self._tree.array(branch=[branch])[0]]
                 model_geometry_df[name] = data
@@ -153,6 +154,13 @@ class BDSimOutput(Output):
                                  'Model.bField': 'B',
                                  'Model.eField': 'E',
                                  }.items():
+                model_geometry_df[name] = self._tree.array(branch=[branch])[0]
+
+            # Aperture
+            for branch, name in {'Model.beamPipeAper1': 'APERTURE1',
+                                 'Model.beamPipeAper2': 'APERTURE2',
+                                 'Model.beamPipeAper3': 'APERTURE3',
+                                 'Model.beamPipeAper4': 'APERTURE4'}.items():
                 model_geometry_df[name] = self._tree.array(branch=[branch])[0]
 
             # Vectors
