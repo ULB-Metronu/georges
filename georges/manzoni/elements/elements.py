@@ -357,8 +357,8 @@ class ManzoniElement(Element, _Patchable):
         if self.APERTYPE is not None:
             aperture_check, aperture_parameters = self.aperture
             out = _np.compress(
-                aperture_check(beam, aperture_parameters),
-                beam,
+                aperture_check(out, aperture_parameters),
+                out,
                 axis=0,
             )
         return beam, out
