@@ -10,7 +10,8 @@ if TYPE_CHECKING:
 def track(beamline: _Input,
           beam: _Beam,
           observer: Optional[_Observer] = None,
-          check_apertures: bool = True
+          check_apertures_entry: bool = False,
+          check_apertures_exit: bool = True,
           ):
     """
 
@@ -18,7 +19,8 @@ def track(beamline: _Input,
         beamline:
         beam:
         observer:
-        check_apertures:
+        check_apertures_entry:
+        check_apertures_exit:
 
     Returns:
 
@@ -29,11 +31,13 @@ def track(beamline: _Input,
     b1 = _np.copy(beam.distribution)
     b2 = _np.zeros(b1.shape)
     for e in beamline.sequence:
-        b1, b2 = e.propagate(b1, b2, global_parameters)
-        if check_apertures:
+        if check_apertures_entry:
             b1, b2 = e.check_aperture(b1, b2)
-            if observer is not None:
-                observer(e, b1, b2)
+        b1, b2 = e.propagate(b1, b2, global_parameters)
+        if check_apertures_exit:
+            b1, b2 = e.check_aperture(b1, b2)
+        if observer is not None:
+            observer(e, b1, b2)
         b2, b1 = b1, b2
 
 
