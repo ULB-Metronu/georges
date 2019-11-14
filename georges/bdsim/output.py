@@ -98,7 +98,66 @@ class BDSimOutput(Output):
         pass
 
     class Beam(Output.Tree):
-        pass
+
+        def read_df(self) -> _pd.DataFrame:
+            """
+
+            Returns:
+
+            """
+
+            beam_df = _pd.DataFrame()
+
+            # Single value
+            for branch, name in {'Beam.GMAD::BeamBase.beamEnergy': 'E0',
+                                 'Beam.GMAD::BeamBase.X0': 'X0',
+                                 'Beam.GMAD::BeamBase.Y0': 'Y0',
+                                 'Beam.GMAD::BeamBase.Z0': 'Z0',
+                                 'Beam.GMAD::BeamBase.S0': 'S0',
+                                 'Beam.GMAD::BeamBase.Xp0': 'Xp0',
+                                 'Beam.GMAD::BeamBase.Yp0': 'Yp0',
+                                 'Beam.GMAD::BeamBase.Zp0': 'Zp0',
+                                 'Beam.GMAD::BeamBase.T0': 'T0',
+                                 'Beam.GMAD::BeamBase.E0': 'E0',
+                                 'Beam.GMAD::BeamBase.tilt': 'tilt',
+                                 'Beam.GMAD::BeamBase.sigmaT': 'sigmaT',
+                                 'Beam.GMAD::BeamBase.sigmaE': 'sigmaE',
+                                 'Beam.GMAD::BeamBase.betx': 'betx',
+                                 'Beam.GMAD::BeamBase.bety': 'bety',
+                                 'Beam.GMAD::BeamBase.alfx': 'alfx',
+                                 'Beam.GMAD::BeamBase.alfy': 'alfy',
+                                 'Beam.GMAD::BeamBase.emitx': 'emitx',
+                                 'Beam.GMAD::BeamBase.emity': 'emity',
+                                 'Beam.GMAD::BeamBase.dispx': 'dispx',
+                                 'Beam.GMAD::BeamBase.dispy': 'dispy',
+                                 'Beam.GMAD::BeamBase.sigmaX': 'sigmaX',
+                                 'Beam.GMAD::BeamBase.sigmaXp': 'sigmaXp',
+                                 'Beam.GMAD::BeamBase.sigmaY': 'sigmaY',
+                                 'Beam.GMAD::BeamBase.sigma11': 'sigma11',
+                                 'Beam.GMAD::BeamBase.sigma12': 'sigma12',
+                                 'Beam.GMAD::BeamBase.sigma13': 'sigma13',
+                                 'Beam.GMAD::BeamBase.sigma14': 'sigma14',
+                                 'Beam.GMAD::BeamBase.sigma15': 'sigma15',
+                                 'Beam.GMAD::BeamBase.sigma16': 'sigma16',
+                                 'Beam.GMAD::BeamBase.sigma22': 'sigma22',
+                                 'Beam.GMAD::BeamBase.sigma23': 'sigma23',
+                                 'Beam.GMAD::BeamBase.sigma24': 'sigma24',
+                                 'Beam.GMAD::BeamBase.sigma25': 'sigma25',
+                                 'Beam.GMAD::BeamBase.sigma26': 'sigma26',
+                                 'Beam.GMAD::BeamBase.sigma33': 'sigma33',
+                                 'Beam.GMAD::BeamBase.sigma34': 'sigma34',
+                                 'Beam.GMAD::BeamBase.sigma35': 'sigma35',
+                                 'Beam.GMAD::BeamBase.sigma36': 'sigma36',
+                                 'Beam.GMAD::BeamBase.sigma44': 'sigma44',
+                                 'Beam.GMAD::BeamBase.sigma45': 'sigma45',
+                                 'Beam.GMAD::BeamBase.sigma46': 'sigma46',
+                                 'Beam.GMAD::BeamBase.sigma55': 'sigma55',
+                                 'Beam.GMAD::BeamBase.sigma56': 'sigma56',
+                                 'Beam.GMAD::BeamBase.sigma66': 'sigma66',
+                                 }.items():
+                beam_df[name] = self._tree.array(branch=[branch])
+            self._df = beam_df
+            return self._df
 
     class Options(Output.Tree):
         pass
@@ -171,10 +230,8 @@ class BDSimOutput(Output):
             for branch, name in geometry_branches.items():
                 data.rename({f"{branch}.fX": f"{name}X", f"{branch}.fY": f"{name}Y", f"{branch}.fZ": f"{name}Z"},
                             axis='columns', inplace=True)
-
             # Concatenate
             self._df = _pd.concat([model_geometry_df, data.loc[0]], axis='columns', sort=False).set_index('NAME')
-
             return self._df
 
     class Run(Output.Tree):
