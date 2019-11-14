@@ -196,6 +196,7 @@ class BDSimOutput(Output):
             self.primary_last_hit = BDSimOutput.Event.PrimaryLastHit(self)
             self.aperture_impacts = BDSimOutput.Event.ApertureImpacts(self)
             self.histos = BDSimOutput.Event.Histos(self)
+            self.primary = BDSimOutput.Event.Primary(self)
             self.samplers = {
                 b.decode('utf-8').rstrip('.'):
                     BDSimOutput.Event.Sampler(b, tree=self)
@@ -299,6 +300,37 @@ class BDSimOutput(Output):
         class Histos(Output.Branch):
             def read_df(self) -> _pd.DataFrame:
                 self._tree._tree
+
+        class Primary(Output.Branch):
+            def read_df(self) -> _pd.DataFrame:
+                self._df = self._tree._tree.pandas.df(branches=tuple(map(lambda _: f"{self.__class__.__name__}.{_}", (
+                    'n',
+                    'energy',
+                    'x',
+                    'y',
+                    'z',
+                    'xp',
+                    'yp',
+                    'zp',
+                    'T',
+                    'weight',
+                    'partID',
+                    'S',
+                    'r',
+                    'rp',
+                    'phi',
+                    'phip',
+                    'theta',
+                    'charge',
+                    'kineticEnergy',
+                    'mass',
+                    'rigidity',
+                    'isIon',
+                    'ionA',
+                    'ionZ',
+                ))))
+                self._df.columns = self._df.columns.str.replace(self.__class__.__name__ + '.', '')
+                return self._df
 
         class Sampler(Output.Branch):
             def __init__(self, name, *args, **kwargs):
