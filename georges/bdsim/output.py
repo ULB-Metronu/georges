@@ -8,6 +8,11 @@ except (ImportError, ImportWarning):
     logging.error("Uproot is required for this module to work.")
 import pandas as _pd
 
+__all__ = [
+    'BDSimOutput',
+    'ReBDSimOutput',
+]
+
 
 class OutputType(type):
     pass

@@ -3,7 +3,7 @@ import numpy as np
 from numpy import cos, sin, cosh, sinh, sqrt
 
 
-@njit
+@njit(cache=True)
 def compute_mad_quadrupole_matrix(element_parameters: list, global_parameters: list) -> np.ndarray:
     L: float = element_parameters[0]
     K1: float = element_parameters[1]
@@ -48,7 +48,7 @@ def compute_mad_quadrupole_matrix(element_parameters: list, global_parameters: l
     return R
 
 
-@njit
+@njit(cache=True)
 def compute_mad_quadrupole_tensor(element_parameters: list, global_parameters: list) -> np.ndarray:
     L: float = element_parameters[0]
     K1: float = element_parameters[1]
