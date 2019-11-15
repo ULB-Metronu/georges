@@ -54,6 +54,9 @@ class MadXIntegrator(Integrator):
         'RBEND': track_madx_bend,
         'SBEND': track_madx_bend,
         'DRIFT': track_madx_drift,
+        'RECTANGULARCOLLIMATOR': track_madx_drift,
+        'ELLIPTICALCOLLIMATOR': track_madx_drift,
+        'DUMP': track_madx_drift,
         'QUADRUPOLE': track_madx_quadrupole,
         'ROTATION': track_madx_srotation,
     }
