@@ -107,6 +107,11 @@ class BDSimOutput(Output):
             """
 
             beam_df = _pd.DataFrame()
+            # Particle Name
+            for branch, name in {'Beam.GMAD::BeamBase.beamParticleName': 'particleName'
+                                 }.items():
+                data = [_.decode('utf-8') for _ in self._tree.array(branch=[branch])]
+            beam_df[name] = data
 
             # Single value
             for branch, name in {'Beam.GMAD::BeamBase.beamEnergy': 'E0',
@@ -118,7 +123,6 @@ class BDSimOutput(Output):
                                  'Beam.GMAD::BeamBase.Yp0': 'Yp0',
                                  'Beam.GMAD::BeamBase.Zp0': 'Zp0',
                                  'Beam.GMAD::BeamBase.T0': 'T0',
-                                 'Beam.GMAD::BeamBase.E0': 'E0',
                                  'Beam.GMAD::BeamBase.tilt': 'tilt',
                                  'Beam.GMAD::BeamBase.sigmaT': 'sigmaT',
                                  'Beam.GMAD::BeamBase.sigmaE': 'sigmaE',
@@ -182,10 +186,11 @@ class BDSimOutput(Output):
                 model_geometry_df[name] = data
 
             # Scalar
-            for branch, name in {'Model.length': 'LENGTH',
+            for branch, name in {'Model.length': 'L',
                                  'Model.staS': 'AT_ENTRY',
                                  'Model.midS': 'AT_CENTER',
                                  'Model.endS': 'AT_EXIT',
+                                 'Model.tilt': 'TILT',
                                  'Model.k1': 'K1',
                                  'Model.k2': 'K2',
                                  'Model.k3': 'K3',
@@ -211,7 +216,10 @@ class BDSimOutput(Output):
                                  'Model.k11s': 'K11S',
                                  'Model.k12s': 'K12S',
                                  'Model.bField': 'B',
-                                 'Model.eField': 'E',
+                                 'Model.e1': 'E1',
+                                 'Model.e2': 'E2',
+                                 'Model.hgap': 'HGAP'
+
                                  }.items():
                 model_geometry_df[name] = self._tree.array(branch=[branch])[0]
 
