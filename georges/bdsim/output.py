@@ -103,7 +103,70 @@ class BDSimOutput(Output):
         pass
 
     class Beam(Output.Tree):
-        pass
+
+        def read_df(self) -> _pd.DataFrame:
+            """
+
+            Returns:
+
+            """
+
+            beam_df = _pd.DataFrame()
+            # Particle Name
+            for branch, name in {'Beam.GMAD::BeamBase.beamParticleName': 'particleName'
+                                 }.items():
+                data = [_.decode('utf-8') for _ in self._tree.array(branch=[branch])]
+            beam_df[name] = data
+
+            # Single value
+            for branch, name in {'Beam.GMAD::BeamBase.beamEnergy': 'E0',
+                                 'Beam.GMAD::BeamBase.X0': 'X0',
+                                 'Beam.GMAD::BeamBase.Y0': 'Y0',
+                                 'Beam.GMAD::BeamBase.Z0': 'Z0',
+                                 'Beam.GMAD::BeamBase.S0': 'S0',
+                                 'Beam.GMAD::BeamBase.Xp0': 'Xp0',
+                                 'Beam.GMAD::BeamBase.Yp0': 'Yp0',
+                                 'Beam.GMAD::BeamBase.Zp0': 'Zp0',
+                                 'Beam.GMAD::BeamBase.T0': 'T0',
+                                 'Beam.GMAD::BeamBase.tilt': 'tilt',
+                                 'Beam.GMAD::BeamBase.sigmaT': 'sigmaT',
+                                 'Beam.GMAD::BeamBase.sigmaE': 'sigmaE',
+                                 'Beam.GMAD::BeamBase.betx': 'betx',
+                                 'Beam.GMAD::BeamBase.bety': 'bety',
+                                 'Beam.GMAD::BeamBase.alfx': 'alfx',
+                                 'Beam.GMAD::BeamBase.alfy': 'alfy',
+                                 'Beam.GMAD::BeamBase.emitx': 'emitx',
+                                 'Beam.GMAD::BeamBase.emity': 'emity',
+                                 'Beam.GMAD::BeamBase.dispx': 'dispx',
+                                 'Beam.GMAD::BeamBase.dispy': 'dispy',
+                                 'Beam.GMAD::BeamBase.sigmaX': 'sigmaX',
+                                 'Beam.GMAD::BeamBase.sigmaXp': 'sigmaXp',
+                                 'Beam.GMAD::BeamBase.sigmaY': 'sigmaY',
+                                 'Beam.GMAD::BeamBase.sigma11': 'sigma11',
+                                 'Beam.GMAD::BeamBase.sigma12': 'sigma12',
+                                 'Beam.GMAD::BeamBase.sigma13': 'sigma13',
+                                 'Beam.GMAD::BeamBase.sigma14': 'sigma14',
+                                 'Beam.GMAD::BeamBase.sigma15': 'sigma15',
+                                 'Beam.GMAD::BeamBase.sigma16': 'sigma16',
+                                 'Beam.GMAD::BeamBase.sigma22': 'sigma22',
+                                 'Beam.GMAD::BeamBase.sigma23': 'sigma23',
+                                 'Beam.GMAD::BeamBase.sigma24': 'sigma24',
+                                 'Beam.GMAD::BeamBase.sigma25': 'sigma25',
+                                 'Beam.GMAD::BeamBase.sigma26': 'sigma26',
+                                 'Beam.GMAD::BeamBase.sigma33': 'sigma33',
+                                 'Beam.GMAD::BeamBase.sigma34': 'sigma34',
+                                 'Beam.GMAD::BeamBase.sigma35': 'sigma35',
+                                 'Beam.GMAD::BeamBase.sigma36': 'sigma36',
+                                 'Beam.GMAD::BeamBase.sigma44': 'sigma44',
+                                 'Beam.GMAD::BeamBase.sigma45': 'sigma45',
+                                 'Beam.GMAD::BeamBase.sigma46': 'sigma46',
+                                 'Beam.GMAD::BeamBase.sigma55': 'sigma55',
+                                 'Beam.GMAD::BeamBase.sigma56': 'sigma56',
+                                 'Beam.GMAD::BeamBase.sigma66': 'sigma66',
+                                 }.items():
+                beam_df[name] = self._tree.array(branch=[branch])
+            self._df = beam_df
+            return self._df
 
     class Options(Output.Tree):
         pass
@@ -128,10 +191,11 @@ class BDSimOutput(Output):
                 model_geometry_df[name] = data
 
             # Scalar
-            for branch, name in {'Model.length': 'LENGTH',
+            for branch, name in {'Model.length': 'L',
                                  'Model.staS': 'AT_ENTRY',
                                  'Model.midS': 'AT_CENTER',
                                  'Model.endS': 'AT_EXIT',
+                                 'Model.tilt': 'TILT',
                                  'Model.k1': 'K1',
                                  'Model.k2': 'K2',
                                  'Model.k3': 'K3',
@@ -157,7 +221,10 @@ class BDSimOutput(Output):
                                  'Model.k11s': 'K11S',
                                  'Model.k12s': 'K12S',
                                  'Model.bField': 'B',
-                                 'Model.eField': 'E',
+                                 'Model.e1': 'E1',
+                                 'Model.e2': 'E2',
+                                 'Model.hgap': 'HGAP'
+
                                  }.items():
                 model_geometry_df[name] = self._tree.array(branch=[branch])[0]
 
@@ -176,10 +243,8 @@ class BDSimOutput(Output):
             for branch, name in geometry_branches.items():
                 data.rename({f"{branch}.fX": f"{name}X", f"{branch}.fY": f"{name}Y", f"{branch}.fZ": f"{name}Z"},
                             axis='columns', inplace=True)
-
             # Concatenate
             self._df = _pd.concat([model_geometry_df, data.loc[0]], axis='columns', sort=False).set_index('NAME')
-
             return self._df
 
     class Run(Output.Tree):
@@ -201,6 +266,7 @@ class BDSimOutput(Output):
             self.primary_last_hit = BDSimOutput.Event.PrimaryLastHit(self)
             self.aperture_impacts = BDSimOutput.Event.ApertureImpacts(self)
             self.histos = BDSimOutput.Event.Histos(self)
+            self.primary = BDSimOutput.Event.Primary(self)
             self.samplers = {
                 b.decode('utf-8').rstrip('.'):
                     BDSimOutput.Event.Sampler(b, tree=self)
@@ -304,6 +370,37 @@ class BDSimOutput(Output):
         class Histos(Output.Branch):
             def read_df(self) -> _pd.DataFrame:
                 self._tree._tree
+
+        class Primary(Output.Branch):
+            def read_df(self) -> _pd.DataFrame:
+                self._df = self._tree._tree.pandas.df(branches=tuple(map(lambda _: f"{self.__class__.__name__}.{_}", (
+                    'n',
+                    'energy',
+                    'x',
+                    'y',
+                    'z',
+                    'xp',
+                    'yp',
+                    'zp',
+                    'T',
+                    'weight',
+                    'partID',
+                    'S',
+                    'r',
+                    'rp',
+                    'phi',
+                    'phip',
+                    'theta',
+                    'charge',
+                    'kineticEnergy',
+                    'mass',
+                    'rigidity',
+                    'isIon',
+                    'ionA',
+                    'ionZ',
+                ))))
+                self._df.columns = self._df.columns.str.replace(self.__class__.__name__ + '.', '')
+                return self._df
 
         class Sampler(Output.Branch):
             def __init__(self, name, *args, **kwargs):
