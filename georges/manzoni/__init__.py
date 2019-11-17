@@ -13,4 +13,4 @@ from .elements import Marker, \
     RectangularCollimator, \
     DipEdge
 from .core import track, match
-from .observers import Observer, BeamObserver, SigmaObserver
+from .observers import Observer, BeamObserver, SigmaObserver, LossesObserver

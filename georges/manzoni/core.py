@@ -40,12 +40,14 @@ def track(beamline: _Input,
         b1, b2 = e.propagate(b1, b2, global_parameters)
         if check_apertures_exit:
             b1, b2 = e.check_aperture(b1, b2)
+        if observer is not None:
+            observer(e, b1, b2)
+        if check_apertures_exit:
             if b1.shape != b2.shape:
                 b1 = _np.zeros(b2.shape)
             if b2.shape[0] == 0:
                 break
-        if observer is not None:
-            observer(e, b1, b2)
+
         b2, b1 = b1, b2
 
 
