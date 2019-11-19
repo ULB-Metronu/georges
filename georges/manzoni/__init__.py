@@ -11,6 +11,8 @@ from .elements import Marker, \
     SRotation, \
     CircularCollimator, \
     RectangularCollimator, \
-    DipEdge
+    DipEdge, \
+    Degrader, \
+    Scatterer
 from .core import track, match
 from .observers import Observer, BeamObserver, SigmaObserver, LossesObserver

@@ -39,6 +39,7 @@ class Degrader(_ManzoniElement):
                   beam_out: _np.ndarray = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
+        print(self.parameters)
         length, a0, a1, a2 = self.parameters
 
         if length == 0:
