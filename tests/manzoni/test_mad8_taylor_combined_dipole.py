@@ -54,7 +54,7 @@ from georges_core import ureg
         (1.0, 0.0, -1.0, 1.0, 2300),
         (1.0, 0.0, 1.0, 10.0, 2300),
         (1.0, 0.0, -1.0, 10.0, 2300),
-        # Combined funciton with quadrupolar and sextupolar terms
+        # Combined function with quadrupolar and sextupolar terms
         (1.0, 1.0, 1.0, 1.0, 230),
         (1.0, 1.0, -1.0, 1.0, 230),
         (1.0, -1.0, 1.0, 1.0, 230),
