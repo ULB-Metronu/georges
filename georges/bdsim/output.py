@@ -1,35 +1,66 @@
 from __future__ import annotations
-from typing import Optional
+from typing import Optional, Any, List, Set
+import multiprocessing
+import concurrent.futures
+from collections import UserDict
 import logging
+import glob
 import os
 try:
     import uproot as _uproot
 except (ImportError, ImportWarning):
     logging.error("Uproot is required for this module to work.")
+import numpy as _np
 import pandas as _pd
 
 __all__ = [
     'BDSimOutput',
     'ReBDSimOutput',
+    'ReBDSimOpticsOutput',
 ]
 
 
 class OutputType(type):
+    """A generic type for BDSIM output classes."""
     pass
 
 
 class Output(metaclass=OutputType):
     def __init__(self, filename: str = 'output.root', path: str = '.'):
         """
+        Create a representation of a BDSIM output using uproot to read the root file.
+
+        The root file is opened with uproot, so a valid path and filename must be provided.
 
         Args:
-            filename:
-            path:
+            filename: the name of the root file to read
+            path: the path to the root file
         """
-        self._file = _uproot.open(os.path.join(path, filename))
+        self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
+        self._files_pattern = os.path.join(path, filename)
+        self._files: List[_uproot.rootio.ROOTDirectory] = []
+        for file in glob.glob(self._files_pattern):
+            f = self._executor.submit(_uproot.open, file)
+            f.add_done_callback(lambda _: self._files.append(_.result()))
+
+    def __getitem__(self, item):
+        return self.files[0][item]
+
+    @property
+    def compression(self):
+        """The compression algorithm used for the root file."""
+        return self.files[0].compression
+
+    @property
+    def files(self) -> List[_uproot.rootio.ROOTDirectory]:
+        """Return the expanded list of files."""
+        if self._executor is not None:
+            self._executor.shutdown(wait=True)
+            self._executor = None
+        return self._files
 
     class Directory:
-        def __init__(self, directory):
+        def __init__(self, output: Output, directory):
             """
 
             Args:
@@ -41,63 +72,162 @@ class Output(metaclass=OutputType):
                 else:
                     return self._directory[n]
 
+            self._output = output
             self._directory = directory
             for name, cls in self._directory.iterclasses():
                 setattr(self, name.decode('utf-8').split(';')[0].replace('-', '_'), _build(name, cls))
 
+        def __getitem__(self, item):
+            return self._directory[item]
+
+        @property
+        def parent(self):
+            return self._output
+
     class Tree:
-        def __init__(self, tree):
+        def __init__(self, output: Output, tree):
             """
 
             Args:
-                tree:
+                tree: the associated uproot tree object
             """
-            self._tree = tree
+            self._output = output
             self._df: Optional[_pd.DataFrame] = None
+            self._np: Optional[_np.ndarray] = None
+            self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
+            self._tree = tree
+            self._trees: List[Any] = []
+            for file in output.files:
+                f = self._executor.submit(file.get, tree)
+                f.add_done_callback(lambda _: self._trees.append(_.result()))
 
-        def read_df(self):
+        def __getitem__(self, item):
+            if isinstance(item, list):
+                return self.arrays(branches=item)
+            else:
+                return self.array(branch=item)
+
+        def to_df(self) -> _pd.DataFrame:
             pass
+
+        def to_np(self) -> _np.ndarray:
+            pass
+
+        def array(self, branch=None, **kwargs) -> _np.ndarray:
+            """A proxy for the uproot method."""
+            tmp = None
+            for tree in self.trees:
+                if tmp is None:
+                    tmp = tree.array(branch=branch, **kwargs)
+                else:
+                    tmp = _np.concatenate([tmp, tree.array(branch=branch, **kwargs)])
+            return tmp
+
+        def arrays(self, branches=None, **kwargs):
+            """A proxy for the uproot method."""
+            return self._tree.arrays(branches=branches, **kwargs)
+
+        @property
+        def parent(self):
+            return self._output
 
         @property
         def numentries(self):
-            return self._tree.numentries
+            """Provides the number of entries in the tree (without reading the entire file)."""
+            return self.trees[0].numentries
 
         @property
-        def df(self):
+        def trees(self):
+            """The associated uproot tree."""
+            if self._executor is not None:
+                self._executor.shutdown(wait=True)
+                self._executor = None
+            return self._trees
+
+        @property
+        def branches(self):
+            return [b.decode('utf-8') for b in self.trees[0].keys()]
+
+        @property
+        def df(self) -> _pd.DataFrame:
             if self._df is None:
-                return self.read_df()
+                return self.to_df()
             return self._df
+
+        @property
+        def np(self) -> _np.ndarray:
+            if self._np is None:
+                return self.to_np()
+            return self._np
 
     class Branch:
-        def __init__(self, tree: Output.Tree):
+        LEAVES: Set[str] = {}
+
+        def __init__(self, branch: str, tree: Output.Tree):
+            self._branch: str = branch
             self._tree: Output.Tree = tree
             self._df: Optional[_pd.DataFrame] = None
+            self._np: Optional[_np.ndarray] = None
 
-        def read_df(self):
+        def to_df(self) -> _pd.DataFrame:
+            if self._df is None:
+                df = _pd.DataFrame()
+                for tree in self.parent.trees:
+                    df = _pd.concat([
+                        df,
+                        tree.pandas.df(
+                            branches=tuple(map(lambda _: f"{self._branch}{_}", self.LEAVES))
+                        )
+                    ])
+                self._df = df
+                self._df.columns = self._df.columns.str.replace(self._branch, '')
+            return self._df
+
+        def to_np(self) -> _np.ndarray:
             pass
 
+        def array(self, branch=None, **kwargs) -> _np.ndarray:
+            """A proxy for the uproot method."""
+            return self.parent.array(branch=self._branch + branch, **kwargs)
+
+        def arrays(self, branches=None, **kwargs):
+            """A proxy for the uproot method.
+            TODO must be fixed
+            """
+            return self.parent.arrays(branches=[self._branch + b for b in branches], **kwargs)
+
         @property
-        def df(self):
+        def parent(self) -> Output.Tree:
+            return self._tree
+
+        @property
+        def df(self) -> _pd.DataFrame:
             if self._df is None:
-                return self.read_df()
+                return self.to_df()
             return self._df
+
+        @property
+        def np(self) -> _np.ndarray:
+            if self._np is None:
+                return self.to_np()
+            return self._np
 
 
 class BDSimOutput(Output):
-    def __init__(self, filename: str = 'output.root', path: str = '.'):
-        """
-
-        Args:
-            filename:
-            path:
-        """
-        super().__init__(filename, path)
-        self.header = BDSimOutput.Header(tree=self._file['Header'])
-        self.beam = BDSimOutput.Beam(tree=self._file['Beam'])
-        self.options = BDSimOutput.Options(tree=self._file['Options'])
-        self.model = BDSimOutput.Model(tree=self._file['Model'])
-        self.run = BDSimOutput.Run(tree=self._file['Run'])
-        self.event = BDSimOutput.Event(tree=self._file['Event'])
+    def __getattr__(self, item):
+        if item in (
+            'header',
+            'beam',
+            'options',
+            'model',
+            'run',
+            'event',
+        ):
+            setattr(self,
+                    item,
+                    getattr(BDSimOutput, item.capitalize())(output=self, tree=item.capitalize())
+                    )
+            return getattr(self, item)
 
     class Header(Output.Tree):
         pass
@@ -109,8 +239,7 @@ class BDSimOutput(Output):
         pass
 
     class Model(Output.Tree):
-
-        def read_df(self) -> _pd.DataFrame:
+        def to_df(self) -> _pd.DataFrame:
             """
 
             Returns:
@@ -124,7 +253,7 @@ class BDSimOutput(Output):
                                  'Model.material': 'MATERIAL',
                                  'Model.beamPipeType': 'APERTYPE',
                                  }.items():
-                data = [_.decode('utf-8') for _ in self._tree.array(branch=[branch])[0]]
+                data = [_.decode('utf-8') for _ in self.trees[0].array(branch=[branch])[0]]
                 model_geometry_df[name] = data
 
             # Scalar
@@ -159,20 +288,20 @@ class BDSimOutput(Output):
                                  'Model.bField': 'B',
                                  'Model.eField': 'E',
                                  }.items():
-                model_geometry_df[name] = self._tree.array(branch=[branch])[0]
+                model_geometry_df[name] = self.trees[0].array(branch=[branch])[0]
 
             # Aperture
             for branch, name in {'Model.beamPipeAper1': 'APERTURE1',
                                  'Model.beamPipeAper2': 'APERTURE2',
                                  'Model.beamPipeAper3': 'APERTURE3',
                                  'Model.beamPipeAper4': 'APERTURE4'}.items():
-                model_geometry_df[name] = self._tree.array(branch=[branch])[0]
+                model_geometry_df[name] = self.trees[0].array(branch=[branch])[0]
 
             # Vectors
             geometry_branches = {'Model.staPos': 'ENTRY_',
                                  'Model.midPos': 'CENTER_',
                                  'Model.endPos': 'EXIT_'}
-            data = self._tree.pandas.df(branches=geometry_branches.keys(), flatten=True)
+            data = self.trees[0].pandas.df(branches=geometry_branches.keys(), flatten=True)
             for branch, name in geometry_branches.items():
                 data.rename({f"{branch}.fX": f"{name}X", f"{branch}.fY": f"{name}Y", f"{branch}.fZ": f"{name}Z"},
                             axis='columns', inplace=True)
@@ -183,46 +312,60 @@ class BDSimOutput(Output):
             return self._df
 
     class Run(Output.Tree):
-        def __init__(self, tree):
-            super().__init__(tree)
+        def __getattr__(self, item):
+            if item in (
+                    'summary',
+            ):
+                setattr(self,
+                        item,
+                        getattr(BDSimOutput.Run, item.capitalize())(branch='Summary.', tree=self)
+                        )
+                return getattr(self, item)
 
         class Summary(Output.Branch):
             pass
 
     class Event(Output.Tree):
-        def __init__(self, tree):
-            super().__init__(tree)
-            self.eloss = BDSimOutput.Event.ELoss(self)
-            self.eloss_vacuum = BDSimOutput.Event.ELossVacuum(self)
-            self.eloss_tunnel = BDSimOutput.Event.ELossTunnel(self)
-            self.eloss_world = BDSimOutput.Event.ELossWorld(self)
-            self.eloss_world_exit = BDSimOutput.Event.ELossWorldExit(self)
-            self.primary_first_hit = BDSimOutput.Event.PrimaryFirstHit(self)
-            self.primary_last_hit = BDSimOutput.Event.PrimaryLastHit(self)
-            self.aperture_impacts = BDSimOutput.Event.ApertureImpacts(self)
-            self.histos = BDSimOutput.Event.Histos(self)
-            self.samplers = {
-                b.decode('utf-8').rstrip('.'):
-                    BDSimOutput.Event.Sampler(b, tree=self)
-                for b in self._tree.keys() if b.decode('utf-8') not in (
-                    'Summary.',
-                    'Primary.',
-                    'PrimaryGlobal.',
-                    'Eloss.',
-                    'ElossVacuum.',
-                    'ElossTunnel.',
-                    'ElossWorld.',
-                    'ElossWorldExit.',
-                    'PrimaryFirstHit.',
-                    'PrimaryLastHit.',
-                    'ApertureImpacts.',
-                    'Trajectory.',
-                    'Histos.',
-                    'Primary.',
-                )}
+        def __getattr__(self, item):
+            if item in (
+                    'eloss',
+                    'eloss_vacuum',
+                    'eloss_tunnel',
+                    'eloss_world',
+                    'eloss_world_exit',
+                    'primary_first_hit',
+                    'primary_last_hit',
+                    'aperture_impacts',
+                    'histos'
+            ):
+                b = ''.join([i.capitalize() for i in item.split('_')])
+                setattr(self,
+                        item,
+                        getattr(BDSimOutput.Event, b)(branch=b + '.', tree=self)
+                        )
+                return getattr(self, item)
 
-        def read_df(self):
-            pass
+            elif item == 'samplers':
+                self.samplers = BDSimOutput.Event.Samplers({
+                    b.decode('utf-8').rstrip('.'):
+                        BDSimOutput.Event.Sampler(branch=b.decode('utf-8'), tree=self)
+                    for b in self.trees[0].keys() if b.decode('utf-8') not in (
+                        'Summary.',
+                        'Primary.',
+                        'PrimaryGlobal.',
+                        'Eloss.',
+                        'ElossVacuum.',
+                        'ElossTunnel.',
+                        'ElossWorld.',
+                        'ElossWorldExit.',
+                        'PrimaryFirstHit.',
+                        'PrimaryLastHit.',
+                        'ApertureImpacts.',
+                        'Trajectory.',
+                        'Histos.',
+                        'Primary.',
+                    )})
+                return self.samplers
 
         class ELoss(Output.Branch):
             pass
@@ -240,114 +383,151 @@ class BDSimOutput(Output):
             pass
 
         class PrimaryFirstHit(Output.Branch):
-            def read_df(self) -> _pd.DataFrame:
-                self._df = self._tree._tree.pandas.df(branches=tuple(map(lambda _: f"{self.__class__.__name__}.{_}", (
-                    'n',
-                    'S',
-                    'weight',
-                    #'partID',
-                    #'trackID',
-                    #'parentID',
-                    'modelID',
-                    'turn',
-                    'x',
-                    'y',
-                    'z',
-                    'X',
-                    'Y',
-                    'Z',
-                    'T',
-                    #'stepLength',
-                    #'preStepKineticEnergy',
-                    'storeTurn',
-                    'storeLinks',
-                    'storeModelID',
-                    'storeLocal',
-                    'storeGlobal',
-                    'storeTime',
-                    'storeStepLength',
-                    'storePreStepKineticEnergy',
-                ))))
-                self._df.columns = self._df.columns.str.replace(self.__class__.__name__ + '.', '')
-                return self._df
+            LEAVES = {
+                'n',
+                'S',
+                'weight',
+                # 'partID',
+                # 'trackID',
+                # 'parentID',
+                'modelID',
+                'turn',
+                'x',
+                'y',
+                'z',
+                'X',
+                'Y',
+                'Z',
+                'T',
+                # 'stepLength',
+                # 'preStepKineticEnergy',
+                'storeTurn',
+                'storeLinks',
+                'storeModelID',
+                'storeLocal',
+                'storeGlobal',
+                'storeTime',
+                'storeStepLength',
+                'storePreStepKineticEnergy',
+            }
 
         class PrimaryLastHit(PrimaryFirstHit):
             pass
 
         class ApertureImpacts(Output.Branch):
-            def read_df(self) -> _pd.DataFrame:
-                self._df = self._tree._tree.pandas.df(branches=tuple(map(lambda _: f"{self.__class__.__name__}.{_}", (
-                    'n',
-                    'energy',
-                    'S',
-                    'weight',
-                    'isPrimary',
-                    'firstPrimaryImpact',
-                    'partID',
-                    'turn',
-                    'x',
-                    'y',
-                    'xp',
-                    'yp',
-                    'T',
-                    'kineticEnergy',
-                    'isIon',
-                    'ionA',
-                    'ionZ',
-                    'trackID',
-                    'parentID',
-                    'modelID',
-                ))))
-                self._df.columns = self._df.columns.str.replace(self.__class__.__name__ + '.', '')
-                return self._df
+            LEAVES = {
+                'n',
+                'energy',
+                'S',
+                'weight',
+                'isPrimary',
+                'firstPrimaryImpact',
+                'partID',
+                'turn',
+                'x',
+                'y',
+                'xp',
+                'yp',
+                'T',
+                'kineticEnergy',
+                'isIon',
+                'ionA',
+                'ionZ',
+                'trackID',
+                'parentID',
+                'modelID',
+            }
 
         class Histos(Output.Branch):
             def read_df(self) -> _pd.DataFrame:
-                self._tree._tree
+                pass
+
+        class Samplers(UserDict):
+            def compute_optics(self, samplers: Optional[List[str]] = None):
+                return _pd.DataFrame(
+                    [sampler.compute_optics() for sampler in self.data.values()]
+                )
+
+            def to_df(self, samplers: Optional[List[str]] = None, columns: Optional[List[str]] = None) -> _pd.DataFrame:
+                pass
+
+            def to_np(self, samplers: Optional[List[str]] = None, columns: Optional[List[str]] = None) -> _np.ndarray:
+                pass
+
+            @property
+            def df(self) -> _pd.DataFrame:
+                return self.to_df()
+
+            @property
+            def np(self) -> _np.ndarray:
+                return self.to_np()
+
+            @property
+            def optics(self):
+                if self._optics is None:
+                    self._optics = self.compute_optics()
+                return self._optics
 
         class Sampler(Output.Branch):
-            def __init__(self, name, *args, **kwargs):
-                self._name = name.decode('utf-8')
-                super().__init__(**kwargs)
+            LEAVES = {
+                'x',
+                'xp',
+                'y',
+                'yp',
+                'T',
+                'energy',
+                'turnNumber',
+                'parentID',
+                'partID',
+                'trackID',
+                'weight',
+                'n',
+                'S',
+            }
 
-            def read_df(self) -> _pd.DataFrame:
-                self._df = self._tree._tree.pandas.df(branches=tuple(map(lambda _: self._name + _, (
-                    'n',
-                    'S',
-                    'x',
-                    'y',
-                    'z',
-                    'xp',
-                    'yp',
-                    'zp',
-                    'energy',
-                    'T',
-                    'weight',
-                    'partID',
-                    'parentID',
-                    'trackID',
-                    'modelID',
-                    'turnNumber',
-                    # 'r',
-                    # 'rp',
-                    # 'phi',
-                    # 'phip',
-                    # 'theta',
-                    # 'charge',
-                    # 'kineticEnergy',
-                    # 'mass',
-                    # 'rigidity',
-                    # 'isIon',
-                    # 'ionA',
-                    # 'ionZ',
-                    # 'nElectrons',
-                ))))
-                self._df.columns = self._df.columns.str.replace(self._name, '')
-                return self._df
+            def to_np(self,
+                      turn_number: int = -1,
+                      primary_only: bool = True,
+                      ) -> _np.ndarray:
+                df: _pd.DataFrame = self.to_df()
+                data = df[['x', 'xp', 'y', 'yp', 'T', 'energy', 'n', 'S']].values
+                validity = df[['turnNumber', 'parentID']].values
+                if turn_number == - 1 and primary_only is False:
+                    return data
+                elif turn_number == -1 and primary_only is True:
+                    return data[validity[1, :] == 0]
+                elif primary_only is False:
+                    return data[validity[0, :] == turn_number]
+                else:
+                    return data[_np.logical_and(validity[:, 1] == 0, validity[:, 0] == turn_number), :]
+
+            def compute_optics(self):
+                """
+
+                Returns:
+
+                """
+                data = self.to_np(turn_number=1, primary_only=True)
+                cv = _np.cov(data)
+                eps_x = _np.sqrt(cv[0, 0] * cv[1, 1] - cv[0, 1] * cv[1, 0])
+                eps_y = _np.sqrt(cv[2, 2] * cv[3, 3] - cv[2, 3] * cv[3, 2])
+                return {
+                    'BETA11': (cv[0, 0] - cv[0, 5] ** 2) / eps_x,
+                    'BETA22': (cv[2, 2] - cv[2, 5] ** 2) / eps_y,
+                    'ALPHA11': -cv[1, 1] / eps_x,
+                    'ALPHA22': -cv[3, 3] / eps_y,
+                    'DISP1': cv[0, 5] / 0.001,
+                    'DISP2': 0.0,
+                    'DISP3': cv[2, 5] / 0.001,
+                    'DISP4': 0.0,
+                    'EPSX': eps_x,
+                    'EPXY': eps_y,
+                    'n': data[:, -2].sum(),
+                    'S': data[0, -1],
+                }
 
 
 class ReBDSimOutput(Output):
-
     def __init__(self, filename: str = 'output.root', path: str = '.'):
         """
         Note: we purposedly expose the 'ModelTree' tree as "model" to keep the same name as for a regular BDSimOutput
@@ -357,10 +537,26 @@ class ReBDSimOutput(Output):
             path:
         """
         super().__init__(filename, path)
-        self.header = BDSimOutput.Header(tree=self._file['Header'])
-        self.model = BDSimOutput.Model(tree=self._file['ModelTree'])
-        self.beam = ReBDSimOutput.Directory(directory=self._file['Beam'])
-        self.event = ReBDSimOutput.Directory(directory=self._file['Event'])
-        self.run = ReBDSimOutput.Directory(directory=self._file['Run'])
-        self.options = ReBDSimOutput.Directory(directory=self._file['Options'])
-        self.model_dir = ReBDSimOutput.Directory(directory=self._file['Model'])
+        self.header = BDSimOutput.Header(tree=self._main_file['Header'])
+        self.model = BDSimOutput.Model(tree=self._main_file['ModelTree'])
+        self.beam = Output.Directory(directory=self._main_file['Beam'])
+        self.event = Output.Directory(directory=self._main_file['Event'])
+        self.run = Output.Directory(directory=self._main_file['Run'])
+        self.options = Output.Directory(directory=self._main_file['Options'])
+        self.model_dir = Output.Directory(directory=self._main_file['Model'])
+
+
+class ReBDSimOpticsOutput(ReBDSimOutput):
+    def __init__(self, filename: str = 'output.root', path: str = ' .'):
+        """
+
+        Args:
+            filename:
+            path:
+        """
+        super().__init__(filename, path)
+        self.optics = ReBDSimOpticsOutput.Optics(tree=self._main_file['Optics'])
+
+    class Optics(Output.Tree):
+        def to_df(self) -> _pd.DataFrame:
+            return self.tree.pandas.df()
