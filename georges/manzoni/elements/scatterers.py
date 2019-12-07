@@ -39,7 +39,6 @@ class Degrader(_ManzoniElement):
                   beam_out: _np.ndarray = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
-        print(self.parameters)
         length, a0, a1, a2 = self.parameters
 
         if length == 0:
@@ -55,26 +54,28 @@ class Degrader(_ManzoniElement):
         # Transport
         matrix = _np.array(
             [
-                [1, length, 0, 0, 0],
-                [0, 1, 0, 0, 0],
-                [0, 0, 1, length, 0],
-                [0, 0, 0, 1, 0],
-                [0, 0, 0, 0, 1]
+                [1, length, 0, 0, 0, 0],
+                [0, 1, 0, 0, 0, 0],
+                [0, 0, 1, length, 0, 0],
+                [0, 0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 1, 0],
+                [0, 0, 0, 0, 0, 1],
             ]
         )
         beam_out = beam_in.dot(matrix.T)
 
         # Interactions
         beam_out += nprandom.multivariate_normal(
-            [0.0, 0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             _np.array(
                 [
-                    [a2, a1, 0.0, 0.0, 0.0],
-                    [a1, a0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, a2, a1, 0.0],
-                    [0.0, 0.0, a1, a0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0]
+                    [a2, a1, 0.0, 0.0, 0.0, 0.0],
+                    [a1, a0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, a2, a1, 0.0, 0.0],
+                    [0.0, 0.0, a1, a0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 ]
             ),
-            int(b.shape[0]))
+            int(beam_in.shape[0]))
         return beam_in, beam_out
