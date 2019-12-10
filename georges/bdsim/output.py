@@ -173,14 +173,20 @@ class Output(metaclass=OutputType):
             if self._df is None:
                 df = _pd.DataFrame()
                 for tree in self.parent.trees:
-                    df = _pd.concat([
-                        df,
-                        tree.pandas.df(
-                            branches=tuple(map(lambda _: f"{self._branch}{_}", self.LEAVES))
-                        )
-                    ])
+                    if len(self.LEAVES) == 0:
+                        df = _pd.concat([
+                            df,
+                            tree.pandas.df()
+                        ])
+                    else:
+                        df = _pd.concat([
+                            df,
+                            tree.pandas.df(
+                                branches=tuple(map(lambda _: f"{self._branch}{_}", self.LEAVES))
+                            )
+                        ])
                 self._df = df
-                self._df.columns = self._df.columns.str.replace(self._branch, '')
+                #self._df.columns = self._df.columns.str.replace(self._branch, '')
             return self._df
 
         def to_np(self) -> _np.ndarray:
@@ -537,26 +543,39 @@ class ReBDSimOutput(Output):
             path:
         """
         super().__init__(filename, path)
-        self.header = BDSimOutput.Header(tree=self._main_file['Header'])
-        self.model = BDSimOutput.Model(tree=self._main_file['ModelTree'])
-        self.beam = Output.Directory(directory=self._main_file['Beam'])
-        self.event = Output.Directory(directory=self._main_file['Event'])
-        self.run = Output.Directory(directory=self._main_file['Run'])
-        self.options = Output.Directory(directory=self._main_file['Options'])
-        self.model_dir = Output.Directory(directory=self._main_file['Model'])
+        # self.header = BDSimOutput.Header(output=self, tree=self.files[0]['Header'])
+        # self.model = BDSimOutput.Model(output=self, tree=self.files[0]['ModelTree'])
+        # self.beam = Output.Directory(directory=self.files[0]['Beam'])
+        # self.event = Output.Directory(directory=self.files[0]['Event'])
+        # self.run = Output.Directory(directory=self.files[0]['Run'])
+        # self.options = Output.Directory(directory=self.files[0]['Options'])
+        # self.model_dir = Output.Directory(directory=self.files[0]['Model'])
 
 
 class ReBDSimOpticsOutput(ReBDSimOutput):
-    def __init__(self, filename: str = 'output.root', path: str = ' .'):
-        """
-
-        Args:
-            filename:
-            path:
-        """
-        super().__init__(filename, path)
-        self.optics = ReBDSimOpticsOutput.Optics(tree=self._main_file['Optics'])
+    def __getattr__(self, item):
+        if item in (
+            'optics',
+        ):
+            setattr(self,
+                    item,
+                    getattr(ReBDSimOpticsOutput, item.capitalize())(output=self, tree=item.capitalize())
+                    )
+            return getattr(self, item)
+        else:
+            return getattr(super(), item)
 
     class Optics(Output.Tree):
-        def to_df(self) -> _pd.DataFrame:
-            return self.tree.pandas.df()
+        def __getattr__(self, item):
+            if item in (
+                    'optics',
+            ):
+                b = ''.join([i.capitalize() for i in item.split('_')])
+                setattr(self,
+                        item,
+                        getattr(ReBDSimOpticsOutput.Optics, b)(branch='', tree=self)
+                        )
+                return getattr(self, item)
+
+        class Optics(Output.Branch):
+            pass
