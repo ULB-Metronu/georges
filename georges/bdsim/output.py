@@ -339,6 +339,7 @@ class BDSimOutput(Output):
                     'eloss_tunnel',
                     'eloss_world',
                     'eloss_world_exit',
+                    'primary',
                     'primary_first_hit',
                     'primary_last_hit',
                     'aperture_impacts',
@@ -387,6 +388,34 @@ class BDSimOutput(Output):
 
         class ELossWorldExit(Output.Branch):
             pass
+
+        class Primary(Output.Branch):
+            LEAVES = {
+                'n',
+                'energy',
+                'x',
+                'y',
+                'z',
+                'xp',
+                'yp',
+                'zp',
+                'T',
+                'weight',
+                'partID',
+                'S',
+                'r',
+                'rp',
+                'phi',
+                'phip',
+                'theta',
+                'charge',
+                'kineticEnergy',
+                'mass',
+                'rigidity',
+                'isIon',
+                'ionA',
+                'ionZ',
+            }
 
         class PrimaryFirstHit(Output.Branch):
             LEAVES = {
