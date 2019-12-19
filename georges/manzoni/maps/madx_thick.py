@@ -1,5 +1,5 @@
 from typing import Tuple
-from numpy import sin, cos, sinh, cosh, sqrt, arctan2
+from numpy import sin, cos, sinh, cosh, sqrt
 from numba import njit, prange
 
 
@@ -141,9 +141,9 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
     for i in prange(b1.shape[0]):
         delta_plus_1 = b1[i, 4] + 1
         x = b1[i, 0]
-        xp = b1[i, 1] / delta_plus_1
+        xp = b1[i, 1] / delta_plus_1  # This is the key point to remember
         y = b1[i, 2]
-        yp = b1[i, 3] / delta_plus_1
+        yp = b1[i, 3] / delta_plus_1  # This is the key point to remember
 
         if tilt != 0.0:
             x, xp, y, yp = _apply_tilt_rotation(x, xp, y, yp, ct, st, 1)
@@ -238,6 +238,7 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
         # Body of the magnet
         k0_ = k0 / delta_plus_1
         k1_ = k1 / delta_plus_1
+        #k2_ = k2 / delta_plus_1
         kx = k0_ * h + k1_
         ky = -k1_
 
