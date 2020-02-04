@@ -185,8 +185,8 @@ class Output(metaclass=OutputType):
                                 branches=tuple(map(lambda _: f"{self._branch}{_}", self.LEAVES))
                             )
                         ])
+                df.columns = self.LEAVES
                 self._df = df
-                #self._df.columns = self._df.columns.str.replace(self._branch, '')
             return self._df
 
         def to_np(self) -> _np.ndarray:
