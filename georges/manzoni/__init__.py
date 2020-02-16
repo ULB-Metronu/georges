@@ -13,6 +13,8 @@ from .elements import Marker, \
     RectangularCollimator, \
     DipEdge, \
     Degrader, \
-    Scatterer
+    Scatterer, \
+    BeamStop
+
 from .core import track, match
 from .observers import Observer, BeamObserver, SigmaObserver, LossesObserver
