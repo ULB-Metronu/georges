@@ -28,8 +28,8 @@ def propagation_degrader(e, b, **kwargs):
 
 
 def mc_scatterer(e, b, **kwargs):
-    b[:, 1] += nprandom.normal(0.0, e[INDEX_FE_A0], int(b.shape[0]))
-    b[:, 3] += nprandom.normal(0.0, e[INDEX_FE_A0], int(b.shape[0]))
+    b[:, 1] += nprandom.normal(0.0, np.sqrt(e[INDEX_FE_A0]), int(b.shape[0]))
+    b[:, 3] += nprandom.normal(0.0, np.sqrt(e[INDEX_FE_A0]), int(b.shape[0]))
     return b
 
 
