@@ -3,6 +3,7 @@ TODO
 """
 from typing import Tuple
 import numpy as _np
+
 try:
     import numpy.random_intel as nprandom
 except ModuleNotFoundError:
@@ -19,7 +20,7 @@ class Scatterer(_ManzoniElement):
 class Degrader(_ManzoniElement):
     PARAMETERS = {
         'MATERIAL': (materials.Vacuum, 'Degrader material'),
-        'KINETIC_ENERGY': (100 * _ureg.MeV, 'Incoming beam energy'),
+        'KINETIC_ENERGY': (82.5 * _ureg.MeV, 'Incoming beam energy'),
         'L': (0.0 * _ureg.m, 'Degrader length'),
     }
     """Parameters of the element, with their default value and their descriptions."""
@@ -54,26 +55,62 @@ class Degrader(_ManzoniElement):
         # Transport
         matrix = _np.array(
             [
-                [1, length, 0, 0, 0],
-                [0, 1, 0, 0, 0],
-                [0, 0, 1, length, 0],
-                [0, 0, 0, 1, 0],
-                [0, 0, 0, 0, 1]
+                [1, length, 0, 0, 0, 0],
+                [0, 1, 0, 0, 0, 0],
+                [0, 0, 1, length, 0, 0],
+                [0, 0, 0, 1, 0, 0],
+                [0, 0, 0, 0, 1, 0],
+                [0, 0, 0, 0, 0, 1],
             ]
         )
         beam_out = beam_in.dot(matrix.T)
 
         # Interactions
         beam_out += nprandom.multivariate_normal(
-            [0.0, 0.0, 0.0, 0.0, 0.0],
+            [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
             _np.array(
                 [
-                    [a2, a1, 0.0, 0.0, 0.0],
-                    [a1, a0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, a2, a1, 0.0],
-                    [0.0, 0.0, a1, a0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0]
+                    [a2, a1, 0.0, 0.0, 0.0, 0.0],
+                    [a1, a0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, a2, a1, 0.0, 0.0],
+                    [0.0, 0.0, a1, a0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 ]
             ),
-            int(b.shape[0]))
+            int(beam_in.shape[0]))
         return beam_in, beam_out
+
+
+class BeamStop(_ManzoniElement):
+    PARAMETERS = {
+        'MATERIAL': (materials.Lead, 'Beam Stop material'),
+        'L': (0.0 * _ureg.m, 'Beam Stop length'),
+        'RADIUS': (0.0 * _ureg.m, 'Beam Stop radius'),
+    }
+
+    @property
+    def parameters(self) -> list:
+        return [
+            self.L.m_as('m'),
+            self.RADIUS.m_as('m')
+        ]
+
+    def propagate(self,
+                  beam_in: _np.ndarray,
+                  beam_out: _np.ndarray = None,
+                  global_parameters: list = None,
+                  ) -> Tuple[_np.ndarray, _np.ndarray]:
+        length, radius = self.parameters
+
+        if length == 0 or radius == 0:
+            _np.copyto(dst=beam_out, src=beam_in, casting='no')
+            return beam_in, beam_out
+
+        else:
+            beam_out = _np.compress(
+                (beam_in[:, 0] ** 2 + beam_in[:, 2] ** 2) > radius ** 2,
+                beam_in,
+                axis=0,
+            )
+            return beam_in, beam_out

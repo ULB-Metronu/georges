@@ -80,13 +80,15 @@ def __srim_read_data(path: str, material_name: str, pdg_data) -> _pd.DataFrame:
     data['stopping_elec'] = data['stopping_elec'].astype(float)
     data['stopping_nuclear'] = data['stopping_nuclear'].astype(float)
 
+    data['stopping_elec'] *= 1000
+    data['stopping_nuclear'] *= 1000
     return data
 
 
 class MaterialType(type):
     @property
     def valid_data(cls):
-        return cls.pdg_data is not None and cls.projected_range is not None and cls.csda_range is not None
+        return cls.pdg_data is not None and cls.projected_range is not None and (cls.projected_range is not None or cls.csda_range is not None)
 
     @property
     def atomic_a(cls) -> float:
@@ -219,6 +221,8 @@ class MaterialType(type):
 
         """
         if not cls.valid_data:
+            """ TODO """
+            "Set a warning message"
             return {
                 'A': (0.0, 0.0, 0.0),
                 'B': 0.0,

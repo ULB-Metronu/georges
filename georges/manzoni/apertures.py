@@ -30,7 +30,7 @@ def elliptical_aperture_check(b1, kargs: _np.ndarray):
     Returns:
 
     """
-    return (b1[:, 0] ** 2 + b1[:, 2] ** 2) < kargs[0] ** 2
+    return (b1[:, 0] / kargs[0]) ** 2 + (b1[:, 2] / kargs[1] ** 2) < 1
 
 
 @njit(parallel=True)
@@ -44,7 +44,7 @@ def rectangular_aperture_check(b1, kargs: _np.ndarray):
     Returns:
 
     """
-    return (b1[:, 0] ** 2 + b1[:, 2] ** 2) < kargs[0] ** 2
+    return _np.multiply(_np.abs(b1[:, 0]) < kargs[0], _np.abs(b1[:, 2]) < kargs[1])
 
 
 @njit(parallel=True)
@@ -58,4 +58,5 @@ def phase_space_aperture_check(b1, kargs: _np.ndarray):
     Returns:
 
     """
-    return (b1[:, 0] ** 2 + b1[:, 2] ** 2) < kargs[0] ** 2
+    return ((b1[:, 0] / kargs[0]) ** 2 + (b1[:, 1] / kargs[1]) ** 2) < 1 and (
+                (b1[:, 2] / kargs[2]) ** 2 + (b1[:, 3] / kargs[3]) ** 2) < 1

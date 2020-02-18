@@ -94,4 +94,19 @@ class SigmaObserver(Observer):
 
 
 class LossesObserver(Observer):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.headers = ('LABEL1',
+                        'PARTICLES_IN',
+                        'PARTICLES_OUT',
+                        'TRANSMISSION',
+                        'LOSSES',
+                        )
+
+    def __call__(self, element, b1, b2):
+        self.data.append((element.LABEL1,
+                          b1.shape[0],
+                          b2.shape[0],
+                          100 * (b2.shape[0] / b1.shape[0]),
+                          100 * (1 - b2.shape[0] / b1.shape[0]),
+                          ))

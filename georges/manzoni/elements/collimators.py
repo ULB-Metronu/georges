@@ -7,7 +7,7 @@ from .magnets import Drift as _Drift
 class Collimator(_Drift):
     PARAMETERS = {
         'APERTYPE': (None, 'Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)'),
-        'APERTURE': ([], ''),
+        'APERTURE': ([None, None, None, None], ''),
     }
 
 
@@ -26,4 +26,10 @@ class EllipticalCollimator(Collimator):
 class RectangularCollimator(Collimator):
     PARAMETERS = {
         'APERTYPE': ('RECTANGULAR', 'Aperture type'),
+    }
+
+
+class Dump(RectangularCollimator):
+    PARAMETERS = {
+        'APERTURE': [0.0, 0.0],
     }

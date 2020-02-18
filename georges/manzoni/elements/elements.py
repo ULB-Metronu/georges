@@ -268,7 +268,7 @@ class Element(metaclass=ElementType):
             >>> c = Command('my_label_1', 'my_label_2')
             >>> str(c)
         """
-        return str(self.attributes)
+        return f"{self.__class__.__name__}: {str(self.attributes)}"
 
     @property
     def attributes(self) -> Dict[str, _ureg.Quantity]:
@@ -419,28 +419,28 @@ class ManzoniElement(Element, _Patchable):
 
     @property
     def aperture(self) -> Optional[Tuple[Callable, _np.ndarray]]:
-        if self.APERTYPE == 'CIRCULAR':
+        if self.APERTYPE.upper() == 'CIRCULAR':
             return (
                 circular_aperture_check,
                 _np.array([
-                    self.APERTURE[0]
+                    self.APERTURE[0].m_as('meter')
                 ])
             )
-        elif self.APERTYPE == 'RECTANGULAR':
+        elif self.APERTYPE.upper() == 'RECTANGULAR':
             return (
                 rectangular_aperture_check,
                 _np.array([
-                    self.APERTURE[0], self.APERTURE[1]
+                    self.APERTURE[0].m_as('meter'), self.APERTURE[1].m_as('meter')
                 ])
             )
-        elif self.APERTYPE == 'ELLIPTICAL':
+        elif self.APERTYPE.upper() == 'ELLIPTICAL':
             return (
                 elliptical_aperture_check,
                 _np.array([
-                    self.APERTURE[0], self.APERTURE[1]
+                    self.APERTURE[0].m_as('meter'), self.APERTURE[1].m_as('meter')
                 ])
             )
-        elif self.APERTYPE == 'PHASE':
+        elif self.APERTYPE.upper() == 'PHASE':
             return (
                 phase_space_aperture_check,
                 _np.array([
