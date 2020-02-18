@@ -88,7 +88,7 @@ def __srim_read_data(path: str, material_name: str, pdg_data) -> _pd.DataFrame:
 class MaterialType(type):
     @property
     def valid_data(cls):
-        return cls.pdg_data is not None and cls.projected_range is not None # and cls.csda_range is not None
+        return cls.pdg_data is not None and cls.projected_range is not None and (cls.projected_range is not None or cls.csda_range is not None)
 
     @property
     def atomic_a(cls) -> float:

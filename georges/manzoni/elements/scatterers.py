@@ -27,11 +27,7 @@ class Degrader(_ManzoniElement):
 
     @property
     def parameters(self) -> list:
-        # print(self.L)
-        # print(self.KINETIC_ENERGY)
-        # print(self.MATERIAL)
         fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
-        # print(fe)
         return [
             self.L.m_as('m'),
             fe['A'][0],
@@ -45,7 +41,6 @@ class Degrader(_ManzoniElement):
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
         length, a0, a1, a2 = self.parameters
-        # print(self.parameters)
 
         if length == 0:
             _np.copyto(dst=beam_out, src=beam_in, casting='no')
