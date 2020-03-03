@@ -239,7 +239,14 @@ class Dodecapole(_ManzoniElement):
 
 
 class Kicker(_ManzoniElement):
-    pass
+    PARAMETERS = {
+        'L': (0.0 * _ureg.m, 'Kicker length.'),
+        'HKICK': (0.0, 'The momentum change in the horizontal plane.'),
+        'VKICK': (0.0, 'The momentum change in the vertical plane.'),
+        'TILT': (0.0 * _ureg.radian, 'The roll angle about the longitudinal axis. A positive angle represents a '
+                                     'clockwise rotation of the kicker')
+    }
+    """Parameters of the element, with their default value and their descriptions."""
 
 
 class TKicker(Kicker):
@@ -247,8 +254,20 @@ class TKicker(Kicker):
 
 
 class HKicker(_ManzoniElement):
-    pass
+    PARAMETERS = {
+        'L': (0.0 * _ureg.m, 'Kicker length.'),
+        'KICK': (0.0 * _ureg.m ** -3, 'The momentum change.'),
+        'TILT': (0.0 * _ureg.radian, 'The roll angle about the longitudinal axis. A positive angle represents a '
+                                     'clockwise rotation of the kicker')
+    }
+    """Parameters of the element, with their default value and their descriptions."""
 
 
 class VKicker(_ManzoniElement):
-    pass
+    PARAMETERS = {
+        'L': (0.0 * _ureg.m, 'Kicker length.'),
+        'KICK': (0.0 * _ureg.m ** -3, 'The momentum change.'),
+        'TILT': (0.0 * _ureg.radian, 'The roll angle about the longitudinal axis. A positive angle represents a '
+                                     'clockwise rotation of the kicker')
+    }
+    """Parameters of the element, with their default value and their descriptions."""
