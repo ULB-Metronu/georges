@@ -253,8 +253,8 @@ class Kicker(_ManzoniElement):
         tilt = self.TILT.m_as('radian')
         ct = _np.cos(tilt)
         st = _np.sin(tilt)
-        hkick = self.HKICK.m_as('radian')
-        vkick = self.VKICK.m_as('radian')
+        hkick = self.HKICK
+        vkick = self.VKICK
         _hkick = ct * hkick + st * vkick
         _vkick = ct * vkick - st * hkick
         return list(map(float, [
@@ -282,7 +282,7 @@ class HKicker(_ManzoniElement):
         tilt = self.TILT.m_as('radian')
         ct = _np.cos(tilt)
         st = _np.sin(tilt)
-        kick = self.KICK.m_as('radian')
+        kick = self.KICK
         hkick = ct * kick
         vkick = - st * kick
         return list(map(float, [
@@ -306,7 +306,7 @@ class VKicker(_ManzoniElement):
         tilt = self.TILT.m_as('radian')
         ct = _np.cos(tilt)
         st = _np.sin(tilt)
-        kick = self.KICK.m_as('radian')
+        kick = self.KICK
         hkick = st * kick
         vkick = ct * kick
         return list(map(float, [

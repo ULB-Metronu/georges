@@ -134,6 +134,35 @@ def get_madx_tracking_data_dipedge(x: float,
     return m.table.trackone.dframe().loc['m1'][['x', 'px', 'y', 'py', 'pt']].values[0:4]
 
 
+def get_madx_tracking_data_kicker(x: float,
+                                  px: float,
+                                  y: float,
+                                  py: float,
+                                  pt: float,
+                                  beta: float,
+                                  length: float,
+                                  tilt: float,
+                                  hkick: float,
+                                  vkick: float) -> np.ndarray:
+    m = cpymad.madx.Madx(stdout=False)
+    m.input(f"""
+    BEAM, PARTICLE=PROTON, BETA={beta};
+
+    SEQ: SEQUENCE, REFER=ENTRY, L=1.0;
+      K1: KICKER, AT=0.0, L={length}, TILT={tilt}, HKICK={hkick}, VKICK={vkick};
+      M1: MARKER, AT={length};
+    ENDSEQUENCE;
+
+    USE, SEQUENCE=SEQ;
+        """)
+    m.command.track(DELTAP=0.0, ONEPASS=True, ONETABLE=True, QUANTUM=False)
+    m.command.start(x=x, px=px, y=y, py=py, t=0.0, pt=pt)
+    m.command.observe(place='M1')
+    m.command.run(turns=1)
+    m.command.endtrack()
+    return m.table.trackone.dframe().loc['m1'][['x', 'px', 'y', 'py', 'pt']].values[0:4]
+
+
 @pytest.mark.parametrize("x, px, y, py, pt, beta, length", [
     (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0),
     (0.1, 0.0, 0.0, 0.0, 0.0, 0.5, 10.0),
@@ -675,4 +704,66 @@ def test_madx_dipedge(x, px, y, py, pt, beta, h, e1, hgap, fint):
 
     assert np.all(np.isclose(get_madx_tracking_data_dipedge(
         x, px, y, py, pt, beta, h, e1, hgap, fint
+    ), r[:, 0:4]))
+
+
+@pytest.mark.parametrize(
+    "x, px, y, py, pt, beta, length, tilt, hkick, vkick", [
+        # X   PX    Y    PY   PT  BETA L  TILT HKICK VKICK
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.0, 0.0, 0.0, 0.0),
+        (1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.0, 0.0, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.5, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 0.5, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 0.0, 0.0, 0.5, 0.0),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 1.0, 0.0, 0.5, 0.0),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 0.0, 0.0, 0.0, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 1.0, 0.0, 0.0, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 1.0, 0.0, 0.5, 0.5),
+        # With tilt
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.1, 0.0, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 0.0, 0.0),
+        (1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.0, 0.1, 0.0, 0.0),
+        (1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 0.1, 0.0, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.1, 0.5, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 0.5, 0.0),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.1, 0.0, 0.5),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 0.0, 0.5),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.1, 0.5, 0.5),
+        (0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.1, 0.5, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 0.0, 0.1, 0.5, 0.0),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 1.0, 0.1, 0.5, 0.0),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 0.0, 0.1, 0.0, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 1.0, 0.1, 0.0, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 0.0, 0.1, 0.5, 0.5),
+        (1.0, 1.0, 1.0, 0.1, 0.0, 0.5, 1.0, 0.1, 0.5, 0.5),
+    ])
+def test_madx_kicker(x, px, y, py, pt, beta, length, tilt, hkick, vkick):
+    k = Kinematics(beta)
+    mi = manzoni.Input(sequence=[
+        manzoni.Kicker('K1',
+                        integrator=MadXIntegrator,
+                        L=length * _.m,
+                        TILT=tilt * _.radian,
+                        HKICK=hkick * _.radian,
+                        VKICK=vkick * _.radian,
+                        ),
+    ]).freeze()
+    deltap = np.sqrt(pt ** 2 + 2 * pt / beta + 1) - 1
+    distribution = np.array([
+        [x, px, y, py, deltap, pt],
+    ])
+    beam = manzoni.Beam(kinematics=k, distribution=distribution)
+    observer = manzoni.BeamObserver()
+    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    r = observer.to_df().iloc[-1]['BEAM_OUT']
+
+    assert np.all(np.isclose(get_madx_tracking_data_kicker(
+        x, px, y, py, pt, beta, length, tilt, hkick, vkick
     ), r[:, 0:4]))

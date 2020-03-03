@@ -9,6 +9,10 @@ from .elements import Marker, \
     Multipole, \
     Sextupole, \
     SRotation, \
+    Kicker, \
+    TKicker, \
+    HKicker, \
+    VKicker, \
     CircularCollimator, \
     RectangularCollimator, \
     DipEdge, \
