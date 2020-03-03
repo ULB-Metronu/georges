@@ -199,7 +199,7 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
     length: float = element_parameters[0]
     angle: float = element_parameters[1]
     k1: float = element_parameters[2]
-    #k2 = element_parameters[3]
+    # k2 = element_parameters[3]
     tilt: float = element_parameters[4]
     h: float = element_parameters[5]
     k0: float = element_parameters[6]
@@ -238,7 +238,7 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
         # Body of the magnet
         k0_ = k0 / delta_plus_1
         k1_ = k1 / delta_plus_1
-        #k2_ = k2 / delta_plus_1
+        # k2_ = k2 / delta_plus_1
         kx = k0_ * h + k1_
         ky = -k1_
 
