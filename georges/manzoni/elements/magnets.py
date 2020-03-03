@@ -248,6 +248,21 @@ class Kicker(_ManzoniElement):
     }
     """Parameters of the element, with their default value and their descriptions."""
 
+    @property
+    def parameters(self) -> list:
+        tilt = self.TILT.m_as('radian')
+        ct = _np.cos(tilt)
+        st = _np.sin(tilt)
+        hkick = self.HKICK.m_as('radian')
+        vkick = self.VKICK.m_as('radian')
+        _hkick = ct * hkick + st * vkick
+        _vkick = ct * vkick - st * hkick
+        return list(map(float, [
+            self.L.m_as('m'),
+            _hkick,
+            _vkick,
+        ]))
+
 
 class TKicker(Kicker):
     pass
@@ -256,18 +271,46 @@ class TKicker(Kicker):
 class HKicker(_ManzoniElement):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Kicker length.'),
-        'KICK': (0.0 * _ureg.m ** -3, 'The momentum change.'),
+        'KICK': (0.0, 'The momentum change.'),
         'TILT': (0.0 * _ureg.radian, 'The roll angle about the longitudinal axis. A positive angle represents a '
                                      'clockwise rotation of the kicker')
     }
     """Parameters of the element, with their default value and their descriptions."""
+
+    @property
+    def parameters(self) -> list:
+        tilt = self.TILT.m_as('radian')
+        ct = _np.cos(tilt)
+        st = _np.sin(tilt)
+        kick = self.KICK.m_as('radian')
+        hkick = ct * kick
+        vkick = - st * kick
+        return list(map(float, [
+            self.L.m_as('m'),
+            hkick,
+            vkick,
+        ]))
 
 
 class VKicker(_ManzoniElement):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Kicker length.'),
-        'KICK': (0.0 * _ureg.m ** -3, 'The momentum change.'),
+        'KICK': (0.0 * _ureg.radian, 'The momentum change.'),
         'TILT': (0.0 * _ureg.radian, 'The roll angle about the longitudinal axis. A positive angle represents a '
                                      'clockwise rotation of the kicker')
     }
     """Parameters of the element, with their default value and their descriptions."""
+
+    @property
+    def parameters(self) -> list:
+        tilt = self.TILT.m_as('radian')
+        ct = _np.cos(tilt)
+        st = _np.sin(tilt)
+        kick = self.KICK.m_as('radian')
+        hkick = st * kick
+        vkick = ct * kick
+        return list(map(float, [
+            self.L.m_as('m'),
+            hkick,
+            vkick,
+        ]))

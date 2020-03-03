@@ -22,5 +22,6 @@ from .madx_thick import \
     track_madx_drift, \
     track_madx_bend, \
     track_madx_dipedge, \
-    track_madx_srotation
+    track_madx_srotation, \
+    track_madx_kicker
 from .madx_combined_dipole import tmsect

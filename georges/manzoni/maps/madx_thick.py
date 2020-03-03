@@ -320,3 +320,12 @@ def track_madx_dipedge(b1, b2, element_parameters: list, global_parameters: list
         b2[i, 5] = b1[i, 5]
 
     return b1, b2
+
+
+@njit(parallel=True, fastmath=True)
+def track_madx_kicker(b1, b2, element_parameters: list, global_parameters: list):
+    length: float = element_parameters[0]
+    hkick: float = element_parameters[1]
+    vkick: float = element_parameters[2]
+
+    return b1, b2

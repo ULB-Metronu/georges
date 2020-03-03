@@ -16,7 +16,8 @@ from .maps import compute_mad_combined_dipole_matrix, \
     track_madx_drift, \
     track_madx_bend, \
     track_madx_dipedge, \
-    track_madx_srotation
+    track_madx_srotation, \
+    track_madx_kicker
 from .kernels import batched_vector_matrix, batched_vector_matrix_tensor
 
 __ALL__ = [
@@ -60,6 +61,9 @@ class MadXIntegrator(Integrator):
         'DUMP': track_madx_drift,
         'QUADRUPOLE': track_madx_quadrupole,
         'SROTATION': track_madx_srotation,
+        'KICKER': track_madx_kicker,
+        'HKICKER': track_madx_kicker,
+        'VKICKER': track_madx_kicker,
     }
 
     @classmethod
