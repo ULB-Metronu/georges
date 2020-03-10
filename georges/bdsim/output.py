@@ -1,3 +1,8 @@
+"""
+A Pythonic way to analyze and work with Beam Delivery SIMulation (BDSIM) ROOT output files.
+
+No dependency on (py)ROOT(py) is needed. The module uses `uproot` instead.
+"""
 from __future__ import annotations
 from typing import Optional, Any, List, Set
 import multiprocessing
@@ -68,7 +73,7 @@ class Output(metaclass=OutputType):
             """
             def _build(n, c):
                 if c.__name__.endswith('Directory'):
-                    return Output.Directory(directory=self._directory[n])
+                    return Output.Directory(output, directory=self._directory[n])
                 else:
                     return self._directory[n]
 
@@ -546,7 +551,7 @@ class ReBDSimOutput(Output):
         # self.header = BDSimOutput.Header(output=self, tree=self.files[0]['Header'])
         # self.model = BDSimOutput.Model(output=self, tree=self.files[0]['ModelTree'])
         # self.beam = Output.Directory(directory=self.files[0]['Beam'])
-        # self.event = Output.Directory(directory=self.files[0]['Event'])
+        self.event = Output.Directory(self, directory=self.files[0]['Event'])
         # self.run = Output.Directory(directory=self.files[0]['Run'])
         # self.options = Output.Directory(directory=self.files[0]['Options'])
         # self.model_dir = Output.Directory(directory=self.files[0]['Model'])
