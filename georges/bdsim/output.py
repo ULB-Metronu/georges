@@ -583,6 +583,7 @@ class BDSimOutput(Output):
                 'y',
                 'yp',
                 'T',
+                'p',
                 'energy',
                 'turnNumber',
                 'parentID',
