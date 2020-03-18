@@ -253,7 +253,7 @@ class BDSimOutput(Output):
             beam_df = _pd.Series()
 
             # Names and strings
-            for branch, name in {'Beam.GMAD::BeamBase.beamParticleName': 'particleName',
+            for branch, name in {'Beam.GMAD::BeamBase.particle': 'particleName',
                                  }.items():
                 beam_df[name] = (self.trees[0].array(branch=[branch])[0]).decode('utf-8')
 
