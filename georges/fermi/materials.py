@@ -173,7 +173,7 @@ class MaterialType(type):
         else:
             raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 
-    def stopping(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> _Kinematics:
+    def stopping(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> Optional[_Kinematics]:
         """
 
         Args:
