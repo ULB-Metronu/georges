@@ -1,7 +1,7 @@
 """
 TODO
 """
-from typing import List, Mapping
+from typing import Optional, List, Mapping
 import os
 import sys
 import numpy as _np
@@ -85,6 +85,18 @@ def __srim_read_data(path: str, material_name: str, pdg_data) -> _pd.DataFrame:
     return data
 
 
+class RangeDefinitionType(type):
+    pass
+
+
+class CSDARange(metaclass=RangeDefinitionType):
+    pass
+
+
+class ProjectedRange(metaclass=RangeDefinitionType):
+    pass
+
+
 class MaterialType(type):
     @property
     def valid_data(cls):
@@ -108,13 +120,15 @@ class MaterialType(type):
             return None
         return cls.pdg_data['rho']
 
-    def range(cls, kinetic_energy: _ureg.Quantity, csda: bool = False, projected: bool = True) -> _ureg.Quantity:
+    def range(cls,
+              kinetic_energy: _ureg.Quantity,
+              range_definition: RangeDefinitionType = ProjectedRange
+              ) -> _ureg.Quantity:
         """
 
         Args:
             kinetic_energy:
-            csda:
-            projected:
+            range_definition:
 
         Returns:
 
@@ -122,14 +136,17 @@ class MaterialType(type):
         if not cls.valid_data:
             return None
         energy = kinetic_energy.m_as('MeV')
-        if projected and not csda:
+        if range_definition == ProjectedRange:
             return _np.exp(cls.projected_range(_np.log(energy))) / cls.density * _ureg.cm
-        elif csda and not projected:
+        elif range_definition == CSDARange:
             return _np.exp(cls.csda_range(_np.log(energy))) / cls.density * _ureg.cm
         else:
             raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 
-    def solve_range(cls, range: _ureg.Quantity, csda: bool = False, projected: bool = True) -> _Kinematics:
+    def solve_range(cls,
+                    range: _ureg.Quantity,
+                    range_definition: RangeDefinitionType = ProjectedRange
+                    ) -> _Kinematics:
         """
 
         Args:
@@ -143,12 +160,12 @@ class MaterialType(type):
         if not cls.valid_data:
             return None
         r = range.m_as('cm')
-        if projected and not csda:
+        if range_definition == ProjectedRange:
             return _Kinematics(
                 _np.exp(cls.projected_range.solve(_np.log(r * cls.density), extrapolate=False))[0] * _ureg.MeV,
                 kinetic=True
             )
-        elif csda and not projected:
+        elif range_definition == CSDARange:
             return _Kinematics(
                 _np.exp(cls.csda_range.solve(_np.log(r * cls.density), extrapolate=False))[0] * _ureg.MeV,
                 kinetic=True
@@ -187,23 +204,21 @@ class MaterialType(type):
     def required_thickness(cls,
                            kinetic_energy_out: _ureg.Quantity,
                            kinetic_energy_in: _ureg.Quantity,
-                           csda: bool = False,
-                           projected: bool = True):
+                           range_definition: RangeDefinitionType = ProjectedRange):
         """
 
         Args:
             kinetic_energy_out:
             kinetic_energy_in:
-            csda:
-            projected:
+            range_definition:
 
         Returns:
 
         """
         if not cls.valid_data:
             return None
-        return cls.range(kinetic_energy_in, csda=csda, projected=projected) \
-               - cls.range(kinetic_energy_out, csda=csda, projected=projected)
+        return cls.range(kinetic_energy_in, range_definition=range_definition) \
+               - cls.range(kinetic_energy_out, range_definition=range_definition)
 
     def scattering(cls,
                    kinetic_energy: _ureg.Quantity,
