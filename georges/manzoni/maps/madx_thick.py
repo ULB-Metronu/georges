@@ -106,6 +106,36 @@ def track_madx_drift(b1, b2, element_parameters: list, global_parameters: list):
 
 
 @njit(parallel=True, fastmath=True)
+def track_madx_drift_paraxial(b1, b2, element_parameters: list, global_parameters: list):
+    """
+    Track through a drift using the paraxial approximation. Not used by MAD-X.
+
+    Args:
+        b1:
+        b2:
+        element_parameters:
+        global_parameters:
+
+    Returns:
+
+    """
+    length: float = element_parameters[0]
+    beta: float = global_parameters[0]
+    time_of_flight: bool = b1.shape[0] == 7
+    for i in prange(b1.shape[0]):
+        b2[i, 0] = b1[i, 0] + length * b1[i, 1]  # X
+        b2[i, 1] = b1[i, 1]  # PX
+        b2[i, 2] = b1[i, 2] + length * b1[i, 3]  # Y
+        b2[i, 3] = b1[i, 3]  # PY
+        b2[i, 4] = b1[i, 4]  # DPP
+        b2[i, 5] = b1[i, 5]  # PT
+        if time_of_flight:
+            b2[i, 6] = b1[i, 6] + (length - (1.0 + beta * b1[i, 5]) * length) / beta
+
+    return b1, b2
+
+
+@njit(parallel=True, fastmath=True)
 def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: list):
     """
     Track through a (thick) quadrupole. This methods follows directly from the method implemented in MAD-X.

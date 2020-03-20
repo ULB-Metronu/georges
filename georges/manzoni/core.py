@@ -15,12 +15,11 @@ def track(beamline: _Input,
           ):
     """
     Args:
-        check_apertures_exit:
-        check_apertures_entry:
         beamline:
         beam:
         observer:
-        check_apertures:
+        check_apertures_exit:
+        check_apertures_entry:
     Returns:
     """
     global_parameters = [
@@ -38,8 +37,8 @@ def track(beamline: _Input,
         b1, b2 = e.propagate(b1, b2, global_parameters)
         if check_apertures_exit:
             b1, b2 = e.check_aperture(b1, b2)
-            if observer is not None:
-                observer(e, b1, b2)
+        if observer is not None:
+            observer(e, b1, b2)
         if b1.shape != b2.shape:
             b1 = _np.zeros(b2.shape)
         if b2.shape[0] == 0:
@@ -47,6 +46,5 @@ def track(beamline: _Input,
         b2, b1 = b1, b2
 
 
-def match(beamline: _Input,
-          beam: _Beam,):
-    pass
+def match(beamline: _Input, beam: _Beam):
+    ...

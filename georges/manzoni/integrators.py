@@ -14,6 +14,7 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_transport_sextupole_tensor, \
     track_madx_quadrupole, \
     track_madx_drift, \
+    track_madx_drift_paraxial, \
     track_madx_bend, \
     track_madx_dipedge, \
     track_madx_srotation, \
@@ -75,6 +76,24 @@ class MadXIntegrator(Integrator):
     @classmethod
     def cache(cls, element) -> list:
         return element.parameters
+
+
+class MadXIntegratorParaxialDrift(Integrator):
+    METHODS = {
+        'DIPEDGE': track_madx_dipedge,
+        'RBEND': track_madx_bend,
+        'SBEND': track_madx_bend,
+        'DRIFT': track_madx_drift_paraxial,
+        'RECTANGULARCOLLIMATOR': track_madx_drift_paraxial,
+        'ELLIPTICALCOLLIMATOR': track_madx_drift_paraxial,
+        'CIRCULARCOLLIMATOR': track_madx_drift_paraxial,
+        'DUMP': track_madx_drift_paraxial,
+        'QUADRUPOLE': track_madx_quadrupole,
+        'SROTATION': track_madx_srotation,
+        'KICKER': track_madx_kicker,
+        'HKICKER': track_madx_kicker,
+        'VKICKER': track_madx_kicker,
+    }
 
 
 class Mad8Integrator(Integrator):
