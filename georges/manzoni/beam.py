@@ -16,8 +16,8 @@ class Beam:
 
         Args:
             dpp:
-            beta:
-            first_order:
+            beta: the relativistic beta
+            first_order: approximate p_t from dpp at first order (valid only for beta close to 1)
 
         Returns:
 
@@ -33,8 +33,8 @@ class Beam:
 
         Args:
             pt:
-            beta:
-            first_order:
+            beta: the relativistic beta
+            first_order: approximate dpp from p_t at first order (valid only for beta close to 1)
 
         Returns:
 

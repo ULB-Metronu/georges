@@ -15,6 +15,7 @@ Georges' documentation
    news
    authors
    installation
+   bdsim
 
 Indices and tables
 ==================
