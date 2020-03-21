@@ -13,11 +13,11 @@ from georges_core.twiss import \
     compute_mu_from_matrix, \
     compute_periodic_twiss
 
+from .beam import Beam as _Beam
+from .observers import BeamObserver as _BeamObserver
 if TYPE_CHECKING:
     from .input import Input as _Input
-    from .beam import Beam as _Beam
     from .observers import Observer as _Observer
-    from .observers import BeamObserver as _BeamObserver
     from .. import Kinematics as _Kinematics
 
 
@@ -125,7 +125,7 @@ def twiss(beamline: _Input,
                                           with_phase_unrolling: bool = True) -> _pd.DataFrame:
         nonlocal twiss_init
         if twiss_init is None:
-            twiss_init = compute_periodic_twiss()
+            twiss_init = compute_periodic_twiss(m)
 
         m['BETA11'] = compute_beta_from_matrix(m, twiss_init)
         m['BETA22'] = compute_beta_from_matrix(m, twiss_init, plane=2)

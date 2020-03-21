@@ -20,5 +20,5 @@ from .elements import Marker, \
     Scatterer, \
     BeamStop
 
-from .core import track, match
+from .core import track, twiss, match
 from .observers import Observer, BeamObserver, SigmaObserver, LossesObserver
