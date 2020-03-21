@@ -25,6 +25,7 @@ __ALL__ = [
     'IntegratorType',
     'Integrator',
     'MadXIntegrator',
+    'MadXParaxialDriftIntegrator',
     'Mad8Integrator',
     'Mad8FirstOrderTaylorIntegrator',
     'Mad8SecondOrderTaylorIntegrator',
@@ -78,7 +79,7 @@ class MadXIntegrator(Integrator):
         return element.parameters
 
 
-class MadXIntegratorParaxialDrift(Integrator):
+class MadXParaxialDriftIntegrator(MadXIntegrator):
     METHODS = {
         'DIPEDGE': track_madx_dipedge,
         'RBEND': track_madx_bend,
