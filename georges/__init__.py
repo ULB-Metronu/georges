@@ -1,4 +1,4 @@
-
+__version__ = "2020.1"
 
 try:
     from georges_core import ureg, Q_

@@ -46,5 +46,5 @@ setup(
         'scipy>=1.0.0',
         'uproot',
     ],
-    package_data={'georges': []},
+    package_data={'georges': ['fermi/bdsim/*.csv', 'fermi/srim/*.txt', 'fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
 )
