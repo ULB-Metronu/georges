@@ -10,4 +10,3 @@ plotly
 pyarrow
 pyyaml
 scipy
-uproot
