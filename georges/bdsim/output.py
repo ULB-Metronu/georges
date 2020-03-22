@@ -1,10 +1,13 @@
 """
 A Pythonic way to analyze and work with Beam Delivery SIMulation (BDSIM) ROOT output files.
 
-No dependency on (py)ROOT(py) is needed. The module uses `uproot` instead.
+Design goals:
+ - No dependency on (py)ROOT(py) is needed. The module uses `uproot` instead.
+ - Enables and favors exploration of the ROOT files. No prior knowledge of the content should be required
+ to discover the content.
 """
 from __future__ import annotations
-from typing import Optional, Any, List, Set
+from typing import TYPE_CHECKING, Optional, Any, List, Set
 import multiprocessing
 import concurrent.futures
 from collections import UserDict
@@ -13,6 +16,8 @@ import glob
 import os
 try:
     import uproot as _uproot
+    if TYPE_CHECKING:
+        import uproot.source.compressed
 except (ImportError, ImportWarning):
     logging.error("Uproot is required for this module to work.")
 import numpy as _np
@@ -31,7 +36,7 @@ class OutputType(type):
 
 
 class Output(metaclass=OutputType):
-    def __init__(self, filename: str = 'output.root', path: str = '.'):
+    def __init__(self, filename: str = 'output.root', path: str = '.', *, open_file: bool = True):
         """
         Create a representation of a BDSIM output using uproot to read the root file.
 
@@ -40,36 +45,46 @@ class Output(metaclass=OutputType):
         Args:
             filename: the name of the root file to read
             path: the path to the root file
+            open_file: attempts to open the master file
         """
-        self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
-        self._files_pattern = os.path.join(path, filename)
-        self._files: List[_uproot.rootio.ROOTDirectory] = []
-        for file in glob.glob(self._files_pattern):
-            f = self._executor.submit(_uproot.open, file)
-            f.add_done_callback(lambda _: self._files.append(_.result()))
+        self._file = os.path.join(path, filename)
+        if open_file:
+            self._directory: _uproot.rootio.ROOTDirectory = _uproot.open(self._file)
 
-    def __getitem__(self, item):
-        return self.files[0][item]
+    @classmethod
+    def from_directory(cls, directory: _uproot.rootio.ROOTDirectory) -> Output:
+        """Create an `Output` object directly attached to an existing ROOT directory.
+
+        Args:
+            directory: an existing `uproot` `ROOTDirectory`
+        """
+        o = cls(open_master=False)
+        o._file = None
+        o._directory = directory
+        return o
+
+    def __getitem__(self, item: str):
+        """Read an object from the ROOT file or directory by name."""
+        return self._directory[item]
 
     @property
-    def compression(self):
-        """The compression algorithm used for the root file."""
-        return self.files[0].compression
+    def compression(self) -> _uproot.source.compressed.Compression:
+        """The compression algorithm used for the root file or directory."""
+        return self._directory.compression
 
     @property
-    def files(self) -> List[_uproot.rootio.ROOTDirectory]:
-        """Return the expanded list of files."""
-        if self._executor is not None:
-            self._executor.shutdown(wait=True)
-            self._executor = None
-        return self._files
+    def directory(self) -> _uproot.rootio.ROOTDirectory:
+        """Return the master directory attached to this output."""
+        return self._directory
 
     class Directory:
-        def __init__(self, output: Output, directory):
+        def __init__(self, output: Output, directory: _uproot.rootio.ROOTDirectory):
             """
+            A representation of a (nested) structure of ROOT directories.
 
             Args:
-                directory:
+                output: the `Output` to which the directory structure is attached
+                directory: the top-level ROOT directory
             """
             def _build(n, c):
                 if c.__name__.endswith('Directory'):
@@ -77,8 +92,8 @@ class Output(metaclass=OutputType):
                 else:
                     return self._directory[n]
 
-            self._output = output
-            self._directory = directory
+            self._output: Output = output
+            self._directory: _uproot.rootio.ROOTDirectory = directory
             for name, cls in self._directory.iterclasses():
                 setattr(self, name.decode('utf-8').split(';')[0].replace('-', '_'), _build(name, cls))
 
@@ -86,31 +101,46 @@ class Output(metaclass=OutputType):
             return self._directory[item]
 
         @property
-        def parent(self):
+        def compression(self) -> _uproot.source.compressed.Compression:
+            """The compression algorithm used for the directory."""
+            return self._directory.compression
+
+        @property
+        def parent(self) -> Output:
+            """The parent Output to which the directory structure is attached."""
             return self._output
 
     class Tree:
-        def __init__(self, output: Output, tree):
+        def __init__(self, output: Output, tree: str):
             """
+            A representation of a ROOT TTree structure.
 
             Args:
-                tree: the associated uproot tree object
+                output: the `Output` to which the tree is attached
+                tree: the tree name
             """
             self._output = output
             self._df: Optional[_pd.DataFrame] = None
             self._np: Optional[_np.ndarray] = None
-            self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=multiprocessing.cpu_count())
-            self._tree = tree
-            self._trees: List[Any] = []
-            for file in output.files:
-                f = self._executor.submit(file.get, tree)
-                f.add_done_callback(lambda _: self._trees.append(_.result()))
+            self._tree: uproot.rootio.TTree = output[tree]
 
         def __getitem__(self, item):
-            if isinstance(item, list):
-                return self.arrays(branches=item)
-            else:
-                return self.array(branch=item)
+            try:
+                return self._tree[item]
+            except KeyError:
+                return self._tree[item + '.']
+
+        def array(self, branch=None, **kwargs) -> _np.ndarray:
+            """A proxy for the `uproot` `arrat` method."""
+            return self.tree.array(branch=branch, **kwargs)
+
+        def arrays(self, branches=None, **kwargs):
+            """A proxy for the `uproot` `arrays` method."""
+            return self.tree.arrays(branches=branches, **kwargs)
+
+        def pandas(self, branches=None, **kwargs):
+            """A proxy for the `uproot` `pandas` method."""
+            return self._tree.pandas.df(branches=branches, **kwargs)
 
         def to_df(self) -> _pd.DataFrame:
             pass
@@ -118,40 +148,24 @@ class Output(metaclass=OutputType):
         def to_np(self) -> _np.ndarray:
             pass
 
-        def array(self, branch=None, **kwargs) -> _np.ndarray:
-            """A proxy for the uproot method."""
-            tmp = None
-            for tree in self.trees:
-                if tmp is None:
-                    tmp = tree.array(branch=branch, **kwargs)
-                else:
-                    tmp = _np.concatenate([tmp, tree.array(branch=branch, **kwargs)])
-            return tmp
-
-        def arrays(self, branches=None, **kwargs):
-            """A proxy for the uproot method."""
-            return self._tree.arrays(branches=branches, **kwargs)
-
         @property
         def parent(self):
+            """The parent Output to which the tree structure is attached."""
             return self._output
 
         @property
-        def numentries(self):
-            """Provides the number of entries in the tree (without reading the entire file)."""
-            return self.trees[0].numentries
-
-        @property
-        def trees(self):
+        def tree(self) -> _uproot.rootio.TTree:
             """The associated uproot tree."""
-            if self._executor is not None:
-                self._executor.shutdown(wait=True)
-                self._executor = None
-            return self._trees
+            return self._tree
 
         @property
-        def branches(self):
-            return [b.decode('utf-8') for b in self.trees[0].keys()]
+        def branches(self) -> List[str]:
+            return [b.decode('utf-8') for b in self.tree.keys()]
+
+        @property
+        def numentries(self) -> int:
+            """Provides the number of entries in the tree (without reading the entire file)."""
+            return self.tree.numentries
 
         @property
         def df(self) -> _pd.DataFrame:
@@ -168,11 +182,39 @@ class Output(metaclass=OutputType):
     class Branch:
         LEAVES: Set[str] = {}
 
-        def __init__(self, branch: str, tree: Output.Tree):
-            self._branch: str = branch
+        def __init__(self, tree: Output.Tree, branch: str):
+            """
+            A representation of a ROOT Branch.
+
+            Args:
+                tree: the `Tree` to which the branch is attached
+                branch: the branch name
+            """
             self._tree: Output.Tree = tree
+            self._branch: str = tree[branch]
             self._df: Optional[_pd.DataFrame] = None
             self._np: Optional[_np.ndarray] = None
+
+        def __getitem__(self, item):
+            return self._branch[item]
+
+        def array(self, branch=None, **kwargs) -> _np.ndarray:
+            """A proxy for the `uproot` `array` method."""
+            return self.parent.array(branch=self.branch.name.decode('utf-8') + branch, **kwargs)
+
+        def arrays(self, branches=None, **kwargs):
+            """A proxy for the uproot method.
+            TODO must be fixed
+            """
+            return self.parent.arrays(branches=[self.branch.name + b for b in branches], **kwargs)
+
+        def pandas(self, branches=None, **kwargs):
+            """A proxy for the uproot method.
+            TODO must be fixed
+            """
+            if branches is None:
+                branches = self.leaves
+            return self.parent.tree.pandas.df(branches=branches, **kwargs)
 
         def to_df(self) -> _pd.DataFrame:
             if self._df is None:
@@ -197,19 +239,18 @@ class Output(metaclass=OutputType):
         def to_np(self) -> _np.ndarray:
             pass
 
-        def array(self, branch=None, **kwargs) -> _np.ndarray:
-            """A proxy for the uproot method."""
-            return self.parent.array(branch=self._branch + branch, **kwargs)
-
-        def arrays(self, branches=None, **kwargs):
-            """A proxy for the uproot method.
-            TODO must be fixed
-            """
-            return self.parent.arrays(branches=[self._branch + b for b in branches], **kwargs)
-
         @property
         def parent(self) -> Output.Tree:
+            """The parent `Tree` to which the branch is attached."""
             return self._tree
+
+        @property
+        def branch(self) -> _uproot.rootio.TBranch:
+            return self._branch
+
+        @property
+        def leaves(self) -> List:
+            return self._branch.keys()
 
         @property
         def df(self) -> _pd.DataFrame:
@@ -228,6 +269,7 @@ class BDSimOutput(Output):
     def __getattr__(self, item):
         if item in (
             'header',
+            'geant4data',
             'beam',
             'options',
             'model',
@@ -236,12 +278,36 @@ class BDSimOutput(Output):
         ):
             setattr(self,
                     item,
-                    getattr(BDSimOutput, item.capitalize())(output=self, tree=item.capitalize())
+                    getattr(BDSimOutput, item.title())(output=self, tree=item.title())
                     )
             return getattr(self, item)
 
     class Header(Output.Tree):
-        pass
+        def __getattr__(self, b):
+            if b in (
+                    'header',
+            ):
+                setattr(self,
+                        b,
+                        getattr(BDSimOutput.Header, b.title())(branch=b.title() + '.', tree=self)
+                        )
+                return getattr(self, b)
+
+        class Header(Output.Branch):
+            LEAVES = {
+                'bdsimVersion',
+                'geant4Version',
+                'rootVersion',
+                'clhepVersion',
+                'timeStamp',
+                'fileType',
+                'dataVersion',
+                'doublePrecisionOutput',
+                'analysedFiles',
+                'combinedFiles',
+                'nTrajectoryFilters',
+                'trajectoryFilters',
+            }
 
     class Beam(Output.Tree):
         def to_df(self) -> _pd.DataFrame:
@@ -259,6 +325,7 @@ class BDSimOutput(Output):
 
             # Single value
             for branch, name in {'Beam.GMAD::BeamBase.beamEnergy': 'E0',
+                                 'Beam.GMAD::BeamBase.beamMomentum': 'P0',
                                  'Beam.GMAD::BeamBase.X0': 'X0',
                                  'Beam.GMAD::BeamBase.Y0': 'Y0',
                                  'Beam.GMAD::BeamBase.Z0': 'Z0',
@@ -308,8 +375,11 @@ class BDSimOutput(Output):
             self._df = _pd.DataFrame(beam_df).transpose()
             return self._df
 
+    class Geant4Data(Output.Tree):
+        ...
+
     class Options(Output.Tree):
-        pass
+        ...
 
     class Model(Output.Tree):
         def to_df(self) -> _pd.DataFrame:
@@ -582,9 +652,12 @@ class BDSimOutput(Output):
                 'xp',
                 'y',
                 'yp',
+                'z',
+                'zp',
                 'T',
                 'p',
                 'energy',
+                'p',
                 'turnNumber',
                 'parentID',
                 'partID',
