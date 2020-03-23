@@ -151,8 +151,7 @@ class MaterialType(type):
 
         Args:
             range:
-            csda:
-            projected:
+            range_definition:
 
         Returns:
 

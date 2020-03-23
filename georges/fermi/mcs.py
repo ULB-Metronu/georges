@@ -8,7 +8,6 @@ def radiation_length(material) -> float:
     """
 
     Args:
-        db:
         material:
 
     Returns:
@@ -24,7 +23,6 @@ def scattering_length(material) -> float:
     See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
 
     Args:
-        db:
         material:
 
     Returns:
