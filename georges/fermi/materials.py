@@ -285,12 +285,13 @@ class MaterialType(type):
         """
         if not cls._energy_dispersion:
             return None
-        c0 = cls.bdsim_data['C0']
-        c1 = cls.bdsim_data['C1']
-        c2 = cls.bdsim_data['C2']
-        c3 = cls.bdsim_data['C3']
-        c4 = cls.bdsim_data['C4']
-        return c4 * energy**4 + c3 * energy**3 + c2 * energy**2 + c1 * energy + c0
+        c0 = cls.bdsim_data['energy_dispersion_c0']
+        c1 = cls.bdsim_data['energy_dispersion_c1']
+        c2 = cls.bdsim_data['energy_dispersion_c2']
+        c3 = cls.bdsim_data['energy_dispersion_c3']
+        c4 = cls.bdsim_data['energy_dispersion_c4']
+        c5 = cls.bdsim_data['energy_dispersion_c5']
+        return c5 * energy**5 + c4 * energy**4 + c3 * energy**3 + c2 * energy**2 + c1 * energy + c0
 
     def losses(cls, energy):
         """
@@ -304,11 +305,11 @@ class MaterialType(type):
         """
         if not cls._loss_factors:
             return None
-        c0 = cls.bdsim_data['C0']
-        c1 = cls.bdsim_data['C1']
-        c2 = cls.bdsim_data['C2']
-        c3 = cls.bdsim_data['C3']
-        c4 = cls.bdsim_data['C4']
+        c0 = cls.bdsim_data['loss_c0']
+        c1 = cls.bdsim_data['loss_c1']
+        c2 = cls.bdsim_data['loss_c2']
+        c3 = cls.bdsim_data['loss_c3']
+        c4 = cls.bdsim_data['loss_c4']
         return c4 * energy ** 4 + c3 * energy ** 3 + c2 * energy ** 2 + c1 * energy + c0
 
 

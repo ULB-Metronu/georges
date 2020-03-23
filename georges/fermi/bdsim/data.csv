@@ -1,7 +1,7 @@
-material, loss_c0, loss_c1, loss_c2, loss_c3, loss_c4, energy_dispersion_c0, energy_dispersion_c1, energy_dispersion_c2, energy_dispersion_c3, energy_dispersion_c4
-hydrogen, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-beryllium, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-boroncarbide, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-polyethylene, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-polystyrene, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
-graphite, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0
+material,loss_c0,loss_c1,loss_c2,loss_c3,loss_c4,energy_dispersion_c0,energy_dispersion_c1,energy_dispersion_c2,energy_dispersion_c3,energy_dispersion_c4,energy_dispersion_c5
+beryllium,0.379351602261267,0.002283602111497227,-4.129185942250397e-06,1.894266626877839e-08,2.016451958694587e-11,0.16307422081922102,-0.004402993316221527,5.239372132235187e-05,-3.2237134283510094e-07,9.994634648918794e-10,-1.2374202484141111e-12
+hydrogen,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+boroncarbide,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+polyethylene,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+polystyrene,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+graphite,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
