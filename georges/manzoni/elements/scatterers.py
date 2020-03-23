@@ -1,7 +1,7 @@
 """
 TODO
 """
-from typing import Tuple
+from typing import Tuple, List
 import numpy as _np
 
 try:
@@ -26,13 +26,15 @@ class Degrader(_ManzoniElement):
     """Parameters of the element, with their default value and their descriptions."""
 
     @property
-    def parameters(self) -> list:
+    def parameters(self) -> List[float]:
         fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
         return [
             self.L.m_as('m'),
             fe['A'][0],
             fe['A'][1],
             fe['A'][2],
+            self.MATERIAL.energy_dispersion(energy=self.KINETIC_ENERGY),
+            self.MATERIAL.losses(energy=self.KINETIC_ENERGY)
         ]
 
     def propagate(self,
@@ -40,7 +42,7 @@ class Degrader(_ManzoniElement):
                   beam_out: _np.ndarray = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
-        length, a0, a1, a2 = self.parameters
+        length, a0, a1, a2, dpp, losses = self.parameters
 
         if length == 0:
             _np.copyto(dst=beam_out, src=beam_in, casting='no')
@@ -48,9 +50,9 @@ class Degrader(_ManzoniElement):
 
         # Monte-Carlo method
         # Remove particles
-        # if e[INDEX_FE_LOSS] != 0:
-        #     idx = np.random.randint(b.shape[0], size=int((e[INDEX_FE_LOSS]) * b.shape[0]))
-        #     b = b[idx, :]
+        if losses != 0:
+            idx = _np.random.randint(beam_in.shape[0], size=int(losses * beam_out.shape[0]))
+            beam_out = beam_in[idx, :]
 
         # Transport
         matrix = _np.array(
@@ -63,7 +65,7 @@ class Degrader(_ManzoniElement):
                 [0, 0, 0, 0, 0, 1],
             ]
         )
-        beam_out = beam_in.dot(matrix.T)
+        beam_out = beam_out.dot(matrix.T)
 
         # Interactions
         beam_out += nprandom.multivariate_normal(
@@ -74,11 +76,12 @@ class Degrader(_ManzoniElement):
                     [a1, a0, 0.0, 0.0, 0.0, 0.0],
                     [0.0, 0.0, a2, a1, 0.0, 0.0],
                     [0.0, 0.0, a1, a0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    [0.0, 0.0, 0.0, 0.0, dpp**2, 0.0],
                     [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 ]
             ),
-            int(beam_in.shape[0]))
+            int(beam_out.shape[0]))
+
         return beam_in, beam_out
 
 
