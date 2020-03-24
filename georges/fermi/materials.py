@@ -309,8 +309,7 @@ class MaterialType(type):
         c1 = cls.bdsim_data['loss_c1']
         c2 = cls.bdsim_data['loss_c2']
         c3 = cls.bdsim_data['loss_c3']
-        c4 = cls.bdsim_data['loss_c4']
-        return c4 * energy ** 4 + c3 * energy ** 3 + c2 * energy ** 2 + c1 * energy + c0
+        return  c3 * energy ** 3 + c2 * energy ** 2 + c1 * energy + c0
 
 
 class Material(metaclass=MaterialType):
