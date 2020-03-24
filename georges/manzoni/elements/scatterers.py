@@ -22,52 +22,26 @@ class MaterialElement(_ManzoniElement):
             self._cache = self.parameters
         return self._cache
 
-
-class Scatterer(MaterialElement):
+class Degrader(_ManzoniElement):
+    # TODO use the real energy of the beam
     PARAMETERS = {
         'MATERIAL': (materials.Vacuum, 'Degrader material'),
-        'KINETIC_ENERGY': (82.5 * _ureg.MeV, 'Incoming beam energy'),
-    }
-    """Parameters of the element, with their default value and their descriptions."""
-
-    @property
-    def parameters(self) -> List[float]:
-        fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
-        return [
-            fe['A'][0],
-        ]
-
-    def propagate(self,
-                  beam_in: _np.ndarray,
-                  beam_out: _np.ndarray = None,
-                  global_parameters: list = None,
-                  ) -> Tuple[_np.ndarray, _np.ndarray]:
-        a0 = self.parameters[0]
-
-        beam_out[:, 1] = beam_in[:, 1] + nprandom.normal(0.0, a0, size=beam_in.shape[0])
-        beam_out[:, 3] = beam_in[:, 3] + nprandom.normal(0.0, a0, size=beam_in.shape[0])
-
-        return beam_in, beam_out
-
-
-class Degrader(MaterialElement):
-    PARAMETERS = {
-        'MATERIAL': (materials.Vacuum, 'Degrader material'),
-        'KINETIC_ENERGY': (82.5 * _ureg.MeV, 'Incoming beam energy'),
+        'KINETIC_ENERGY': (230 * _ureg.MeV, 'Incoming beam energy'),
         'L': (0.0 * _ureg.m, 'Degrader length'),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> List[float]:
+        degraded_energy = (self.MATERIAL.stopping(self.L, self.KINETIC_ENERGY)).ekin
         fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
         return [
             self.L.m_as('m'),
             fe['A'][0],
             fe['A'][1],
             fe['A'][2],
-            self.MATERIAL.energy_dispersion(energy=self.KINETIC_ENERGY),
-            self.MATERIAL.losses(energy=self.KINETIC_ENERGY)
+            self.MATERIAL.energy_dispersion(energy=degraded_energy),
+            self.MATERIAL.losses(energy=degraded_energy)
         ]
 
     def propagate(self,
