@@ -354,11 +354,12 @@ def track_madx_dipedge(b1, b2, element_parameters: list, global_parameters: list
 
 @njit(parallel=True, fastmath=True)
 def track_madx_kicker(b1, b2, element_parameters: list, global_parameters: list):
+    length: float = element_parameters[0]
     hkick: float = element_parameters[1]
     vkick: float = element_parameters[2]
 
     # Half drift
-    track_madx_drift(b1, b2, element_parameters, global_parameters)
+    track_madx_drift(b1, b2, [length / 2.0], global_parameters)
 
     # Kick
     for i in prange(b1.shape[0]):
@@ -370,6 +371,6 @@ def track_madx_kicker(b1, b2, element_parameters: list, global_parameters: list)
         b1[i, 5] = b2[i, 5]
 
     # Half drift
-    track_madx_drift(b1, b2, element_parameters, global_parameters)
+    track_madx_drift(b1, b2, [length / 2.0], global_parameters)
 
     return b1, b2

@@ -51,7 +51,7 @@ class Degrader(_ManzoniElement):
         # Monte-Carlo method
         # Remove particles
         if losses != 0:
-            idx = _np.random.randint(beam_in.shape[0], size=int(losses * beam_out.shape[0]))
+            idx = _np.random.randint(beam_in.shape[0], size=int(losses * beam_in.shape[0]))
             beam_out = beam_in[idx, :]
 
         # Transport

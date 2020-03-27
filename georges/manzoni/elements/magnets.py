@@ -16,7 +16,7 @@ class Marker(_ManzoniElement):
         return beam_in, beam_out
 
 
-class Drift(_ManzoniElement):
+class Gap(_ManzoniElement):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Drift length.'),
     }
@@ -38,6 +38,14 @@ class Drift(_ManzoniElement):
         return list(map(float, [
             self.L.m_as('meter'),
         ]))
+
+
+class Drift(Gap):
+    PARAMETERS = {
+        'APERTYPE': (None, 'Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)'),
+        'APERTURE': ([], ''),
+    }
+    """Parameters of the element, with their default value and their descriptions."""
 
 
 class SRotation(_ManzoniElement):
