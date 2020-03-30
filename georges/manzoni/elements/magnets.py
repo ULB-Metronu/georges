@@ -258,7 +258,7 @@ class Kicker(_ManzoniElement):
 
     @property
     def parameters(self) -> list:
-        tilt = self.TILT.m_as('radian')
+        tilt = -self.TILT.m_as('radian')
         ct = _np.cos(tilt)
         st = _np.sin(tilt)
         hkick = self.HKICK
@@ -287,7 +287,7 @@ class HKicker(_ManzoniElement):
 
     @property
     def parameters(self) -> list:
-        tilt = self.TILT.m_as('radian')
+        tilt = -self.TILT.m_as('radian')
         ct = _np.cos(tilt)
         st = _np.sin(tilt)
         kick = self.KICK
@@ -311,7 +311,7 @@ class VKicker(_ManzoniElement):
 
     @property
     def parameters(self) -> list:
-        tilt = self.TILT.m_as('radian')
+        tilt = -self.TILT.m_as('radian')
         ct = _np.cos(tilt)
         st = _np.sin(tilt)
         kick = self.KICK
