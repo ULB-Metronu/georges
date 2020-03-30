@@ -138,7 +138,10 @@ class Bend(Magnet):
         # Generic parameters
         length = self.length
         h = self.ANGLE.m_as('radian') / self.length
-        k0 = self.K0.m_as('m**-1') or h
+        if self.K0.m_as('m**-1') is None or self.K0.m_as('m**-1') == 0:
+            k0 = h
+        else:
+            k0 = self.K0.m_as('m**-1')
         hgap = self.HGAP.m_as('m')
         e1, e2 = self.edges
         fint, fintx = self.fringe_field_integrals
