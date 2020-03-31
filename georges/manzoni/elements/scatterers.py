@@ -14,7 +14,30 @@ from ...fermi import materials
 
 
 class Scatterer(_ManzoniElement):
-    pass
+    PARAMETERS = {
+        'MATERIAL': (materials.Vacuum, 'Degrader material'),
+        'KINETIC_ENERGY': (82.5 * _ureg.MeV, 'Incoming beam energy'),
+    }
+    """Parameters of the element, with their default value and their descriptions."""
+
+    @property
+    def parameters(self) -> List[float]:
+        fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
+        return [
+            fe['A'][0],
+        ]
+
+    def propagate(self,
+                  beam_in: _np.ndarray,
+                  beam_out: _np.ndarray = None,
+                  global_parameters: list = None,
+                  ) -> Tuple[_np.ndarray, _np.ndarray]:
+        a0 = self.parameters[0]
+
+        beam_out[:, 1] = beam_in[:, 1] + nprandom.normal(0.0, a0, size=beam_in.shape[0])
+        beam_out[:, 3] = beam_in[:, 3] + nprandom.normal(0.0, a0, size=beam_in.shape[0])
+
+        return beam_in, beam_out
 
 
 class Degrader(_ManzoniElement):
