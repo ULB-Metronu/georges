@@ -1,5 +1,6 @@
 from typing import List, Tuple
 import numpy as _np
+from numba.typed import List as nList
 from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_combined_dipole_tensor, \
     compute_mad_quadrupole_matrix, \
@@ -46,7 +47,7 @@ class Integrator(metaclass=IntegratorType):
                   element,
                   beam_in: _np.ndarray,
                   beam_out: _np.ndarray,
-                  global_parameters: list
+                  global_parameters: nList
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
         return beam_in, beam_out
 
@@ -69,7 +70,7 @@ class MadXIntegrator(Integrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in: _np.ndarray, beam_out: _np.ndarray, global_parameters: list):
+    def propagate(cls, element, beam_in: _np.ndarray, beam_out: _np.ndarray, global_parameters: nList):
         return cls.METHODS.get(element.__class__.__name__.upper())(
             beam_in, beam_out, element.cache, global_parameters
         )
@@ -109,7 +110,7 @@ class Mad8FirstOrderTaylorIntegrator(Mad8Integrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+    def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
         return batched_vector_matrix(
             beam_in,
             beam_out,
@@ -129,7 +130,7 @@ class Mad8SecondOrderTaylorIntegrator(Mad8FirstOrderTaylorIntegrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+    def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
         return batched_vector_matrix_tensor(
             beam_in,
             beam_out,
@@ -156,7 +157,7 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+    def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
         return batched_vector_matrix(
             beam_in,
             beam_out,
@@ -178,7 +179,7 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
     }
 
     @classmethod
-    def propagate(cls, element, beam_in, beam_out, global_parameters: list):
+    def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
         return batched_vector_matrix_tensor(
             beam_in,
             beam_out,

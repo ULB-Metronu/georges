@@ -6,6 +6,7 @@ from typing import Optional, Any, Tuple, Dict, Callable
 import inspect
 import uuid
 import numpy as _np
+from numba.typed import List as nList
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
 from ..integrators import IntegratorType, MadXIntegrator
@@ -320,7 +321,7 @@ class ManzoniElement(Element, _Patchable):
         """
         super().__init__(label1, *params, **kwargs)
         self._integrator = integrator
-        self._cache: Optional[Any] = None
+        self._cache: Optional[nList] = None
         self._frozen: bool = False
 
     def propagate(self,
@@ -454,7 +455,9 @@ class ManzoniElement(Element, _Patchable):
         self._cache = None
 
     @property
-    def cache(self) -> list:
+    def cache(self) -> nList:
         if not self.frozen:
-            self._cache = self.integrator.cache(self)
+            self._cache = nList()
+            for e in self.integrator.cache(self):
+                self._cache.append(e)
         return self._cache

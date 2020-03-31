@@ -1,6 +1,7 @@
 from typing import Tuple
 from numpy import sin, cos, sinh, cosh, sqrt
 from numba import njit, prange
+from numba.typed import List as nList
 
 
 @njit(fastmath=True)
@@ -33,7 +34,7 @@ def _apply_tilt_rotation(x: float,
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_srotation(b1, b2, element_parameters: list, global_parameters: list):
+def track_madx_srotation(b1, b2, element_parameters: nList, global_parameters: nList):
     """
 
     Args:
@@ -68,7 +69,7 @@ def track_madx_srotation(b1, b2, element_parameters: list, global_parameters: li
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_drift(b1, b2, element_parameters: list, global_parameters: list):
+def track_madx_drift(b1, b2, element_parameters: nList, global_parameters: nList):
     """
     Track through a drift. This methods follows directly from the method implemented in MAD-X.
 
@@ -106,7 +107,7 @@ def track_madx_drift(b1, b2, element_parameters: list, global_parameters: list):
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_drift_paraxial(b1, b2, element_parameters: list, global_parameters: list):
+def track_madx_drift_paraxial(b1, b2, element_parameters: nList, global_parameters: nList):
     """
     Track through a drift using the paraxial approximation. Not used by MAD-X.
 
@@ -136,7 +137,7 @@ def track_madx_drift_paraxial(b1, b2, element_parameters: list, global_parameter
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: list):
+def track_madx_quadrupole(b1, b2, element_parameters: nList, global_parameters: nList):
     """
     Track through a (thick) quadrupole. This methods follows directly from the method implemented in MAD-X.
 
@@ -211,7 +212,7 @@ def track_madx_quadrupole(b1, b2, element_parameters: list, global_parameters: l
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
+def track_madx_bend(b1, b2, element_parameters: nList, global_parameters: nList):
     """
     Track through a (thick) combined function bend. This methods follows directly from the method implemented in MAD-X.
 
@@ -239,11 +240,14 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
     exit_fringe_y: float = element_parameters[10]
 
     if angle == 0:
+        quad_parameters = nList()
+        quad_parameters.append(length)
+        quad_parameters.append(k1)
+        quad_parameters.append(0.0)
+        quad_parameters.append(tilt)
         return track_madx_quadrupole(b1,
                                      b2,
-                                     [
-                                         length, k1, 0.0, tilt
-                                     ],
+                                     quad_parameters,
                                      global_parameters)
 
     if tilt != 0.0:
@@ -328,7 +332,7 @@ def track_madx_bend(b1, b2, element_parameters: list, global_parameters: list):
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_dipedge(b1, b2, element_parameters: list, global_parameters: list):
+def track_madx_dipedge(b1, b2, element_parameters: nList, global_parameters: nList):
     fringe_x: float = element_parameters[0]
     fringe_y: float = element_parameters[1]
 
@@ -353,13 +357,13 @@ def track_madx_dipedge(b1, b2, element_parameters: list, global_parameters: list
 
 
 @njit(parallel=True, fastmath=True)
-def track_madx_kicker(b1, b2, element_parameters: list, global_parameters: list):
-    length: float = element_parameters[0]
+def track_madx_kicker(b1, b2, element_parameters: nList, global_parameters: nList):
+    element_parameters[0] /= 2
     hkick: float = element_parameters[1]
     vkick: float = element_parameters[2]
 
     # Half drift
-    track_madx_drift(b1, b2, [length / 2.0], global_parameters)
+    track_madx_drift(b1, b2, element_parameters[0:1], global_parameters)
 
     # Kick
     for i in prange(b1.shape[0]):
@@ -371,6 +375,6 @@ def track_madx_kicker(b1, b2, element_parameters: list, global_parameters: list)
         b1[i, 5] = b2[i, 5]
 
     # Half drift
-    track_madx_drift(b1, b2, [length / 2.0], global_parameters)
+    track_madx_drift(b1, b2, element_parameters[0:1], global_parameters)
 
     return b1, b2

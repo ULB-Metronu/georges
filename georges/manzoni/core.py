@@ -1,7 +1,8 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Tuple, Optional
+from typing import TYPE_CHECKING, Optional
 import numpy as _np
 import pandas as _pd
+from numba.typed import List as nList
 from georges_core.sequences import BetaBlock as _BetaBlock
 from georges_core.twiss import \
     compute_alpha_from_matrix, \
@@ -36,9 +37,8 @@ def track(beamline: _Input,
         check_apertures_entry:
     Returns:
     """
-    global_parameters = [
-        beam.kinematics.beta
-    ]
+    global_parameters = nList()
+    global_parameters.append(beam.kinematics.beta)
     b1 = _np.copy(beam.distribution)
     b2 = _np.zeros(b1.shape)
     for e in beamline.sequence:

@@ -1,10 +1,11 @@
 from numba import njit
 import numpy as np
 from numpy import cos, sin, cosh, sinh, sqrt
+from numba.typed import List as nList
 
 
 @njit
-def compute_transport_quadrupole_matrix(element_parameters: list) -> np.ndarray:
+def compute_transport_quadrupole_matrix(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0]
     K1: float = element_parameters[1]
     R = np.zeros((6, 6))
@@ -47,7 +48,7 @@ def compute_transport_quadrupole_matrix(element_parameters: list) -> np.ndarray:
 
 
 @njit
-def compute_transport_quadrupole_tensor(element_parameters: list) -> np.ndarray:
+def compute_transport_quadrupole_tensor(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0]
     K1: float = element_parameters[1]
     T = np.zeros((6, 6, 6))
