@@ -1,19 +1,46 @@
 """
 TODO
 """
-from typing import Tuple
+from typing import Tuple, Optional
 import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
+from ..kernels import batched_vector_matrix
 
 
 class Marker(_ManzoniElement):
     """
     TODO
     """
+    INTEGRATOR = None
+
     def propagate(self, beam_in: _np.ndarray, beam_out: _np.ndarray = None, parameters: list = None):
         _np.copyto(dst=beam_out, src=beam_in, casting='no')
         return beam_in, beam_out
+
+
+class Matrix(_ManzoniElement):
+    INTEGRATOR = None
+    PARAMETERS = {
+        'MATRIX': (_np.eye(6), 'Transfer matrix.'),
+    }
+
+    def propagate(self,
+                  beam_in: _np.ndarray,
+                  beam_out: Optional[_np.ndarray] = None,
+                  global_parameters: list = None,
+                  ) -> Tuple[_np.ndarray, _np.ndarray]:
+        return batched_vector_matrix(
+            beam_in,
+            beam_out,
+            self.MATRIX
+        )
+
+    @property
+    def parameters(self) -> list:
+        return [
+            self.MATRIX
+        ]
 
 
 class Gap(_ManzoniElement):

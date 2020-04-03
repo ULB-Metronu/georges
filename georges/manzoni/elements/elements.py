@@ -304,10 +304,11 @@ class Element(metaclass=ElementType):
 
 
 class ManzoniElement(Element, _Patchable):
+    INTEGRATOR: Optional[IntegratorType] = MadXIntegrator
 
     def __init__(self,
                  label1: str = '',
-                 integrator: IntegratorType = MadXIntegrator,
+                 integrator: Optional[IntegratorType] = None,
                  *params,
                  **kwargs
                  ):
@@ -320,7 +321,7 @@ class ManzoniElement(Element, _Patchable):
             **kwargs:
         """
         super().__init__(label1, *params, **kwargs)
-        self._integrator = integrator
+        self._integrator: Optional[IntegratorType] = integrator or self.INTEGRATOR
         self._cache: Optional[nList] = None
         self._frozen: bool = False
 
@@ -441,7 +442,7 @@ class ManzoniElement(Element, _Patchable):
                     self.APERTURE[0].m_as('meter'), self.APERTURE[1].m_as('meter')
                 ])
             )
-        elif self.APERTYPE.upper() == 'PHASE':
+        elif self.APERTYPE.upper() == 'PHASE_SPACE':
             return (
                 phase_space_aperture_check,
                 _np.array([
