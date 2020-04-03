@@ -13,7 +13,17 @@ from .elements import ManzoniElement as _ManzoniElement
 from ...fermi import materials
 
 
-class Scatterer(_ManzoniElement):
+class MaterialElement(_ManzoniElement):
+    INTEGRATOR = None
+
+    @property
+    def cache(self) -> list:
+        if not self.frozen:
+            self._cache = self.parameters
+        return self._cache
+
+
+class Scatterer(MaterialElement):
     PARAMETERS = {
         'MATERIAL': (materials.Vacuum, 'Degrader material'),
         'KINETIC_ENERGY': (230 * _ureg.MeV, 'Incoming beam energy'),
@@ -46,8 +56,7 @@ class Scatterer(_ManzoniElement):
         return beam_in, beam_out
 
 
-class Degrader(_ManzoniElement):
-    # TODO use the real energy of the beam
+class Degrader(MaterialElement):
     PARAMETERS = {
         'MATERIAL': (materials.Vacuum, 'Degrader material'),
         'KINETIC_ENERGY': (230 * _ureg.MeV, 'Incoming beam energy'),
@@ -64,8 +73,8 @@ class Degrader(_ManzoniElement):
             fe['A'][0],
             fe['A'][1],
             fe['A'][2],
-            self.MATERIAL.energy_dispersion(energy=degraded_energy),
-            self.MATERIAL.losses(energy=degraded_energy)
+            self.MATERIAL.energy_dispersion(energy=self.KINETIC_ENERGY),
+            self.MATERIAL.losses(energy=self.KINETIC_ENERGY)
         ]
 
     def propagate(self,
@@ -116,7 +125,7 @@ class Degrader(_ManzoniElement):
         return beam_in, beam_out
 
 
-class BeamStop(_ManzoniElement):
+class BeamStop(MaterialElement):
     PARAMETERS = {
         'MATERIAL': (materials.Lead, 'Beam Stop material'),
         'L': (0.0 * _ureg.m, 'Beam Stop length'),
