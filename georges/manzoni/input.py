@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING, Optional, List
 from georges_core.sequences import Sequence as _Sequence
 from . import elements
 from .core import track
+from .elements.scatterers import MaterialElement
 if TYPE_CHECKING:
+    from georges_core import ureg as _ureg
     from .beam import Beam as _Beam
     from .observers import Observer as _Observer
 
@@ -59,6 +61,14 @@ class Input:
         """
         track(self, beam, observer, check_apertures)
         return observer
+
+    def adjust_energy(self, input_energy: _ureg.Quantity):
+        current_energy = input_energy
+        for e in self.sequence:
+            if not isinstance(e, MaterialElement):
+                break
+            e.KINETIC_ENERGY = current_energy
+            current_energy = e.degraded_energy
 
     @classmethod
     def from_sequence(cls,

@@ -17,6 +17,13 @@ class MaterialElement(_ManzoniElement):
     INTEGRATOR = None
 
     @property
+    def degraded_energy(self):
+        if self.L.magnitude == 0.0:
+            return self.KINETIC_ENERGY
+        else:
+            return (self.MATERIAL.stopping(self.L, self.KINETIC_ENERGY)).ekin
+
+    @property
     def cache(self) -> list:
         if not self.frozen:
             self._cache = self.parameters
@@ -66,7 +73,6 @@ class Degrader(MaterialElement):
 
     @property
     def parameters(self) -> List[float]:
-        degraded_energy = (self.MATERIAL.stopping(self.L, self.KINETIC_ENERGY)).ekin
         fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
         return [
             self.L.m_as('m'),
