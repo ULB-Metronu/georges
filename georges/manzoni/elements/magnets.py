@@ -46,6 +46,8 @@ class Matrix(_ManzoniElement):
 class Gap(_ManzoniElement):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Drift length.'),
+        'APERTYPE': (None, 'Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)'),
+        'APERTURE': ([], ''),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
