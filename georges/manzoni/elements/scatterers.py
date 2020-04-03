@@ -14,6 +14,8 @@ from ...fermi import materials
 
 
 class MaterialElement(_ManzoniElement):
+    INTEGRATOR = None
+
     @property
     def cache(self) -> list:
         if not self.frozen:
@@ -46,6 +48,7 @@ class Scatterer(MaterialElement):
         beam_out[:, 3] = beam_in[:, 3] + nprandom.normal(0.0, a0, size=beam_in.shape[0])
 
         return beam_in, beam_out
+
 
 class Degrader(MaterialElement):
     PARAMETERS = {
