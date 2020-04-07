@@ -110,3 +110,7 @@ class LossesObserver(Observer):
                           100 * (b2.shape[0] / b1.shape[0]),
                           100 * (1 - b2.shape[0] / b1.shape[0]),
                           ))
+
+
+class IbaBpmObserver(Observer):
+    ...
