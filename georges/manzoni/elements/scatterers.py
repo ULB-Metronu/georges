@@ -68,6 +68,7 @@ class Degrader(MaterialElement):
         'MATERIAL': (materials.Vacuum, 'Degrader material'),
         'KINETIC_ENERGY': (230 * _ureg.MeV, 'Incoming beam energy'),
         'L': (0.0 * _ureg.m, 'Degrader length'),
+        'WITH_LOSSES': (False, 'Boolean to compute losses and dpp')
     }
     """Parameters of the element, with their default value and their descriptions."""
 
@@ -79,8 +80,8 @@ class Degrader(MaterialElement):
             fe['A'][0],
             fe['A'][1],
             fe['A'][2],
-            self.MATERIAL.energy_dispersion(energy=self.KINETIC_ENERGY),
-            self.MATERIAL.losses(energy=self.KINETIC_ENERGY)
+            0 if self.MATERIAL == materials.Air else self.MATERIAL.energy_dispersion(energy=self.degraded_energy),
+            0 if self.MATERIAL == materials.Air else self.MATERIAL.losses(energy=self.degraded_energy)
         ]
 
     def propagate(self,
@@ -96,7 +97,7 @@ class Degrader(MaterialElement):
 
         # Monte-Carlo method
         # Remove particles
-        if losses != 0:
+        if self.WITH_LOSSES is True and losses != 0:
             idx = _np.random.randint(beam_in.shape[0], size=int(losses * beam_in.shape[0]))
             beam_out = beam_in[idx, :]
 

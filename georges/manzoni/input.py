@@ -65,10 +65,9 @@ class Input:
     def adjust_energy(self, input_energy: _ureg.Quantity):
         current_energy = input_energy
         for e in self.sequence:
-            if not isinstance(e, MaterialElement):
-                break
-            e.KINETIC_ENERGY = current_energy
-            current_energy = e.degraded_energy
+            if isinstance(e, MaterialElement):
+                e.KINETIC_ENERGY = current_energy
+                current_energy = e.degraded_energy
 
     @classmethod
     def from_sequence(cls,
