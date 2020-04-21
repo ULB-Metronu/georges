@@ -88,7 +88,7 @@ class Degrader(MaterialElement):
                   beam_out: _np.ndarray = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
-        length, a0, a1, a2, dpp, losses = self.parameters
+        length, a0, a1, a2, dpp, losses = self.cache
 
         if length == 0:
             _np.copyto(dst=beam_out, src=beam_in, casting='no')
@@ -114,19 +114,20 @@ class Degrader(MaterialElement):
         beam_out = beam_out.dot(matrix.T)
 
         # Interactions
-        beam_out += nprandom.multivariate_normal(
-            [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-            _np.array(
-                [
-                    [a2, a1, 0.0, 0.0, 0.0, 0.0],
-                    [a1, a0, 0.0, 0.0, 0.0, 0.0],
-                    [0.0, 0.0, a2, a1, 0.0, 0.0],
-                    [0.0, 0.0, a1, a0, 0.0, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, dpp**2, 0.0],
-                    [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
-                ]
-            ),
-            int(beam_out.shape[0]))
+        if self.MATERIAL is not materials.Vacuum:
+            beam_out += nprandom.multivariate_normal(
+                [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                _np.array(
+                    [
+                        [a2, a1, 0.0, 0.0, 0.0, 0.0],
+                        [a1, a0, 0.0, 0.0, 0.0, 0.0],
+                        [0.0, 0.0, a2, a1, 0.0, 0.0],
+                        [0.0, 0.0, a1, a0, 0.0, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, dpp**2, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                    ]
+                ),
+                int(beam_out.shape[0]))
 
         return beam_in, beam_out
 

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING, Optional, List
 import numpy as _np
 import pandas as _pd
 from numba.typed import List as nList
@@ -24,7 +24,7 @@ if TYPE_CHECKING:
 
 def track(beamline: _Input,
           beam: _Beam,
-          observer: Optional[_Observer] = None,
+          observers: List[Optional[_Observer]] = None,
           check_apertures_exit: bool = True,
           check_apertures_entry: bool = False
           ):
@@ -32,7 +32,7 @@ def track(beamline: _Input,
     Args:
         beamline:
         beam:
-        observer:
+        observers:
         check_apertures_exit:
         check_apertures_entry:
     Returns:
@@ -51,8 +51,9 @@ def track(beamline: _Input,
         b1, b2 = e.propagate(b1, b2, global_parameters)
         if check_apertures_exit:
             b1, b2 = e.check_aperture(b1, b2)
-        if observer is not None:
-            observer(e, b1, b2)
+        if observers is not None:
+            for o in observers:
+                o(e, b1, b2)
         if b1.shape != b2.shape:
             b1 = _np.zeros(b2.shape)
         if b2.shape[0] == 0:

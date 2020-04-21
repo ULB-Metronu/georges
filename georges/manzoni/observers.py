@@ -31,6 +31,17 @@ class BeamObserver(Observer):
         self.data.append((element.LABEL1, _np.copy(b1) if self._with_input_beams else None, _np.copy(b2)))
 
 
+class SuperObserver(Observer):
+    def __init__(self):
+        super().__init__()
+        self.headers = ('LABEL1',
+                        )
+
+    def __call__(self, element, b1, b2):
+        self.data.append((element.LABEL1,
+                          ))
+
+
 class MeanObserver(Observer):
     def __init__(self):
         super().__init__()
@@ -110,6 +121,12 @@ class LossesObserver(Observer):
                           100 * (b2.shape[0] / b1.shape[0]),
                           100 * (1 - b2.shape[0] / b1.shape[0]),
                           ))
+
+    def adjust_for_efficiency(self, efficiency: float = 1.0):
+        # do something with self.data
+        # self.data['LOSSES'] /= efficiency
+        # self.data['TRANSMISSION'] *= effiency
+        ...
 
 
 class IbaBpmObserver(Observer):

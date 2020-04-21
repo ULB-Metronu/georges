@@ -64,7 +64,7 @@ class FermiRossi(metaclass=ScatteringModelType):
 
         """
         es = 15.0  # MeV
-        chi_0 = 19.32
+        chi_0 = 19.32  # TODO this is probably wrong, it should be the radiation length
         return (es/pv) ** 2 * (1/chi_0)
 
 
