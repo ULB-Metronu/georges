@@ -50,7 +50,7 @@ class Scatterer(MaterialElement):
                   beam_out: _np.ndarray = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
-        a0 = self.parameters[0]
+        a0 = self.cache[0]
 
         beam_out[:, 0] = beam_in[:, 0]
         beam_out[:, 2] = beam_in[:, 2]
