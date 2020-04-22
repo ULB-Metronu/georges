@@ -45,5 +45,8 @@ setup(
         'pyyaml',
         'scipy>=1.0.0',
     ],
-    package_data={'georges': ['fermi/bdsim/*.csv', 'fermi/srim/*.txt', 'fermi/pdg/*.csv', 'fermi/pstar/*.txt']},
+    package_data={'georges': ['fermi/materials.yaml',
+                              'fermi/bdsim/*.csv',
+                              'fermi/srim/*.txt',
+                              'fermi/pstar/*.txt']},
 )
