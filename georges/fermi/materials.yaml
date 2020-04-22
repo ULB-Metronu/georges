@@ -1,10 +1,494 @@
 elements:
-  hydrogen: {Z: 1, A: 1.0, rho: 0.0083748}
-  nitrogen: {Z: 7, A: 14.0, rho: 1.0}
-  oxygen: {Z: 8, A: 16.0, rho: 1.0}
+  hydrogen: {Z: 1, A: 1.01}
+  helium: {Z: 2, A: 4.0}
+  lithium: {Z: 3, A: 6.94}
+  beryllium: {Z: 4, A: 9.01}
+  boron: {Z: 5, A: 10.81}
+  carbon: {Z: 6, A: 12.01}
+  nitrogen: {Z: 7, A: 14.01}
+  oxygen: {Z: 8, A: 16.0}
+  fluorine: {Z: 9, A: 19.0}
+  neon: {Z: 10, A: 20.18}
+  sodium: {Z: 11, A: 22.99}
+  magnesium: {Z: 12, A: 24.3}
+  aluminum: {Z: 13, A: 26.98}
+  silicon: {Z: 14, A: 28.09}
+  phosphorus: {Z: 15, A: 30.97}
+  sulfur: {Z: 16, A: 32.06}
+  chlorine: {Z: 17, A: 35.45}
+  argon: {Z: 18, A: 39.95}
+  potassium: {Z: 19, A: 39.1}
+  calcium: {Z: 20, A: 40.08}
+  scandium: {Z: 21, A: 44.96}
+  titanium: {Z: 22, A: 47.87}
+  vanadium: {Z: 23, A: 50.94}
+  chromium: {Z: 24, A: 52.0}
+  manganese: {Z: 25, A: 54.94}
+  iron: {Z: 26, A: 55.84}
+  cobalt: {Z: 27, A: 58.93}
+  nickel: {Z: 28, A: 58.69}
+  copper: {Z: 29, A: 63.55}
+  zinc: {Z: 30, A: 65.38}
+  gallium: {Z: 31, A: 69.72}
+  germanium: {Z: 32, A: 72.64}
+  arsenic: {Z: 33, A: 74.92}
+  selenium: {Z: 34, A: 78.96}
+  bromine: {Z: 35, A: 79.9}
+  krypton: {Z: 36, A: 83.8}
+  rubidium: {Z: 37, A: 85.47}
+  strontium: {Z: 38, A: 87.62}
+  yttrium: {Z: 39, A: 88.91}
+  zirconium: {Z: 40, A: 91.22}
+  niobium: {Z: 41, A: 92.91}
+  molybdenum: {Z: 42, A: 95.96}
+  technetium: {Z: 43, A: 98.0}
+  ruthenium: {Z: 44, A: 101.07}
+  rhodium: {Z: 45, A: 102.91}
+  palladium: {Z: 46, A: 106.42}
+  silver: {Z: 47, A: 107.87}
+  cadmium: {Z: 48, A: 112.41}
+  indium: {Z: 49, A: 114.82}
+  tin: {Z: 50, A: 118.71}
+  antimony: {Z: 51, A: 121.76}
+  tellurium: {Z: 52, A: 127.6}
+  iodine: {Z: 53, A: 126.9}
+  xenon: {Z: 54, A: 131.29}
+  cesium: {Z: 55, A: 132.9}
+  barium: {Z: 56, A: 137.33}
+  lanthanum: {Z: 57, A: 138.9}
+  cerium: {Z: 58, A: 140.12}
+  praseodymium: {Z: 59, A: 140.91}
+  neodymium: {Z: 60, A: 144.24}
+  promethium: {Z: 61, A: 145.0}
+  samarium: {Z: 62, A: 150.36}
+  europium: {Z: 63, A: 151.96}
+  gadolinium: {Z: 64, A: 157.25}
+  terbium: {Z: 65, A: 158.93}
+  dysprosium: {Z: 66, A: 162.5}
+  holmium: {Z: 67, A: 164.93}
+  erbium: {Z: 68, A: 167.26}
+  thulium: {Z: 69, A: 168.93}
+  ytterbium: {Z: 70, A: 173.05}
+  lutetium: {Z: 71, A: 174.97}
+  hafnium: {Z: 72, A: 178.49}
+  tantalum: {Z: 73, A: 180.95}
+  wolfram: {Z: 74, A: 183.84}
+  rhenium: {Z: 75, A: 186.21}
+  osmium: {Z: 76, A: 190.23}
+  iridium: {Z: 77, A: 192.22}
+  platinum: {Z: 78, A: 195.08}
+  gold: {Z: 79, A: 196.97}
+  mercury: {Z: 80, A: 200.59}
+  thallium: {Z: 81, A: 204.38}
+  lead: {Z: 82, A: 207.2}
+  bismuth: {Z: 83, A: 208.98}
+  polonium: {Z: 84, A: 210.0}
+  thorium: {Z: 90, A: 232.04}
+  protactinium: {Z: 91, A: 231.04}
+  uranium: {Z: 92, A: 238.03}
+
 compounds:
+  diamond:
+    fractions:
+      carbon: 1
+    rho: 3.52
+
+  graphite:
+    fractions:
+      carbon: 1
+    rho: 1.7
+
+  water:
+    fractions:
+      hydrogen: 0.1119
+      oxygen: 0.8881
+    rho: 1.0
+
   air:
     fractions:
-      oxygen: 0.2
-      nitrogen: 0.8
-    rho: 1.0
+      carbon: 0.0001
+      nitrogen: 0.7553
+      oxygen: 0.2318
+      argon: 0.0128
+    rho: 1.205e-3
+
+  lexan:
+    fractions:
+      hydrogen: 0.0555
+      carbon: 0.7557
+      oxygen: 0.1888
+    rho: 1.2
+
+  boroncarbide:
+    fractions:
+      boron: 0.7826
+      carbon: 0.2174
+    rho: 2.520
+
+  mylar:
+    fractions:
+      hydrogen: 0.042
+      carbon: 0.6250
+      oxygen: 0.333
+    rho: 1.4
+
+  polyethylene:
+    fractions:
+      hydrogen: 0.1437
+      carbon: 0.8563
+    rho: 0.94
+
+  polystyrene:
+    fractions:
+      hydrogen: 0.074
+      carbon: 0.9226
+    rho: 1.06
+
+  hydrogen:
+    fractions:
+      hydrogen: 1.0
+    rho: 0.0708
+  helium:
+    fractions:
+      helium: 1.0
+    rho: 0.122
+  lithium:
+    fractions:
+      lithium: 1.0
+    rho: 0.534
+  beryllium:
+    fractions:
+      beryllium: 1.0
+    rho: 1.848
+  boron:
+    fractions:
+      boron: 1.0
+    rho: 2.34
+  carbon:
+    fractions:
+      carbon: 1.0
+    rho: 2.2
+  nitrogen:
+    fractions:
+      nitrogen: 1.0
+    rho: 0.808
+  oxygen:
+    fractions:
+      oxygen: 1.0
+    rho: 1.14
+  fluorine:
+    fractions:
+      fluorine: 1.0
+    rho: 1.5
+  neon:
+    fractions:
+      neon: 1.0
+    rho: 1.207
+  sodium:
+    fractions:
+      sodium: 1.0
+    rho: 0.971
+  magnesium:
+    fractions:
+      magnesium: 1.0
+    rho: 1.738
+  aluminum:
+    fractions:
+      aluminum: 1.0
+    rho: 2.6989
+  silicon:
+    fractions:
+      silicon: 1.0
+    rho: 2.33
+  phosphorus:
+    fractions:
+      phosphorus: 1.0
+    rho: 1.82
+  sulfur:
+    fractions:
+      sulfur: 1.0
+    rho: 2.07
+  chlorine:
+    fractions:
+      chlorine: 1.0
+    rho: 1.56
+  argon:
+    fractions:
+      argon: 1.0
+    rho: 1.4
+  potassium:
+    fractions:
+      potassium: 1.0
+    rho: 0.862
+  calcium:
+    fractions:
+      calcium: 1.0
+    rho: 1.55
+  scandium:
+    fractions:
+      scandium: 1.0
+    rho: 2.989
+  titanium:
+    fractions:
+      titanium: 1.0
+    rho: 4.54
+  vanadium:
+    fractions:
+      vanadium: 1.0
+    rho: 6.11
+  chromium:
+    fractions:
+      chromium: 1.0
+    rho: 7.19
+  manganese:
+    fractions:
+      manganese: 1.0
+    rho: 7.33
+  iron:
+    fractions:
+      iron: 1.0
+    rho: 7.874
+  cobalt:
+    fractions:
+      cobalt: 1.0
+    rho: 8.9
+  nickel:
+    fractions:
+      nickel: 1.0
+    rho: 8.902
+  copper:
+    fractions:
+      copper: 1.0
+    rho: 8.96
+  zinc:
+    fractions:
+      zinc: 1.0
+    rho: 7.133
+  gallium:
+    fractions:
+      gallium: 1.0
+    rho: 5.904
+  germanium:
+    fractions:
+      germanium: 1.0
+    rho: 5.323
+  arsenic:
+    fractions:
+      arsenic: 1.0
+    rho: 5.73
+  selenium:
+    fractions:
+      selenium: 1.0
+    rho: 4.79
+  bromine:
+    fractions:
+      bromine: 1.0
+    rho: 3.12
+  krypton:
+    fractions:
+      krypton: 1.0
+    rho: 2.16
+  rubidium:
+    fractions:
+      rubidium: 1.0
+    rho: 1.532
+  strontium:
+    fractions:
+      strontium: 1.0
+    rho: 2.54
+  yttrium:
+    fractions:
+      yttrium: 1.0
+    rho: 4.469
+  zirconium:
+    fractions:
+      zirconium: 1.0
+    rho: 6.506
+  niobium:
+    fractions:
+      niobium: 1.0
+    rho: 8.57
+  molybdenum:
+    fractions:
+      molybdenum: 1.0
+    rho: 10.22
+  technetium:
+    fractions:
+      technetium: 1.0
+    rho: 11.5
+  ruthenium:
+    fractions:
+      ruthenium: 1.0
+    rho: 12.41
+  rhodium:
+    fractions:
+      rhodium: 1.0
+    rho: 12.41
+  palladium:
+    fractions:
+      palladium: 1.0
+    rho: 12.02
+  silver:
+    fractions:
+      silver: 1.0
+    rho: 10.5
+  cadmium:
+    fractions:
+      cadmium: 1.0
+    rho: 8.65
+  indium:
+    fractions:
+      indium: 1.0
+    rho: 7.31
+  tin:
+    fractions:
+      tin: 1.0
+    rho: 7.31
+  antimony:
+    fractions:
+      antimony: 1.0
+    rho: 6.691
+  tellurium:
+    fractions:
+      tellurium: 1.0
+    rho: 6.24
+  iodine:
+    fractions:
+      iodine: 1.0
+    rho: 4.93
+  xenon:
+    fractions:
+      xenon: 1.0
+    rho: 3.52
+  cesium:
+    fractions:
+      cesium: 1.0
+    rho: 1.873
+  barium:
+    fractions:
+      barium: 1.0
+    rho: 3.5
+  lanthanum:
+    fractions:
+      lanthanum: 1.0
+    rho: 6.145
+  cerium:
+    fractions:
+      cerium: 1.0
+    rho: 6.77
+  praseodymium:
+    fractions:
+      praseodymium: 1.0
+    rho: 6.773
+  neodymium:
+    fractions:
+      neodymium: 1.0
+    rho: 7.008
+  promethium:
+    fractions:
+      promethium: 1.0
+    rho: 7.264
+  samarium:
+    fractions:
+      samarium: 1.0
+    rho: 7.52
+  europium:
+    fractions:
+      europium: 1.0
+    rho: 5.244
+  gadolinium:
+    fractions:
+      gadolinium: 1.0
+    rho: 7.901
+  terbium:
+    fractions:
+      terbium: 1.0
+    rho: 8.23
+  dysprosium:
+    fractions:
+      dysprosium: 1.0
+    rho: 8.551
+  holmium:
+    fractions:
+      holmium: 1.0
+    rho: 8.795
+  erbium:
+    fractions:
+      erbium: 1.0
+    rho: 9.066
+  thulium:
+    fractions:
+      thulium: 1.0
+    rho: 9.321
+  ytterbium:
+    fractions:
+      ytterbium: 1.0
+    rho: 6.966
+  lutetium:
+    fractions:
+      lutetium: 1.0
+    rho: 9.841
+  hafnium:
+    fractions:
+      hafnium: 1.0
+    rho: 13.31
+  tantalum:
+    fractions:
+      tantalum: 1.0
+    rho: 16.654
+  wolfram:
+    fractions:
+      wolfram: 1.0
+    rho: 19.3
+  rhenium:
+    fractions:
+      rhenium: 1.0
+    rho: 21.02
+  osmium:
+    fractions:
+      osmium: 1.0
+    rho: 22.57
+  iridium:
+    fractions:
+      iridium: 1.0
+    rho: 22.42
+  platinum:
+    fractions:
+      platinum: 1.0
+    rho: 21.45
+  gold:
+    fractions:
+      gold: 1.0
+    rho: 19.3
+  mercury:
+    fractions:
+      mercury: 1.0
+    rho: 13.546
+  thallium:
+    fractions:
+      thallium: 1.0
+    rho: 11.85
+  lead:
+    fractions:
+      lead: 1.0
+    rho: 11.35
+  bismuth:
+    fractions:
+      bismuth: 1.0
+    rho: 9.747
+  polonium:
+    fractions:
+      polonium: 1.0
+    rho: 9.32
+  thorium:
+    fractions:
+      thorium: 1.0
+    rho: 11.72
+  protactinium:
+    fractions:
+      protactinium: 1.0
+    rho: 15.37
+  uranium:
+    fractions:
+      uranium: 1.0
+    rho: 18.95
