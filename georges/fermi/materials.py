@@ -181,7 +181,7 @@ class CompoundType(type):
         length = 0
         for element, fraction in cls.material_data['fractions'].items():
             element = getattr(sys.modules[__name__], 'elements')[element.title()]
-            length += 1.0 / fraction * element.atomic_scattering_length
+            length += fraction / element.atomic_scattering_length
         return 1/(cls.density * length)
 
     def range(cls,
