@@ -1,0 +1,10 @@
+elements:
+  hydrogen: {Z: 1, A: 1.0, rho: 0.0083748}
+  nitrogen: {Z: 7, A: 14.0, rho: 1.0}
+  oxygen: {Z: 8, A: 16.0, rho: 1.0}
+compounds:
+  air:
+    fractions:
+      oxygen: 0.2
+      nitrogen: 0.8
+    rho: 1.0

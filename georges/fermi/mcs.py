@@ -4,43 +4,6 @@ TODO
 import numpy as _np
 
 
-def radiation_length(material) -> float:
-    """
-
-    Args:
-        material:
-
-    Returns:
-
-    """
-    a: float = material.atomic_a
-    z: float = material.atomic_z
-    return 716.4 * a * (1 / (z * (z + 1) * (_np.log(287 / _np.sqrt(z)))))
-
-
-def scattering_length(material) -> float:
-    """
-    See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
-
-    Args:
-        material:
-
-    Returns:
-
-    """
-    rho = material.density
-    if material is 'water':
-        return 46.88/rho
-    if material is 'air':
-        return 46.76 / rho
-    alpha: float = 0.0072973525664  # Fine structure constant
-    avogadro: float = 6.02e23  # Avogadro's number
-    re: float = 2.817940e-15 * 100  # Classical electron radius (in cm)
-    a: float = material.atomic_a
-    z: float = material.atomic_z
-    return 1 / (rho * alpha * avogadro * re ** 2 * z ** 2 * (2 * _np.log(33219 * (a * z) ** (-1 / 3)) - 1) / a)
-
-
 class ScatteringModelType(type):
     @staticmethod
     def t(pv: float, p1v1: float, **kwargs) -> float:
@@ -64,7 +27,7 @@ class FermiRossi(metaclass=ScatteringModelType):
 
         """
         es = 15.0  # MeV
-        chi_0 = 19.32  # TODO this is probably wrong, it should be the radiation length
+        chi_0 = kwargs['material'].radiation_length
         return (es/pv) ** 2 * (1/chi_0)
 
 
@@ -112,7 +75,7 @@ class DifferentialHighland(metaclass=ScatteringModelType):
         """
         material = kwargs.get('material')
         es = 14.1  # MeV
-        chi0 = radiation_length(material=material)
+        chi0 = material.radiation_length
         x = material.thickness(k_out=pv, k_in=p1v1)
         return DifferentialHighland.f_dh(DifferentialHighland.l(x, chi0)) * (es / pv) ** 2 * (1 / chi0)
 
@@ -154,7 +117,7 @@ class ICRUProtons(metaclass=ScatteringModelType):
         """
         material = kwargs['material']
         es = 15.0  # MeV
-        chi_s = scattering_length(material=material)
+        chi_s = material.scattering_length
         return (es / pv) ** 2 * (1 / chi_s)
 
 
@@ -176,7 +139,7 @@ class DifferentialMoliere(metaclass=ScatteringModelType):
         """
         material = kwargs['material']
         es = 15.0  # MeV
-        chi_s = scattering_length(material=material)
+        chi_s = material.scattering_length
         return DifferentialMoliere.f_dm(p1v1, pv) * (es / pv) ** 2 * (1 / chi_s)
 
     @staticmethod

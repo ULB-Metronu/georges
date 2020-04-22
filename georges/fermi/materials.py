@@ -4,6 +4,7 @@ TODO
 from typing import Optional, List, Mapping
 import os
 import sys
+import yaml
 import numpy as _np
 import pandas as _pd
 from scipy.integrate import quad as _quad
@@ -13,13 +14,6 @@ from .mcs import DifferentialMoliere as _DifferentialMoliere
 from georges_core import ureg as _ureg
 from georges_core import Kinematics as _Kinematics
 from georges_core.kinematics import ekin_to_pv as _ekin_to_pv
-
-
-def __pdg_read_data(path: str) -> _pd.DataFrame:
-    return _pd.read_csv(os.path.join(path, "pdg", "data.csv"),
-                        delimiter=',',
-                        index_col='material'
-                        )
 
 
 def __bdsim_read_data(path: str) -> _pd.DataFrame:
@@ -40,7 +34,7 @@ def __star_read_data(path: str, material_name: str) -> _pd.DataFrame:
                         index_col=False)
 
 
-def __srim_read_data(path: str, material_name: str, pdg_data) -> _pd.DataFrame:
+def __srim_read_data(path: str, material_name: str, density: float) -> _pd.DataFrame:
     data = _pd.read_csv(
         os.path.join(path, "srim", f"{material_name}.txt"),
         skiprows=23,
@@ -72,7 +66,7 @@ def __srim_read_data(path: str, material_name: str, pdg_data) -> _pd.DataFrame:
 
     data['projected_range'] = data['projected_range'].astype(float)
     data['projected_range_meter'] = data.apply(
-        lambda e: units[e['projected_range_unit']] * pdg_data.at[material_name, 'rho'] * 100 * e['projected_range'],
+        lambda e: units[e['projected_range_unit']] * density * 100 * e['projected_range'],
         axis=1
     )
     data['energy'] = data['energy'].astype(float)
@@ -100,25 +94,59 @@ class ProjectedRange(metaclass=RangeDefinitionType):
 class MaterialType(type):
     @property
     def valid_data(cls):
-        return cls.pdg_data is not None and cls.projected_range is not None and (cls.projected_range is not None or cls.csda_range is not None)
+        return cls.material_data is not None and cls.projected_range is not None and (cls.projected_range is not None or cls.csda_range is not None)
 
     @property
     def atomic_a(cls) -> float:
-        if cls.pdg_data is None:
+        if cls.material_data is None:
             return None
-        return cls.pdg_data['A']
+        return cls.material_data['A']
 
     @property
-    def atomic_z(cls) -> float:
-        if cls.pdg_data is None:
+    def atomic_z(cls) -> int:
+        if cls.material_data is None:
             return None
-        return cls.pdg_data['Z']
+        return cls.material_data['Z']
 
     @property
     def density(cls) -> float:
-        if cls.pdg_data is None:
+        if cls.material_data is None:
             return None
-        return cls.pdg_data['rho']
+        return cls.material_data['rho']
+
+    @property
+    def radiation_length(cls) -> float:
+        """
+
+        Args:
+            material:
+
+        Returns:
+
+        """
+        a: float = cls.atomic_a
+        z: int = cls.atomic_z
+        # Probably wrong, should include rho somewhere
+        return 716.4 * a * (1 / (z * (z + 1) * (_np.log(287 / _np.sqrt(z)))))
+
+    @property
+    def scattering_length(cls) -> float:
+        """
+        See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
+
+        Args:
+            material:
+
+        Returns:
+
+        """
+        rho = cls.density
+        alpha: float = 0.0072973525664  # Fine structure constant
+        avogadro: float = 6.02e23  # Avogadro's number
+        re: float = 2.817940e-15 * 100  # Classical electron radius (in cm)
+        a: float = cls.atomic_a
+        z: int = cls.atomic_z
+        return 1 / (rho * alpha * avogadro * re ** 2 * z ** 2 * (2 * _np.log(33219 * (a * z) ** (-1 / 3)) - 1) / a)
 
     def range(cls,
               kinetic_energy: _ureg.Quantity,
@@ -321,13 +349,13 @@ class Material(metaclass=MaterialType):
     def __init_subclass__(cls,
                           csda_range_data,
                           projected_range_data,
-                          pdg_data,
+                          material_data,
                           bdsim_data,
                           **kwargs):
         super().__init_subclass__(**kwargs)
         cls.csda_range = csda_range_data
         cls.projected_range = projected_range_data
-        cls.pdg_data = pdg_data
+        cls.material_data = material_data
         cls.bdsim_data = bdsim_data
 
     def __str__(self):
@@ -337,11 +365,27 @@ class Material(metaclass=MaterialType):
         return str(self) == str(y)
 
 
+class MaterialCompoundType(MaterialType):
+    @property
+    def radiation_length(cls) -> float:
+        length = 0
+        for element, fraction in cls.material_data['fraction'].items():
+            length += 1.0 / fraction * getattr(sys.modules[__name__], element.title()).radiation_length
+        return 1/length
+
+    @property
+    def scattering_length(cls) -> float:
+        length = 0
+        for element, fraction in cls.material_data['fractions'].items():
+            length += 1.0 / fraction * getattr(sys.modules[__name__], element.title()).scattering_length
+        return 1/length
+
+
 def __initialize_materials_database():
     db_path = os.path.dirname(__file__)
 
-    # Read PDG data
-    pdg_data = __pdg_read_data(db_path)
+    # Read all material definitions
+    materials_definitions = yaml.safe_load(open('/Users/chernals/reps/georges/georges/fermi/materials.yaml', 'r'))
 
     # Read P-Star data
     pstar_data_files = [os.path.splitext(f)[0] for f in os.listdir(os.path.join(db_path, 'pstar')) if
@@ -354,7 +398,10 @@ def __initialize_materials_database():
     srim_data_files = [os.path.splitext(f)[0] for f in os.listdir(os.path.join(db_path, 'srim')) if
                        os.path.isfile(os.path.join(db_path, 'srim', f)) and os.path.splitext(f)[1] == '.txt']
     srim = {
-        m: __srim_read_data(db_path, m, pdg_data) for m in srim_data_files
+        m: __srim_read_data(db_path,
+                            m,
+                            materials_definitions['elements'].get(m)['rho'] or materials_definitions['compounds'].get(m)['rho']
+                            ) for m in srim_data_files if (materials_definitions['elements'].get(m) or materials_definitions['compounds'].get(m))
     }
 
     # Read BDSIM data
@@ -379,12 +426,19 @@ def __initialize_materials_database():
     csda_ranges = {**csda_ranges_pstar}
 
     # Dynamically create the material classes
-    for m in set(('Vacuum',) + tuple(projected_ranges.keys()) + tuple(csda_ranges.keys())):
-        setattr(sys.modules[__name__], m.title(), MaterialType(m.title(), (Material,), {},
-                                                               projected_range_data=projected_ranges.get(m, None),
-                                                               csda_range_data=csda_ranges.get(m, None),
-                                                               pdg_data=pdg_data.loc[
-                                                                   m] if m in pdg_data.index else None,
+    for k, v in materials_definitions['elements'].items():
+        setattr(sys.modules[__name__], k.title(), MaterialType(k.title(), (Material,), {},
+                                                               projected_range_data=projected_ranges.get(k, None),
+                                                               csda_range_data=csda_ranges.get(k, None),
+                                                               material_data=v,
                                                                bdsim_data=bdsim_data.loc[
-                                                                   m] if m in bdsim_data.index else None
+                                                                   k] if k in bdsim_data.index else None
                                                                ))
+    for k, v in materials_definitions['compounds'].items():
+        setattr(sys.modules[__name__], k.title(), MaterialCompoundType(k.title(), (Material,), {},
+                                                                       projected_range_data=projected_ranges.get(k, None),
+                                                                       csda_range_data=csda_ranges.get(k, None),
+                                                                       material_data=v,
+                                                                       bdsim_data=bdsim_data.loc[
+                                                                           k] if k in bdsim_data.index else None
+                                                                       ))
