@@ -112,6 +112,14 @@ compounds:
       argon: 0.0128
     rho: 1.205e-3
 
+  vacuum:
+    fractions:
+      carbon: 0.0001
+      nitrogen: 0.7553
+      oxygen: 0.2318
+      argon: 0.0128
+    rho: 1e-25
+
   lexan:
     fractions:
       hydrogen: 0.0555
