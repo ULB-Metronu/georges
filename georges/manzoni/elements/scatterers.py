@@ -33,7 +33,7 @@ class MaterialElement(_ManzoniElement):
 class Scatterer(MaterialElement):
     PARAMETERS = {
         'MATERIAL': (materials.Vacuum, 'Degrader material'),
-        'KINETIC_ENERGY': (230 * _ureg.MeV, 'Incoming beam energy'),
+        'KINETIC_ENERGY': (0.0 * _ureg.MeV, 'Incoming beam energy'),
         'L': (0.0 * _ureg.m, 'Degrader length'),
     }
     """Parameters of the element, with their default value and their descriptions."""
@@ -73,7 +73,7 @@ class Scatterer(MaterialElement):
 class Degrader(MaterialElement):
     PARAMETERS = {
         'MATERIAL': (materials.Vacuum, 'Degrader material'),
-        'KINETIC_ENERGY': (230 * _ureg.MeV, 'Incoming beam energy'),
+        'KINETIC_ENERGY': (0.0 * _ureg.MeV, 'Incoming beam energy'),
         'L': (0.0 * _ureg.m, 'Degrader length'),
         'WITH_LOSSES': (False, 'Boolean to compute losses and dpp')
     }
