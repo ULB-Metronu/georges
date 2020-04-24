@@ -187,7 +187,7 @@ class CompoundType(type):
     def range(cls,
               kinetic_energy: _ureg.Quantity,
               range_definition: RangeDefinitionType = ProjectedRange
-              ) -> _ureg.Quantity:
+              ) -> Optional[_ureg.Quantity]:
         """
 
         Args:
@@ -210,7 +210,7 @@ class CompoundType(type):
     def solve_range(cls,
                     range: _ureg.Quantity,
                     range_definition: RangeDefinitionType = ProjectedRange
-                    ) -> _Kinematics:
+                    ) -> Optional[_Kinematics]:
         """
 
         Args:
@@ -236,7 +236,7 @@ class CompoundType(type):
         else:
             raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 
-    def stopping(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> Optional[_Kinematics]:
+    def stopping(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> _Kinematics:
         """
 
         Args:
@@ -247,10 +247,10 @@ class CompoundType(type):
 
         """
         if not cls.valid_data:
-            return None
+            return _Kinematics(kinetic_energy)
         return cls.solve_range(cls.residual_range(thickness, kinetic_energy))
 
-    def residual_range(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> _ureg.Quantity:
+    def residual_range(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> Optional[_ureg.Quantity]:
         """
 
         Args:
