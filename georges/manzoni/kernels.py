@@ -6,7 +6,7 @@ import numba as _nb
 from numba import njit
 
 
-@njit(parallel=True, nogil=True)
+@njit(nogil=True)  # no parallel jit found
 def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray):
     """
 

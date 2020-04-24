@@ -95,13 +95,7 @@ class Degrader(MaterialElement):
             _np.copyto(dst=beam_out, src=beam_in, casting='no')
             return beam_in, beam_out
 
-        # Monte-Carlo method
-        # Remove particles
-        if self.WITH_LOSSES is True and losses != 0:
-            idx = _np.random.randint(beam_in.shape[0], size=int(losses * beam_in.shape[0]))
-            beam_out = beam_in[idx, :]
-
-        # Transport
+        # Transport matrix
         matrix = _np.array(
             [
                 [1, length, 0, 0, 0, 0],
@@ -112,7 +106,15 @@ class Degrader(MaterialElement):
                 [0, 0, 0, 0, 0, 1],
             ]
         )
-        beam_out = beam_out.dot(matrix.T)
+
+        # Monte-Carlo method
+        # Remove particles
+        if self.WITH_LOSSES is True and losses != 0:
+            idx = _np.random.randint(beam_in.shape[0], size=int(losses * beam_in.shape[0]))
+            beam_out = beam_in[idx, :]
+            beam_out = beam_out.dot(matrix.T)
+        else:
+            beam_out = beam_in.dot(matrix.T)
 
         # Interactions
         if self.MATERIAL is not materials.Vacuum:
