@@ -347,9 +347,8 @@ class CompoundType(type):
         Returns:
 
         """
-        # TODO
-        # if not cls._energy_dispersion:
-        #     return None
+        if cls.bdsim_data is None:
+            return 0.0
 
         c0 = cls.bdsim_data['energy_dispersion_c0']
         c1 = cls.bdsim_data['energy_dispersion_c1']
@@ -370,9 +369,9 @@ class CompoundType(type):
         Returns:
 
         """
-        # TODO
-        # if not cls._loss_factors:
-        #     return None
+        if cls.bdsim_data is None:
+            return 1.0
+
         c0 = cls.bdsim_data['loss_c0']
         c1 = cls.bdsim_data['loss_c1']
         c2 = cls.bdsim_data['loss_c2']

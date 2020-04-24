@@ -80,8 +80,8 @@ class Degrader(MaterialElement):
             fe['A'][0],
             fe['A'][1],
             fe['A'][2],
-            0 if self.MATERIAL == materials.Air else self.MATERIAL.energy_dispersion(energy=self.degraded_energy),
-            0 if self.MATERIAL == materials.Air else self.MATERIAL.losses(energy=self.degraded_energy)
+            self.MATERIAL.energy_dispersion(energy=self.degraded_energy),
+            self.MATERIAL.losses(energy=self.degraded_energy)
         ]
 
     def propagate(self,
