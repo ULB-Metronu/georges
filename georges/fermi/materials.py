@@ -286,7 +286,10 @@ class CompoundType(type):
     def scattering(cls,
                    kinetic_energy: _ureg.Quantity,
                    thickness: _ureg.Quantity,
-                   model: _ScatteringModelType = _DifferentialMoliere) -> Mapping[str, float]:
+                   model: _ScatteringModelType = _DifferentialMoliere,
+                   compute_a0: bool = True,
+                   compute_a1: bool = True,
+                   compute_a2: bool = True) -> Mapping[str, float]:
         """
         Compute the Fermi-Eyges parameters A0, A1, A2 and B (emittance).
 
@@ -294,6 +297,9 @@ class CompoundType(type):
             kinetic_energy:
             thickness:
             model:
+            compute_a0:
+            compute_a1:
+            compute_a2:
 
         Returns:
 
@@ -321,20 +327,25 @@ class CompoundType(type):
                 _ekin_to_pv(initial_energy).m_as('MeV'),
                 material=material
             )
+        a = [0.0, 0.0, 0.0]
+        if compute_a0:
+            a[0] = _quad(integrand, 0, thickness, args=(kinetic_energy, thickness, cls, model, 0))[0]  # Order 0
+        if compute_a1:
+            a[1] = 1e-2 * _quad(integrand, 0, thickness, args=(kinetic_energy, thickness, cls, model, 1))[0]  # Order 1
+        if compute_a2:
+            a[2] = 1e-4 * _quad(integrand, 0, thickness, args=(kinetic_energy, thickness, cls, model, 2))[0]  # Order 2
 
-        a = [
-            _quad(integrand, 0, thickness, args=(kinetic_energy, thickness, cls, model, 0))[0],  # Order 0
-            1e-2 * _quad(integrand, 0, thickness, args=(kinetic_energy, thickness, cls, model, 1))[0],  # Order 1
-            1e-4 * _quad(integrand, 0, thickness, args=(kinetic_energy, thickness, cls, model, 2))[0],  # Order 2
-        ]
-        b = _np.sqrt(a[0] * a[2] - a[1] ** 2)  # Emittance in m.rad
+        if compute_a0 and compute_a1 and compute_a2:
+            b = _np.sqrt(a[0] * a[2] - a[1] ** 2)  # Emittance in m.rad
+        else:
+            b = 0.0
 
         return {
             'A': a,
             'B': b,
-            'TWISS_ALPHA': -a[1] / b,
-            'TWISS_BETA': a[2] / b,
-            'TWISS_GAMMA': a[0] / b,
+            'TWISS_ALPHA': -a[1] / b if b != 0.0 else 0.0,
+            'TWISS_BETA': a[2] / b if b != 0.0 else 0.0,
+            'TWISS_GAMMA': a[0] / b if b != 0.0 else 0.0,
         }
 
     def energy_dispersion(cls, energy: _ureg.Quantity) -> float:

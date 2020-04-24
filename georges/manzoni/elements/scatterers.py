@@ -40,7 +40,10 @@ class Scatterer(MaterialElement):
 
     @property
     def parameters(self) -> List[float]:
-        fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
+        fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY,
+                                      thickness=self.L,
+                                      compute_a1=False,
+                                      compute_a2=False)
         return [
             fe['A'][0],
         ]
@@ -50,6 +53,10 @@ class Scatterer(MaterialElement):
                   beam_out: _np.ndarray = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
+        if self.MATERIAL is materials.Vacuum:
+            _np.copyto(dst=beam_out, src=beam_in, casting='no')
+            return beam_in, beam_out
+
         a0 = self.cache[0]
 
         beam_out[:, 0] = beam_in[:, 0]
