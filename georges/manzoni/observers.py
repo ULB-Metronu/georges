@@ -133,11 +133,35 @@ class LossesObserver(Observer):
                               100 * (1 - b2.shape[0] / b1.shape[0]),
                               ))
 
-    def adjust_for_efficiency(self, efficiency: float = 1.0):
+    def compute_global_transmission(self, global_transmission: float = 1.0):
+        for elem in self.data:
+            global_transmission *= elem[3]/100
+        return global_transmission*100
+
+    def compute_global_losses(self):
+        return 100-self.compute_global_transmission()
+
+    #def adjust_for_efficiency(self, efficiency: float = 1.0):
         # do something with self.data
         # self.data['LOSSES'] /= efficiency
         # self.data['TRANSMISSION'] *= effiency
-        ...
+     #   ...
+
+
+class SymmetryObserver(Observer):
+    def __init__(self):
+        super().__init__()
+
+        self.headers = ('LABEL1',
+                        'SYM_IN',
+                        'SYM_OUT',
+                        )
+
+    def __call__(self, element, b1, b2):
+        self.data.append((element.LABEL1,
+                          abs(b1[:, 0].std() - b1[:, 2].std()) / (b1[:, 0].std() + b1[:, 2].std()),
+                          abs(b2[:, 0].std() - b2[:, 2].std()) / (b2[:, 0].std() + b2[:, 2].std()),
+                          ))
 
 
 class IbaBpmObserver(Observer):
