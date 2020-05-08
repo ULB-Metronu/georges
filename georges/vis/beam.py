@@ -5,7 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from matplotlib import patches
 from matplotlib.ticker import NullFormatter
-#from georges import statistics
+from . import statistics
 
 
 class BeamPlottingException(Exception):
