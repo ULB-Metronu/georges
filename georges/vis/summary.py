@@ -7,19 +7,19 @@ from .tracking import tracking
 from .losses import losses
 
 
-def tracking_summary(bl=None, context={}, fig=None):
+def tracking_summary(bl=None, fig=None):
     if bl is None:
         raise Exception("`bl` cannot be None.")
     if fig is None:
         fig = plt.figure(figsize=(12, 21))
     ax = fig.add_subplot(311)
     prepare(ax, bl, size_arrows=False)
-    aperture(ax, bl, context, plane='X')
+    aperture(ax, bl, plane='X')
     tracking(ax, bl, plane='X')
 
     ax = fig.add_subplot(312)
     prepare(ax, bl, size_arrows=False)
-    aperture(ax, bl, context, plane='Y')
+    aperture(ax, bl, plane='Y')
     tracking(ax, bl, plane='Y')
 
     ax = fig.add_subplot(313)
@@ -29,7 +29,7 @@ def tracking_summary(bl=None, context={}, fig=None):
     plt.tight_layout()
 
 
-def summary(bl, bl_track, context, element='DRIFT_ISO', fig=None):
+def summary(bl, beam_o_df, element='DRIFT_ISO', fig=None):
     if fig is None:
         fig = plt.figure(figsize=(20, 20))
     # Define the left bottom corner block
@@ -58,7 +58,7 @@ def summary(bl, bl_track, context, element='DRIFT_ISO', fig=None):
     ax_tab.tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
 
     dim = ['Y', 'PY']
-    phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, bl_track.line['BEAM'], element, dim)
+    phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, beam_o_df, element, dim)
 
     # Define the right bottom corner block
     x_bound = left + width + space + hwidth + 3 * space
@@ -85,7 +85,7 @@ def summary(bl, bl_track, context, element='DRIFT_ISO', fig=None):
     ax_tab.tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
 
     dim = ['X', 'PX']
-    phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, bl_track.line['BEAM'], element, dim)
+    phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, beam_o_df, element, dim)
 
     # Define the right top corner block
     y_bound = bottom + height + space + hheight + 3 * space
@@ -111,7 +111,7 @@ def summary(bl, bl_track, context, element='DRIFT_ISO', fig=None):
     ax_tab = fig.add_axes(rect_tab)  # y histogram
 
     dim = ['X', 'Y']
-    phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, bl_track.line['BEAM'], element, dim)
+    phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, beam_o_df, element, dim)
 
     # Define the left top corner block
     n_height = (height + space + hheight) / 3
@@ -128,15 +128,15 @@ def summary(bl, bl_track, context, element='DRIFT_ISO', fig=None):
     ax_trans = fig.add_axes(rect_trans)  # y histogram
 
     prepare(ax_beam_X, bl)
-    aperture(ax_beam_X, bl, context=context, plane='X')
-    tracking(ax_beam_X, bl_track, context=context, plane='X', halo=True, halo99=True, std=True, mean=True)
+    aperture(ax_beam_X, bl, plane='X')
+    tracking(ax_beam_X, bl,beam_o_df, plane='X', halo=True, halo99=True, std=True, mean=True)
 
     prepare(ax_beam_Y, bl, print_label=False)
-    aperture(ax_beam_Y, bl, context=context, plane='Y')
-    tracking(ax_beam_Y, bl_track, context=context, plane='Y', halo=True, halo99=True, std=True, mean=True)
+    aperture(ax_beam_Y, bl, plane='Y')
+    tracking(ax_beam_Y,bl, beam_o_df, plane='Y', halo=True, halo99=True, std=True, mean=True)
 
     prepare(ax_trans, bl, print_label=False)
-    losses_ = losses(ax_trans, bl_track, log=False)
+    losses_ = losses(ax_trans, bl,beam_o_df, log=False)
 
     ax_beam_X.set_ylabel("Horizontal beam size [mm]")
     ax_beam_Y.set_ylabel("Vertical beam size [mm]")
@@ -146,3 +146,5 @@ def summary(bl, bl_track, context, element='DRIFT_ISO', fig=None):
     ax_beam_Y.set_xlabel('')
     ax_beam_X.set_ylim([-40, 40])
     ax_beam_Y.set_ylim([-40, 40])
+
+    return fig

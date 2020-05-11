@@ -29,7 +29,7 @@ def draw_chamber(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], 1000 * (e['APERTURE_UP'])),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
+            e['L'].magnitude,  # width
             1000 * e['CHAMBER_UP'],  # height
             hatch='', facecolor=palette['base01']
         )
@@ -37,7 +37,7 @@ def draw_chamber(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], 1000 * (-e['APERTURE_DOWN'])),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
+            e['L'].magnitude,  # width
             -1000 * e['CHAMBER_UP'],  # height
             hatch='', facecolor=palette['base01']
         )
@@ -48,7 +48,7 @@ def draw_quad(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], 1000 * e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
+            e['L'].magnitude,  # width
             100,  # height
             hatch=STYLE_QUAD_HATCH, facecolor=palette['quad']
         )
@@ -57,7 +57,7 @@ def draw_quad(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
+            e['L'].magnitude,  # width
             -100,  # height
             hatch=STYLE_QUAD_HATCH, facecolor=palette['quad']
         )
@@ -66,14 +66,14 @@ def draw_quad(ax, e):
 
 
 def draw_coll(ax, e, plane):
-    if 'PIPE' not in e:
-        return
-    if not np.isnan(e['PIPE']):
-        return
+    #if 'PIPE' not in e:
+    #    return
+    #if not np.isnan(e['PIPE']):
+    #    return
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], 1000 * e['APERTURE_UP']),  # (x,y)
-            e['LENGTH'],  # width
+            e['L'].magnitude,  # width
             100,  # height
             facecolor=palette['coll']
         )
@@ -82,7 +82,7 @@ def draw_coll(ax, e, plane):
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
-            e['LENGTH'],  # width
+            e['L'].magnitude,  # width
             -100,  # height
             facecolor=palette['coll']
         )
@@ -94,7 +94,7 @@ def draw_bend(ax, e):
     ax.add_patch(
         matplotlib.patches.Rectangle(
             (e['AT_ENTRY'], tmp if tmp < 55 else 55),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
+            e['L'].magnitude,  # width
             100,  # height
             hatch=STYLE_BEND_HATCH, facecolor=palette['bend']
         )
@@ -102,8 +102,8 @@ def draw_bend(ax, e):
     tmp = -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']
     ax.add_patch(
         matplotlib.patches.Rectangle(
-            (e['AT_ENTRY'], tmp if tmp < 55 else 55),  # (x,y)
-            e['ORBIT_LENGTH'],  # width
+            (e['AT_ENTRY'], tmp if abs(tmp) < 55 else -55),  # (x,y)
+            e['L'].magnitude,  # width
             -100,  # height
             hatch=STYLE_BEND_HATCH, facecolor=palette['bend']
         )
@@ -122,32 +122,37 @@ def fill_aperture(element, context):
     return element
 
 
-def aperture(ax, bl, context={}, **kwargs):
-    bl = bl.line.apply(lambda e: fill_aperture(e, context), axis=1)
+def aperture(ax, bl, **kwargs):
+    bl = bl.drop('ROT_DEG')
 
     if 'APERTURE' not in bl:
         return
 
     planes = kwargs.get('plane', 'both')
 
+    if planes == 'X':
+        index = 0
+    elif planes == 'Y':
+        index = 1
+
     bl['APERTURE_UP'] = bl['APERTURE'].apply(
-        lambda a: xy_from_string(a, planes == 'both' or planes == 'Y', context)
+        lambda a: a[index].magnitude
     )
     bl['APERTURE_DOWN'] = bl['APERTURE'].apply(
-        lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X'), context)
+        lambda a: a[index].magnitude
     )
 
     if 'CHAMBER' not in bl:
         bl['CHAMBER'] = 0
 
     bl['CHAMBER_UP'] = bl['CHAMBER'].apply(
-        lambda a: xy_from_string(a, planes == 'both' or planes == 'Y', context)
+        lambda a: a
     )
     bl['CHAMBER_DOWN'] = bl['CHAMBER'].apply(
-        lambda a: xy_from_string(a, not (planes == 'both' or planes == 'X'), context)
+        lambda a: a
     )
 
-    bl.query("CLASS == 'QUADRUPOLE'").apply(lambda e: draw_quad(ax, e), axis=1)
-    bl.query("CLASS == 'SBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
-    bl.query("CLASS == 'RBEND'").apply(lambda e: draw_bend(ax, e), axis=1)
-    bl.query("CLASS == 'COLLIMATOR'").apply(lambda e: draw_coll(ax, e, planes), axis=1)
+    bl.query("CLASS == 'Quadrupole'").apply(lambda e: draw_quad(ax, e), axis=1)
+    bl.query("CLASS == 'SBend'").apply(lambda e: draw_bend(ax, e), axis=1)
+    bl.query("CLASS == 'RBend'").apply(lambda e: draw_bend(ax, e), axis=1)
+    bl.query("CLASS == 'RectangularCollimator'").apply(lambda e: draw_coll(ax, e, planes), axis=1)

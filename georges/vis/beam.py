@@ -212,7 +212,7 @@ def phase_space(fig, data, **kwargs):
                         fontsize=12)
 
 
-def phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, data, elt, dim):
+def phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, beam_o_df, elt, dim):
     # SOURCE at
     # http://www.visiondummy.com/2014/04/draw-error-ellipse-representing-covariance-matrix/
     # Define the x and y data
@@ -226,11 +226,10 @@ def phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, data, elt, dim):
     else:
         unit_col_1 = '[mrad]'
 
-    #x = 1e3 * data[elt].distribution[dim[0]]
-    #y = 1e3 * data[elt].distribution[dim[1]]
+    dico_plane = {'X': 0, 'PX': 1, 'Y': 2, 'PY': 3}
 
-    x = 1e3 * data['BEAM_OUT'][elt][:,0]
-    y = 1e3 * data['BEAM_OUT'][elt][:,2]
+    x = 1e3 * np.array(beam_o_df['BEAM_OUT'][elt][:,dico_plane[dim[0]]])
+    y = 1e3 * np.array(beam_o_df['BEAM_OUT'][elt][:,dico_plane[dim[1]]])
 
 
     X_mean = np.mean(x)
@@ -294,10 +293,10 @@ def phase_space_d(ax_global, ax_histx, ax_histy, ax_tab, data, elt, dim):
 
     mean_x = str(round(x.mean(), 3))
     std_x = str(round(x.std(), 3))
-    median_x = str(round(x.median(), 3))
+    median_x = str(round(np.median(x), 3))
     mean_y = str(round(y.mean(), 3))
     std_y = str(round(y.std(), 3))
-    median_y = str(round(y.median(), 3))
+    median_y = str(round(np.median(y), 3))
 
     ax_tab.tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
     x0 = ax_tab.get_xlim()[0]
@@ -429,3 +428,37 @@ def five_spot_map(bl_track0, bl_track1, bl_track2, bl_track3, bl_track4, figsize
                  , xy=(0.0 + 0.03, 0.0), xytext=(0.0 + 0.03, 0.0),
                  horizontalalignment='center', verticalalignment='center',
                  fontsize=12)
+
+def halo(distribution, dimensions=['X', 'Y', 'PX', 'PY']):
+    """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
+
+    halo = pd.concat([
+        distribution[dimensions].quantile(0.01),
+        distribution[dimensions].quantile(0.05),
+        distribution[dimensions].quantile(1.0 - 0.842701),
+        distribution[dimensions].quantile(0.842701),
+        distribution[dimensions].quantile(0.95),
+        distribution[dimensions].quantile(0.99)
+    ], axis=1).rename(columns={0.01: '1%',
+                               0.05: '5%',
+                               1.0 - 0.842701: '20%',
+                               0.842701: '80%',
+                               0.95: '95%',
+                               0.99: '99%'
+                               }
+                      )
+    return halo
+
+def halo_from_beam_o_df(beam_o_df,element,percentile, dimensions=['X', 'Y', 'PX', 'PY']):
+    """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
+
+    data = pd.DataFrame(columns=['X', 'Y','PX', 'PY'])
+    data['X'] = beam_o_df['BEAM_OUT'][element][:, 0]
+    data['Y'] = beam_o_df['BEAM_OUT'][element][:, 2]
+    data['PX'] = beam_o_df['BEAM_OUT'][element][:, 1]
+    data['PY'] = beam_o_df['BEAM_OUT'][element][:, 3]
+
+    halo = data[dimensions].quantile(percentile)
+
+
+    return halo

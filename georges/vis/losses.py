@@ -1,5 +1,6 @@
 from .common import beamline_get_ticks_locations
 from .common import palette as common_palette
+from .common import prepare
 from matplotlib.ticker import *
 import pandas as pd
 
@@ -16,15 +17,18 @@ def losses(ax, bl,beam_o_df, **kwargs):
         }), axis=1)
 
     ax2 = ax.twinx()
+    prepare(ax2,bl)
+    prepare(ax, bl, with_beamline=kwargs.get("with_beamline", False))
+
     ticks_locations = beamline_get_ticks_locations(bl)
-    ax2.get_xaxis().set_tick_params(direction='out')
-    ax2.yaxis.set_ticks_position('left')
-    ax2.xaxis.set_ticks_position('bottom')
-    ax2.yaxis.set_ticks_position('right')
-    ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])
-    ax2.tick_params(axis='x', labelsize=6)
-    ax2.xaxis.set_major_formatter(FixedFormatter([]))
-    ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
+    #ax2.get_xaxis().set_tick_params(direction='out')
+    #ax2.yaxis.set_ticks_position('left')
+    #ax2.xaxis.set_ticks_position('bottom')
+    #ax2.yaxis.set_ticks_position('right')
+    #ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])
+    #ax2.tick_params(axis='x', labelsize=6)
+    #ax2.xaxis.set_major_formatter(FixedFormatter([]))
+    #ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
     ax2.set_ylabel('T ($\%$)')
     ax2.yaxis.label.set_color(palette['green'])
     ax2.grid(True)
@@ -35,7 +39,7 @@ def losses(ax, bl,beam_o_df, **kwargs):
         ax2.set_ylim([0, 100])
         ax2.plot(transmission['S'], 100*transmission['T'], 's-', color=palette['green'])
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
-    ax.yaxis.set_major_locator(MultipleLocator(10))
+    #ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.set_ylabel('Losses ($\%$)')
     ax.yaxis.label.set_color(palette['magenta'])
     ax.bar(transmission['S'] - 0.125, -100 * transmission['T'].diff(), 0.125, alpha=0.7,
