@@ -29,7 +29,7 @@ class Observer(metaclass=ObserverType):
 
 
 class BeamObserver(Observer):
-    def __init__(self, elements: Optional[List[str]], with_input_beams: bool = False):
+    def __init__(self, elements: Optional[List[str]] = None, with_input_beams: bool = False):
         super().__init__(elements)
         self._with_input_beams = with_input_beams
         self.headers = ('LABEL1', 'BEAM_IN', 'BEAM_OUT')
@@ -40,7 +40,7 @@ class BeamObserver(Observer):
 
 
 class SuperObserver(Observer):
-    def __init__(self, elements: Optional[List[str]]):
+    def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('LABEL1',
                         )
@@ -51,8 +51,8 @@ class SuperObserver(Observer):
 
 
 class MeanObserver(Observer):
-    def __init__(self, elements: Optional[List[str]]):
-        super().__init__()
+    def __init__(self, elements: Optional[List[str]] = None):
+        super().__init__(elements)
         self.headers = ('LABEL1',
                         'BEAM_IN_X',
                         'BEAM_OUT_X',
@@ -83,7 +83,7 @@ class MeanObserver(Observer):
 
 
 class SigmaObserver(Observer):
-    def __init__(self, elements: Optional[List[str]]):
+    def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('LABEL1',
                         'BEAM_IN_X',
@@ -115,7 +115,7 @@ class SigmaObserver(Observer):
 
 
 class LossesObserver(Observer):
-    def __init__(self, elements: Optional[List[str]]):
+    def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('LABEL1',
                         'PARTICLES_IN',

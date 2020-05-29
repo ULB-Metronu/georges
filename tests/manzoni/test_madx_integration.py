@@ -199,7 +199,7 @@ def test_madx_drift(x, px, y, py, pt, beta, length):
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    manzoni.track(beamline=mi, beam=beam, observers=[observer])
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_drift(
@@ -315,7 +315,7 @@ def test_madx_quadrupole(x, px, y, py, pt, beta, length, k1, k1s, tilt):
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    manzoni.track(beamline=mi, beam=beam, observers=[observer])
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_quadrupole(
@@ -375,7 +375,7 @@ def test_madx_sbend(x, px, y, py, pt, beta, length, angle, k1):
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    manzoni.track(beamline=mi, beam=beam, observers=[observer])
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_bend(
@@ -435,7 +435,7 @@ def test_madx_rbend(x, px, y, py, pt, beta, length, angle, k1):
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    manzoni.track(beamline=mi, beam=beam, observers=[observer])
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_bend(
@@ -504,7 +504,7 @@ def test_madx_sbend_fringe(x, px, y, py, pt, beta, length, angle, k1, e1, e2, hg
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    manzoni.track(beamline=mi, beam=beam, observers=[observer])
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_bend(
@@ -577,7 +577,7 @@ def test_madx_sbend_fringe(x, px, y, py, pt, beta, length, angle, k1, e1, e2, hg
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi_sbend, beam=beam, observer=observer)
+    manzoni.track(beamline=mi_sbend, beam=beam, observers=[observer])
     r_sbend = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_bend(
@@ -650,7 +650,7 @@ def test_madx_rbend_fringe(x, px, y, py, pt, beta, length, angle, k1, e1, e2, hg
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi_rbend, beam=beam, observer=observer)
+    manzoni.track(beamline=mi_rbend, beam=beam, observers=[observer])
     r_rbend = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_bend(
@@ -699,7 +699,7 @@ def test_madx_dipedge(x, px, y, py, pt, beta, h, e1, hgap, fint):
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    manzoni.track(beamline=mi, beam=beam, observers=[observer])
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_dipedge(
@@ -761,7 +761,7 @@ def test_madx_kicker(x, px, y, py, pt, beta, length, tilt, hkick, vkick):
     ])
     beam = manzoni.Beam(kinematics=k, distribution=distribution)
     observer = manzoni.BeamObserver()
-    manzoni.track(beamline=mi, beam=beam, observer=observer)
+    manzoni.track(beamline=mi, beam=beam, observers=[observer])
     r = observer.to_df().iloc[-1]['BEAM_OUT']
 
     assert np.all(np.isclose(get_madx_tracking_data_kicker(

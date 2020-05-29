@@ -104,7 +104,7 @@ def twiss(beamline: _Input,
         ])
         beam = _Beam(kinematics=kinematics, distribution=coordinates)
         observer = _BeamObserver(with_input_beams=False)
-        track(beam=beam, beamline=beamline, observer=observer)
+        track(beam=beam, beamline=beamline, observers=observer)
         return observer.to_df()
 
     def compute_matrix_for_twiss(data: _pd.DataFrame) -> _pd.DataFrame:

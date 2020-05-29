@@ -21,4 +21,4 @@ from .elements import Marker, \
     BeamStop
 
 from .core import track, twiss, match
-from .observers import Observer, BeamObserver, SigmaObserver, LossesObserver
+from .observers import Observer, BeamObserver, SigmaObserver, LossesObserver, MeanObserver
