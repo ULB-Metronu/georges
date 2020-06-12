@@ -37,6 +37,8 @@ def track(beamline: _Input,
         check_apertures_entry:
     Returns:
     """
+    if observers is None:
+        observers = []
     global_parameters = nList()
     global_parameters.append(beam.kinematics.beta)
     b1 = _np.copy(beam.distribution)
