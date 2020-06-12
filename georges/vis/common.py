@@ -35,7 +35,7 @@ palette['X_MADX'] = palette['cyan']
 palette['Y_MADX'] = palette['orange']
 palette['X_G4BL'] = palette['magenta']
 palette['Y_G4BL'] = palette['green']
-palette['quadrupole'] = palette['orange']
+palette['quadrupole'] = palette['red']
 palette['sextupole'] = palette['green']
 palette['octupole'] = palette['green']
 palette['multipole'] = palette['green']
@@ -90,7 +90,7 @@ def draw_beamline(ax, bl):
                     e['L'].magnitude,
                     .1,
                     hatch='',
-                    facecolor=fc,
+                    facecolor='blue',
                     clip_on=False,
                 )
             )
@@ -116,13 +116,38 @@ def draw_beamline(ax, bl):
                     e['L'].to('meter').magnitude,
                     .1,
                     hatch='',
-                    facecolor=palette['coll'],
-                    ec=palette['coll'],
+                    facecolor='gold',
+                    ec='gold',
                     clip_on=False,
                 )
             )
 
-
+    for i, e in bl.query("TYPE=='degrader'").iterrows():
+        fc = 'g'
+        ax2.add_patch(
+                matplotlib.patches.Rectangle(
+                    (e['AT_ENTRY'], offset-0.05),
+                    e['L'].to('meter').magnitude,
+                    .1,
+                    hatch='',
+                    facecolor='black',
+                    ec='black',
+                    clip_on=False,
+                )
+            )
+    for i, e in bl.query("CLASS=='CircularCollimator'").iterrows():
+        fc = 'g'
+        ax2.add_patch(
+                matplotlib.patches.Rectangle(
+                    (e['AT_ENTRY'], offset-0.05),
+                    e['L'].to('meter').magnitude,
+                    .1,
+                    hatch='',
+                    facecolor='grey',
+                    ec='grey',
+                    clip_on=False,
+                )
+            )
 
 def prepare(ax, bl, **kwargs):
 

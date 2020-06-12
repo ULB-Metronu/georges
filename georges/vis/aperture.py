@@ -156,3 +156,4 @@ def aperture(ax, bl, **kwargs):
     bl.query("CLASS == 'SBend'").apply(lambda e: draw_bend(ax, e), axis=1)
     bl.query("CLASS == 'RBend'").apply(lambda e: draw_bend(ax, e), axis=1)
     bl.query("CLASS == 'RectangularCollimator'").apply(lambda e: draw_coll(ax, e, planes), axis=1)
+    bl.query("CLASS == 'CircularCollimator'").apply(lambda e: draw_coll(ax, e, planes), axis=1)

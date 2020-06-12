@@ -34,15 +34,16 @@ def losses(ax, bl,beam_o_df, **kwargs):
     ax2.grid(True)
     if kwargs.get('log', False):
         ax2.semilogy(transmission['S'], 100*transmission['T'], 's-', color=palette['green'])
+        ax2.set_ylim([min(100*transmission['T']),100])
     else:
         ax2.yaxis.set_major_locator(MultipleLocator(10))
         ax2.set_ylim([0, 100])
         ax2.plot(transmission['S'], 100*transmission['T'], 's-', color=palette['green'])
     ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
-    #ax.yaxis.set_major_locator(MultipleLocator(10))
+    ax.yaxis.set_major_locator(MultipleLocator(10))
     ax.set_ylabel('Losses ($\%$)')
     ax.yaxis.label.set_color(palette['magenta'])
-    ax.bar(transmission['S'] - 0.125, -100 * transmission['T'].diff(), 0.125, alpha=0.7,
+    ax.bar(transmission['S'] , -100 * transmission['T'].diff(), 0.125, alpha=0.7,
            edgecolor=palette['magenta'],
            color=palette['magenta'],
            error_kw=dict(ecolor=palette['base02'], lw=1, capsize=2, capthick=1))
@@ -51,4 +52,4 @@ def losses(ax, bl,beam_o_df, **kwargs):
     if kwargs.get('with_current'):
         ax2.plot(bl['AT_EXIT'], bl['CURRENT'], 'k-')
 
-    return transmission
+    return transmission,ax,ax2
