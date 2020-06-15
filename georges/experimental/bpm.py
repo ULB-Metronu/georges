@@ -68,18 +68,18 @@ def bpm_fit(a, p):
     return [popt, np.sqrt(pcov.diagonal())]
 
 
-def bpm(**kwargs):
+def bpm(path: str = '.',
+        file: str = 'variquad.csv',
+        bpm_name: str = 'BPM',
+        instrument=None,
+        ) -> pd.DataFrame:
     """Process a PCVue BPM data file and read associated data onto a DataFrame.
-    :param kwargs: parameters are:
         - path: the path were the data file and bpm data files can be found
         - file: the data file name
         - bpm: the BPM name
         - instrument: the specific parsing data for the instrument
     """
-    path = kwargs.get("path", ".")
-    file = kwargs.get("file")
-    bpm_name = kwargs.get("bpm", "BPM")
-    instrument = kwargs.get("instrument", DATA_BPM_PCVUE)
+    instrument = instrument or DATA_BPM_PCVUE
     try:
         bpm_data = pd.read_csv(os.path.join(path, file), skiprows=0, encoding="utf-8-sig")
     except:
