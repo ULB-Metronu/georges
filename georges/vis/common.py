@@ -154,7 +154,6 @@ def prepare(ax, bl, **kwargs):
     bl_short = bl.reset_index()
     bl_short = bl_short[[not a for a in bl_short['NAME'].str.contains("DRIFT")]]
     bl_short = bl_short.set_index("NAME")
-    bl_short = bl_short.drop('ROT_DEG')
 
     ticks_locations_short = beamline_get_ticks_locations(bl_short)
     ticks_labels_short = beamline_get_ticks_labels(bl_short)

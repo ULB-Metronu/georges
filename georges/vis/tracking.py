@@ -23,7 +23,7 @@ def tracking(ax, bl,beam_o_df, mean=True, std=True, halo=True, **kwargs):
 
     t = bl.apply(lambda r: pd.Series({
         'NAME': r['NAME'],
-        'S': r[kwargs.get("reference_plane", 'AT_CENTER')],
+        'S': r[kwargs.get("reference_plane", 'AT_EXIT')],
         '1%': 1000 * compute_halo(beam_o_df, r['NAME'], 0.01, plane) if halo_99 else 0.0,
         '5%': 1000 * compute_halo(beam_o_df, r['NAME'], 0.05, plane) if halo else 0.0,
         '95%': 1000 * compute_halo(beam_o_df, r['NAME'], 0.95, plane) if halo else 0.0,

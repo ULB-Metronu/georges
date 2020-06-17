@@ -123,7 +123,6 @@ def fill_aperture(element, context):
 
 
 def aperture(ax, bl, **kwargs):
-    bl = bl.drop('ROT_DEG')
 
     if 'APERTURE' not in bl:
         return
