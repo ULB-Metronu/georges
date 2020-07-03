@@ -2,7 +2,7 @@
 TODO
 """
 import numpy as _np
-
+from .. import ureg as _ureg
 
 class ScatteringModelType(type):
     @staticmethod
@@ -27,7 +27,7 @@ class FermiRossi(metaclass=ScatteringModelType):
 
         """
         es = 15.0  # MeV
-        chi_0 = kwargs['material'].radiation_length
+        chi_0 = kwargs['material'].radiation_length.m_as('cm')
         return (es/pv) ** 2 * (1/chi_0)
 
 
@@ -75,8 +75,8 @@ class DifferentialHighland(metaclass=ScatteringModelType):
         """
         material = kwargs.get('material')
         es = 14.1  # MeV
-        chi0 = material.radiation_length
-        x = material.thickness(k_out=pv, k_in=p1v1)
+        chi0 = material.radiation_length.m_as('cm')
+        x = material.required_thickness(kinetic_energy_out=pv*_ureg.MeV, kinetic_energy_in=p1v1*_ureg.MeV).m_as('cm')
         return DifferentialHighland.f_dh(DifferentialHighland.l(x, chi0)) * (es / pv) ** 2 * (1 / chi0)
 
 
@@ -117,7 +117,7 @@ class ICRUProtons(metaclass=ScatteringModelType):
         """
         material = kwargs['material']
         es = 15.0  # MeV
-        chi_s = material.scattering_length
+        chi_s = material.scattering_length.m_as('cm')
         return (es / pv) ** 2 * (1 / chi_s)
 
 
@@ -139,7 +139,7 @@ class DifferentialMoliere(metaclass=ScatteringModelType):
         """
         material = kwargs['material']
         es = 15.0  # MeV
-        chi_s = material.scattering_length
+        chi_s = material.scattering_length.m_as('cm')
         return DifferentialMoliere.f_dm(p1v1, pv) * (es / pv) ** 2 * (1 / chi_s)
 
     @staticmethod
