@@ -170,12 +170,12 @@ class CompoundType(type):
         cls.material_data['rho'] = value * _ureg('g /cm**3')
 
     @property
-    def radiation_length(cls) -> float:
+    def radiation_length(cls) -> _Q:
         length = 0
         for element, fraction in cls.material_data['fractions'].items():
             element = getattr(sys.modules[__name__], 'elements')[element.title()]
-            length += 1.0 / fraction * element.atomic_radiation_length
-        return 1/length
+            length += fraction / element.atomic_radiation_length
+        return 1/(cls.density * length)
 
     @property
     def scattering_length(cls) -> _Q:

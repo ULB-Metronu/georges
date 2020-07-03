@@ -4,6 +4,7 @@ TODO
 import numpy as _np
 from .. import ureg as _ureg
 
+
 class ScatteringModelType(type):
     @staticmethod
     def t(pv: float, p1v1: float, **kwargs) -> float:
