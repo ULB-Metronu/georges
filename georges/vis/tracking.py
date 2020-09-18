@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 
-def tracking(ax, bl,beam_o_df, mean=True, std=True, halo=True, **kwargs):
+def tracking(ax, bl,beam_o_df, mean=False, std=False, halo=True, **kwargs):
     """Plot the beam envelopes from tracking data."""
     if kwargs.get("plane") is None:
         raise Exception("Plane (plane='X' or plane='Y') must be specified.")
@@ -24,10 +24,10 @@ def tracking(ax, bl,beam_o_df, mean=True, std=True, halo=True, **kwargs):
     t = bl.apply(lambda r: pd.Series({
         'NAME': r['NAME'],
         'S': r[kwargs.get("reference_plane", 'AT_EXIT')],
-        '1%': 1000 * compute_halo(beam_o_df, r['NAME'], 0.01, plane) if halo_99 else 0.0,
-        '5%': 1000 * compute_halo(beam_o_df, r['NAME'], 0.05, plane) if halo else 0.0,
-        '95%': 1000 * compute_halo(beam_o_df, r['NAME'], 0.95, plane) if halo else 0.0,
-        '99%': 1000 * compute_halo(beam_o_df, r['NAME'], 0.99, plane) if halo_99 else 0.0,
+        '1%': 1000 * (compute_halo(beam_o_df, r['NAME'], 0.023, plane) - compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo_99 else 0.0,
+        '5%': 1000 * (compute_halo(beam_o_df, r['NAME'], 0.159, plane) - compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo else 0.0,
+        '95%': 1000 * (compute_halo(beam_o_df, r['NAME'], 0.841, plane) - compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo else 0.0,
+        '99%': 1000 * (compute_halo(beam_o_df, r['NAME'], 0.977, plane) - compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo_99 else 0.0,
         'mean': 1000 * beam_o_df['BEAM_OUT'][r['NAME']][:, dico_plane[plane]].mean() if mean else 0.0,
         'std': 1000 * beam_o_df['BEAM_OUT'][r['NAME']][:, dico_plane[plane]].std() if std else 0.0,
         #'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] * int(pd.notnull(r['BPM'])) if 'BPM' in bl.line.columns and std_bpm else 0.0,
@@ -41,7 +41,8 @@ def tracking(ax, bl,beam_o_df, mean=True, std=True, halo=True, **kwargs):
 
     if halo:
         filled_plot(ax, t['S'], t['5%'], t['95%'], palette[plane], True, alpha=0.3)
-        filled_plot(ax, t['S'], t['mean'] - t['std'], t['mean'] + t['std'], palette[plane], True, alpha=0.3)
+        # filled_plot(ax, t['S'], t['mean'] - t['std'], t['mean'] + t['std'], palette[plane], True, alpha=0.3)
+        filled_plot(ax, t['S'], t['5%'], t['95%'], palette[plane], True, alpha=0.3)
         if halo_99:
             filled_plot(ax, t['S'], t['1%'], t['99%'], palette[plane], True, alpha=0.3)
 
