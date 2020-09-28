@@ -4,16 +4,7 @@ import numpy as _np
 import pandas as _pd
 from numba.typed import List as nList
 from georges_core.sequences import BetaBlock as _BetaBlock
-from georges_core.twiss import \
-    compute_alpha_from_matrix, \
-    compute_beta_from_matrix, \
-    compute_dispersion_from_matrix, \
-    compute_dispersion_prime_from_matrix, \
-    compute_gamma_from_matrix, \
-    compute_jacobian_from_matrix, \
-    compute_mu_from_matrix, \
-    compute_periodic_twiss
-
+from georges_core.twiss import Twiss as _Twiss
 from .beam import Beam as _Beam
 from .observers import BeamObserver as _BeamObserver
 if TYPE_CHECKING:
@@ -69,6 +60,7 @@ def twiss(beamline: _Input,
           offsets=None,
           with_twiss_parametrization: bool = True,
           twiss_init: _BetaBlock = None,
+          with_phase_unrolling: bool = True
           ) -> _pd.DataFrame:
     """
 
@@ -124,54 +116,11 @@ def twiss(beamline: _Input,
             }
         return _pd.DataFrame.from_dict(_matrix, orient='index')
 
-    def compute_parametrization_for_twiss(m: _pd.DataFrame,
-                                          with_phase_unrolling: bool = True) -> _pd.DataFrame:
-        nonlocal twiss_init
-        if twiss_init is None:
-            twiss_init = compute_periodic_twiss(m)
-
-        m['BETA11'] = compute_beta_from_matrix(m, twiss_init)
-        m['BETA22'] = compute_beta_from_matrix(m, twiss_init, plane=2)
-        m['ALPHA11'] = compute_alpha_from_matrix(m, twiss_init)
-        m['ALPHA22'] = compute_alpha_from_matrix(m, twiss_init, plane=2)
-        m['GAMMA11'] = compute_gamma_from_matrix(m, twiss_init)
-        m['GAMMA22'] = compute_gamma_from_matrix(m, twiss_init, plane=2)
-        m['MU1'] = compute_mu_from_matrix(m, twiss_init)
-        m['MU2'] = compute_mu_from_matrix(m, twiss_init, plane=2)
-        m['DET1'] = compute_jacobian_from_matrix(m)
-        m['DET2'] = compute_jacobian_from_matrix(m, plane=2)
-        m['DISP1'] = compute_dispersion_from_matrix(m, twiss_init)
-        m['DISP2'] = compute_dispersion_prime_from_matrix(m, twiss_init)
-        m['DISP3'] = compute_dispersion_from_matrix(m, twiss_init, plane=2)
-        m['DISP4'] = compute_dispersion_prime_from_matrix(m, twiss_init, plane=2)
-
-        def phase_unrolling(phi):
-            """TODO"""
-            if phi[0] < 0:
-                phi[0] += 2 * _np.pi
-            for i in range(1, phi.shape[0]):
-                if phi[i] < 0:
-                    phi[i] += 2 * _np.pi
-                if phi[i - 1] - phi[i] > 0.5:
-                    phi[i:] += 2 * _np.pi
-            return phi
-
-        try:
-            from numba import njit
-            phase_unrolling = njit(phase_unrolling)
-        except ModuleNotFoundError:
-            pass
-
-        if with_phase_unrolling:
-            m['MU1U'] = phase_unrolling(m['MU1'].values)
-            m['MU2U'] = phase_unrolling(m['MU2'].values)
-
-        return m
-
     tracks = track_for_twiss()
     matrix = compute_matrix_for_twiss(tracks)
     if with_twiss_parametrization:
-        matrix = compute_parametrization_for_twiss(matrix)
+        tw = _Twiss(twiss_init=twiss_init, with_phase_unrolling=with_phase_unrolling)
+        matrix = tw(matrix=matrix)
     return matrix
 
 
