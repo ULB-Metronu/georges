@@ -418,7 +418,8 @@ def __initialize_materials_database():
     db_path = os.path.dirname(__file__)
 
     # Read all material definitions
-    materials_definitions = yaml.safe_load(open(os.path.join(db_path, "materials.yaml"), 'r'))
+    with open(os.path.join(db_path, "materials.yaml"), 'r') as stream:
+        materials_definitions = yaml.safe_load(stream)
 
     # Read P-Star data
     pstar_data_files = [os.path.splitext(f)[0] for f in os.listdir(os.path.join(db_path, 'pstar')) if
