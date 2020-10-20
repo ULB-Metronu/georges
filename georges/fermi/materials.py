@@ -15,6 +15,7 @@ from .mcs import DifferentialMoliere as _DifferentialMoliere
 from georges_core import ureg as _ureg
 from georges_core import Kinematics as _Kinematics
 from georges_core.kinematics import ekin_to_pv as _ekin_to_pv
+from .. import Q_ as _Q
 
 
 def __bdsim_read_data(path: str) -> _pd.DataFrame:
@@ -106,7 +107,7 @@ class ElementType(type):
         return cls.material_data['Z']
 
     @property
-    def atomic_radiation_length(cls) -> float:
+    def atomic_radiation_length(cls) -> _Q:
         """
 
         Args:
@@ -117,11 +118,11 @@ class ElementType(type):
         """
         a: float = cls.atomic_a
         z: int = cls.atomic_z
-        # Probably wrong, should include rho somewhere
-        return 716.4 * a * (1 / (z * (z + 1) * (_np.log(287 / _np.sqrt(z)))))
+
+        return 716.4 * a * (1 / (z * (z + 1) * (_np.log(287 / _np.sqrt(z))))) * _ureg('g / cm**2')
 
     @property
-    def atomic_scattering_length(cls) -> float:
+    def atomic_scattering_length(cls) -> _Q:
         """
         See "Techniques of Proton Radiotherapy:Transport Theory", B. Gottschalk, 2012.
 
@@ -136,7 +137,7 @@ class ElementType(type):
         re: float = scipy.constants.physical_constants['classical electron radius'][0] * 100  # in cm!
         a: float = cls.atomic_a
         z: int = cls.atomic_z
-        return 1 / (alpha * avogadro * re ** 2 * z ** 2 * (2 * _np.log(33219 * (a * z) ** (-1 / 3)) - 1) / a)
+        return 1 / (alpha * avogadro * re ** 2 * z ** 2 * (2 * _np.log(33219 * (a * z) ** (-1 / 3)) - 1) / a) * _ureg('g / cm**2')
 
 
 class Element(metaclass=ElementType):
@@ -159,25 +160,25 @@ class CompoundType(type):
         return cls.material_data is not None and cls.projected_range is not None and (cls.projected_range is not None or cls.csda_range is not None)
 
     @property
-    def density(cls) -> float:
+    def density(cls) -> _Q:
         if cls.material_data is None:
             return None
-        return cls.material_data['rho']
+        return cls.material_data['rho'] * _ureg('g /cm**3')
 
     @density.setter
-    def density(cls, value) -> float:
-        cls.material_data['rho'] = value
+    def density(cls, value) -> _Q:
+        cls.material_data['rho'] = value * _ureg('g /cm**3')
 
     @property
-    def radiation_length(cls) -> float:
+    def radiation_length(cls) -> _Q:
         length = 0
         for element, fraction in cls.material_data['fractions'].items():
             element = getattr(sys.modules[__name__], 'elements')[element.title()]
-            length += 1.0 / fraction * element.atomic_radiation_length
-        return 1/length
+            length += fraction / element.atomic_radiation_length
+        return 1/(cls.density * length)
 
     @property
-    def scattering_length(cls) -> float:
+    def scattering_length(cls) -> _Q:
         length = 0
         for element, fraction in cls.material_data['fractions'].items():
             element = getattr(sys.modules[__name__], 'elements')[element.title()]
@@ -200,10 +201,11 @@ class CompoundType(type):
         if not cls.valid_data:
             return None
         energy = kinetic_energy.m_as('MeV')
+        density = cls.density.m_as('g/cm**3')
         if range_definition == ProjectedRange:
-            return _np.exp(cls.projected_range(_np.log(energy))) / cls.density * _ureg.cm
+            return _np.exp(cls.projected_range(_np.log(energy))) / density * _ureg.cm
         elif range_definition == CSDARange:
-            return _np.exp(cls.csda_range(_np.log(energy))) / cls.density * _ureg.cm
+            return _np.exp(cls.csda_range(_np.log(energy))) / density * _ureg.cm
         else:
             raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 
@@ -223,14 +225,15 @@ class CompoundType(type):
         if not cls.valid_data:
             return None
         r = range.m_as('cm')
+        density = cls.density.m_as('g/cm**3')
         if range_definition == ProjectedRange:
             return _Kinematics(
-                _np.exp(cls.projected_range.solve(_np.log(r * cls.density), extrapolate=False))[0] * _ureg.MeV,
+                _np.exp(cls.projected_range.solve(_np.log(r * density), extrapolate=False))[0] * _ureg.MeV,
                 kinetic=True
             )
         elif range_definition == CSDARange:
             return _Kinematics(
-                _np.exp(cls.csda_range.solve(_np.log(r * cls.density), extrapolate=False))[0] * _ureg.MeV,
+                _np.exp(cls.csda_range.solve(_np.log(r * density), extrapolate=False))[0] * _ureg.MeV,
                 kinetic=True
             )
         else:
@@ -415,7 +418,8 @@ def __initialize_materials_database():
     db_path = os.path.dirname(__file__)
 
     # Read all material definitions
-    materials_definitions = yaml.safe_load(open(os.path.join(db_path, "materials.yaml"), 'r'))
+    with open(os.path.join(db_path, "materials.yaml"), 'r') as stream:
+        materials_definitions = yaml.safe_load(stream)
 
     # Read P-Star data
     pstar_data_files = [os.path.splitext(f)[0] for f in os.listdir(os.path.join(db_path, 'pstar')) if
