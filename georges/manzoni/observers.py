@@ -169,16 +169,8 @@ class IbaBpmObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('LABEL1',
-                        'BEAM_IN_X',
-                        'BEAM_OUT_X',
-                        'BEAM_IN_Y',
-                        'BEAM_OUT_Y',
-                        'BEAM_IN_XP',
-                        'BEAM_OUT_XP',
-                        'BEAM_IN_YP',
-                        'BEAM_OUT_YP',
-                        'BEAM_IN_DPP',
-                        'BEAM_OUT_DPP',
+                        'BEAM_X',
+                        'BEAM_Y',
                         )
 
     def fit_bpm(self, distribution: _np.array):
@@ -217,15 +209,8 @@ class IbaBpmObserver(Observer):
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.LABEL1,
-                              self.fit_bpm(b1[:, 0])[0],
-                              self.fit_bpm(b2[:, 0])[0],
-                              self.fit_bpm(b1[:, 2])[0],
-                              self.fit_bpm(b2[:, 2])[0],
-                              b1[:, 1].std(),
-                              b2[:, 1].std(),
-                              b1[:, 3].std(),
-                              b2[:, 3].std(),
-                              b1[:, 4].std(),
-                              b2[:, 4].std(),
-                              ))
+            if element.CLASS == 'Marker':
+                self.data.append((element.LABEL1,
+                                  self.fit_bpm(b2[:, 0])[0],
+                                  self.fit_bpm(b2[:, 2])[0],
+                                  ))
