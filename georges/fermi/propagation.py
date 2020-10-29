@@ -72,8 +72,8 @@ def propagate(sequence: Sequence, energy: _ureg.Quantity, beam: Optional[Mapping
         s.loc[i, 'A1_IN'] = acc[1]
         s.loc[i, 'A2_IN'] = acc[2]
         s.loc[i, 'A0_OUT'] = acc[0] + e['A0']
-        s.loc[i, 'A1_OUT'] = acc[0] * e['L'].m_as('cm') + acc[1] + e['A1']
-        s.loc[i, 'A2_OUT'] = acc[0] * e['L'].m_as('cm') ** 2 + 2 * acc[1] * e['L'].m_as('cm') + acc[2] + e['A2']
+        s.loc[i, 'A1_OUT'] = acc[0] * e['L'].m_as('m') + acc[1] + e['A1']
+        s.loc[i, 'A2_OUT'] = acc[0] * e['L'].m_as('m') ** 2 + 2 * acc[1] * e['L'].m_as('m') + acc[2] + e['A2']
         acc = [s.loc[i, 'A0_OUT'], s.loc[i, 'A1_OUT'], s.loc[i, 'A2_OUT']]
     s['B_IN'] = s['A0_IN'] * s['A2_IN'] - s['A1_IN'] ** 2
     s['B_OUT'] = s['A0_OUT'] * s['A2_OUT'] - s['A1_OUT'] ** 2
