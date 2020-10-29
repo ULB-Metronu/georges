@@ -77,3 +77,21 @@ def drift6(b1: _np.ndarray, b2: _np.ndarray, length: float):
         b2[i, 4] = b1[i, 4]
         b2[i, 5] = b1[i, 5]
     return b1, b2
+
+
+def compute_mad_drift_matrix(element_parameters: list, global_parameters: list) -> _np.ndarray:
+
+    L: float = element_parameters[0]
+    R = _np.zeros((6, 6))
+
+    # Definition of the matrix elements
+    R[0, 0] = 1
+    R[0, 1] = L
+    R[1, 1] = 1
+    R[2, 2] = 1
+    R[2, 3] = L
+    R[3, 3] = 1
+    R[4, 4] = 1
+    R[5, 5] = 1
+
+    return R

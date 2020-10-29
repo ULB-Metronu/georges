@@ -58,7 +58,7 @@ def twiss(beamline: _Input,
           kinematics: _Kinematics,
           reference_particle: _np.ndarray = None,
           offsets=None,
-          with_twiss_parametrization: bool = True,
+          twiss_parametrization: bool = True,
           twiss_init: _BetaBlock = None,
           with_phase_unrolling: bool = True
           ) -> _pd.DataFrame:
@@ -118,9 +118,8 @@ def twiss(beamline: _Input,
 
     tracks = track_for_twiss()
     matrix = compute_matrix_for_twiss(tracks)
-    if with_twiss_parametrization:
-        tw = _Twiss(twiss_init=twiss_init, with_phase_unrolling=with_phase_unrolling)
-        matrix = tw(matrix=matrix)
+    if twiss_parametrization:
+        matrix = _Twiss(twiss_init=twiss_init, with_phase_unrolling=with_phase_unrolling)(matrix=matrix)
     return matrix
 
 

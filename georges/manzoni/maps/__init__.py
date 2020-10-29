@@ -16,7 +16,7 @@ from .mad8_quadrupole import \
 from .mad8_combined_dipole import \
     compute_mad_combined_dipole_matrix, \
     compute_mad_combined_dipole_tensor
-from .mad8_drift import drift6
+from .mad8_drift import drift6, compute_mad_drift_matrix
 from .madx_thick import \
     track_madx_quadrupole, \
     track_madx_drift, \
