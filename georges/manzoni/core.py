@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 def track(beamline: _Input,
           beam: _Beam,
           observers: List[Optional[_Observer]] = None,
-          check_apertures_exit: bool = True,
+          check_apertures_exit: bool = False,
           check_apertures_entry: bool = False
           ):
     """
@@ -86,19 +86,19 @@ def twiss(beamline: _Input,
         coordinates = _np.array([
             reference_particle,
             reference_particle + [offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, offsets[0], 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, offsets[0], 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, offsets[0], 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, 0.0, 0.0, offsets[0]],
+            reference_particle + [0.0, offsets[1], 0.0, 0.0, 0.0, 0.0],
+            reference_particle + [0.0, 0.0, offsets[2], 0.0, 0.0, 0.0],
+            reference_particle + [0.0, 0.0, 0.0, offsets[3], 0.0, 0.0],
+            reference_particle + [0.0, 0.0, 0.0, 0.0, 0.0, offsets[4]],
             reference_particle + [-offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, -offsets[0], 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, -offsets[0], 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, -offsets[0], 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, 0.0, 0.0, -offsets[0]],
+            reference_particle + [0.0, -offsets[1], 0.0, 0.0, 0.0, 0.0],
+            reference_particle + [0.0, 0.0, -offsets[2], 0.0, 0.0, 0.0],
+            reference_particle + [0.0, 0.0, 0.0, -offsets[3], 0.0, 0.0],
+            reference_particle + [0.0, 0.0, 0.0, 0.0, 0.0, -offsets[4]],
         ])
         beam = _Beam(kinematics=kinematics, distribution=coordinates)
         observer = _BeamObserver(with_input_beams=False)
-        track(beam=beam, beamline=beamline, observers=observer)
+        track(beam=beam, beamline=beamline, observers=[observer])
         return observer.to_df()
 
     def compute_matrix_for_twiss(data: _pd.DataFrame) -> _pd.DataFrame:
