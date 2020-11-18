@@ -5,6 +5,9 @@ from typing import Optional, List
 import numpy as _np
 import pandas as _pd
 from scipy.optimize import curve_fit
+from numba import njit
+import matplotlib.pyplot as plt
+from lmfit import Model, Parameters
 
 
 class ObserverType(type):
@@ -48,7 +51,7 @@ class SuperObserver(Observer):
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.LABEL1, ))
+            self.data.append((element.LABEL1,))
 
 
 class MeanObserver(Observer):
@@ -136,11 +139,11 @@ class LossesObserver(Observer):
 
     def compute_global_transmission(self, global_transmission: float = 1.0):
         for elem in self.data:
-            global_transmission *= elem[3]/100
-        return global_transmission*100
+            global_transmission *= elem[3] / 100
+        return global_transmission * 100
 
     def compute_global_losses(self):
-        return 100-self.compute_global_transmission()
+        return 100 - self.compute_global_transmission()
 
     # def adjust_for_efficiency(self, efficiency: float = 1.0):
     # do something with self.data
@@ -169,18 +172,21 @@ class IbaBpmObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('LABEL1',
-                        'BEAM_X',
-                        'BEAM_Y',
+                        'BEAM_OUT_X',
+                        'BEAM_OUT_Y',
                         )
 
-    def fit_bpm(self, distribution: _np.array):
+    @staticmethod
+    def fit_bpm(distribution: _np.array):
 
+        @njit
         def gaussian(x, a, mu, sigma):
             return a * _np.exp(-(x - mu) ** 2 / (2 * sigma ** 2)) / (_np.sqrt(2 * _np.pi) * sigma)
 
-        def fit_bpm(d, ax=None, maxfev=10000):
+        def fit_bpm(d, maxfev=1e7):
             bs = _np.array(
-                [-31, -19.8, -15.8, -11.8, -7.8, -5.8, -3.8, -1.8, 0.0, 1.8, 3.8, 5.8, 7.8, 11.8, 15.8, 19.8, 31]) / 1000
+                [-31, -19.8, -15.8, -11.8, -7.8, -5.8, -3.8, -1.8, 0.0, 1.8,
+                 3.8, 5.8, 7.8, 11.8, 15.8, 19.8, 31]) / 1000
             bsp = (bs[1:] + bs[:-1]) / 2
             w = 1.0 / (bs[1:] - bs[:-1])
             w[0] *= 0.7
@@ -191,25 +197,28 @@ class IbaBpmObserver(Observer):
             ar = _np.trapz(y / _np.sum(y) * len(y), x)
             mean = _np.mean(x * y / _np.sum(y) * len(y))
             rms = _np.std(x * y / _np.sum(y) * len(y))
-            popt, pcov = curve_fit(gaussian, x, y,
-                                   p0=[ar, mean, rms],
-                                   maxfev=maxfev,
-                                   bounds=(
-                                        (-_np.inf, mean - 0.1 * _np.abs(mean), 0.5 * rms),
-                                        (_np.inf, mean + 0.1 * _np.abs(mean), 2 * rms)
-                                          )
-                                   )
 
-            return [
-                _np.abs(popt[2]),
-                _np.sqrt(pcov[2, 2]) if pcov[2, 2] > 0 else 0.0
-            ]
+            params = Parameters()  # Instanciate the Parameters class, then add variables as keywords
+            params.add('a', value=ar, min=-1e6, max=1e6)
+            params.add('mu', value=mean, min=mean-_np.abs(mean), max=mean+_np.abs(mean))
+            params.add('sigma', value=rms, min=0.5*rms, max=2*rms)
+            params.add('max_nfev', value=maxfev)
+
+            gmodel = Model(gaussian)
+            result = gmodel.fit(data=y,
+                                x=x,
+                                params=params)
+
+            # Print the fit result
+            print('bpm fit result:', result.best_values['a'], result.best_values['mu'], result.best_values['sigma'])
+            return [result.best_values['sigma']]
 
         return fit_bpm(distribution)
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
             if element.CLASS == 'Marker':
+                print(element.LABEL1)  # To identify the BPM whose data are being fitted
                 self.data.append((element.LABEL1,
                                   self.fit_bpm(b2[:, 0])[0],
                                   self.fit_bpm(b2[:, 2])[0],
