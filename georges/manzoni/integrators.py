@@ -5,6 +5,7 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_combined_dipole_tensor, \
     compute_mad_quadrupole_matrix, \
     compute_mad_quadrupole_tensor, \
+    compute_mad_drift_matrix, \
     compute_transport_combined_dipole_matrix, \
     compute_transport_combined_dipole_tensor, \
     compute_transport_multipole_matrix, \
@@ -125,6 +126,7 @@ class Mad8FirstOrderTaylorIntegrator(Mad8Integrator):
 
 class Mad8SecondOrderTaylorIntegrator(Mad8FirstOrderTaylorIntegrator):
     TENSORS = {
+        'DRIFT': compute_mad_drift_matrix,
         'BEND': compute_mad_combined_dipole_tensor,
         'SBEND': compute_mad_combined_dipole_tensor,
         'QUADRUPOLE': compute_mad_quadrupole_tensor,

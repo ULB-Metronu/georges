@@ -1,1 +1,2 @@
-from georges_core.vis import *
+from .matplotlib import ManzoniMatplotlibArtist
+
