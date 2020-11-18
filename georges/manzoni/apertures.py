@@ -5,7 +5,7 @@ import numpy as _np
 from numba import njit
 
 
-@njit()
+@njit
 def circular_aperture_check(b1, kargs: _np.ndarray):
     """
 
@@ -19,7 +19,7 @@ def circular_aperture_check(b1, kargs: _np.ndarray):
     return (b1[:, 0] ** 2 + b1[:, 2] ** 2) < kargs[0] ** 2
 
 
-@njit()
+@njit
 def elliptical_aperture_check(b1, kargs: _np.ndarray):
     """
 
@@ -33,7 +33,7 @@ def elliptical_aperture_check(b1, kargs: _np.ndarray):
     return (b1[:, 0] / kargs[0]) ** 2 + (b1[:, 2] / kargs[1] ** 2) < 1
 
 
-@njit()
+@njit
 def rectangular_aperture_check(b1, kargs: _np.ndarray):
     """
 
@@ -47,7 +47,7 @@ def rectangular_aperture_check(b1, kargs: _np.ndarray):
     return _np.multiply(_np.abs(b1[:, 0]) < kargs[0], _np.abs(b1[:, 2]) < kargs[1])
 
 
-@njit()
+@njit
 def phase_space_aperture_check(b1, kargs: _np.ndarray):
     """
 
