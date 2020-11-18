@@ -4,40 +4,37 @@ TODO
 """
 from __future__ import annotations
 import numpy as _np
+from numpy.linalg import eig
+from numpy import linspace
 import pandas as _pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-import matplotlib.transforms as transforms
-from .. import ureg as _ureg
-from georges_core.vis import MatplotlibArtist as _MatplotlibArtist
-# from ..units import _m, _cm, _degree, _radian
-
 from matplotlib.ticker import *
-
-from numpy.linalg import eig
-from numpy import linspace
 from matplotlib.ticker import NullFormatter
 
 from lmfit.models import GaussianModel
 
+from georges_core.vis import MatplotlibArtist as _MatplotlibArtist
+
 PALETTE = {
-    'solarized': {'base03': '#002b36',
-                  'base02': '#073642',
-                  'base01': '#586e75',
-                  'base00': '#657b83',
-                  'base0': '#839496',
-                  'base1': '#93a1a1',
-                  'base2': '#eee8d5',
-                  'base3': '#fdf6e3',
-                  'yellow': '#b58900',
-                  'orange': '#cb4b16',
-                  'red': '#dc322f',
-                  'magenta': '#d33682',
-                  'violet': '#6c71c4',
-                  'blue': '#268bd2',
-                  'cyan': '#2aa198',
-                  'green': '#859900'
-                  }
+    'solarized': {
+        'base03': '#002b36',
+        'base02': '#073642',
+        'base01': '#586e75',
+        'base00': '#657b83',
+        'base0': '#839496',
+        'base1': '#93a1a1',
+        'base2': '#eee8d5',
+        'base3': '#fdf6e3',
+        'yellow': '#b58900',
+        'orange': '#cb4b16',
+        'red': '#dc322f',
+        'magenta': '#d33682',
+        'violet': '#6c71c4',
+        'blue': '#268bd2',
+        'cyan': '#2aa198',
+        'green': '#859900'
+    }
 }
 
 # Define default color palette
@@ -62,12 +59,13 @@ palette['multipole'] = palette['green']
 STYLE_BEND_HATCH = '/'
 STYLE_QUAD_HATCH = ''
 
+
 class ManzoniMatplotlibArtist(_MatplotlibArtist):
     """A matplotlib implementation of a `ZgoubiPlot` artist."""
+
     def __init__(self,
                  ax=None,
                  with_boxes: bool = True,
-                 with_frames: bool = True,
                  with_centers: bool = False,
                  tracks_color: str = 'b',
                  **kwargs):
@@ -84,6 +82,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         super().__init__(with_boxes, **kwargs)
         self._with_centers = with_centers
         self._tracks_color = tracks_color
+
         if ax is None:
             self.init_plot(**kwargs)
         else:
@@ -155,8 +154,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         """
         self._ax.plot(*args, **kwargs)
 
-    # THIS IS THE OLD common.py FUNCTION
-
+    # THIS IS THE OLD common.py
     def style_boxplot(bp, color):
         """Apply fancy styles to a matplotlib boxplot."""
         for box in bp['boxes']:
@@ -171,13 +169,16 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         for flier in bp['fliers']:
             flier.set(marker='o', markersize=6, color=color, markeredgecolor='none', alpha=0.5)
 
-    def beamline_get_ticks_locations(self, o):
+    @staticmethod
+    def beamline_get_ticks_locations(o):
         return list(o['AT_CENTER'].values)
 
-    def beamline_get_ticks_labels(self, o):
+    @staticmethod
+    def beamline_get_ticks_labels(o):
         return list(o.index)
 
-    def draw_beamline(self, ax, bl):
+    @staticmethod
+    def draw_beamline(ax, bl):
 
         offset = 1.15
         ax2 = ax.twinx()
@@ -307,7 +308,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         if kwargs.get("with_beamline", False):
             self.draw_beamline(ax, bl)
 
-    def filled_plot(self, ax, x, y0, y, c, fill=False, **kwargs):
+    @staticmethod
+    def filled_plot(ax, x, y0, y, c, fill=False, **kwargs):
         ax.plot(x, y, '.', markersize=0,
                 markerfacecolor=c, markeredgecolor=c, color=c, **kwargs)
         if fill:
@@ -316,10 +318,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
     # THIS IS THE OLD statistics.py
     class StatisticException(Exception):
         """Exception raised for errors in the beam plotting module."""
+
         def __init__(self, m):
             self.message = m
-    
-    def histogram_fit(self, data, bounds_binning=50, verbose=False, model=GaussianModel):
+
+    @staticmethod
+    def histogram_fit(data, bounds_binning=50, verbose=False, model=GaussianModel):
         """ All models are available on https://lmfit.github.io/lmfit-py/builtin_models.html#lmfit.models"""
         y, bin_edges = _np.histogram(data, density=False, bins=bounds_binning)
         x = (bin_edges[:-1] + bin_edges[1:]) / 2
@@ -327,16 +331,16 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         if verbose:
             print(result.fit_report())
         return x, result
-    
+
     # THIS IS THE OLD beam.py
     class BeamPlottingException(Exception):
         """Exception raised for errors in the beam plotting module."""
-    
+
         def __init__(self, m):
             self.message = m
-    
-    
-    def ellipse(self, ra, rb, angle, x0, y0, **kwargs):
+
+    @staticmethod
+    def ellipse(ra, rb, angle, x0, y0, **kwargs):
         """
         Create an ellipse from beam parameters.
         :param ra: semi-major axis
@@ -356,15 +360,14 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                                edgecolor=kwargs.get('color', 'red'),
                                label=kwargs.get('label'),
                                )
-    
-    
-    def rotation_angle(self, eval, evec):
+
+    @staticmethod
+    def rotation_angle(eval, evec):
         if eval[0] * evec[0, 0] > eval[1] * evec[0, 1]:
             return _np.degrees(_np.arctan(evec[1, 0] / evec[0, 0]))
         else:
             return _np.degrees(_np.arctan(evec[1, 1] / evec[0, 1]))
-    
-    
+
     def phase_space(self, fig, data, **kwargs):
         # SOURCE at
         # http://www.visiondummy.com/2014/04/draw-error-ellipse-representing-covariance-matrix/
@@ -377,15 +380,15 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             unit_col_1 = '[mm]'
         else:
             unit_col_1 = '[mrad]'
-    
+
         x = data[data.columns[0]]
         y = data[data.columns[1]]
         X_mean = _np.mean(x)
         Y_mean = _np.mean(y)
-    
+
         xlims = [X_mean - 1.2 * _np.max(_np.abs(x)), X_mean + 1.2 * _np.max(_np.abs(x))]
         ylims = [Y_mean - 1.2 * _np.max(_np.abs(y)), Y_mean + 1.2 * _np.max(_np.abs(y))]
-    
+
         CV = _np.cov(x, y)
         [Eval, Evec] = eig(CV)
         chisq = [2.278868566, 5.991464547, 11.61828598]
@@ -393,7 +396,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         for i in range(0, len(chisq)):
             X_r.append(2 * (chisq[i] * Eval[0]) ** 0.5)
             Y_r.append(2 * (chisq[i] * Eval[1]) ** 0.5)
-    
+
         # Define the locations for the axes
         left, width = 0.12, 0.6
         bottom, height = 0.12, 0.6
@@ -411,7 +414,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax_histx.grid(True)
         ax_histy.set_xlabel("Counts")
         ax_histy.grid(True)
-    
+
         # Remove the inner axes numbers of the histograms
         nullfmt = NullFormatter()
         ax_histx.xaxis.set_major_formatter(nullfmt)
@@ -434,7 +437,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                               aspect='auto', cmap=kwargs.get('cmap', 'gist_gray_r')))
         # Plot the beam plot contours
         contourcolor = 'black'
-    
+
         ang = self.rotation_angle(Eval, Evec)
         ang_annotx = _np.cos(_np.radians(ang))
         ang_annoty = _np.sin(_np.radians(ang))
@@ -471,11 +474,11 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         if kwargs.get('gaussian_fit', False):
             limx = _np.arange(xlims[0], xlims[1], (xlims[1] - xlims[0]) / nxbins)
             bin_centerx, fitresults_x = self.histogram_fit(x, bounds_binning=limx,
-                                                                 verbose=kwargs.get("verbose", False))
+                                                           verbose=kwargs.get("verbose", False))
             ax_histx.plot(bin_centerx, fitresults_x.best_fit, 'k--', linewidth=1)
             limy = _np.arange(ylims[0], ylims[1], (ylims[1] - ylims[0]) / nybins)
             bin_centery, fitresults_y = self.histogram_fit(y, bounds_binning=limy,
-                                                                 verbose=kwargs.get("verbose", False))
+                                                           verbose=kwargs.get("verbose", False))
             ax_histy.plot(fitresults_y.best_fit, bin_centery, 'k--', linewidth=1)
         if kwargs.get('draw_tab', False):
             mean_x = str(round(x.mean(), 3))
@@ -484,7 +487,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             mean_y = str(round(y.mean(), 3))
             std_y = str(round(y.std(), 3))
             median_y = str(round(y.median(), 3))
-    
+
             ax_tab = fig.add_axes(rect_tab)  # y histogram
             ax_tab.tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
             x0 = ax_tab.get_xlim()[0]
@@ -504,7 +507,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             ax_tab.annotate('median', xy=(x0 + 0.875, y0 + 0.9), xytext=(x0 + 0.875, y0 + 0.9),
                             horizontalalignment='center', verticalalignment='center',
                             fontsize=12)
-    
+
             xname = data.columns[0] + '\n' + unit_col_0
             yname = data.columns[1] + '\n' + unit_col_1
             ax_tab.annotate(xname, xy=(x0 + 0.125, 0.6), xytext=(x0 + 0.125, 0.6),
@@ -531,13 +534,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             ax_tab.annotate(median_y, xy=(x0 + 0.875, 0.2), xytext=(x0 + 0.875, 0.2),
                             horizontalalignment='center', verticalalignment='center',
                             fontsize=12)
-    
-    
+
     def phase_space_d(self, ax_global, ax_histx, ax_histy, ax_tab, beam_o_df, elt, dim):
         # SOURCE at
         # http://www.visiondummy.com/2014/04/draw-error-ellipse-representing-covariance-matrix/
         # Define the x and y data
-    
+
         if dim[0] == 'X' or dim[0] == 'Y':
             unit_col_0 = '[mm]'
         else:
@@ -546,19 +548,18 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             unit_col_1 = '[mm]'
         else:
             unit_col_1 = '[mrad]'
-    
+
         dico_plane = {'X': 0, 'PX': 1, 'Y': 2, 'PY': 3}
-    
-        x = 1e3 * _np.array(beam_o_df['BEAM_OUT'][elt][:,dico_plane[dim[0]]])
-        y = 1e3 * _np.array(beam_o_df['BEAM_OUT'][elt][:,dico_plane[dim[1]]])
-    
-    
+
+        x = 1e3 * _np.array(beam_o_df['BEAM_OUT'][elt][:, dico_plane[dim[0]]])
+        y = 1e3 * _np.array(beam_o_df['BEAM_OUT'][elt][:, dico_plane[dim[1]]])
+
         X_mean = _np.mean(x)
         Y_mean = _np.mean(y)
-    
+
         xlims = [X_mean - _np.max(_np.abs(x)), X_mean + _np.max(_np.abs(x))]
         ylims = [Y_mean - _np.max(_np.abs(y)), Y_mean + _np.max(_np.abs(y))]
-    
+
         CV = _np.cov(x, y)
         [Eval, Evec] = eig(CV)
         chisq = [2.278868566, 5.991464547, 11.61828598]
@@ -566,10 +567,10 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         for i in range(0, len(chisq)):
             X_r.append(2 * (chisq[i] * Eval[0]) ** 0.5)
             Y_r.append(2 * (chisq[i] * Eval[1]) ** 0.5)
-    
+
         # Find the min/max of the data
         xmin, xmax, ymin, ymax = min(xlims), max(xlims), min(ylims), max(ylims)
-    
+
         # Make the 'main' beam plot
         # Define the number of bins
         nxbins = 100
@@ -589,7 +590,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax_global.add_patch(self.ellipse(X_r[1], Y_r[1], ang, X_mean, Y_mean, color='blue', label='$2\\sigma$'))
         ax_global.add_patch(self.ellipse(X_r[2], Y_r[2], ang, X_mean, Y_mean, color='green', label='$3\\sigma$'))
         ax_global.legend()
-    
+
         # Plot the axes labels
         ax_global.set_xlabel(dim[0] + ' ' + unit_col_0, fontsize=18)
         ax_global.set_ylabel(dim[1] + ' ' + unit_col_1, fontsize=18)
@@ -604,21 +605,21 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax_global.set_ylim(ylims)
         ax_histx.set_xlim(xlims)
         ax_histy.set_ylim(ylims)
-    
+
         limx = _np.arange(xlims[0], xlims[1], (xlims[1] - xlims[0]) / nxbins)
         bin_centerx, fitresults_x = self.histogram_fit(x, bounds_binning=limx, verbose=False)
         ax_histx.plot(bin_centerx, fitresults_x.best_fit, 'k--', linewidth=1)
         limy = _np.arange(ylims[0], ylims[1], (ylims[1] - ylims[0]) / nybins)
         bin_centery, fitresults_y = self.histogram_fit(y, bounds_binning=limy, verbose=False)
         ax_histy.plot(fitresults_y.best_fit, bin_centery, 'k--', linewidth=1)
-    
+
         mean_x = str(round(x.mean(), 3))
         std_x = str(round(x.std(), 3))
         median_x = str(round(_np.median(x), 3))
         mean_y = str(round(y.mean(), 3))
         std_y = str(round(y.std(), 3))
         median_y = str(round(_np.median(y), 3))
-    
+
         ax_tab.tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
         x0 = ax_tab.get_xlim()[0]
         y0 = ax_tab.get_ylim()[0]
@@ -637,7 +638,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax_tab.annotate('median', xy=(x0 + 0.875, y0 + 0.9), xytext=(x0 + 0.875, y0 + 0.9),
                         horizontalalignment='center', verticalalignment='center',
                         fontsize=12)
-    
+
         xname = dim[0] + '\n' + unit_col_0
         yname = dim[1] + '\n' + unit_col_1
         ax_tab.annotate(xname, xy=(x0 + 0.125, 0.6), xytext=(x0 + 0.125, 0.6),
@@ -664,8 +665,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax_tab.annotate(median_y, xy=(x0 + 0.875, 0.2), xytext=(x0 + 0.875, 0.2),
                         horizontalalignment='center', verticalalignment='center',
                         fontsize=12)
-    
-    
+
     def five_spot_map(self, bl_track0, bl_track1, bl_track2, bl_track3, bl_track4, figsize=(8, 8)):
         fig = plt.figure(figsize=figsize)
         try:
@@ -675,55 +675,60 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             brcorner = _pd.DataFrame(bl_track2.line['BEAM']['ISO'].distribution['X'])
             tlcorner = _pd.DataFrame(bl_track3.line['BEAM']['ISO'].distribution['X'])
             trcorner = _pd.DataFrame(bl_track4.line['BEAM']['ISO'].distribution['X'])
-            dataX = _pd.concat([center, blcorner, brcorner, tlcorner, trcorner], ignore_index=True)
-    
+            datax = _pd.concat([center, blcorner, brcorner, tlcorner, trcorner], ignore_index=True)
+
             center = _pd.DataFrame(bl_track0.line['BEAM']['ISO'].distribution['Y'])
             blcorner = _pd.DataFrame(bl_track1.line['BEAM']['ISO'].distribution['Y'])
             brcorner = _pd.DataFrame(bl_track2.line['BEAM']['ISO'].distribution['Y'])
             tlcorner = _pd.DataFrame(bl_track3.line['BEAM']['ISO'].distribution['Y'])
             trcorner = _pd.DataFrame(bl_track4.line['BEAM']['ISO'].distribution['Y'])
-            dataY = _pd.concat([center, blcorner, brcorner, tlcorner, trcorner], ignore_index=True)
+            datay = _pd.concat([center, blcorner, brcorner, tlcorner, trcorner], ignore_index=True)
         except:
             print('Error, one simulation is missing. You have to put the 5 simulations outputs in the functions')
-    
+
         # Create the 2D histogram with the 5 spots.
-        _ = plt.hist2d(dataX['X'].values, dataY['Y'].values, bins=400, cmap='gist_gray_r')
+        _ = plt.hist2d(datax['X'].values, datay['Y'].values, bins=400, cmap='gist_gray_r')
         data_X = []
         data_X.append(1e3 * bl_track0.line['BEAM']['ISO'].std['X'])
         data_X.append(1e3 * bl_track1.line['BEAM']['ISO'].std['X'])
         data_X.append(1e3 * bl_track2.line['BEAM']['ISO'].std['X'])
         data_X.append(1e3 * bl_track3.line['BEAM']['ISO'].std['X'])
         data_X.append(1e3 * bl_track4.line['BEAM']['ISO'].std['X'])
-    
+
         data_S = []
         data_S.append(100 * _np.abs(bl_track0.line['BEAM']['ISO'].std['X'] - bl_track0.line['BEAM']['ISO'].std['Y']) / (
-        bl_track0.line['BEAM']['ISO'].std['X'] + bl_track0.line['BEAM']['ISO'].std['Y']))
+                bl_track0.line['BEAM']['ISO'].std['X'] + bl_track0.line['BEAM']['ISO'].std['Y']))
         data_S.append(100 * _np.abs(bl_track1.line['BEAM']['ISO'].std['X'] - bl_track1.line['BEAM']['ISO'].std['Y']) / (
-        bl_track1.line['BEAM']['ISO'].std['X'] + bl_track1.line['BEAM']['ISO'].std['Y']))
+                bl_track1.line['BEAM']['ISO'].std['X'] + bl_track1.line['BEAM']['ISO'].std['Y']))
         data_S.append(100 * _np.abs(bl_track2.line['BEAM']['ISO'].std['X'] - bl_track2.line['BEAM']['ISO'].std['Y']) / (
-        bl_track2.line['BEAM']['ISO'].std['X'] + bl_track2.line['BEAM']['ISO'].std['Y']))
+                bl_track2.line['BEAM']['ISO'].std['X'] + bl_track2.line['BEAM']['ISO'].std['Y']))
         data_S.append(100 * _np.abs(bl_track3.line['BEAM']['ISO'].std['X'] - bl_track3.line['BEAM']['ISO'].std['Y']) / (
-        bl_track3.line['BEAM']['ISO'].std['X'] + bl_track3.line['BEAM']['ISO'].std['Y']))
+                bl_track3.line['BEAM']['ISO'].std['X'] + bl_track3.line['BEAM']['ISO'].std['Y']))
         data_S.append(100 * _np.abs(bl_track4.line['BEAM']['ISO'].std['X'] - bl_track4.line['BEAM']['ISO'].std['Y']) / (
-        bl_track4.line['BEAM']['ISO'].std['X'] + bl_track4.line['BEAM']['ISO'].std['Y']))
-    
+                bl_track4.line['BEAM']['ISO'].std['X'] + bl_track4.line['BEAM']['ISO'].std['Y']))
+
         data_T = []
-        data_T.append(_np.degrees(self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track0.line['BEAM']['ISO'].distribution['X'],
-                                                                      1e3 * bl_track0.line['BEAM']['ISO'].distribution[
-                                                                          'Y']))))
-        data_T.append(_np.degrees(self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track1.line['BEAM']['ISO'].distribution['X'],
-                                                                      1e3 * bl_track1.line['BEAM']['ISO'].distribution[
-                                                                          'Y']))))
-        data_T.append(_np.degrees(self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track2.line['BEAM']['ISO'].distribution['X'],
-                                                                      1e3 * bl_track2.line['BEAM']['ISO'].distribution[
-                                                                          'Y']))))
-        data_T.append(_np.degrees(self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track3.line['BEAM']['ISO'].distribution['X'],
-                                                                      1e3 * bl_track3.line['BEAM']['ISO'].distribution[
-                                                                          'Y']))))
-        data_T.append(_np.degrees(self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track4.line['BEAM']['ISO'].distribution['X'],
-                                                                      1e3 * bl_track4.line['BEAM']['ISO'].distribution[
-                                                                          'Y']))))
-    
+        data_T.append(_np.degrees(
+            self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track0.line['BEAM']['ISO'].distribution['X'],
+                                                           1e3 * bl_track0.line['BEAM']['ISO'].distribution[
+                                                               'Y']))))
+        data_T.append(_np.degrees(
+            self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track1.line['BEAM']['ISO'].distribution['X'],
+                                                           1e3 * bl_track1.line['BEAM']['ISO'].distribution[
+                                                               'Y']))))
+        data_T.append(_np.degrees(
+            self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track2.line['BEAM']['ISO'].distribution['X'],
+                                                           1e3 * bl_track2.line['BEAM']['ISO'].distribution[
+                                                               'Y']))))
+        data_T.append(_np.degrees(
+            self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track3.line['BEAM']['ISO'].distribution['X'],
+                                                           1e3 * bl_track3.line['BEAM']['ISO'].distribution[
+                                                               'Y']))))
+        data_T.append(_np.degrees(
+            self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track4.line['BEAM']['ISO'].distribution['X'],
+                                                           1e3 * bl_track4.line['BEAM']['ISO'].distribution[
+                                                               'Y']))))
+
         plt.annotate('$\sigma_X = {}$mm \n $S = {}$% \n $\phi={} °$'.format(round(data_X[1], 2), round(data_S[1], 2),
                                                                             round(data_T[1], 2))
                      , xy=(- 0.1 + 0.03, 0.1), xytext=(- 0.1 + 0.03, 0.1),
@@ -749,10 +754,11 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                      , xy=(0.0 + 0.03, 0.0), xytext=(0.0 + 0.03, 0.0),
                      horizontalalignment='center', verticalalignment='center',
                      fontsize=12)
-    
-    def halo(self, distribution, dimensions=['X', 'Y', 'PX', 'PY']):
+
+    @staticmethod
+    def halo(distribution, dimensions=['X', 'Y', 'PX', 'PY']):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
-    
+
         halo = _pd.concat([
             distribution[dimensions].quantile(0.01),
             distribution[dimensions].quantile(0.05),
@@ -769,22 +775,24 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                                    }
                           )
         return halo
-    
-    def compute_halo(self, beam_o_df,element,percentile, dimensions=['X', 'Y', 'PX', 'PY']):
+
+    @staticmethod
+    def compute_halo(beam_o_df, element, percentile, dimensions=['X', 'Y', 'PX', 'PY']):
         """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
-    
-        data = _pd.DataFrame(columns=['X', 'Y','PX', 'PY'])
+
+        data = _pd.DataFrame(columns=['X', 'Y', 'PX', 'PY'])
         data['X'] = beam_o_df['BEAM_OUT'][element][:, 0]
         data['Y'] = beam_o_df['BEAM_OUT'][element][:, 2]
         data['PX'] = beam_o_df['BEAM_OUT'][element][:, 1]
         data['PY'] = beam_o_df['BEAM_OUT'][element][:, 3]
-    
+
         halo = data[dimensions].quantile(percentile)
-    
+
         return halo
-    
+
     # THIS IS THE OLD aperture.py
-    def xy_from_string(self, a, i, c):
+    @staticmethod
+    def xy_from_string(a, i, c):
         def convert(x):
             try:
                 converted = float(x)
@@ -794,15 +802,16 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 except TypeError:
                     converted = 1.0
             return converted
+
         if len(str(a).strip('[]').strip('{}').split(',')) >= int(i) + 1:
             return convert(str(a).strip('[]').strip('{}').split(',')[int(i)])
         elif len(str(a).strip('[]').strip('{}').split(',')) > 0:
             return convert(str(a).strip('[]').strip('{}').split(',')[0])
         else:
             return _np.inf
-    
-    
-    def draw_chamber(self, ax, e):
+
+    @staticmethod
+    def draw_chamber(ax, e):
         ax.add_patch(
             patches.Rectangle(
                 (e['AT_ENTRY'], 1000 * (e['APERTURE_UP'])),  # (x,y)
@@ -819,8 +828,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 hatch='', facecolor=palette['base01']
             )
         )
-    
-    
+
     def draw_quad(self, ax, e):
         ax.add_patch(
             patches.Rectangle(
@@ -830,7 +838,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 hatch=STYLE_QUAD_HATCH, facecolor=palette['quad']
             )
         )
-    
+
         ax.add_patch(
             patches.Rectangle(
                 (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
@@ -840,12 +848,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             )
         )
         self.draw_chamber(ax, e)
-    
-    
-    def draw_coll(self, ax, e, plane):
-        #if 'PIPE' not in e:
+
+    @staticmethod
+    def draw_coll(ax, e, plane):
+        # if 'PIPE' not in e:
         #    return
-        #if not _np.isnan(e['PIPE']):
+        # if not _np.isnan(e['PIPE']):
         #    return
         ax.add_patch(
             patches.Rectangle(
@@ -855,7 +863,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 facecolor=palette['coll']
             )
         )
-    
+
         ax.add_patch(
             patches.Rectangle(
                 (e['AT_ENTRY'], -1000 * e['APERTURE_DOWN']),  # (x,y)
@@ -864,8 +872,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 facecolor=palette['coll']
             )
         )
-    
-    
+
     def draw_bend(self, ax, e):
         tmp = 1000 * e['APERTURE_UP'] + e['CHAMBER_UP']
         ax.add_patch(
@@ -886,10 +893,10 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             )
         )
         self.draw_chamber(ax, e)
-    
-    
-    def fill_aperture(self, element, context):
-        if element.name+'_APERTURE' in context and element['TYPE'] == 'SLITS':
+
+    @staticmethod
+    def fill_aperture(element, context):
+        if element.name + '_APERTURE' in context and element['TYPE'] == 'SLITS':
             element['APERTURE'] = context[element.name + '_APERTURE']
         if element['TYPE'] == 'COLLIMATOR' and \
                 element['PLUG'] == 'APERTURE' and \
@@ -897,7 +904,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 _np.isnan(element['APERTURE']):
             element['APERTURE'] = element['CIRCUIT']
         return element
-
 
     def aperture(self, ax, bl, **kwargs):
 
@@ -935,7 +941,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         bl.query("CLASS == 'CircularCollimator'").apply(lambda e: self.draw_coll(ax, e, planes), axis=1)
 
     # THIS IS THE OLD bpm.py
-    def draw_bpm_size(self, ax, s, x):
+    @staticmethod
+    def draw_bpm_size(ax, s, x):
         ax.add_patch(
             patches.Rectangle(
                 (s - 0.05, -x),
@@ -943,7 +950,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 2 * x,
             )
         )
-
 
     def bpm(self, ax, bl, **kwargs):
         """TODO."""
@@ -955,7 +961,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         )
 
     # THIS IS THE OLD losses.py
-    def losses(self, ax, bl,beam_o_df, **kwargs):
+    def losses(self, ax, bl, beam_o_df, **kwargs):
         """Plot the losses from a beamline tracking computation and a context."""
         losses_palette = kwargs.get("palette", palette)
         bl['n_particles'] = list(map(len, beam_o_df['BEAM_OUT']))
@@ -965,35 +971,25 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 'S': r['AT_EXIT'],
                 'T': r['n_particles'] / init
             }), axis=1)
-
         ax2 = ax.twinx()
-        self.prepare(ax2,bl)
+        self.prepare(ax2, bl)
         self.prepare(ax, bl, with_beamline=kwargs.get("with_beamline", False))
-
         ticks_locations = self.beamline_get_ticks_locations(bl)
-        #ax2.get_xaxis().set_tick_params(direction='out')
-        #ax2.yaxis.set_ticks_position('left')
-        #ax2.xaxis.set_ticks_position('bottom')
-        #ax2.yaxis.set_ticks_position('right')
-        #ax2.set_xlim([ticks_locations[0], ticks_locations[-1]])
-        #ax2.tick_params(axis='x', labelsize=6)
-        #ax2.xaxis.set_major_formatter(FixedFormatter([]))
-        #ax2.xaxis.set_major_locator(FixedLocator(ticks_locations))
         ax2.set_ylabel('T ($\%$)')
         ax2.yaxis.label.set_color(losses_palette['green'])
         ax2.grid(True)
         if kwargs.get('log', False):
-            ax2.semilogy(transmission['S'], 100*transmission['T'], 's-', color=losses_palette['green'])
-            ax2.set_ylim([min(100*transmission['T']),100])
+            ax2.semilogy(transmission['S'], 100 * transmission['T'], 's-', color=losses_palette['green'])
+            ax2.set_ylim([min(100 * transmission['T']), 100])
         else:
             ax2.yaxis.set_major_locator(MultipleLocator(10))
             ax2.set_ylim([0, 100])
-            ax2.plot(transmission['S'], 100*transmission['T'], 's-', color=losses_palette['green'])
+            ax2.plot(transmission['S'], 100 * transmission['T'], 's-', color=losses_palette['green'])
         ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
         ax.yaxis.set_major_locator(MultipleLocator(10))
         ax.set_ylabel('Losses ($\%$)')
         ax.yaxis.label.set_color(losses_palette['magenta'])
-        ax.bar(transmission['S'] , -100 * transmission['T'].diff(), 0.125, alpha=0.7,
+        ax.bar(transmission['S'], -100 * transmission['T'].diff(), 0.125, alpha=0.7,
                edgecolor=losses_palette['magenta'],
                color=losses_palette['magenta'],
                error_kw=dict(ecolor=losses_palette['base02'], lw=1, capsize=2, capthick=1))
@@ -1002,10 +998,11 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         if kwargs.get('with_current'):
             ax2.plot(bl['AT_EXIT'], bl['CURRENT'], 'k-')
 
-        return transmission,ax,ax2
+        return transmission, ax, ax2
 
-    # THIS IS THE OLD scattering
-    def draw_slab(self, ax, e):
+    # THIS IS THE OLD scattering.py
+    @staticmethod
+    def draw_slab(ax, e):
         materials_colors = {
             'graphite': 'g',
             'beryllium': 'r',
@@ -1021,10 +1018,11 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             )
         )
 
-    def draw_measuring_plane(self, ax, e):
+    @staticmethod
+    def draw_measuring_plane(ax, e):
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY']-0.005, -1),  # (x,y)
+                (e['AT_ENTRY'] - 0.005, -1),  # (x,y)
                 0.01,  # width
                 2,  # height
                 hatch='', facecolor='k'
@@ -1056,7 +1054,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         self.losses(ax, bl)
 
         plt.tight_layout()
-
 
     def summary(self, bl, beam_o_df, element='DRIFT_ISO', fig=None):
         if fig is None:
@@ -1148,38 +1145,39 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         bottom_h = n_bottom - 1.5 * space + n_height + space
         bottom_hh = bottom_h + n_height + space
         # Set up the geometry of the three plots
-        rect_beam_X = [left, bottom_hh, n_width, n_height]
-        rect_beam_Y = [left, bottom_h, n_width, n_height]
+        rect_beam_x = [left, bottom_hh, n_width, n_height]
+        rect_beam_y = [left, bottom_h, n_width, n_height]
         rect_trans = [left, n_bottom - 1.5 * space, n_width, n_height]
         # Make the three plots
-        ax_beam_X = fig.add_axes(rect_beam_X)  # beam plot
-        ax_beam_Y = fig.add_axes(rect_beam_Y)  # x histogram
+        ax_beam_x = fig.add_axes(rect_beam_x)  # beam plot
+        ax_beam_y = fig.add_axes(rect_beam_y)  # x histogram
         ax_trans = fig.add_axes(rect_trans)  # y histogram
 
-        self.prepare(ax_beam_X, bl)
-        self.aperture(ax_beam_X, bl, plane='X')
-        self.tracking(ax_beam_X, bl,beam_o_df, plane='X', halo=True, halo99=True, std=True, mean=True)
+        self.prepare(ax_beam_x, bl)
+        self.aperture(ax_beam_x, bl, plane='X')
+        self.tracking(ax_beam_x, bl, beam_o_df, plane='X', halo=True, halo99=True, std=True, mean=True)
 
-        self.prepare(ax_beam_Y, bl, print_label=False)
-        self.aperture(ax_beam_Y, bl, plane='Y')
-        self.tracking(ax_beam_Y,bl, beam_o_df, plane='Y', halo=True, halo99=True, std=True, mean=True)
+        self.prepare(ax_beam_y, bl, print_label=False)
+        self.aperture(ax_beam_y, bl, plane='Y')
+        self.tracking(ax_beam_y, bl, beam_o_df, plane='Y', halo=True, halo99=True, std=True, mean=True)
 
         self.prepare(ax_trans, bl, print_label=False)
-        losses_ = self.losses(ax_trans, bl,beam_o_df, log=False)
+        losses_ = self.losses(ax_trans, bl, beam_o_df, log=False)
 
-        ax_beam_X.set_ylabel("Horizontal beam size [mm]")
-        ax_beam_Y.set_ylabel("Vertical beam size [mm]")
-        ax_beam_X.set_xticklabels([])
-        ax_beam_Y.set_xticklabels([])
-        ax_beam_X.set_xlabel('')
-        ax_beam_Y.set_xlabel('')
-        ax_beam_X.set_ylim([-40, 40])
-        ax_beam_Y.set_ylim([-40, 40])
+        ax_beam_x.set_ylabel("Horizontal beam size [mm]")
+        ax_beam_y.set_ylabel("Vertical beam size [mm]")
+        ax_beam_x.set_xticklabels([])
+        ax_beam_y.set_xticklabels([])
+        ax_beam_x.set_xlabel('')
+        ax_beam_y.set_xlabel('')
+        ax_beam_x.set_ylim([-40, 40])
+        ax_beam_y.set_ylim([-40, 40])
 
         return fig
 
     # THIS SI THE OLD survey.py
-    def survey_iba(self, ax, bl, **kwargs):
+    @staticmethod
+    def survey_iba(ax, bl, **kwargs):
         ax.set_xlabel("X (m)")
         ax.set_ylabel("Y (m)")
         ax.set_xlim([0, _np.max(bl.line['X']) / 1000])
@@ -1188,7 +1186,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             if _pd.notnull(row['X']) and _pd.notnull(row['Y']):
                 if kwargs.get("labels", False):
                     ax.annotate(index,
-                                xy=(row['X'] / 1000, row['Y'] / 1000), xytext=(row['X'] / 1000 + 0.5, row['Y'] / 1000 + 0.5),
+                                xy=(row['X'] / 1000, row['Y'] / 1000),
+                                xytext=(row['X'] / 1000 + 0.5, row['Y'] / 1000 + 0.5),
                                 arrowprops=dict(arrowstyle="->", facecolor='black', shrinkA=50, shrinkB=5000, ),
                                 size=3,
                                 horizontalalignment='left',
@@ -1227,14 +1226,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                     )
         plt.axes().set_aspect('equal', 'datalim')
 
-
     ELEMENT_COLORS = {
         'QUADRUPOLE': '#cb4b16',  # Solarized 'orange'
         'SEXTUPOLE': 'g',
         'OCTUPOLE': 'g',
         'MULTIPOLE': 'g'
     }
-
 
     def survey_madx(self, ax, bl):
         x_edges = [
@@ -1249,9 +1246,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             _np.max([x_edges[0], y_edges[0]]),
             _np.max([x_edges[1], y_edges[1]])
         ]
-        padding = _np.max(edges)*0.1
-        ax.set_xlim([edges[0]-padding, edges[1]+padding])
-        ax.set_ylim([edges[0]-padding, edges[1]+padding])
+        padding = _np.max(edges) * 0.1
+        ax.set_xlim([edges[0] - padding, edges[1] + padding])
+        ax.set_ylim([edges[0] - padding, edges[1] + padding])
         tmp = -90
         for index, row in bl.line.iterrows():
             if row['KEYWORD'] == 'SBEND' or row['KEYWORD'] == 'MARKER':
@@ -1306,7 +1303,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 )
             ax.add_patch(w)
 
-
     def survey(self, ax, bl, style='madx', **kwargs):
         if style == 'iba_survey':
             self.survey_iba(ax, bl, **kwargs)
@@ -1316,7 +1312,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             raise Exception("Style not supported.")
 
     # THIS IS THE OLD tracking.py
-    def tracking(self, ax, bl,beam_o_df, mean=False, std=False, halo=True, **kwargs):
+    def tracking(self, ax, bl, beam_o_df, mean=False, std=False, halo=True, **kwargs):
         """Plot the beam envelopes from tracking data."""
         if kwargs.get("plane") is None:
             raise Exception("Plane (plane='X' or plane='Y') must be specified.")
@@ -1335,14 +1331,24 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         t = bl.apply(lambda r: _pd.Series({
             'NAME': r['NAME'],
             'S': r[kwargs.get("reference_plane", 'AT_EXIT')],
-            '1%': 1000 * (self.compute_halo(beam_o_df, r['NAME'], 0.023, plane) - self.compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo_99 else 0.0,
-            '5%': 1000 * (self.compute_halo(beam_o_df, r['NAME'], 0.159, plane) - self.compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo else 0.0,
-            '95%': 1000 * (self.compute_halo(beam_o_df, r['NAME'], 0.841, plane) - self.compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo else 0.0,
-            '99%': 1000 * (self.compute_halo(beam_o_df, r['NAME'], 0.977, plane) - self.compute_halo(beam_o_df, r['NAME'], 0.5, plane)) if halo_99 else 0.0,
+            '1%': 1000 * (
+                        self.compute_halo(beam_o_df, r['NAME'], 0.023, plane) - self.compute_halo(beam_o_df, r['NAME'],
+                                                                                                  0.5,
+                                                                                                  plane)) if halo_99 else 0.0,
+            '5%': 1000 * (
+                        self.compute_halo(beam_o_df, r['NAME'], 0.159, plane) - self.compute_halo(beam_o_df, r['NAME'],
+                                                                                                  0.5,
+                                                                                                  plane)) if halo else 0.0,
+            '95%': 1000 * (
+                        self.compute_halo(beam_o_df, r['NAME'], 0.841, plane) - self.compute_halo(beam_o_df, r['NAME'],
+                                                                                                  0.5,
+                                                                                                  plane)) if halo else 0.0,
+            '99%': 1000 * (
+                        self.compute_halo(beam_o_df, r['NAME'], 0.977, plane) - self.compute_halo(beam_o_df, r['NAME'],
+                                                                                                  0.5,
+                                                                                                  plane)) if halo_99 else 0.0,
             'mean': 1000 * beam_o_df['BEAM_OUT'][r['NAME']][:, dico_plane[plane]].mean() if mean else 0.0,
             'std': 1000 * beam_o_df['BEAM_OUT'][r['NAME']][:, dico_plane[plane]].std() if std else 0.0,
-            #'std_bpm': 1000 * r['BEAM'].std_bpm[plane][0] * int(pd.notnull(r['BPM'])) if 'BPM' in bl.line.columns and std_bpm else 0.0,
-            #'std_bpm_err': np.max([1.0, 1000 * r['BEAM'].std_bpm[plane][1] * int( pd.notnull(r['BPM'])) if 'BPM' in bl.line.columns and std_bpm else 0.0]),
         }), axis=1)
 
         t.set_index('NAME')
@@ -1351,9 +1357,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             return
 
         if halo:
-            # filled_plot(ax, t['S'], t['1%'], t['99%'], tracking_palette[plane], True, alpha=0.3)
             self.filled_plot(ax, t['S'], t['5%'], t['95%'], tracking_palette[plane], True, alpha=0.3)
-            # filled_plot(ax, t['S'], t['mean'] - t['std'], t['mean'] + t['std'], tracking_palette[plane], True, alpha=0.3)
             self.filled_plot(ax, t['S'], t['5%'], t['95%'], tracking_palette[plane], True, alpha=0.3)
             if halo_99:
                 self.filled_plot(ax, t['S'], t['1%'], t['99%'], tracking_palette[plane], True, alpha=0.3)
@@ -1404,9 +1408,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         context = kwargs.get('context', {})
         bl = bl.line
 
-        bl['XMAXMONO'] = _np.sqrt(bl['BETX']*context['EMITX'])
-        bl['XMAX'] = _np.sqrt(bl['XMAXMONO']**2+(context['DPP']*bl['DX'])**2)
-        bl['YMAX'] = _np.sqrt(bl['BETY']*context['EMITY'])
+        bl['XMAXMONO'] = _np.sqrt(bl['BETX'] * context['EMITX'])
+        bl['XMAX'] = _np.sqrt(bl['XMAXMONO'] ** 2 + (context['DPP'] * bl['DX']) ** 2)
+        bl['YMAX'] = _np.sqrt(bl['BETY'] * context['EMITY'])
         p = kwargs.get('plane', None)
         cx = kwargs.get('color', 'X')
         cy = kwargs.get('color', 'Y')
@@ -1429,7 +1433,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             self.filled_plot(ax, bl['S'], 0, -1000 * bl['YMAX'], palette[cy], True, alpha=0.4)
             self.filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
 
-
     def beta(self, ax, bl, **kwargs):
         """Plot the Twiss beta functions."""
         if kwargs.get('ptc', False):
@@ -1437,11 +1440,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         else:
             self.twiss_function_plot(ax, bl, ['BET'], **kwargs)
 
-
     def alpha(self, ax, bl, **kwargs):
         """Plot the Twiss alpha functions."""
         self.twiss_function_plot(ax, bl, ['ALF'], **kwargs)
-
 
     def dispersion(self, ax, bl, planes='both', rel_beta=1, **kwargs):
         """Plot the dispersion functions."""
@@ -1453,13 +1454,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             ax.plot(bl.line['S'], rel_beta * bl.line['DX'], color=palette['X'])
             ax.plot(bl.line['S'], rel_beta * bl.line['DY'], color=palette['Y'])
 
-
     def phase_advance(self, ax, bl, **kwargs):
         """Plot the phase advance."""
         self.twiss_function_plot(ax, bl, ['MU'], kwargs.get('ptc', False))
 
-
-    def twiss_function_plot(self, ax, bl, functions, planes='both', **kwargs):
+    @staticmethod
+    def twiss_function_plot(ax, bl, functions, planes='both', **kwargs):
         bl = bl.line
 
         if kwargs.get('ptc', False):
@@ -1470,7 +1470,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             y = 'Y'
         for f in functions:
             if planes is 'both' or planes is 'X':
-                ax.plot(bl['S'], bl[f+x], color=palette['X'])
+                ax.plot(bl['S'], bl[f + x], color=palette['X'])
             if planes is 'both' or planes is 'Y':
-                ax.plot(bl['S'], bl[f+y], color=palette['Y'])
-
+                ax.plot(bl['S'], bl[f + y], color=palette['Y'])
