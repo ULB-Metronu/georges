@@ -49,21 +49,21 @@ def track_madx_srotation(b1, b2, element_parameters: nList, global_parameters: n
     tilt: float = element_parameters[0]
     if tilt < 1e-8:
         b2 = b1.copy()
-    else:
-        st = sin(tilt)
-        ct = cos(tilt)
-        for i in prange(b1.shape[0]):
-            x = b1[i, 0]
-            px = b1[i, 1]
-            y = b1[i, 2]
-            py = b1[i, 3]
-            x_, px_, y_, py_ = _apply_tilt_rotation(x, px, y, py, ct, st, 1)
-            b2[i, 0] = x_
-            b2[i, 1] = px_
-            b2[i, 2] = y_
-            b2[i, 3] = py_
-            b2[i, 4] = b1[i, 4]
-            b2[i, 5] = b1[i, 5]
+
+    st = sin(tilt)
+    ct = cos(tilt)
+    for i in prange(b1.shape[0]):
+        x = b1[i, 0]
+        px = b1[i, 1]
+        y = b1[i, 2]
+        py = b1[i, 3]
+        x_, px_, y_, py_ = _apply_tilt_rotation(x, px, y, py, ct, st, 1)
+        b2[i, 0] = x_
+        b2[i, 1] = px_
+        b2[i, 2] = y_
+        b2[i, 3] = py_
+        b2[i, 4] = b1[i, 4]
+        b2[i, 5] = b1[i, 5]
 
     return b1, b2
 
