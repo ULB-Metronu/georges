@@ -49,6 +49,7 @@ def track_madx_srotation(b1, b2, element_parameters: nList, global_parameters: n
     tilt: float = element_parameters[0]
     if tilt < 1e-8:
         b2 = b1.copy()
+        return b1, b2
 
     st = sin(tilt)
     ct = cos(tilt)
