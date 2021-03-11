@@ -83,18 +83,20 @@ def twiss(beamline: _Input,
             reference_particle = _np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         if offsets is None:
             offsets = _np.array([0.01, 0.01, 0.01, 0.01, 0.01])
+        pt = _Beam.compute_pt(dpp=offsets[4], beta=kinematics.beta)
+        print(pt)
         coordinates = _np.array([
             reference_particle,
             reference_particle + [offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
             reference_particle + [0.0, offsets[1], 0.0, 0.0, 0.0, 0.0],
             reference_particle + [0.0, 0.0, offsets[2], 0.0, 0.0, 0.0],
             reference_particle + [0.0, 0.0, 0.0, offsets[3], 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, 0.0, 0.0, offsets[4]],
+            reference_particle + [0.0, 0.0, 0.0, 0.0, offsets[4], pt],
             reference_particle + [-offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
             reference_particle + [0.0, -offsets[1], 0.0, 0.0, 0.0, 0.0],
             reference_particle + [0.0, 0.0, -offsets[2], 0.0, 0.0, 0.0],
             reference_particle + [0.0, 0.0, 0.0, -offsets[3], 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, 0.0, 0.0, -offsets[4]],
+            reference_particle + [0.0, 0.0, 0.0, 0.0, -offsets[4], pt],
         ])
         beam = _Beam(kinematics=kinematics, distribution=coordinates)
         observer = _BeamObserver(with_input_beams=False)
@@ -110,7 +112,7 @@ def twiss(beamline: _Input,
             m[:, 4] = m[:, 5]
             m = m[:, 0:5]
             _matrix[label] = {
-                f'R{i + 1}{j + 1}': (m[i + 1, j] - m[i + 1 + 5, j]) / normalization[i]
+                f'R{j + 1}{i + 1}': (m[i + 1, j] - m[i + 1 + 5, j]) / normalization[i]
                 for j in range(0, 5)
                 for i in range(0, 5)
             }
