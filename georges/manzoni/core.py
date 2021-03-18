@@ -84,7 +84,6 @@ def twiss(beamline: _Input,
         if offsets is None:
             offsets = _np.array([0.01, 0.01, 0.01, 0.01, 0.01])
         pt = _Beam.compute_pt(dpp=offsets[4], beta=kinematics.beta)
-        print(pt)
         coordinates = _np.array([
             reference_particle,
             reference_particle + [offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
@@ -96,7 +95,7 @@ def twiss(beamline: _Input,
             reference_particle + [0.0, -offsets[1], 0.0, 0.0, 0.0, 0.0],
             reference_particle + [0.0, 0.0, -offsets[2], 0.0, 0.0, 0.0],
             reference_particle + [0.0, 0.0, 0.0, -offsets[3], 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, 0.0, -offsets[4], pt],
+            reference_particle + [0.0, 0.0, 0.0, 0.0, -offsets[4], -pt],
         ])
         beam = _Beam(kinematics=kinematics, distribution=coordinates)
         observer = _BeamObserver(with_input_beams=False)
