@@ -278,7 +278,7 @@ class Dodecapole(_ManzoniElement):
     pass
 
 
-class Kicker(_ManzoniElement):
+class Kicker(Magnet):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Kicker length.'),
         'HKICK': (0.0, 'The momentum change in the horizontal plane.'),
@@ -308,7 +308,7 @@ class TKicker(Kicker):
     pass
 
 
-class HKicker(_ManzoniElement):
+class HKicker(Magnet):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Kicker length.'),
         'KICK': (0.0, 'The momentum change.'),
@@ -332,7 +332,7 @@ class HKicker(_ManzoniElement):
         ]))
 
 
-class VKicker(_ManzoniElement):
+class VKicker(Magnet):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Kicker length.'),
         'KICK': (0.0 * _ureg.radian, 'The momentum change.'),
