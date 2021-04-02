@@ -79,6 +79,7 @@ def drift6(b1: _np.ndarray, b2: _np.ndarray, length: float):
     return b1, b2
 
 
+@njit(parallel=True, fastmath=True)
 def compute_mad_drift_matrix(element_parameters: list, global_parameters: list) -> _np.ndarray:
 
     L: float = element_parameters[0]
@@ -95,3 +96,12 @@ def compute_mad_drift_matrix(element_parameters: list, global_parameters: list) 
     R[5, 5] = 1
 
     return R
+
+
+@njit(parallel=True, fastmath=True)
+def compute_mad_drift_tensor(element_parameters: list, global_parameters: list) -> _np.ndarray:
+
+    L: float = element_parameters[0]
+    T = _np.zeros((6, 6, 6))
+
+    return T

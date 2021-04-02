@@ -43,7 +43,7 @@ def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray)
     return b1, b2
 
 
-@njit(parallel=True, nogil=True)
+@njit(nogil=True)
 def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray, tensor: _np.ndarray):
     """
 

@@ -6,6 +6,7 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_mad_quadrupole_matrix, \
     compute_mad_quadrupole_tensor, \
     compute_mad_drift_matrix, \
+    compute_mad_drift_tensor, \
     compute_transport_combined_dipole_matrix, \
     compute_transport_combined_dipole_tensor, \
     compute_transport_multipole_matrix, \
@@ -14,6 +15,8 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_transport_quadrupole_tensor, \
     compute_transport_sextupole_matrix, \
     compute_transport_sextupole_tensor, \
+    compute_transport_drift_matrix, \
+    compute_transport_drift_tensor, \
     track_madx_quadrupole, \
     track_madx_drift, \
     track_madx_drift_paraxial, \
@@ -106,6 +109,7 @@ class Mad8Integrator(Integrator):
 
 class Mad8FirstOrderTaylorIntegrator(Mad8Integrator):
     MATRICES = {
+        'DRIFT': compute_mad_drift_matrix,
         'BEND': compute_mad_combined_dipole_matrix,
         'SBEND': compute_mad_combined_dipole_matrix,
         'QUADRUPOLE': compute_mad_quadrupole_matrix,
@@ -126,7 +130,7 @@ class Mad8FirstOrderTaylorIntegrator(Mad8Integrator):
 
 class Mad8SecondOrderTaylorIntegrator(Mad8FirstOrderTaylorIntegrator):
     TENSORS = {
-        'DRIFT': compute_mad_drift_matrix,
+        'DRIFT': compute_mad_drift_tensor,
         'BEND': compute_mad_combined_dipole_tensor,
         'SBEND': compute_mad_combined_dipole_tensor,
         'QUADRUPOLE': compute_mad_quadrupole_tensor,
@@ -152,6 +156,7 @@ class TransportIntegrator(Integrator):
 
 class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
     MATRICES = {
+        # 'DRIFT': compute_transport_drift_matrix,
         'BEND': compute_transport_combined_dipole_matrix,
         'SBEND': compute_transport_combined_dipole_matrix,
         'QUADRUPOLE': compute_transport_quadrupole_matrix,
@@ -174,6 +179,7 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
 
 class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
     TENSORS = {
+        # 'DRIFT': compute_transport_drift_tensor,
         'BEND': compute_transport_combined_dipole_tensor,
         'SBEND': compute_transport_combined_dipole_tensor,
         'QUADRUPOLE': compute_transport_quadrupole_tensor,
