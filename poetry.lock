@@ -220,6 +220,14 @@ optional = true
 python-versions = ">=2.7"
 
 [[package]]
+name = "fortranformat"
+version = "1.0.1"
+description = "Mimics Fortran textual IO in Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "future"
 version = "0.18.2"
 description = "Clean single-source support for Python 3 and 2"
@@ -229,23 +237,31 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 
 [[package]]
 name = "georges-core"
-version = "2020.1"
-description = "Georges' accelerator physics library - Core modules"
+version = "0.1.0"
+description = ""
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">3.8.1 <3.10"
 develop = true
 
 [package.dependencies]
-boost-histogram = "*"
-matplotlib = "*"
-numba = "*"
-numpy = "*"
-pandas = "*"
-pint = "*"
-plotly = "*"
-uproot = "*"
-vtk = "*"
+boost-histogram = "^1.0.2"
+matplotlib = "^3.4.2"
+mergedeep = "^1.3.4"
+numba = "^0.53.1"
+numpy = "^1.20.3"
+numpy-quaternion = "^2021.4.5"
+pandas = "^1.2.4"
+Pint = "^0.17"
+plotly = "^4.14.3"
+pybdsim = "branch dev_failsim"
+PyYAML = "^5.4.1"
+scipy = "^1.6.3"
+uproot = "^4.0.8"
+vtk = "^9.0.1"
+
+[package.extras]
+sphinx = ["sphinx (>=4.0.2,<5.0.0)", "sphinx-material @ git+https://github.com/bashtage/sphinx-material.git@master", "sphinx-automodapi (>=0.13,<0.14)", "sphinxcontrib-bibtex (>=2.2.0,<3.0.0)", "sphinx-copybutton (>=0.3.1,<0.4.0)", "sphinx-autobuild (>=2021.3.14,<2022.0.0)", "sphinx-rtd-theme (>=0.5.2,<0.6.0)", "m2r2 (>=0.2.7,<0.3.0)", "pandoc (>=1.0.2,<2.0.0)", "nbsphinx (>=0.8.2,<0.9.0)", "ipython (>=7.24.1,<8.0.0)", "pytest (>=6.2.2,<7.0.0)", "pytest-bdd (>=4.0.2,<5.0.0)"]
 
 [package.source]
 type = "directory"
@@ -557,6 +573,14 @@ python-versions = ">=3.5"
 traitlets = "*"
 
 [[package]]
+name = "mergedeep"
+version = "1.3.4"
+description = "A deep merge function for 🐍."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
 name = "minrpc"
 version = "0.1.0"
 description = "Minimalistic RPC utility (DO NOT USE!)"
@@ -707,6 +731,23 @@ description = "NumPy is the fundamental package for array computing with Python.
 category = "main"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "numpy-quaternion"
+version = "2021.4.5.14.42.35"
+description = "Add a quaternion dtype to NumPy"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+numpy = ">=1.13"
+
+[package.extras]
+docs = ["mkdocs", "mktheapidocs", "pymdown-extensions"]
+numba = ["numba (<0.49.0)", "llvmlite (<0.32.0)", "numba"]
+scipy = ["scipy"]
+testing = ["pytest", "pytest-cov"]
 
 [[package]]
 name = "packaging"
@@ -903,6 +944,31 @@ python-versions = ">=3.6"
 numpy = ">=1.16.6"
 
 [[package]]
+name = "pybdsim"
+version = "2.3.0"
+description = ""
+category = "main"
+optional = false
+python-versions = ">=2.7.*"
+develop = false
+
+[package.dependencies]
+fortranformat = "*"
+future = "*"
+matplotlib = "*"
+numpy = "*"
+pymad8 = "*"
+pymadx = "*"
+pytransport = "*"
+scipy = "*"
+
+[package.source]
+type = "git"
+url = "https://bitbucket.org/jairhul/pybdsim.git"
+reference = "dev_failsim"
+resolved_reference = "d597b17b5b32836964c1e13a5bc5b7c6107aa6a9"
+
+[[package]]
 name = "pybtex"
 version = "0.24.0"
 description = "A BibTeX-compatible bibliography processor in Python"
@@ -945,6 +1011,34 @@ description = "Pygments is a syntax highlighting package written in Python."
 category = "main"
 optional = true
 python-versions = ">=3.5"
+
+[[package]]
+name = "pymad8"
+version = "1.6.0"
+description = "Write MAD8 models and load MAD8 output."
+category = "main"
+optional = false
+python-versions = ">=2.7.*"
+
+[package.dependencies]
+fortranformat = ">=0.2.5"
+matplotlib = ">=1.7.1"
+numpy = ">=1.4.0"
+
+[[package]]
+name = "pymadx"
+version = "1.8.1"
+description = "Write MADX models and load MADX output."
+category = "main"
+optional = false
+python-versions = ">=2.7.*"
+
+[package.dependencies]
+future = "*"
+matplotlib = ">=1.7.1"
+numpy = ">=1.4"
+pytransport = "*"
+six = ">1.0"
 
 [[package]]
 name = "pyparsing"
@@ -1025,6 +1119,19 @@ Unidecode = {version = ">=1.1.1", optional = true, markers = "extra == \"unideco
 
 [package.extras]
 unidecode = ["Unidecode (>=1.1.1)"]
+
+[[package]]
+name = "pytransport"
+version = "1.4.0"
+description = "Convert TRANSPORT models and load TRANSPORT output."
+category = "main"
+optional = false
+python-versions = ">=2.7.*"
+
+[package.dependencies]
+matplotlib = "*"
+numpy = "*"
+scipy = "*"
 
 [[package]]
 name = "pytz"
@@ -1671,6 +1778,10 @@ entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
     {file = "entrypoints-0.3.tar.gz", hash = "sha256:c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451"},
 ]
+fortranformat = [
+    {file = "fortranformat-1.0.1-py2-none-any.whl", hash = "sha256:bfa14f5b6b62e90cc02852dcca5b6ea8caf782725be44b0ca39868e462ac88c8"},
+    {file = "fortranformat-1.0.1.tar.gz", hash = "sha256:730b4f56ef64d7ec18537b357e92c7b17aec7e24e3d1e32c122c31dbdd64ef2b"},
+]
 future = [
     {file = "future-0.18.2.tar.gz", hash = "sha256:b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d"},
 ]
@@ -1910,6 +2021,10 @@ matplotlib-inline = [
     {file = "matplotlib-inline-0.1.2.tar.gz", hash = "sha256:f41d5ff73c9f5385775d5c0bc13b424535c8402fe70ea8210f93e11f3683993e"},
     {file = "matplotlib_inline-0.1.2-py3-none-any.whl", hash = "sha256:5cf1176f554abb4fa98cb362aa2b55c500147e4bdbb07e3fda359143e1da0811"},
 ]
+mergedeep = [
+    {file = "mergedeep-1.3.4-py3-none-any.whl", hash = "sha256:70775750742b25c0d8f36c55aed03d24c3384d17c951b3175d898bd778ef0307"},
+    {file = "mergedeep-1.3.4.tar.gz", hash = "sha256:0096d52e9dad9939c3d975a774666af186eda617e6ca84df4c94dec30004f2a8"},
+]
 minrpc = [
     {file = "minrpc-0.1.0-py2.py3-none-any.whl", hash = "sha256:4b6c99f16d982be722e3583df33e4f537311513aaf9434eeab3de27ab95ad9bf"},
     {file = "minrpc-0.1.0.tar.gz", hash = "sha256:ec3e58a506411e8fe62d70c73c3c067eb2227ecc35319763d556ef1b2b76d719"},
@@ -2014,6 +2129,37 @@ numpy = [
     {file = "numpy-1.20.3-cp39-cp39-win_amd64.whl", hash = "sha256:6690080810f77485667bfbff4f69d717c3be25e5b11bb2073e76bb3f578d99b4"},
     {file = "numpy-1.20.3-pp37-pypy37_pp73-manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:4e465afc3b96dbc80cf4a5273e5e2b1e3451286361b4af70ce1adb2984d392f9"},
     {file = "numpy-1.20.3.zip", hash = "sha256:e55185e51b18d788e49fe8305fd73ef4470596b33fc2c1ceb304566b99c71a69"},
+]
+numpy-quaternion = [
+    {file = "numpy-quaternion-2021.4.5.14.42.35.tar.gz", hash = "sha256:a9571532cc16c433e8a532ebcb18e802a9c4d52c30356be2b13fb27f6655905f"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:6cc3031547b5083457ea4db951ed4a1c4b3e44d6af47a7583fecd168c290de43"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp36-cp36m-manylinux1_i686.whl", hash = "sha256:9e99b362126a3bed4cdc3da7c3727e0a9e25ff8b13b66bae30e0f72423c5ad84"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp36-cp36m-manylinux1_x86_64.whl", hash = "sha256:aeba4f1159ce93fff82dca6d1d15b405f8bb5816e123f3f669db767f534bbb07"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp36-cp36m-manylinux2010_i686.whl", hash = "sha256:ce7f70675a88f1079a9ae7d4a2943d87ea50c9eec3a832be91740d2d2bd62dba"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp36-cp36m-manylinux2010_x86_64.whl", hash = "sha256:b86d2aa462c7ee22d53e7b743be8d555f96d130fe362ce839fdb485543a9627a"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp36-cp36m-win32.whl", hash = "sha256:1a9293187460258d49dcbf273d0eb124712da62e3d6855f419d03ed85af81b45"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp36-cp36m-win_amd64.whl", hash = "sha256:b4285b73c820bade48dd1189cfcd9d17be228ad2b70681c416f1b2101fe577f8"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:b56f7dd262e51773e1ea96a647efa94cddf1133a259f0d3fe9b7c34386732e5f"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp37-cp37m-manylinux1_i686.whl", hash = "sha256:b2ef279aebe6e23f58c6daf30c29689fb53a85163de7ae40404b5e58071c93b0"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp37-cp37m-manylinux1_x86_64.whl", hash = "sha256:05e3d42058c725079e004e245590952e1d2064a51e57ca8b73d4b075fcac5297"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp37-cp37m-manylinux2010_i686.whl", hash = "sha256:94943b2ba37011c594cf2b4c2117f53e2b81e425b9d755616807311ba89e6eba"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp37-cp37m-manylinux2010_x86_64.whl", hash = "sha256:dee09f850689ec9c5c25e1d1a532d9477660430b58e8f532249c8e51e6365933"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp37-cp37m-win32.whl", hash = "sha256:8743aacfe19423a0547004975f28b985ec2f5211154be14644d29eb4713197b1"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp37-cp37m-win_amd64.whl", hash = "sha256:750c0251d1f32b8ee142bdf148ea748c549c282bd13ef3bdb8425508894f6b42"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:f24aa0cda6437cee8c84d06009a403a4a3567c22d9f87d26c0d9982d7e3b5320"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp38-cp38-manylinux1_i686.whl", hash = "sha256:672acf0c4550ec638c74d43de92aee801a02825caf9dc0f1226863cac4668ae2"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp38-cp38-manylinux1_x86_64.whl", hash = "sha256:6e28dab12fb468a5ad147c25ba7a90d90a62d0845662f53db4c3deba0d3d1088"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp38-cp38-manylinux2010_i686.whl", hash = "sha256:ed7fc0dd536d212382650b5d23c1510ddaeaed53f719e4470fc501aaf8cd81a5"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp38-cp38-manylinux2010_x86_64.whl", hash = "sha256:4e9acc1055fd3f459287774f4e0f21f512355a3b4e6f5e0ddb041b1eebf4a7c9"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp38-cp38-win32.whl", hash = "sha256:5c2e5073af6ae5b9e9f74d537338ee746b5dcb8d55bf8ef9574b6e7e7b2831d2"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp38-cp38-win_amd64.whl", hash = "sha256:e9a0fc2055203139aa238931d49e8f0d1d339612c654f6317cbcd3e61992448f"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:0eaef8d8eaf6594fc2ea0ac65d6da4c599a57023dd1924b84b62992555594b9d"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp39-cp39-manylinux1_i686.whl", hash = "sha256:8798203bf4b7bb0da7a4b54a6c48a58128fd7964f5369cfdbcae92ef05a4d6bc"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp39-cp39-manylinux1_x86_64.whl", hash = "sha256:2b703c09c7ac8f7d96309dc95aaa7885282268e42ef1e2f62b45771bcf9679c9"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp39-cp39-manylinux2010_i686.whl", hash = "sha256:b503771e3eca43c959fbaa0457b0df4b50c12e04d69784076b6410e9125df7d8"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp39-cp39-manylinux2010_x86_64.whl", hash = "sha256:44c48ee7ea120fe724a48e2029feabc23e7c8508ca1c20f87b327a041fe12eca"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp39-cp39-win32.whl", hash = "sha256:7bd02f8445dcd21c05f6d2db7c0faa9494def35673f29d5a37ab9a1d3fdd0144"},
+    {file = "numpy_quaternion-2021.4.5.14.42.35-cp39-cp39-win_amd64.whl", hash = "sha256:5aab622b5ac62f5ea1b92a70eaaac73cfda3ded8f200600c121b45356d69066b"},
 ]
 packaging = [
     {file = "packaging-20.9-py2.py3-none-any.whl", hash = "sha256:67714da7f7bc052e064859c05c595155bd1ee9f69f76557e21f051443c20947a"},
@@ -2153,6 +2299,7 @@ pyarrow = [
     {file = "pyarrow-4.0.1-cp39-cp39-win_amd64.whl", hash = "sha256:a968375c66e505f72b421f5864a37f51aad5da61b6396fa283f956e9f2b2b923"},
     {file = "pyarrow-4.0.1.tar.gz", hash = "sha256:11517f0b4f4acbab0c37c674b4d1aad3c3dfea0f6b1bb322e921555258101ab3"},
 ]
+pybdsim = []
 pybtex = [
     {file = "pybtex-0.24.0-py2.py3-none-any.whl", hash = "sha256:e1e0c8c69998452fea90e9179aa2a98ab103f3eed894405b7264e517cc2fcc0f"},
     {file = "pybtex-0.24.0.tar.gz", hash = "sha256:818eae35b61733e5c007c3fcd2cfb75ed1bc8b4173c1f70b56cc4c0802d34755"},
@@ -2168,6 +2315,14 @@ pycparser = [
 pygments = [
     {file = "Pygments-2.9.0-py3-none-any.whl", hash = "sha256:d66e804411278594d764fc69ec36ec13d9ae9147193a1740cd34d272ca383b8e"},
     {file = "Pygments-2.9.0.tar.gz", hash = "sha256:a18f47b506a429f6f4b9df81bb02beab9ca21d0a5fee38ed15aef65f0545519f"},
+]
+pymad8 = [
+    {file = "pymad8-1.6.0-py3-none-any.whl", hash = "sha256:dd2481ccd75e02bed763271fa338dcdd21663d2c8eb8b4ded44f7347c8a61368"},
+    {file = "pymad8-1.6.0.tar.gz", hash = "sha256:be2ce89624ea0d523519456126cb3be1c9ac82f9b207f936270a382371843454"},
+]
+pymadx = [
+    {file = "pymadx-1.8.1-py3-none-any.whl", hash = "sha256:23f01b7b332a05487591cc50dd2c00d9effde6007ec3ce3d3958f4bcc2c38327"},
+    {file = "pymadx-1.8.1.tar.gz", hash = "sha256:b056d821e49be3fe7b2be9674c78972151a65b83e8e91318569a8ef68d1e57ee"},
 ]
 pyparsing = [
     {file = "pyparsing-2.4.7-py2.py3-none-any.whl", hash = "sha256:ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"},
@@ -2191,6 +2346,10 @@ python-dateutil = [
 python-slugify = [
     {file = "python-slugify-5.0.2.tar.gz", hash = "sha256:f13383a0b9fcbe649a1892b9c8eb4f8eab1d6d84b84bb7a624317afa98159cab"},
     {file = "python_slugify-5.0.2-py2.py3-none-any.whl", hash = "sha256:6d8c5df75cd4a7c3a2d21e257633de53f52ab0265cd2d1dc62a730e8194a7380"},
+]
+pytransport = [
+    {file = "pytransport-1.4.0-py3-none-any.whl", hash = "sha256:1e98f97ab1758074b973639f651eefc6d45e3b0dd6b685103768e7ebc79eadb8"},
+    {file = "pytransport-1.4.0.tar.gz", hash = "sha256:b0598fa67fb274ec3201a332842dbe56632bdf3327b56c66c52a8243a2ae3884"},
 ]
 pytz = [
     {file = "pytz-2021.1-py2.py3-none-any.whl", hash = "sha256:eb10ce3e7736052ed3623d49975ce333bcd712c7bb19a58b9e2089d4057d0798"},
