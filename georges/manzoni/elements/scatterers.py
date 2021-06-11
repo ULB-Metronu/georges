@@ -17,11 +17,17 @@ class MaterialElement(_ManzoniElement):
     INTEGRATOR = None
 
     @property
+    def material(self):
+        if isinstance(self.MATERIAL, str):
+            return getattr(materials, self.MATERIAL.capitalize())
+        return self.MATERIAL
+
+    @property
     def degraded_energy(self):
         if self.L.magnitude == 0.0:
             return self.KINETIC_ENERGY
         else:
-            return (self.MATERIAL.stopping(self.L, self.KINETIC_ENERGY)).ekin
+            return (self.material.stopping(self.L, self.KINETIC_ENERGY)).ekin
 
     @property
     def cache(self) -> list:
@@ -42,7 +48,7 @@ class Scatterer(MaterialElement):
 
     @property
     def parameters(self) -> List[float]:
-        fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY,
+        fe = self.material.scattering(kinetic_energy=self.KINETIC_ENERGY,
                                       thickness=self.L,
                                       compute_a1=False,
                                       compute_a2=False)
@@ -55,10 +61,9 @@ class Scatterer(MaterialElement):
                   beam_out: _np.ndarray = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
-        if self.MATERIAL is materials.Vacuum:
+        if self.material is materials.Vacuum:
             _np.copyto(dst=beam_out, src=beam_in, casting='no')
             return beam_in, beam_out
-
         a0 = self.cache[0]
 
         beam_out[:, 0] = beam_in[:, 0]
@@ -85,14 +90,14 @@ class Degrader(MaterialElement):
 
     @property
     def parameters(self) -> List[float]:
-        fe = self.MATERIAL.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
+        fe = self.material.scattering(kinetic_energy=self.KINETIC_ENERGY, thickness=self.L)
         return [
             self.L.m_as('m'),
             fe['A'][0],
             fe['A'][1],
             fe['A'][2],
-            self.MATERIAL.energy_dispersion(energy=self.degraded_energy),
-            self.MATERIAL.losses(energy=self.degraded_energy)
+            self.material.energy_dispersion(energy=self.degraded_energy),
+            self.material.losses(energy=self.degraded_energy)
         ]
 
     def propagate(self,
@@ -128,7 +133,7 @@ class Degrader(MaterialElement):
         beam_out = beam_out.dot(matrix.T)
 
         # Interactions
-        if self.MATERIAL is not materials.Vacuum:
+        if self.material is not materials.Vacuum:
             beam_out += nprandom.multivariate_normal(
                 [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                 _np.array(
