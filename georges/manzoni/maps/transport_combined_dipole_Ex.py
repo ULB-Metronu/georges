@@ -1,13 +1,17 @@
 from numba import njit 
 import numpy as np 
 from numpy import cos, sin, cosh, sinh, sqrt 
+from numba.typed import List as nList
 
-def compute_transport_combined_dipole_matrix(element_parameters: list) -> np.ndarray:
-    L: float = element_parameters[0] 
-    alpha: float = element_parameters[1] 
-    h = alpha / L 
-    K1: float = element_parameters[2] 
-    R = np.zeros((6, 6))
+def compute_transport_combined_dipole_Ex_matrix(element_parameters: nList) -> np.ndarray:
+    L: float = element_parameters[0]
+    alpha: float = element_parameters[1]  
+    K1: float = element_parameters[2]  
+    d: float = element_parameters[len(element_parameters)-1]
+    h = alpha / L
+    h = h/(1+d) 
+    K1 = K1/(1+d) 
+    R = np.zeros((6,6))
     R[4,4] = 1
     R[5,5] = 1
     if (h==0):
@@ -89,11 +93,15 @@ def compute_transport_combined_dipole_matrix(element_parameters: list) -> np.nda
                 R[3,3] = cos(L*sqrt(-K1)) 
     return R 
 
-def compute_transport_combined_dipole_tensor(element_parameters: list) -> np.ndarray:
+def compute_transport_combined_dipole_Ex_tensor(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0] 
     alpha: float = element_parameters[1] 
     h = alpha / L 
     K1: float = element_parameters[2] 
+    K2: float = element_parameters[3]
+    d: float = element_parameters[len(element_parameters)-1] 
+    h = h/(1+d) 
+    K1 = K1/(1+d) 
     T = np.zeros((6,6,6))
     if (h==0):
         if (K1 > 0):
@@ -138,34 +146,34 @@ def compute_transport_combined_dipole_tensor(element_parameters: list) -> np.nda
             T[3,3,4] = 1 - cos(L*h) 
         if (K1 != 0):
             if (h**2 + K1 == 0):
-                T[0,0,0] = -L**2*h*(2*K1 + h**2)/2 
-                T[0,0,1] = -L**3*h*(2*K1 + h**2)/3 
-                T[0,0,4] = L**2*(-K1*L**2*h**2/6 + K1/2 - L**2*h**4/12 + h**2) 
-                T[0,1,1] = L**2*h*(-2*K1*L**2 - L**2*h**2 + 3)/12 
-                T[0,1,4] = L**3*(K1*L**2*h**2/10 + K1/6 + L**2*h**4/20 + h**2/2) 
-                T[0,2,2] = h*sin(L*sqrt(-K1))**2/4 
-                T[0,3,3] = -L**2*h/4 
-                T[0,4,4] = L**2*h*(2*K1*L**4*h**2 + 5*K1*L**2 + L**4*h**4 + 15*L**2*h**2 - 60)/120 
-                T[1,0,0] = -L*h*(2*K1 + h**2) 
-                T[1,0,1] = -L**2*h*(2*K1 + h**2) 
-                T[1,0,4] = L*(-2*K1*L**2*h**2 + 3*K1 - L**2*h**4 + 6*h**2)/3 
-                T[1,1,1] = L*h*(-4*K1*L**2 - 2*L**2*h**2 + 3)/6 
-                T[1,1,4] = L**2*(2*K1*L**2*h**2 + 2*K1 + L**2*h**4 + 6*h**2)/4 
-                T[1,2,2] = h*sqrt(-K1)*sin(2*L*sqrt(-K1))/4 
-                T[1,3,3] = -L*h/2 
-                T[1,4,4] = L*h*(K1*L**4*h**2/10 + K1*L**2/6 + L**4*h**4/20 + L**2*h**2/2 - 1) 
-                T[2,0,2] = -L*h*sqrt(-K1)*sin(L*sqrt(-K1)) 
-                T[2,0,3] = -L*h*cos(L*sqrt(-K1)) + h*sin(L*sqrt(-K1))/sqrt(-K1) 
-                T[2,1,2] = -L**2*h*sqrt(-K1)*sin(L*sqrt(-K1))/2 
-                T[2,1,3] = L**2*h*cos(L*sqrt(-K1))/2 
-                T[2,2,4] = -L*sqrt(-K1)*(L**2*h**2 - 3)*sin(L*sqrt(-K1))/6 
-                T[2,3,4] = -L**3*h**2*sqrt(-K1)*sin(L*sqrt(-K1))/6 - L**2*h**2*cos(L*sqrt(-K1))/4 + L**2*h**2*sin(L*sqrt(-K1))/(4*sqrt(-K1)) + L*h**2*sin(L*sqrt(-K1))/(4*sqrt(-K1)) - L*cos(L*sqrt(-K1))/2 - h**2*sin(L*sqrt(-K1))/(4*(-K1)**(3/2)) + sin(L*sqrt(-K1))/(2*sqrt(-K1)) - L*h**2*cos(L*sqrt(-K1))/(4*K1) 
-                T[3,0,2] = h*(K1*L*cos(L*sqrt(-K1)) - sqrt(-K1)*sin(L*sqrt(-K1))) 
-                T[3,0,3] = L*h*sqrt(-K1)*sin(L*sqrt(-K1)) 
-                T[3,1,2] = L*h*(K1*L*cos(L*sqrt(-K1)) - 2*sqrt(-K1)*sin(L*sqrt(-K1)))/2 
-                T[3,1,3] = L*h*(-L*sqrt(-K1)*sin(L*sqrt(-K1)) + 2*cos(L*sqrt(-K1)))/2 
-                T[3,2,4] = K1*L*(L**2*h**2 - 3)*cos(L*sqrt(-K1))/6 - L**2*h**2*sqrt(-K1)*sin(L*sqrt(-K1))/3 - sqrt(-K1)*(L**2*h**2 - 3)*sin(L*sqrt(-K1))/6 
-                T[3,3,4] = (3*K1*L*h**2*sin(L*sqrt(-K1)) - 3*K1*h**2*(2*L + 1)*sin(L*sqrt(-K1)) - L*(-K1)**(3/2)*(-2*K1*L**2*h**2*cos(L*sqrt(-K1)) + 3*L*h**2*sqrt(-K1)*sin(L*sqrt(-K1)) - 3*L*h**2*cos(L*sqrt(-K1)) + 3*h**2*cos(L*sqrt(-K1)) - 6*sqrt(-K1)*sin(L*sqrt(-K1))))/(12*(-K1)**(3/2)) 
+               T[0,0,0] = -L**2*h*(2*K1 + h**2)/2 
+               T[0,0,1] = -L**3*h*(2*K1 + h**2)/3 
+               T[0,0,4] = L**2*(-K1*L**2*h**2/6 + K1/2 - L**2*h**4/12 + h**2) 
+               T[0,1,1] = L**2*h*(-2*K1*L**2 - L**2*h**2 + 3)/12 
+               T[0,1,4] = L**3*(K1*L**2*h**2/10 + K1/6 + L**2*h**4/20 + h**2/2) 
+               T[0,2,2] = h*sin(L*sqrt(-K1))**2/4 
+               T[0,3,3] = -L**2*h/4 
+               T[0,4,4] = L**2*h*(2*K1*L**4*h**2 + 5*K1*L**2 + L**4*h**4 + 15*L**2*h**2 - 60)/120 
+               T[1,0,0] = -L*h*(2*K1 + h**2) 
+               T[1,0,1] = -L**2*h*(2*K1 + h**2) 
+               T[1,0,4] = L*(-2*K1*L**2*h**2 + 3*K1 - L**2*h**4 + 6*h**2)/3 
+               T[1,1,1] = L*h*(-4*K1*L**2 - 2*L**2*h**2 + 3)/6 
+               T[1,1,4] = L**2*(2*K1*L**2*h**2 + 2*K1 + L**2*h**4 + 6*h**2)/4 
+               T[1,2,2] = h*sqrt(-K1)*sin(2*L*sqrt(-K1))/4 
+               T[1,3,3] = -L*h/2 
+               T[1,4,4] = L*h*(K1*L**4*h**2/10 + K1*L**2/6 + L**4*h**4/20 + L**2*h**2/2 - 1) 
+               T[2,0,2] = -L*h*sqrt(-K1)*sin(L*sqrt(-K1)) 
+               T[2,0,3] = -L*h*cos(L*sqrt(-K1)) + h*sin(L*sqrt(-K1))/sqrt(-K1) 
+               T[2,1,2] = -L**2*h*sqrt(-K1)*sin(L*sqrt(-K1))/2 
+               T[2,1,3] = L**2*h*cos(L*sqrt(-K1))/2 
+               T[2,2,4] = -L*sqrt(-K1)*(L**2*h**2 - 3)*sin(L*sqrt(-K1))/6 
+               T[2,3,4] = -L**3*h**2*sqrt(-K1)*sin(L*sqrt(-K1))/6 - L**2*h**2*cos(L*sqrt(-K1))/4 + L**2*h**2*sin(L*sqrt(-K1))/(4*sqrt(-K1)) + L*h**2*sin(L*sqrt(-K1))/(4*sqrt(-K1)) - L*cos(L*sqrt(-K1))/2 - h**2*sin(L*sqrt(-K1))/(4*(-K1)**(3/2)) + sin(L*sqrt(-K1))/(2*sqrt(-K1)) - L*h**2*cos(L*sqrt(-K1))/(4*K1) 
+               T[3,0,2] = h*(K1*L*cos(L*sqrt(-K1)) - sqrt(-K1)*sin(L*sqrt(-K1))) 
+               T[3,0,3] = L*h*sqrt(-K1)*sin(L*sqrt(-K1)) 
+               T[3,1,2] = L*h*(K1*L*cos(L*sqrt(-K1)) - 2*sqrt(-K1)*sin(L*sqrt(-K1)))/2 
+               T[3,1,3] = L*h*(-L*sqrt(-K1)*sin(L*sqrt(-K1)) + 2*cos(L*sqrt(-K1)))/2 
+               T[3,2,4] = K1*L*(L**2*h**2 - 3)*cos(L*sqrt(-K1))/6 - L**2*h**2*sqrt(-K1)*sin(L*sqrt(-K1))/3 - sqrt(-K1)*(L**2*h**2 - 3)*sin(L*sqrt(-K1))/6 
+               T[3,3,4] = (3*K1*L*h**2*sin(L*sqrt(-K1)) - 3*K1*h**2*(2*L + 1)*sin(L*sqrt(-K1)) - L*(-K1)**(3/2)*(-2*K1*L**2*h**2*cos(L*sqrt(-K1)) + 3*L*h**2*sqrt(-K1)*sin(L*sqrt(-K1)) - 3*L*h**2*cos(L*sqrt(-K1)) + 3*h**2*cos(L*sqrt(-K1)) - 6*sqrt(-K1)*sin(L*sqrt(-K1))))/(12*(-K1)**(3/2)) 
             if (h**2 + K1 > 0):
                 if (K1 > 0):
                     T[0,0,0] = h*(4*K1*cos(L*sqrt(K1 + h**2))**2 + 4*K1*cos(L*sqrt(K1 + h**2)) - 7*K1 + 2*h**2*cos(L*sqrt(K1 + h**2))**2 + 2*h**2*cos(L*sqrt(K1 + h**2)) - 3*h**2 + (K1 + h**2)*cos(L*sqrt(K1 + h**2))**2 - 2*(K1 + h**2)*cos(L*sqrt(K1 + h**2)))/(6*(K1 + h**2)) 

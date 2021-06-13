@@ -3,10 +3,11 @@ import numpy as np
 from numpy import cos, sin, cosh, sinh, sqrt
 from numba.typed import List as nList
 
-def compute_transport_multipole_matrix(element_parameters: nList) -> np.ndarray:
+def compute_transport_multipole_Ex_matrix(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0] 
     K1: float = element_parameters[1] 
-    K2: float = element_parameters[2] 
+    d: float = element_parameters[3] 
+    K1 = K1/(1+d)  
     R = np.zeros((6,6))
     R[4,4] = 1
     R[5,5] = 1
@@ -37,10 +38,13 @@ def compute_transport_multipole_matrix(element_parameters: nList) -> np.ndarray:
         R[3,3] = cos(L*sqrt(-K1)) 
     return R 
 
-def compute_transport_multipole_tensor(element_parameters: nList) -> np.ndarray:
+def compute_transport_multipole_Ex_tensor(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0] 
     K1: float = element_parameters[1] 
     K2: float = element_parameters[2] 
+    d: float = element_parameters[3] 
+    K1 = K1/(1+d) 
+    K2 = K2/(1+d) 
     T = np.zeros((6,6,6))
     if (K1 == 0):
         T[0,0,0] = -K2*L**2/2 
