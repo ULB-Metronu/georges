@@ -365,7 +365,7 @@ def track_madx_kicker(b1, b2, element_parameters: nList, global_parameters: nLis
 
     # Half drift
     track_madx_drift(b1, b2, element_parameters[0:1], global_parameters)
-    b1_copy = b1
+    b1_copy = b1.copy()
 
     # Kick
     for i in prange(b1.shape[0]):
