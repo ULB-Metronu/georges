@@ -36,6 +36,20 @@ class MaterialElement(_ManzoniElement):
             self._cache = self.parameters
         return self._cache
 
+    @property
+    def beta(self):
+        return Kinematics(self.KINETIC_ENERGY, kinetic=True).beta
+
+    @staticmethod
+    def pseudo_aperture_check(beam, beta):
+        px = beam[:, 1]
+        py = beam[:, 3]
+        pt = beam[:, 5]
+        condition = 1 + 2 * pt / beta + pt ** 2 - px ** 2 - py ** 2 >= 0
+        checked_beam = _np.compress(condition, beam, axis=0)
+
+        return checked_beam
+
 
 class Scatterer(MaterialElement):
     PARAMETERS = {
@@ -75,22 +89,7 @@ class Scatterer(MaterialElement):
         beam_out[:, 1] = beam_in[:, 1] + nprandom.normal(0.0, a0, size=beam_in.shape[0])
         beam_out[:, 3] = beam_in[:, 3] + nprandom.normal(0.0, a0, size=beam_in.shape[0])
 
-        beta = Kinematics(self.KINETIC_ENERGY, kinetic=True).beta
-
-        # This built-in function is used to remove particles with too big px and py
-        # This is necessary to always guarantee the paraxial approximation
-        # Applied at the exit of degraders and scatterers
-        # TO-DO: be more generic
-        def pseudo_aperture_check(beam):
-            px = beam[:, 1]
-            py = beam[:, 3]
-            pt = beam[:, 5]
-            condition = 1 + 2 * pt / beta + pt ** 2 - px ** 2 - py ** 2 >= 0
-            checked_beam = _np.compress(beam, condition, axis=0)
-
-            return checked_beam
-
-        beam_out = pseudo_aperture_check(beam_out)
+        beam_out = self.pseudo_aperture_check(beam_out, self.beta)
 
         return beam_in, beam_out
 
@@ -166,22 +165,7 @@ class Degrader(MaterialElement):
                 ),
                 int(beam_out.shape[0]))
 
-        beta = Kinematics(self.KINETIC_ENERGY, kinetic=True).beta
-
-        # This built-in function is used to remove particles with too big px and py
-        # This is necessary to always guarantee the paraxial approximation
-        # Applied at the exit of degraders and scatterers
-        # TO-DO: be more generic
-        def pseudo_aperture_check(beam):
-            px = beam[:, 1]
-            py = beam[:, 3]
-            pt = beam[:, 5]
-            condition = 1 + 2 * pt / beta + pt ** 2 - px ** 2 - py ** 2 >= 0
-            checked_beam = _np.compress(condition, beam, axis=0)
-
-            return checked_beam
-
-        beam_out = pseudo_aperture_check(beam_out)
+        beam_out = self.pseudo_aperture_check(beam_out, self.beta)
 
         return beam_in, beam_out
 
