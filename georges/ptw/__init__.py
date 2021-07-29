@@ -1,3 +1,1 @@
-from .analyze_dose_profiles import BraggPeakAnalysis, \
-                                   SpreadOutBraggPeakAnalysis, \
-                                   LateralProfileAnalysis
+from .ptw import BraggPeakAnalysis, SpreadOutBraggPeakAnalysis, LateralProfileAnalysis
