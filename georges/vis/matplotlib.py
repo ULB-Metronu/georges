@@ -9,8 +9,7 @@ from numpy import linspace
 import pandas as _pd
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from matplotlib.ticker import *
-from matplotlib.ticker import NullFormatter
+from matplotlib.ticker import FixedLocator, MultipleLocator, NullFormatter, FixedFormatter
 
 from lmfit.models import GaussianModel
 
@@ -50,14 +49,11 @@ palette['X_MADX'] = palette['cyan']
 palette['Y_MADX'] = palette['orange']
 palette['X_G4BL'] = palette['magenta']
 palette['Y_G4BL'] = palette['green']
+palette['Bend'] = palette['blue']
 palette['Quadrupole'] = palette['red']
 palette['Sextupole'] = palette['green']
 palette['Octupole'] = palette['green']
 palette['Multipole'] = palette['green']
-
-# Variables required for the old aperture.py
-STYLE_BEND_HATCH = '/'
-STYLE_QUAD_HATCH = ''
 
 
 class ManzoniMatplotlibArtist(_MatplotlibArtist):
@@ -171,7 +167,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
     @staticmethod
     def beamline_get_ticks_locations(o):
-        return list(o['AT_CENTER'].values)
+        return list(o['AT_CENTER'].apply(lambda e: e.m_as('m')).values)
 
     @staticmethod
     def beamline_get_ticks_labels(o):
@@ -184,8 +180,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax2 = ax.twinx()
         ax2.set_yticks([])
         ax2.set_ylim([0, 1])
-        ax2.hlines(offset, 0, bl['L'].sum().m_as('m'), clip_on=False, colors='black', lw=1)
-        for i, e in bl.query("CLASS=='Sbend' or CLASS=='Rbend'").iterrows():
+        ax2.hlines(offset, 0, bl.iloc[-1]['AT_EXIT'].m_as('m'), clip_on=False, colors='black', lw=1)
+        for i, e in bl.query("CLASS=='SBend' or CLASS=='RBend'").iterrows():
             if e['ANGLE'] > 0:
                 fc = 'r'
             elif e['ANGLE'] < 0:
@@ -200,11 +196,11 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 focusing = 0.0
             ax2.add_patch(
                 patches.Rectangle(
-                    (e['AT_ENTRY'], offset - 0.05 + focusing * 0.02),
+                    (e['AT_ENTRY'].m_as('m'), offset - 0.05 + focusing * 0.02),
                     e['L'].m_as('m'),
                     .1,
                     hatch='',
-                    facecolor='blue',
+                    facecolor=palette['Bend'],
                     clip_on=False,
                 )
             )
@@ -212,7 +208,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
-                    (e['AT_ENTRY'], offset - 0.05),
+                    (e['AT_ENTRY'].m_as('m'), offset - 0.05),
                     e['L'].m_as('m'),
                     .1,
                     hatch='',
@@ -225,7 +221,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
-                    (e['AT_ENTRY'], offset - 0.05),
+                    (e['AT_ENTRY'].m_as('m'), offset - 0.05),
                     e['L'].m_as('m'),
                     .1,
                     hatch='',
@@ -238,7 +234,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
-                    (e['AT_ENTRY'], offset - 0.05),
+                    (e['AT_ENTRY'].m_as('m'), offset - 0.05),
                     e['L'].m_as('m'),
                     .1,
                     hatch='',
@@ -251,7 +247,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
-                    (e['AT_ENTRY'], offset - 0.05),
+                    (e['AT_ENTRY'].m_as('m'), offset - 0.05),
                     e['L'].m_as('m'),
                     .1,
                     hatch='',
@@ -807,7 +803,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
     def draw_chamber(ax, e):
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], (e['APERTURE_UP'])),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), (e['APERTURE_UP'])),  # (x,y)
                 e['L'].m_as('m'),  # width
                 1000 * e['CHAMBER_UP'],  # height
                 hatch='', facecolor=palette['base01']
@@ -815,7 +811,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         )
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], -e['APERTURE_DOWN']),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), -e['APERTURE_DOWN']),  # (x,y)
                 e['L'].m_as('m'),  # width
                 -1000 * e['CHAMBER_UP'],  # height
                 hatch='', facecolor=palette['base01']
@@ -825,19 +821,19 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
     def draw_quad(self, ax, e):
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
                 e['L'].m_as('m'),  # width
-                100,  # height
-                hatch=STYLE_QUAD_HATCH, facecolor=palette['quad']
+                100,
+                facecolor=palette['Quadrupole']
             )
         )
 
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], -e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), -e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
                 e['L'].m_as('m'),  # width
-                -100,  # height
-                hatch=STYLE_QUAD_HATCH, facecolor=palette['quad']
+                -100,
+                facecolor=palette['Quadrupole']
             )
         )
         self.draw_chamber(ax, e)
@@ -850,7 +846,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         #    return
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], e['APERTURE_UP']),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), e['APERTURE_UP']),  # (x,y)
                 e['L'].m_as('m'),  # width
                 100,  # height
                 facecolor=palette['coll']
@@ -859,7 +855,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], -e['APERTURE_DOWN']),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), -e['APERTURE_DOWN']),  # (x,y)
                 e['L'].m_as('m'),  # width
                 -100,  # height
                 facecolor=palette['coll']
@@ -870,19 +866,19 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         tmp = e['APERTURE_UP'] + e['CHAMBER_UP']
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], tmp if tmp < 55 else 55),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), tmp if tmp < 55 else 55),  # (x,y)
                 e['L'].m_as('m'),  # width
                 100,  # height
-                hatch=STYLE_BEND_HATCH, facecolor=palette['bend']
+                facecolor=palette['Bend']
             )
         )
         tmp = -e['APERTURE_DOWN'] - e['CHAMBER_UP']
         ax.add_patch(
             patches.Rectangle(
-                (e['AT_ENTRY'], tmp if abs(tmp) < 55 else -55),  # (x,y)
+                (e['AT_ENTRY'].m_as('m'), tmp if abs(tmp) < 55 else -55),  # (x,y)
                 e['L'].m_as('m'),  # width
-                -100,  # height
-                hatch=STYLE_BEND_HATCH, facecolor=palette['bend']
+                -100,
+                facecolor=palette['Bend']
             )
         )
         self.draw_chamber(ax, e)
@@ -902,8 +898,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
         if 'APERTURE' not in bl:
             return
-
+        bl = bl.query("KEYWORD != 'MARKER' and KEYWORD != 'DRIFT'") # Marker doesn't have aperture
         planes = kwargs.get('plane', 'both')
+
+        # Set the y aperture for circular apertype
+        for idx in bl.query("APERTYPE == 'CIRCULAR'").index:
+            bl.loc[idx, 'APERTURE'] = _np.array([bl.loc[idx, 'APERTURE'][0], bl.loc[idx, 'APERTURE'][0]], dtype=object)
 
         if planes == 'X':
             index = 0
@@ -928,8 +928,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         )
 
         bl.query("CLASS == 'Quadrupole'").apply(lambda e: self.draw_quad(ax, e), axis=1)
-        bl.query("CLASS == 'Sbend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
-        bl.query("CLASS == 'Rbend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
+        bl.query("CLASS == 'SBend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
+        bl.query("CLASS == 'RBend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
         bl.query("CLASS == 'RectangularCollimator'").apply(lambda e: self.draw_coll(ax, e, planes), axis=1)
         bl.query("CLASS == 'CircularCollimator'").apply(lambda e: self.draw_coll(ax, e, planes), axis=1)
 
