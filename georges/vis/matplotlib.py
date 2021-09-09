@@ -40,20 +40,18 @@ PALETTE = {
 palette = PALETTE['solarized']
 
 # Define "logical" colors
-palette['quad'] = palette['blue']
-palette['bend'] = palette['red']
-palette['coll'] = palette['yellow']
 palette['X'] = palette['cyan']
 palette['Y'] = palette['orange']
 palette['X_MADX'] = palette['cyan']
 palette['Y_MADX'] = palette['orange']
 palette['X_G4BL'] = palette['magenta']
 palette['Y_G4BL'] = palette['green']
-palette['Bend'] = palette['blue']
-palette['Quadrupole'] = palette['red']
-palette['Sextupole'] = palette['green']
-palette['Octupole'] = palette['green']
-palette['Multipole'] = palette['green']
+palette['bend'] = palette['blue']
+palette['quadrupole'] = palette['red']
+palette['sextupole'] = palette['green']
+palette['octupole'] = palette['green']
+palette['multipole'] = palette['green']
+palette['coll'] = palette['yellow']
 
 
 class ManzoniMatplotlibArtist(_MatplotlibArtist):
@@ -181,7 +179,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax2.set_yticks([])
         ax2.set_ylim([0, 1])
         ax2.hlines(offset, 0, bl.iloc[-1]['AT_EXIT'].m_as('m'), clip_on=False, colors='black', lw=1)
-        for i, e in bl.query("CLASS=='SBend' or CLASS=='RBend'").iterrows():
+        for i, e in bl.query("CLASS=='sbend' or CLASS=='rbend'").iterrows():
             if e['ANGLE'] > 0:
                 fc = 'r'
             elif e['ANGLE'] < 0:
@@ -200,11 +198,11 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                     e['L'].m_as('m'),
                     .1,
                     hatch='',
-                    facecolor=palette['Bend'],
+                    facecolor=palette['bend'],
                     clip_on=False,
                 )
             )
-        for i, e in bl.query("CLASS=='Sextupole' or CLASS=='Quadrupole' or CLASS=='Multipole'").iterrows():
+        for i, e in bl.query("CLASS=='sextupole' or CLASS=='quadrupole' or CLASS=='multipole'").iterrows():
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
@@ -217,7 +215,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                     clip_on=False,
                 )
             )
-        for i, e in bl.query("CLASS=='RectangularCollimator'").iterrows():
+        for i, e in bl.query("CLASS=='rectangularcollimator'").iterrows():
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
@@ -230,7 +228,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                     clip_on=False,
                 )
             )
-        for i, e in bl.query("CLASS=='Degrader'").iterrows():
+        for i, e in bl.query("CLASS=='degrader'").iterrows():
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
@@ -243,7 +241,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                     clip_on=False,
                 )
             )
-        for i, e in bl.query("CLASS=='CircularCollimator'").iterrows():
+        for i, e in bl.query("CLASS=='circularcollimator'").iterrows():
             fc = 'g'
             ax2.add_patch(
                 patches.Rectangle(
@@ -262,6 +260,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         bl_short = bl.reset_index()
         bl_short = bl_short[[not a for a in bl_short['NAME'].str.contains("DRIFT")]]
         bl_short = bl_short.set_index("NAME")
+        bl_short['CLASS'] = bl_short['CLASS'].apply(lambda e: e.lower())
 
         ticks_locations_short = self.beamline_get_ticks_locations(bl_short)
         ticks_labels_short = self.beamline_get_ticks_labels(bl_short)
@@ -270,7 +269,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         ax.tick_params(axis='x', labelsize=8)
         ax.xaxis.set_major_locator(FixedLocator(ticks_locations_short))
 
-        ax.set_xlim([ticks_locations[0], ticks_locations[-1]])
+        ax.set_xlim([bl_short.iloc[0]['AT_ENTRY'].m_as('m'), bl_short.iloc[-1]['AT_EXIT'].m_as('m')])
         ax.get_xaxis().set_tick_params(direction='out')
         plt.setp(ax.xaxis.get_majorticklabels(), rotation=-45)
         ax.yaxis.set_major_locator(MultipleLocator(10))
@@ -824,7 +823,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 (e['AT_ENTRY'].m_as('m'), e['APERTURE_UP'] + e['CHAMBER_UP']),  # (x,y)
                 e['L'].m_as('m'),  # width
                 100,
-                facecolor=palette['Quadrupole']
+                facecolor=palette['quadrupole']
             )
         )
 
@@ -833,7 +832,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 (e['AT_ENTRY'].m_as('m'), -e['APERTURE_DOWN'] - e['CHAMBER_UP']),  # (x,y)
                 e['L'].m_as('m'),  # width
                 -100,
-                facecolor=palette['Quadrupole']
+                facecolor=palette['quadrupole']
             )
         )
         self.draw_chamber(ax, e)
@@ -869,7 +868,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 (e['AT_ENTRY'].m_as('m'), tmp if tmp < 55 else 55),  # (x,y)
                 e['L'].m_as('m'),  # width
                 100,  # height
-                facecolor=palette['Bend']
+                facecolor=palette['bend']
             )
         )
         tmp = -e['APERTURE_DOWN'] - e['CHAMBER_UP']
@@ -878,7 +877,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 (e['AT_ENTRY'].m_as('m'), tmp if abs(tmp) < 55 else -55),  # (x,y)
                 e['L'].m_as('m'),  # width
                 -100,
-                facecolor=palette['Bend']
+                facecolor=palette['bend']
             )
         )
         self.draw_chamber(ax, e)
@@ -927,11 +926,11 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             lambda a: a
         )
 
-        bl.query("CLASS == 'Quadrupole'").apply(lambda e: self.draw_quad(ax, e), axis=1)
-        bl.query("CLASS == 'SBend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
-        bl.query("CLASS == 'RBend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
-        bl.query("CLASS == 'RectangularCollimator'").apply(lambda e: self.draw_coll(ax, e, planes), axis=1)
-        bl.query("CLASS == 'CircularCollimator'").apply(lambda e: self.draw_coll(ax, e, planes), axis=1)
+        bl.query("CLASS == 'quadrupole'").apply(lambda e: self.draw_quad(ax, e), axis=1)
+        bl.query("CLASS == 'sbend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
+        bl.query("CLASS == 'rbend'").apply(lambda e: self.draw_bend(ax, e), axis=1)
+        bl.query("CLASS == 'rectangularcollimator'").apply(lambda e: self.draw_coll(ax, e, planes), axis=1)
+        bl.query("CLASS == 'circularcollimator'").apply(lambda e: self.draw_coll(ax, e, planes), axis=1)
 
     # THIS IS THE OLD bpm.py
     @staticmethod
@@ -1187,7 +1186,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                                 verticalalignment='bottom',
                                 clip_on=True
                                 )
-                if row['CLASS'] == 'QUADRUPOLE':
+                if row['CLASS'] == 'quadrupole':
                     ax.add_patch(
                         patches.Rectangle(
                             (row['X'] / 1000, row['Y'] / 1000),  # (x,y)
@@ -1197,7 +1196,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                             edgecolor='#268bd2'
                         )
                     )
-                elif row['CLASS'] == 'RBEND' or row['CLASS'] == 'SBEND':
+                elif row['CLASS'] == 'rbend' or row['CLASS'] == 'sbend':
                     ax.add_patch(
                         patches.Rectangle(
                             (row['X'] / 1000, row['Y'] / 1000),  # (x,y)
