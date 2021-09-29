@@ -9,7 +9,7 @@ import numpy as _np
 from numba.typed import List as nList
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
-from ..integrators import IntegratorType, MadXIntegrator
+from ..integrators import IntegratorType, MadXIntegrator, TransportSecondOrderTaylorIntegrator, TransportFirstOrderTaylorIntegrator, TransportSecondOrderTaylorIntegratorExact, TransportFirstOrderTaylorIntegratorExact
 from ..apertures import circular_aperture_check, \
     rectangular_aperture_check, \
     elliptical_aperture_check, \

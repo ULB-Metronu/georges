@@ -3,10 +3,13 @@ import numpy as np
 from numpy import cos, sin, cosh, sinh, sqrt 
 from numba.typed import List as nList
 
-def compute_transport_sextupole_matrix(element_parameters: nList) -> np.ndarray:
+def compute_transport_sextupole_Ex_matrix(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0] 
     K2: float = element_parameters[1] 
+    d: float = element_parameters[2] 
+    K2 + K2/(1+d) 
     R = np.zeros(6,6)
+    
     R[0,0] = 1 
     R[0,1] = L 
     R[1,1] = 1 
@@ -17,9 +20,11 @@ def compute_transport_sextupole_matrix(element_parameters: nList) -> np.ndarray:
     R[5,5] = 1
     return R 
 
-def compute_transport_sextupole_tensor(element_parameters: nList) -> np.ndarray:
+def compute_transport_sextupole_Ex_tensor(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0] 
     K2: float = element_parameters[1] 
+    d: float = element_parameters[2] 
+    K2 + K2/(1+d) 
     T = np.zeros(6,6,6)
     T[0,0,0] = -K2*L**2/2 
     T[0,0,1] = -K2*L**3/3 

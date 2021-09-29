@@ -8,7 +8,7 @@ from georges_core import Kinematics as _Kinematics
 class Beam:
     def __init__(self, kinematics: _Kinematics, distribution: np.ndarray):
         self._kinematics = kinematics
-        self._distribution = distribution
+        self._distribution = distribution.astype(float, copy=False)
 
     @classmethod
     def compute_pt(cls, dpp: np.ndarray, beta: float, first_order: bool = False) -> np.ndarray:
