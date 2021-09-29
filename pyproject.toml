@@ -2,20 +2,23 @@
 name = "georges"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Cédric Hernalsteens <cedric.hernalsteens@ulb.be>",
+           "Robin Tesse <robin.tesse@ulb.be>",
+           "Eustache Gnacadja <eustache.gnacadja@ulb.be>",
+           "Eliott Ramoisiaux <eliott.ramoisiaux@ulb.be>",
+           "Marion Vanwelde <marion.vanwelde@ulb.be>"]
 
 [tool.poetry.dependencies]
 python = ">3.8.1 <3.10"
 cpymad = "^1.8.1"
 mypy = "^0.812"
 pyarrow = "^4.0.1"
-PyYAML = "^5.4.1"
 lmfit = "^1.0.2"
 
 georges-core = { path = "libs/georges-core/", develop = true }
 
 sphinx = { version = "^4.0.2", optional = true }
-sphinx-material = { git = "https://github.com/bashtage/sphinx-material.git", optional = true }
+sphinx-material = { version = "^0.0.34", optional = true }
 sphinx-automodapi = { version = "^0.13", optional = true }
 sphinxcontrib-bibtex = { version = "^2.2.0", optional = true }
 sphinx-copybutton = { version = "^0.3.1", optional = true }
