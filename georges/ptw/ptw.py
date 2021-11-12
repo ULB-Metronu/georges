@@ -122,32 +122,48 @@ class SpreadOutBraggPeakAnalysis:
         self.z_axis = z_axis
         self.modul_type = 'Full'
 
-    def max_indexes(self) -> _np.array:
-        max_indexes = _np.array(list(map(int, self.dose_data.idxmax(axis=1).values.tolist())))
-
-        return max_indexes
-
-    def sobp_data(self) -> _np.array:
-        sobp_data = _np.zeros((self.dose_data.shape[0], self.dose_data.shape[0]))
+    def get_library_max_ranges(self):
+        max_ranges = _np.zeros(self.dose_data.shape[0])
 
         for i in range(self.dose_data.shape[0]):
-            sobp_data[i] = self.dose_data.iloc[:, self.max_indexes()[i]]
+            normalized_bragg_peak = 1e2 * self.dose_data.iloc[i, :] / _np.max(self.dose_data.iloc[i, :])
+            bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'z': self.z_axis,
+                                                             'dose': normalized_bragg_peak}),
+                                            method='polynom_fit')
+
+            max_ranges[i] = bp_analysis.get_maximum()
+
+        return max_ranges
+
+    def sobp_data(self) -> _np.array:
+        sobp_data = _np.zeros((self.dose_data.shape[0],
+                               self.dose_data.shape[0]))  # Array to store maximum dose values of each Bragg Peak
+
+        max_ranges = self.get_library_max_ranges()
+        for i in range(self.dose_data.shape[0]):
+            for j in range(self.dose_data.shape[0]):
+                bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'z': self.z_axis,
+                                                                 'dose': self.dose_data.iloc[j, :]}),
+                                                method='polynom_fit')
+
+                sobp_data[i, j] = bp_analysis.compute_percentage(max_ranges[i])
 
         return sobp_data
 
     def compute_weights(self) -> _np.array:
-        goal_dose_values = _np.full(self.dose_data.shape[0], 1)  # Here we want 1 Gy
+
+        a_matrix = self.sobp_data() / self.sobp_data().max()
+        goal_dose_values = _np.full(a_matrix.shape[0], 1)  # Here we want 1 Gy
 
         if self.method == 'np.linalg.solve':
 
-            return _np.linalg.solve(self.sobp_data(), goal_dose_values)
+            return _np.linalg.solve(a_matrix, goal_dose_values)
 
         elif self.method == 'scipy.optimize':
 
-            a = self.sobp_data()
             b = goal_dose_values
             n = len(b)
-            fun = lambda x: _np.linalg.norm(_np.dot(a, x) - b)
+            fun = lambda x: _np.linalg.norm(_np.dot(a_matrix, x) - b)
             sol = minimize(fun,
                            _np.zeros(n),
                            method='L-BFGS-B',
@@ -250,10 +266,10 @@ class SpreadOutBraggPeakAnalysis:
                                 kind='linear',
                                 bounds_error=False)
             res = scipy.optimize.newton_krylov(lambda x: function(x=x) - r,
-                                                xin=xin,
-                                                maxiter=1000000,
-                                                f_tol=1e-1,
-                                                x_tol=1e-1)
+                                               xin=xin,
+                                               maxiter=1000000,
+                                               f_tol=1e-1,
+                                               x_tol=1e-1)
             return res
 
         r_10 = compute_range(flipped_data, 10, self.z_axis)
@@ -306,20 +322,18 @@ class LateralProfileAnalysis:
         return f_left, f_right
 
     def get_position_left(self, percentage):
-
         position = scipy.optimize.newton_krylov(lambda x: self.define_f()[0](x=x) - percentage,
                                                 xin=self.set_data()[1][
-                                                     _np.abs(pd.DataFrame(self.set_data()[2] - percentage)).idxmin()],
+                                                    _np.abs(pd.DataFrame(self.set_data()[2] - percentage)).idxmin()],
                                                 maxiter=100000,
                                                 f_tol=1e-2,
                                                 x_tol=1e-2)
         return position[0]
 
     def get_position_right(self, percentage):
-
         position = scipy.optimize.newton_krylov(lambda x: self.define_f()[1](x=x) - percentage,
                                                 xin=self.set_data()[3][
-                                                      _np.abs(pd.DataFrame(self.set_data()[4] - percentage)).idxmin()],
+                                                    _np.abs(pd.DataFrame(self.set_data()[4] - percentage)).idxmin()],
                                                 maxiter=100000,
                                                 f_tol=1e-2,
                                                 x_tol=1e-2)
@@ -379,3 +393,34 @@ class LateralProfileAnalysis:
 
     def get_penumbra(self):
         return _np.mean([self.get_penumbra_left(), self.get_penumbra_right()])
+
+
+def compute_dvh(dose_data, voxel_volume):
+    """
+    Args:
+        dose_data: 3D-array of the dose values.
+        voxel_volume: The volume of a unique voxel. We consider the same size for all voxels.
+
+    Returns:
+        dvh_dataframe: The dvh stored into a 2 columns dataframe
+
+    """
+    dvh_histogram = plt.hist(dose_data,
+                             bins=100,
+                             cumulative=-1,
+                             density=True
+                             )
+
+    dvh_dataframe = pd.DataFrame(columns=['dose_value',
+                                          'volume'
+                                          ])
+
+    dvh_dataframe['volume'] = dvh_histogram[0]
+    dvh_dataframe['dose_value'] = voxel_volume * dvh_histogram[1]
+
+    return dvh_dataframe
+
+
+class GammaAnalysis:
+
+    pass
