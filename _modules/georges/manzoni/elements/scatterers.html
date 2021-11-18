@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.elements.scatterers &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">georges-src</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>georges.manzoni.elements.scatterers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for georges.manzoni.elements.scatterers</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TODO</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">_np</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy.random_intel</span> <span class="k">as</span> <span class="nn">nprandom</span>
+<span class="k">except</span> <span class="ne">ModuleNotFoundError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">numpy.random</span> <span class="k">as</span> <span class="nn">nprandom</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">ureg</span> <span class="k">as</span> <span class="n">_ureg</span>
+<span class="kn">from</span> <span class="nn">.elements</span> <span class="kn">import</span> <span class="n">ManzoniElement</span> <span class="k">as</span> <span class="n">_ManzoniElement</span>
+<span class="kn">from</span> <span class="nn">...fermi</span> <span class="kn">import</span> <span class="n">materials</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">Kinematics</span>
+
+
+<div class="viewcode-block" id="MaterialElement"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.MaterialElement">[docs]</a><span class="k">class</span> <span class="nc">MaterialElement</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="n">INTEGRATOR</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">material</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MATERIAL</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">materials</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">MATERIAL</span><span class="o">.</span><span class="n">capitalize</span><span class="p">())</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">MATERIAL</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">degraded_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">KINETIC_ENERGY</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">stopping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">KINETIC_ENERGY</span><span class="p">))</span><span class="o">.</span><span class="n">ekin</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">beta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Kinematics</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">KINETIC_ENERGY</span><span class="p">,</span> <span class="n">kinetic</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">beta</span>
+
+<div class="viewcode-block" id="MaterialElement.pseudo_aperture_check"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.MaterialElement.pseudo_aperture_check">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">pseudo_aperture_check</span><span class="p">(</span><span class="n">beam</span><span class="p">,</span> <span class="n">beta</span><span class="p">):</span>
+        <span class="n">px</span> <span class="o">=</span> <span class="n">beam</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">py</span> <span class="o">=</span> <span class="n">beam</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">beam</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">]</span>
+        <span class="n">condition</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">pt</span> <span class="o">/</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">pt</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">px</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">py</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+        <span class="n">checked_beam</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">condition</span><span class="p">,</span> <span class="n">beam</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">checked_beam</span></div></div>
+
+
+<div class="viewcode-block" id="Scatterer"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.Scatterer">[docs]</a><span class="k">class</span> <span class="nc">Scatterer</span><span class="p">(</span><span class="n">MaterialElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;MATERIAL&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">Vacuum</span><span class="p">,</span> <span class="s1">&#39;Degrader material&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;KINETIC_ENERGY&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">MeV</span><span class="p">,</span> <span class="s1">&#39;Incoming beam energy&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Degrader length&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTYPE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTURE&#39;</span><span class="p">:</span> <span class="p">([],</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">scattering</span><span class="p">(</span><span class="n">kinetic_energy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">KINETIC_ENERGY</span><span class="p">,</span>
+                                      <span class="n">thickness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">,</span>
+                                      <span class="n">compute_a1</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                      <span class="n">compute_a2</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">fe</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">]</span>
+
+<div class="viewcode-block" id="Scatterer.propagate"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.Scatterer.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">beam_in</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">beam_out</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">global_parameters</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span> <span class="ow">is</span> <span class="n">materials</span><span class="o">.</span><span class="n">Vacuum</span><span class="p">:</span>
+            <span class="n">_np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">beam_out</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">beam_in</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span>
+        <span class="n">a0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">beam_out</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">beam_out</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="n">beam_out</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span>
+        <span class="n">beam_out</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">]</span>
+
+        <span class="n">beam_out</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">nprandom</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">beam_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">beam_out</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">nprandom</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">beam_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="n">beam_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pseudo_aperture_check</span><span class="p">(</span><span class="n">beam_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span></div></div>
+
+
+<div class="viewcode-block" id="Degrader"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.Degrader">[docs]</a><span class="k">class</span> <span class="nc">Degrader</span><span class="p">(</span><span class="n">MaterialElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;MATERIAL&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">Vacuum</span><span class="p">,</span> <span class="s1">&#39;Degrader material&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;KINETIC_ENERGY&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">MeV</span><span class="p">,</span> <span class="s1">&#39;Incoming beam energy&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Degrader length&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;WITH_LOSSES&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;Boolean to compute losses and dpp&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTYPE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTURE&#39;</span><span class="p">:</span> <span class="p">([],</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">scattering</span><span class="p">(</span><span class="n">kinetic_energy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">KINETIC_ENERGY</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="n">fe</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">fe</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">fe</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">energy_dispersion</span><span class="p">(</span><span class="n">energy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">degraded_energy</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">material</span><span class="o">.</span><span class="n">losses</span><span class="p">(</span><span class="n">energy</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">degraded_energy</span><span class="p">)</span>
+        <span class="p">]</span>
+
+<div class="viewcode-block" id="Degrader.propagate"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.Degrader.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">beam_in</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">beam_out</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">global_parameters</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="n">length</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">dpp</span><span class="p">,</span> <span class="n">losses</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span>
+
+        <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">_np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">beam_out</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">beam_in</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span>
+
+        <span class="c1"># Monte-Carlo method</span>
+        <span class="c1"># Remove particles</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">WITH_LOSSES</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span> <span class="n">losses</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">beam_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">losses</span> <span class="o">*</span> <span class="n">beam_in</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">beam_out</span> <span class="o">=</span> <span class="n">beam_in</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">beam_out</span> <span class="o">=</span> <span class="n">beam_in</span>
+
+        <span class="c1"># Transport matrix</span>
+        <span class="n">matrix</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">beam_out</span> <span class="o">=</span> <span class="n">beam_out</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+        <span class="c1"># Interactions</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">material</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">materials</span><span class="o">.</span><span class="n">Vacuum</span><span class="p">:</span>
+            <span class="n">beam_out</span> <span class="o">+=</span> <span class="n">nprandom</span><span class="o">.</span><span class="n">multivariate_normal</span><span class="p">(</span>
+                <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                    <span class="p">[</span>
+                        <span class="p">[</span><span class="n">a2</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="n">a1</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">a2</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">a1</span><span class="p">,</span> <span class="n">a0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">dpp</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                        <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                    <span class="p">]</span>
+                <span class="p">),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="n">beam_out</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+
+        <span class="n">beam_out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pseudo_aperture_check</span><span class="p">(</span><span class="n">beam_out</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span></div></div>
+
+
+<div class="viewcode-block" id="BeamStop"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.BeamStop">[docs]</a><span class="k">class</span> <span class="nc">BeamStop</span><span class="p">(</span><span class="n">MaterialElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;MATERIAL&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">materials</span><span class="o">.</span><span class="n">Vacuum</span><span class="p">,</span> <span class="s1">&#39;Beam Stop material&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Beam Stop length&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;RADIUS&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Beam Stop radius&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;KINETIC_ENERGY&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">MeV</span><span class="p">,</span> <span class="s1">&#39;Incoming beam energy&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">RADIUS</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="p">]</span>
+
+<div class="viewcode-block" id="BeamStop.propagate"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.scatterers.BeamStop.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">beam_in</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">beam_out</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">global_parameters</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="n">length</span><span class="p">,</span> <span class="n">radius</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span>
+
+        <span class="k">if</span> <span class="n">length</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">radius</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">_np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">beam_out</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">beam_in</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">beam_out</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span>
+                <span class="p">(</span><span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">beam_in</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">radius</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+                <span class="n">beam_in</span><span class="p">,</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,545 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.vis package &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="georges.manzoni.maps package" href="georges.manzoni.maps.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">georges</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="georges.html">georges package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="georges.fermi.html">georges.fermi package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="georges.madx.html">georges.madx package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="georges.manzoni.html">georges.manzoni package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">georges.vis package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">georges</a> &raquo;</li>
+        
+          <li><a href="georges.html">georges package</a> &raquo;</li>
+        
+      <li>georges.vis package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/georges.vis.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="georges-vis-package">
+<h1>georges.vis package<a class="headerlink" href="#georges-vis-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-georges.vis.matplotlib">
+<span id="georges-vis-matplotlib-module"></span><h2>georges.vis.matplotlib module<a class="headerlink" href="#module-georges.vis.matplotlib" title="Permalink to this headline">¶</a></h2>
+<p>Matplotlib plotting module for Manzoni.</p>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.vis.matplotlib.</span></span><span class="sig-name descname"><span class="pre">ManzoniMatplotlibArtist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_boxes</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_centers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tracks_color</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">'b'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">georges_core.vis.matplotlib.MatplotlibArtist</span></code></p>
+<p>A matplotlib implementation of a <cite>ZgoubiPlot</cite> artist.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.BeamPlottingException">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">BeamPlottingException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.BeamPlottingException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.BeamPlottingException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised for errors in the beam plotting module.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.ELEMENT_COLORS">
+<span class="sig-name descname"><span class="pre">ELEMENT_COLORS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'MULTIPOLE':</span> <span class="pre">'g',</span> <span class="pre">'OCTUPOLE':</span> <span class="pre">'g',</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">'#cb4b16',</span> <span class="pre">'SEXTUPOLE':</span> <span class="pre">'g'}</span></em><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.ELEMENT_COLORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.StatisticException">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-name descname"><span class="pre">StatisticException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.StatisticException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.StatisticException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised for errors in the beam plotting module.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.alpha">
+<span class="sig-name descname"><span class="pre">alpha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.alpha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the Twiss alpha functions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.aperture">
+<span class="sig-name descname"><span class="pre">aperture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.aperture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.aperture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.ax">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ax</span></span><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.ax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current Matplotlib ax.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>the Matplotlib ax.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.ax2">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">ax2</span></span><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.ax2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.beamline_get_ticks_labels">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">beamline_get_ticks_labels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.beamline_get_ticks_labels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.beamline_get_ticks_labels" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.beamline_get_ticks_locations">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">beamline_get_ticks_locations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.beamline_get_ticks_locations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.beamline_get_ticks_locations" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.beta">
+<span class="sig-name descname"><span class="pre">beta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.beta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.beta" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the Twiss beta functions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.bpm">
+<span class="sig-name descname"><span class="pre">bpm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.bpm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.bpm" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.compute_halo">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">compute_halo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam_o_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percentile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['X',</span> <span class="pre">'Y',</span> <span class="pre">'PX',</span> <span class="pre">'PY']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.compute_halo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.compute_halo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.dispersion">
+<span class="sig-name descname"><span class="pre">dispersion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rel_beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.dispersion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.dispersion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the dispersion functions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_beamline">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">draw_beamline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_beamline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_beamline" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_bend">
+<span class="sig-name descname"><span class="pre">draw_bend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_bend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_bend" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_bpm_size">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">draw_bpm_size</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_bpm_size"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_bpm_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_chamber">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">draw_chamber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_chamber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_chamber" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_coll">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">draw_coll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plane</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_coll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_coll" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_measuring_plane">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">draw_measuring_plane</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_measuring_plane"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_measuring_plane" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_quad">
+<span class="sig-name descname"><span class="pre">draw_quad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_quad"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_quad" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_slab">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">draw_slab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.draw_slab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.draw_slab" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.ellipse">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">ellipse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ra</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rb</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.ellipse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.ellipse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ellipse from beam parameters.
+:param ra: semi-major axis
+:param rb: semi-minor axis
+:param angle: oritentation angle
+:param x0: center X coordinate
+:param y0: center Y coordinate
+:return: <cite>matplotlib.patches.Ellipse</cite> object</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.figure">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">figure</span></span><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Current Matplotlib figure.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>the Matplotlib figure.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.fill_aperture">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fill_aperture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.fill_aperture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.fill_aperture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.filled_plot">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">filled_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.filled_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.filled_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.five_spot_map">
+<span class="sig-name descname"><span class="pre">five_spot_map</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bl_track0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl_track1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl_track2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl_track3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl_track4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(8,</span> <span class="pre">8)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.five_spot_map"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.five_spot_map" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.halo">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">halo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['X',</span> <span class="pre">'Y',</span> <span class="pre">'PX',</span> <span class="pre">'PY']</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.halo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.halo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.histogram_fit">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">histogram_fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">data</span></em>, <em class="sig-param"><span class="pre">bounds_binning=50</span></em>, <em class="sig-param"><span class="pre">verbose=False</span></em>, <em class="sig-param"><span class="pre">model=&lt;class</span> <span class="pre">'lmfit.models.GaussianModel'&gt;</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.histogram_fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.histogram_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All models are available on <a class="reference external" href="https://lmfit.github.io/lmfit-py/builtin_models.html#lmfit.models">https://lmfit.github.io/lmfit-py/builtin_models.html#lmfit.models</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.init_plot">
+<span class="sig-name descname"><span class="pre">init_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(12,</span> <span class="pre">8)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subplots</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">111</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.init_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.init_plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the Matplotlib figure and ax.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subplots: number of subplots
+figsize: figure size</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.losses">
+<span class="sig-name descname"><span class="pre">losses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_o_df</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.losses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.losses" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the losses from a beamline tracking computation and a context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.phase_advance">
+<span class="sig-name descname"><span class="pre">phase_advance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.phase_advance"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.phase_advance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the phase advance.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.phase_space">
+<span class="sig-name descname"><span class="pre">phase_space</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.phase_space"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.phase_space" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.phase_space_d">
+<span class="sig-name descname"><span class="pre">phase_space_d</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax_global</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_histx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_histy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax_tab</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_o_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.phase_space_d"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.phase_space_d" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy for matplotlib.pyplot.plot</p>
+<p>Same as <cite>matplotlib.pyplot.plot</cite>, forwards all arguments.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.prepare">
+<span class="sig-name descname"><span class="pre">prepare</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.prepare"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.prepare" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.rotation_angle">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">rotation_angle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eval</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evec</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.rotation_angle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.rotation_angle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.scattering">
+<span class="sig-name descname"><span class="pre">scattering</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.scattering"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.scattering" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.style_boxplot">
+<span class="sig-name descname"><span class="pre">style_boxplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.style_boxplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.style_boxplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply fancy styles to a matplotlib boxplot.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.summary">
+<span class="sig-name descname"><span class="pre">summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_o_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'DRIFT_ISO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.survey">
+<span class="sig-name descname"><span class="pre">survey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'madx'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.survey"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.survey" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.survey_iba">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">survey_iba</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.survey_iba"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.survey_iba" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.survey_madx">
+<span class="sig-name descname"><span class="pre">survey_madx</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.survey_madx"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.survey_madx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.tracking">
+<span class="sig-name descname"><span class="pre">tracking</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_o_df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mean</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">std</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">halo</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.tracking"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.tracking" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the beam envelopes from tracking data.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.tracking_summary">
+<span class="sig-name descname"><span class="pre">tracking_summary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.tracking_summary"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.tracking_summary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.tracks_color">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">tracks_color</span></span><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.tracks_color" title="Permalink to this definition">¶</a></dt>
+<dd><p>The color for the rendering of the tracks.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>color as a string</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.twiss">
+<span class="sig-name descname"><span class="pre">twiss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.twiss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.twiss" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the Twiss beam envelopes from a beamline Twiss computation and a context.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.twiss_function_plot">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">twiss_function_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">functions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">planes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'both'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.twiss_function_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.twiss_function_plot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.vis.matplotlib.ManzoniMatplotlibArtist.xy_from_string">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">xy_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/vis/matplotlib.html#ManzoniMatplotlibArtist.xy_from_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.vis.matplotlib.ManzoniMatplotlibArtist.xy_from_string" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.vis">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-georges.vis" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="georges.manzoni.maps.html" class="btn btn-neutral float-left" title="georges.manzoni.maps package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.fermi.mcs &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">georges-src</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>georges.fermi.mcs</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for georges.fermi.mcs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TODO</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">_np</span>
+<span class="kn">from</span> <span class="nn">..</span> <span class="kn">import</span> <span class="n">ureg</span> <span class="k">as</span> <span class="n">_ureg</span>
+
+
+<div class="viewcode-block" id="ScatteringModelType"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.ScatteringModelType">[docs]</a><span class="k">class</span> <span class="nc">ScatteringModelType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+<div class="viewcode-block" id="ScatteringModelType.t"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.ScatteringModelType.t">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">pv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">p1v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mf">0.0</span></div></div>
+
+
+<div class="viewcode-block" id="FermiRossi"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.FermiRossi">[docs]</a><span class="k">class</span> <span class="nc">FermiRossi</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ScatteringModelType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FermiRossi.t"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.FermiRossi.t">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">pv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">p1v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pv:</span>
+<span class="sd">            p1v1:</span>
+<span class="sd">            **kwargs:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="mf">15.0</span>  <span class="c1"># MeV</span>
+        <span class="n">chi_0</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">radiation_length</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">es</span><span class="o">/</span><span class="n">pv</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">chi_0</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DifferentialHighland"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.DifferentialHighland">[docs]</a><span class="k">class</span> <span class="nc">DifferentialHighland</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ScatteringModelType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DifferentialHighland.l"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.DifferentialHighland.l">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">l</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">chi0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x:</span>
+<span class="sd">            chi0:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">chi0</span></div>
+
+<div class="viewcode-block" id="DifferentialHighland.f_dh"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.DifferentialHighland.f_dh">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">f_dh</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            l:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mf">0.970</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">/</span> <span class="mf">20.7</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">/</span> <span class="mf">22.7</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="DifferentialHighland.t"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.DifferentialHighland.t">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">pv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">p1v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pv:</span>
+<span class="sd">            p1v1:</span>
+<span class="sd">            **kwargs:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">material</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;material&#39;</span><span class="p">)</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="mf">14.1</span>  <span class="c1"># MeV</span>
+        <span class="n">chi0</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">radiation_length</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">required_thickness</span><span class="p">(</span><span class="n">kinetic_energy_out</span><span class="o">=</span><span class="n">pv</span><span class="o">*</span><span class="n">_ureg</span><span class="o">.</span><span class="n">MeV</span><span class="p">,</span> <span class="n">kinetic_energy_in</span><span class="o">=</span><span class="n">p1v1</span><span class="o">*</span><span class="n">_ureg</span><span class="o">.</span><span class="n">MeV</span><span class="p">)</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DifferentialHighland</span><span class="o">.</span><span class="n">f_dh</span><span class="p">(</span><span class="n">DifferentialHighland</span><span class="o">.</span><span class="n">l</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">chi0</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">es</span> <span class="o">/</span> <span class="n">pv</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">chi0</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="ICRU"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.ICRU">[docs]</a><span class="k">class</span> <span class="nc">ICRU</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ScatteringModelType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ICRU.t"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.ICRU.t">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">pv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">p1v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pv:</span>
+<span class="sd">            p1v1:</span>
+<span class="sd">            **kwargs:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div></div>
+
+
+<div class="viewcode-block" id="ICRUProtons"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.ICRUProtons">[docs]</a><span class="k">class</span> <span class="nc">ICRUProtons</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ScatteringModelType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ICRUProtons.t"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.ICRUProtons.t">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">pv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">p1v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pv:</span>
+<span class="sd">            p1v1:</span>
+<span class="sd">            **kwargs:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">material</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="mf">15.0</span>  <span class="c1"># MeV</span>
+        <span class="n">chi_s</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">scattering_length</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">es</span> <span class="o">/</span> <span class="n">pv</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">chi_s</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DifferentialMoliere"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.DifferentialMoliere">[docs]</a><span class="k">class</span> <span class="nc">DifferentialMoliere</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ScatteringModelType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DifferentialMoliere.t"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.DifferentialMoliere.t">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">t</span><span class="p">(</span><span class="n">pv</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">p1v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            pv:</span>
+<span class="sd">            p1v1:</span>
+<span class="sd">            **kwargs:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">material</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;material&#39;</span><span class="p">]</span>
+        <span class="n">es</span> <span class="o">=</span> <span class="mf">15.0</span>  <span class="c1"># MeV</span>
+        <span class="n">chi_s</span> <span class="o">=</span> <span class="n">material</span><span class="o">.</span><span class="n">scattering_length</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">DifferentialMoliere</span><span class="o">.</span><span class="n">f_dm</span><span class="p">(</span><span class="n">p1v1</span><span class="p">,</span> <span class="n">pv</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">es</span> <span class="o">/</span> <span class="n">pv</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">chi_s</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DifferentialMoliere.f_dm"><a class="viewcode-back" href="../../../api/georges.fermi.html#georges.fermi.mcs.DifferentialMoliere.f_dm">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">f_dm</span><span class="p">(</span><span class="n">p1v1</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">pv</span><span class="p">:</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            p1v1:</span>
+<span class="sd">            pv:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">pv</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;pv&#39; must be &gt; 0.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p1v1</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;&#39;p1v1&#39; must be &gt; 0.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">p1v1</span> <span class="o">&lt;=</span> <span class="n">pv</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Initial &#39;p1v1&#39; must be larger than final &#39;pv&#39;.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="mf">0.5244</span> \
+               <span class="o">+</span> <span class="mf">0.1975</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">pv</span> <span class="o">/</span> <span class="n">p1v1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> \
+               <span class="o">+</span> <span class="mf">0.2320</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span> \
+               <span class="o">-</span> <span class="mf">0.0098</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">pv</span><span class="p">)</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">pv</span> <span class="o">/</span> <span class="n">p1v1</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

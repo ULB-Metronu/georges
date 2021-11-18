@@ -1,0 +1,507 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.maps.madx_combined_dipole &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">georges-src</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>georges.manzoni.maps.madx_combined_dipole</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for georges.manzoni.maps.madx_combined_dipole</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This code is from MAD-X twiss.f90. It is used to allow comparisons between the MAD-X tensor and</span>
+<span class="sd">the generated code for MAD8 or Transport style tensor computation.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cosh</span><span class="p">,</span> <span class="n">sinh</span>
+
+<span class="n">zero</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">one</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">two</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">three</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">four</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">six</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">nine</span> <span class="o">=</span> <span class="mi">9</span>
+<span class="n">twelve</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">fifteen</span> <span class="o">=</span> <span class="mi">15</span>
+<span class="n">twty</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">twty2</span> <span class="o">=</span> <span class="mi">22</span>
+<span class="n">twty4</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="n">thty</span> <span class="o">=</span> <span class="mi">30</span>
+<span class="n">foty2</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">fvty6</span> <span class="o">=</span> <span class="mi">56</span>
+<span class="n">svty2</span> <span class="o">=</span> <span class="mi">72</span>
+<span class="n">httwty</span> <span class="o">=</span> <span class="mi">120</span>
+<span class="n">c1</span> <span class="o">=</span> <span class="n">one</span>
+<span class="n">c2</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="mi">2</span>
+<span class="n">c3</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="n">twty4</span>
+<span class="n">c4</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="mi">720</span>
+<span class="n">s1</span> <span class="o">=</span> <span class="n">one</span>
+<span class="n">s2</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="mi">6</span>
+<span class="n">s3</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="n">httwty</span>
+<span class="n">s4</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="mi">5040</span>
+<span class="n">cg0</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="n">twty</span>
+<span class="n">cg1</span> <span class="o">=</span> <span class="mi">5</span> <span class="o">/</span> <span class="mi">840</span>
+<span class="n">cg2</span> <span class="o">=</span> <span class="mi">21</span> <span class="o">/</span> <span class="mi">60480</span>
+<span class="n">ch0</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="n">fvty6</span>
+<span class="n">ch1</span> <span class="o">=</span> <span class="mi">14</span> <span class="o">/</span> <span class="mi">4032</span>
+<span class="n">ch2</span> <span class="o">=</span> <span class="mi">147</span> <span class="o">/</span> <span class="mi">443520</span>
+
+
+<div class="viewcode-block" id="tmfoc"><a class="viewcode-back" href="../../../../api/georges.manzoni.maps.html#georges.manzoni.maps.madx_combined_dipole.tmfoc">[docs]</a><span class="k">def</span> <span class="nf">tmfoc</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">sk1</span><span class="p">):</span>
+    <span class="c1">#   !----------------------------------------------------------------------*</span>
+    <span class="c1">#   ! Purpose:                                                             *</span>
+    <span class="c1">#   !   Compute linear focussing functions.                                *</span>
+    <span class="c1">#   ! Input:                                                               *</span>
+    <span class="c1">#   !   el        (double)  element length.                                *</span>
+    <span class="c1">#   !   sk1       (double)  quadrupole strength.                           *</span>
+    <span class="c1">#   ! Output:                                                              *</span>
+    <span class="c1">#   !   c         (double)  cosine-like function.             c(k,l)       *</span>
+    <span class="c1">#   !   s         (double)  sine-like function.               s(k,l)       *</span>
+    <span class="c1">#   !   d         (double)  dispersion function.              d(k,l)       *</span>
+    <span class="c1">#   !   f         (double)  integral of dispersion function.  f(k,l)       *</span>
+    <span class="c1">#   !----------------------------------------------------------------------*</span>
+    <span class="c1">#   double precision, intent(IN)  :: el, sk1</span>
+    <span class="c1">#   double precision, intent(OUT) :: c, s, d, f</span>
+
+    <span class="c1">#   double precision :: qk, qkl, qkl2</span>
+
+    <span class="c1">#   double precision, parameter :: twty=20d0, thty=30d0, foty2=42d0</span>
+    <span class="n">qk</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">sk1</span><span class="p">))</span>
+    <span class="n">qkl</span> <span class="o">=</span> <span class="n">qk</span> <span class="o">*</span> <span class="n">el</span>
+    <span class="n">qkl2</span> <span class="o">=</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">2</span>
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">qkl2</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-2</span><span class="p">:</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">*</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">/</span> <span class="n">twelve</span><span class="p">)</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">*</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">/</span> <span class="n">twty</span><span class="p">)</span> <span class="o">/</span> <span class="n">six</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">*</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">/</span> <span class="n">thty</span><span class="p">)</span> <span class="o">/</span> <span class="n">twelve</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">two</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">*</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">qkl2</span> <span class="o">/</span> <span class="n">foty2</span><span class="p">)</span> <span class="o">/</span> <span class="n">twty</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">/</span> <span class="n">six</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">qkl2</span> <span class="o">&gt;</span> <span class="n">zero</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">qkl</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">qkl</span><span class="p">)</span> <span class="o">/</span> <span class="n">qk</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">cosh</span><span class="p">(</span><span class="n">qkl</span><span class="p">)</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="n">sinh</span><span class="p">(</span><span class="n">qkl</span><span class="p">)</span> <span class="o">/</span> <span class="n">qk</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="n">sk1</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="n">el</span> <span class="o">-</span> <span class="n">s</span><span class="p">)</span> <span class="o">/</span> <span class="n">sk1</span>
+    <span class="k">return</span> <span class="n">c</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">f</span></div>
+
+
+<div class="viewcode-block" id="tmsect"><a class="viewcode-back" href="../../../../api/georges.manzoni.maps.html#georges.manzoni.maps.madx_combined_dipole.tmsect">[docs]</a><span class="k">def</span> <span class="nf">tmsect</span><span class="p">(</span><span class="n">fsec</span><span class="p">,</span> <span class="n">el</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">sk1</span><span class="p">,</span> <span class="n">sk2</span><span class="p">,</span> <span class="n">dh</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+    <span class="c1"># use twissbeamfi, only : beta, gamma, dtbyds</span>
+    <span class="c1"># use matrices, only: EYE</span>
+    <span class="c1"># use math_constfi, only :</span>
+    <span class="c1"># implicit none</span>
+    <span class="c1"># !----------------------------------------------------------------------*</span>
+    <span class="c1"># !     Purpose:                                                         *</span>
+    <span class="c1"># !     TRANSPORT map for a sector dipole without fringe fields.         *</span>
+    <span class="c1"># !     Input:                                                           *</span>
+    <span class="c1"># !     fsec      (logical) if true, return second order terms.          *</span>
+    <span class="c1"># !     el        (double)  element length.                              *</span>
+    <span class="c1"># !     h         (double)  reference curvature of magnet.               *</span>
+    <span class="c1"># !     dh        (double)  dipole field error.                          *</span>
+    <span class="c1"># !     sk1       (double)  quadrupole strength.                         *</span>
+    <span class="c1"># !     sk2       (double)  sextupole strengh.                           *</span>
+    <span class="c1"># !     Output:                                                          *</span>
+    <span class="c1"># !     ek(6)     (double)  kick due to dipole.                          *</span>
+    <span class="c1"># !     re(6,6)   (double)  transfer matrix.                             *</span>
+    <span class="c1"># !     te(6,6,6) (double)  second order terms.                          *</span>
+    <span class="c1"># !----------------------------------------------------------------------*</span>
+    <span class="c1"># logical, intent(IN) :: fsec</span>
+    <span class="c1"># double precision :: el, h, dh, sk1, sk2</span>
+    <span class="c1"># double precision :: ek(6), re(6,6), te(6,6,6)</span>
+
+    <span class="c1"># double precision :: bi, bi2, bi2gi2</span>
+    <span class="c1"># double precision :: cm, cp, cx, cy, cyy, dd, difsq, dm, dp, dx, dyy</span>
+    <span class="c1"># double precision :: fm, fp, fx, fyy, gx, h2, hx, sm, sp, sumsq, sx, sy, syy</span>
+    <span class="c1"># double precision :: t1, t116, t126, t166, t2, t216, t226, t266</span>
+    <span class="c1"># double precision :: t336, t346, t436, t446, t5, t516, t526, t566</span>
+    <span class="c1"># double precision :: xk, xkl, xklsq, xksq, xs6</span>
+    <span class="c1"># double precision :: y0, y1, y2, y2klsq, y2ksq, yk, ykl, yklsq, yksq, ys2</span>
+    <span class="c1"># double precision :: zc, zd, zf, zs</span>
+
+    <span class="c1"># !---- Initialize.</span>
+    <span class="n">ek</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">re</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
+    <span class="n">te</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="n">bi</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">beta</span>
+    <span class="n">bi2</span> <span class="o">=</span> <span class="n">bi</span> <span class="o">*</span> <span class="n">bi</span>
+    <span class="n">bi2gi2</span> <span class="o">=</span> <span class="n">one</span> <span class="o">/</span> <span class="p">(</span><span class="n">beta</span> <span class="o">*</span> <span class="n">gamma</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="c1"># !---- Horizontal.</span>
+    <span class="n">xksq</span> <span class="o">=</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">sk1</span>
+    <span class="n">xk</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">xksq</span><span class="p">))</span>
+    <span class="n">xkl</span> <span class="o">=</span> <span class="n">xk</span> <span class="o">*</span> <span class="n">el</span>
+    <span class="n">xklsq</span> <span class="o">=</span> <span class="n">xksq</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xklsq</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-2</span><span class="p">:</span>
+        <span class="n">cx</span> <span class="o">=</span> <span class="p">(</span><span class="n">c1</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">c2</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="n">c3</span><span class="p">))</span>
+        <span class="n">sx</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">s2</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="n">s3</span><span class="p">))</span> <span class="o">*</span> <span class="n">el</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">c2</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">c3</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="n">c4</span><span class="p">))</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">fx</span> <span class="o">=</span> <span class="p">(</span><span class="n">s2</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">s3</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="n">s4</span><span class="p">))</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">3</span>
+        <span class="n">gx</span> <span class="o">=</span> <span class="p">(</span><span class="n">cg0</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">cg1</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="n">cg2</span><span class="p">))</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">5</span>
+        <span class="n">hx</span> <span class="o">=</span> <span class="p">(</span><span class="n">ch0</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">ch1</span> <span class="o">-</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="n">ch2</span><span class="p">))</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">7</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">xklsq</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">cx</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">xkl</span><span class="p">)</span>
+            <span class="n">sx</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">xkl</span><span class="p">)</span> <span class="o">/</span> <span class="n">xk</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cx</span> <span class="o">=</span> <span class="n">cosh</span><span class="p">(</span><span class="n">xkl</span><span class="p">)</span>
+            <span class="n">sx</span> <span class="o">=</span> <span class="n">sinh</span><span class="p">(</span><span class="n">xkl</span><span class="p">)</span> <span class="o">/</span> <span class="n">xk</span>
+
+        <span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">one</span> <span class="o">-</span> <span class="n">cx</span><span class="p">)</span> <span class="o">/</span> <span class="n">xksq</span>
+        <span class="n">fx</span> <span class="o">=</span> <span class="p">(</span><span class="n">el</span> <span class="o">-</span> <span class="n">sx</span><span class="p">)</span> <span class="o">/</span> <span class="n">xksq</span>
+        <span class="n">gx</span> <span class="o">=</span> <span class="p">(</span><span class="n">three</span> <span class="o">*</span> <span class="n">el</span> <span class="o">-</span> <span class="n">sx</span> <span class="o">*</span> <span class="p">(</span><span class="n">four</span> <span class="o">-</span> <span class="n">cx</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">two</span> <span class="o">*</span> <span class="n">xksq</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">hx</span> <span class="o">=</span> <span class="p">(</span><span class="n">fifteen</span> <span class="o">*</span> <span class="n">el</span> <span class="o">-</span> <span class="n">sx</span> <span class="o">*</span> <span class="p">(</span><span class="n">twty2</span> <span class="o">-</span> <span class="n">nine</span> <span class="o">*</span> <span class="n">cx</span> <span class="o">+</span> <span class="n">two</span> <span class="o">*</span> <span class="n">cx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">six</span> <span class="o">*</span> <span class="n">xksq</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)</span>
+
+    <span class="n">re</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cx</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sx</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">bi</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">xksq</span> <span class="o">*</span> <span class="n">sx</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cx</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">bi</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">re</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">re</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">el</span> <span class="o">*</span> <span class="n">bi2gi2</span> <span class="o">-</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">bi2</span>
+
+    <span class="n">ek</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">dh</span> <span class="o">*</span> <span class="n">dx</span>
+    <span class="n">ek</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">dh</span> <span class="o">*</span> <span class="n">sx</span>
+    <span class="n">ek</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dh</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">bi</span> <span class="o">+</span> <span class="n">el</span>  <span class="c1"># *dtbyds</span>
+
+    <span class="c1"># !---- Vertical.</span>
+    <span class="n">yksq</span> <span class="o">=</span> <span class="o">-</span> <span class="n">sk1</span>
+    <span class="n">yk</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">yksq</span><span class="p">))</span>
+    <span class="n">ykl</span> <span class="o">=</span> <span class="n">yk</span> <span class="o">*</span> <span class="n">el</span>
+    <span class="n">yklsq</span> <span class="o">=</span> <span class="n">yksq</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">yklsq</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">1e-2</span><span class="p">:</span>
+        <span class="n">cy</span> <span class="o">=</span> <span class="p">(</span><span class="n">c1</span> <span class="o">-</span> <span class="n">yklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">c2</span> <span class="o">-</span> <span class="n">yklsq</span> <span class="o">*</span> <span class="n">c3</span><span class="p">))</span>
+        <span class="n">sy</span> <span class="o">=</span> <span class="p">(</span><span class="n">s1</span> <span class="o">-</span> <span class="n">yklsq</span> <span class="o">*</span> <span class="p">(</span><span class="n">s2</span> <span class="o">-</span> <span class="n">yklsq</span> <span class="o">*</span> <span class="n">s3</span><span class="p">))</span> <span class="o">*</span> <span class="n">el</span>
+    <span class="k">elif</span> <span class="n">yklsq</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">cy</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">ykl</span><span class="p">)</span>
+        <span class="n">sy</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">ykl</span><span class="p">)</span> <span class="o">/</span> <span class="n">yk</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">cy</span> <span class="o">=</span> <span class="n">cosh</span><span class="p">(</span><span class="n">ykl</span><span class="p">)</span>
+        <span class="n">sy</span> <span class="o">=</span> <span class="n">sinh</span><span class="p">(</span><span class="n">ykl</span><span class="p">)</span> <span class="o">/</span> <span class="n">yk</span>
+
+    <span class="n">re</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cy</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">sy</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">yksq</span> <span class="o">*</span> <span class="n">sy</span>
+    <span class="n">re</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">cy</span>
+
+    <span class="n">ek</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">ek</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># !---- Second-order terms.</span>
+    <span class="k">if</span> <span class="n">fsec</span><span class="p">:</span>
+        <span class="c1"># !---- Pure horizontal terms.</span>
+        <span class="n">xs6</span> <span class="o">=</span> <span class="p">(</span><span class="n">sk2</span> <span class="o">+</span> <span class="n">two</span> <span class="o">*</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sk1</span><span class="p">)</span> <span class="o">/</span> <span class="n">six</span>
+        <span class="n">ys2</span> <span class="o">=</span> <span class="p">(</span><span class="n">sk2</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sk1</span><span class="p">)</span> <span class="o">/</span> <span class="n">two</span>
+        <span class="n">h2</span> <span class="o">=</span> <span class="n">h</span> <span class="o">/</span> <span class="n">two</span>
+
+        <span class="n">t116</span> <span class="o">=</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">three</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">-</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">t126</span> <span class="o">=</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">cx</span> <span class="o">*</span> <span class="n">gx</span><span class="p">)</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span>
+        <span class="n">t166</span> <span class="o">=</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">gx</span><span class="p">)</span> <span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">t216</span> <span class="o">=</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">three</span> <span class="o">*</span> <span class="n">cx</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">+</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+        <span class="n">t226</span> <span class="o">=</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">three</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">t266</span> <span class="o">=</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">cx</span> <span class="o">*</span> <span class="n">gx</span><span class="p">)</span>
+        <span class="n">t516</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">three</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">-</span> <span class="n">four</span> <span class="o">*</span> <span class="n">gx</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">fx</span> <span class="o">+</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span>
+        <span class="n">t526</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">gx</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">t566</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">three</span> <span class="o">*</span> <span class="n">hx</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">gx</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="n">gx</span> <span class="o">-</span> <span class="n">fx</span>
+
+        <span class="n">t1</span> <span class="o">=</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">fx</span><span class="p">)</span> <span class="o">-</span> <span class="n">dx</span>
+        <span class="n">t2</span> <span class="o">=</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">el</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">-</span> <span class="n">fx</span><span class="p">)</span>
+        <span class="n">t5</span> <span class="o">=</span> <span class="n">fx</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">gx</span> <span class="o">-</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span>
+
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">sx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">dx</span><span class="p">)</span> <span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">xksq</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">xs6</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">cx</span><span class="p">)</span> <span class="o">*</span> <span class="n">sx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">xs6</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">cx</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">t116</span> <span class="o">+</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">*</span> <span class="n">sx</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">t126</span> <span class="o">+</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">el</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">-</span> <span class="n">fx</span><span class="p">)</span> <span class="o">-</span> <span class="n">sx</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t166</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">t1</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi2</span> <span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">bi2gi2</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">one</span> <span class="o">+</span> <span class="n">two</span> <span class="o">*</span> <span class="n">cx</span><span class="p">)</span> <span class="o">*</span> <span class="n">sx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">one</span> <span class="o">+</span> <span class="n">two</span> <span class="o">*</span> <span class="n">cx</span><span class="p">)</span> <span class="o">*</span> <span class="n">dx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span> <span class="p">(</span><span class="n">two</span> <span class="o">*</span> <span class="n">xs6</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">h2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">t216</span> <span class="o">-</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">sx</span> <span class="o">-</span> <span class="n">el</span> <span class="o">*</span> <span class="n">cx</span><span class="p">))</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">t226</span> <span class="o">+</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">*</span> <span class="n">sx</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">t266</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">t2</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi2</span> <span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">bi2gi2</span>
+
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h2</span> <span class="o">*</span> <span class="n">xs6</span> <span class="o">*</span> <span class="p">(</span><span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">+</span> <span class="n">three</span> <span class="o">*</span> <span class="n">fx</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">el</span> <span class="o">-</span> <span class="n">cx</span> <span class="o">*</span> <span class="n">sx</span><span class="p">))</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h2</span> <span class="o">*</span> <span class="n">xs6</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="n">xs6</span> <span class="o">*</span> <span class="n">gx</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">fx</span> <span class="o">-</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">dx</span><span class="p">)</span> <span class="o">/</span> <span class="n">four</span> <span class="o">-</span> <span class="n">sx</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">h2</span> <span class="o">*</span> <span class="p">((</span><span class="n">t516</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">el</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">-</span> <span class="n">fx</span><span class="p">)</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi2</span> <span class="o">+</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">bi2gi2</span><span class="p">)</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">h2</span> <span class="o">*</span> <span class="p">((</span><span class="n">t526</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">dx</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">-</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">fx</span><span class="p">)</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi2</span> <span class="o">+</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">bi2gi2</span><span class="p">)</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">t566</span> <span class="o">+</span> <span class="n">t5</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi2</span> <span class="o">+</span> <span class="p">(</span><span class="n">three</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">h</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">-</span> <span class="n">el</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi2gi2</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+
+        <span class="c1"># !---- Mixed terms.</span>
+        <span class="n">y2ksq</span> <span class="o">=</span> <span class="n">four</span> <span class="o">*</span> <span class="n">yksq</span>
+        <span class="n">cyy</span><span class="p">,</span> <span class="n">syy</span><span class="p">,</span> <span class="n">dyy</span><span class="p">,</span> <span class="n">fyy</span> <span class="o">=</span> <span class="n">tmfoc</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">y2ksq</span><span class="p">)</span>
+        <span class="n">y2klsq</span> <span class="o">=</span> <span class="n">y2ksq</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">y2klsq</span><span class="p">),</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xklsq</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mf">1e-2</span><span class="p">:</span>
+            <span class="n">y0</span> <span class="o">=</span> <span class="n">one</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="n">xklsq</span> <span class="o">+</span> <span class="n">y2klsq</span>
+            <span class="n">y2</span> <span class="o">=</span> <span class="n">xklsq</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">xklsq</span> <span class="o">*</span> <span class="n">y2klsq</span> <span class="o">+</span> <span class="n">y2klsq</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">zc</span> <span class="o">=</span> <span class="p">(</span><span class="n">y0</span> <span class="o">-</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span> <span class="o">/</span> <span class="n">thty</span><span class="p">)</span> <span class="o">/</span> <span class="n">twelve</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">two</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">y0</span> <span class="o">-</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span> <span class="o">/</span> <span class="n">foty2</span><span class="p">)</span> <span class="o">/</span> <span class="n">twty</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">3</span> <span class="o">/</span> <span class="n">six</span>
+            <span class="n">zd</span> <span class="o">=</span> <span class="p">(</span><span class="n">y0</span> <span class="o">-</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span> <span class="o">/</span> <span class="n">fvty6</span><span class="p">)</span> <span class="o">/</span> <span class="n">thty</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">4</span> <span class="o">/</span> <span class="n">twty4</span>
+            <span class="n">zf</span> <span class="o">=</span> <span class="p">(</span><span class="n">y0</span> <span class="o">-</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="n">y2</span> <span class="o">/</span> <span class="n">svty2</span><span class="p">)</span> <span class="o">/</span> <span class="n">foty2</span><span class="p">)</span> <span class="o">*</span> <span class="n">el</span> <span class="o">**</span> <span class="mi">5</span> <span class="o">/</span> <span class="n">httwty</span>
+        <span class="k">elif</span> <span class="n">xksq</span> <span class="o">&lt;=</span> <span class="n">zero</span> <span class="ow">or</span> <span class="n">yksq</span> <span class="o">&lt;=</span> <span class="n">zero</span><span class="p">:</span>
+            <span class="n">dd</span> <span class="o">=</span> <span class="n">xksq</span> <span class="o">-</span> <span class="n">y2ksq</span>
+            <span class="n">zc</span> <span class="o">=</span> <span class="p">(</span><span class="n">cyy</span> <span class="o">-</span> <span class="n">cx</span><span class="p">)</span> <span class="o">/</span> <span class="n">dd</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">syy</span> <span class="o">-</span> <span class="n">sx</span><span class="p">)</span> <span class="o">/</span> <span class="n">dd</span>
+            <span class="n">zd</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyy</span> <span class="o">-</span> <span class="n">dx</span><span class="p">)</span> <span class="o">/</span> <span class="n">dd</span>
+            <span class="n">zf</span> <span class="o">=</span> <span class="p">(</span><span class="n">fyy</span> <span class="o">-</span> <span class="n">fx</span><span class="p">)</span> <span class="o">/</span> <span class="n">dd</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sumsq</span> <span class="o">=</span> <span class="p">(</span><span class="n">xk</span> <span class="o">/</span> <span class="n">two</span> <span class="o">+</span> <span class="n">yk</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">difsq</span> <span class="o">=</span> <span class="p">(</span><span class="n">xk</span> <span class="o">/</span> <span class="n">two</span> <span class="o">-</span> <span class="n">yk</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">cp</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">dp</span><span class="p">,</span> <span class="n">fp</span> <span class="o">=</span> <span class="n">tmfoc</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">sumsq</span><span class="p">)</span>
+            <span class="n">cm</span><span class="p">,</span> <span class="n">sm</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">fm</span> <span class="o">=</span> <span class="n">tmfoc</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">difsq</span><span class="p">)</span>
+            <span class="n">zc</span> <span class="o">=</span> <span class="n">sp</span> <span class="o">*</span> <span class="n">sm</span> <span class="o">/</span> <span class="n">two</span>
+            <span class="n">zs</span> <span class="o">=</span> <span class="p">(</span><span class="n">sp</span> <span class="o">*</span> <span class="n">cm</span> <span class="o">-</span> <span class="n">cp</span> <span class="o">*</span> <span class="n">sm</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">four</span> <span class="o">*</span> <span class="n">xk</span> <span class="o">*</span> <span class="n">yk</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">xksq</span> <span class="o">&gt;</span> <span class="n">y2ksq</span><span class="p">:</span>
+                <span class="n">zd</span> <span class="o">=</span> <span class="p">(</span><span class="n">dyy</span> <span class="o">-</span> <span class="n">zc</span><span class="p">)</span> <span class="o">/</span> <span class="n">xksq</span>
+                <span class="n">zf</span> <span class="o">=</span> <span class="p">(</span><span class="n">fyy</span> <span class="o">-</span> <span class="n">zs</span><span class="p">)</span> <span class="o">/</span> <span class="n">xksq</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">zd</span> <span class="o">=</span> <span class="p">(</span><span class="n">dx</span> <span class="o">-</span> <span class="n">zc</span><span class="p">)</span> <span class="o">/</span> <span class="n">y2ksq</span>
+                <span class="n">zf</span> <span class="o">=</span> <span class="p">(</span><span class="n">fx</span> <span class="o">-</span> <span class="n">zs</span><span class="p">)</span> <span class="o">/</span> <span class="n">y2ksq</span>
+
+        <span class="n">t336</span> <span class="o">=</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zf</span><span class="p">)</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">sy</span>
+        <span class="n">t346</span> <span class="o">=</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">sy</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">zf</span><span class="p">)</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">cy</span>
+        <span class="n">t436</span> <span class="o">=</span> <span class="n">two</span> <span class="o">*</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">cy</span> <span class="o">-</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">sy</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">zf</span><span class="p">)</span>
+        <span class="n">t446</span> <span class="o">=</span> <span class="n">two</span> <span class="o">*</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">-</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">-</span> <span class="n">two</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zf</span><span class="p">)</span>
+
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">+</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">dx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">/</span> <span class="n">two</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">dx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">+</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">sx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">zc</span> <span class="o">/</span> <span class="n">two</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">-</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">sx</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">zc</span> <span class="o">/</span> <span class="n">two</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zs</span><span class="p">)</span> <span class="o">+</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">sy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">sy</span> <span class="o">*</span> <span class="n">zc</span> <span class="o">/</span> <span class="n">two</span> <span class="o">-</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">zs</span><span class="p">)</span> <span class="o">+</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">cy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">/</span> <span class="n">two</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zd</span><span class="p">)</span> <span class="o">+</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">sy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">+</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">sy</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">/</span> <span class="n">two</span> <span class="o">-</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">zd</span><span class="p">)</span> <span class="o">+</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">cy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h2</span> <span class="o">*</span> <span class="n">t336</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">el</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h2</span> <span class="o">*</span> <span class="n">t346</span> <span class="o">-</span> <span class="p">(</span><span class="n">sy</span> <span class="o">+</span> <span class="n">el</span> <span class="o">*</span> <span class="n">cy</span><span class="p">)</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">-</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zc</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">+</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">cy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">-</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">zc</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">+</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">sx</span> <span class="o">*</span> <span class="n">sy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">cy</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">-</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">+</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">cy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">sk2</span> <span class="o">*</span> <span class="p">(</span><span class="n">sk1</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">-</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">zs</span> <span class="o">/</span> <span class="n">two</span><span class="p">)</span> <span class="o">+</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">*</span> <span class="n">sy</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h2</span> <span class="o">*</span> <span class="n">t436</span> <span class="o">+</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">sy</span> <span class="o">-</span> <span class="n">el</span> <span class="o">*</span> <span class="n">cy</span><span class="p">)</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">h2</span> <span class="o">*</span> <span class="n">t446</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">el</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">zf</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">ys2</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">+</span> <span class="n">sk1</span> <span class="o">*</span> <span class="p">(</span><span class="n">el</span> <span class="o">-</span> <span class="n">cy</span> <span class="o">*</span> <span class="n">sy</span><span class="p">)</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">zd</span> <span class="o">/</span> <span class="n">two</span> <span class="o">-</span> <span class="n">sk1</span> <span class="o">*</span> <span class="n">sy</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="n">te</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">sk2</span> <span class="o">*</span> <span class="n">zf</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">h2</span> <span class="o">*</span> <span class="n">fx</span> <span class="o">-</span> <span class="p">(</span><span class="n">el</span> <span class="o">+</span> <span class="n">sy</span> <span class="o">*</span> <span class="n">cy</span><span class="p">)</span> <span class="o">/</span> <span class="n">four</span><span class="p">)</span> <span class="o">*</span> <span class="n">bi</span>
+        <span class="c1"># call tmsymm(te)</span>
+
+    <span class="k">return</span> <span class="n">re</span><span class="p">,</span> <span class="n">te</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

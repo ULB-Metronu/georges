@@ -1,0 +1,683 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.elements.elements &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">georges-src</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>georges.manzoni.elements.elements</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for georges.manzoni.elements.elements</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TODO</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">import</span> <span class="nn">inspect</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">_np</span>
+<span class="kn">from</span> <span class="nn">numba.typed</span> <span class="kn">import</span> <span class="n">List</span> <span class="k">as</span> <span class="n">nList</span>
+<span class="kn">from</span> <span class="nn">pint</span> <span class="kn">import</span> <span class="n">UndefinedUnitError</span> <span class="k">as</span> <span class="n">_UndefinedUnitError</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">ureg</span> <span class="k">as</span> <span class="n">_ureg</span>
+<span class="kn">from</span> <span class="nn">..integrators</span> <span class="kn">import</span> <span class="n">IntegratorType</span><span class="p">,</span> <span class="n">MadXIntegrator</span><span class="p">,</span> <span class="n">TransportSecondOrderTaylorIntegrator</span><span class="p">,</span> <span class="n">TransportFirstOrderTaylorIntegrator</span><span class="p">,</span> <span class="n">TransportSecondOrderTaylorIntegratorExact</span><span class="p">,</span> <span class="n">TransportFirstOrderTaylorIntegratorExact</span>
+<span class="kn">from</span> <span class="nn">..apertures</span> <span class="kn">import</span> <span class="n">circular_aperture_check</span><span class="p">,</span> \
+    <span class="n">rectangular_aperture_check</span><span class="p">,</span> \
+    <span class="n">elliptical_aperture_check</span><span class="p">,</span> \
+    <span class="n">phase_space_aperture_check</span>
+<span class="kn">from</span> <span class="nn">georges_core.patchable</span> <span class="kn">import</span> <span class="n">Patchable</span> <span class="k">as</span> <span class="n">_Patchable</span>
+
+
+<div class="viewcode-block" id="ManzoniException"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniException">[docs]</a><span class="k">class</span> <span class="nc">ManzoniException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised for errors in the Manzoni elements module.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">m</span></div>
+
+
+<div class="viewcode-block" id="ManzoniAttributeException"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniAttributeException">[docs]</a><span class="k">class</span> <span class="nc">ManzoniAttributeException</span><span class="p">(</span><span class="n">ManzoniException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception raised for errors in the Manzoni elements module.&quot;&quot;&quot;</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="ElementType"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ElementType">[docs]</a><span class="k">class</span> <span class="nc">ElementType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Dark magic.</span>
+<span class="sd">    Be careful.</span>
+
+<span class="sd">    TODO</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__new__</span><span class="p">(</span><span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bases</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ElementType</span><span class="p">,</span> <span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">dct</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="c1"># Insert a default initializer (constructor) in case one is not present</span>
+        <span class="k">if</span> <span class="s1">&#39;__init__&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
+            <span class="k">def</span> <span class="nf">default_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                             <span class="n">label1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                             <span class="n">integrator</span><span class="p">:</span> <span class="n">IntegratorType</span> <span class="o">=</span> <span class="n">MadXIntegrator</span><span class="p">,</span>
+                             <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                <span class="sd">&quot;&quot;&quot;Default initializer for all Commands.&quot;&quot;&quot;</span>
+                <span class="n">defaults</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">if</span> <span class="s1">&#39;post_init&#39;</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
+                    <span class="n">defaults</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="n">parameter_name</span><span class="p">:</span> <span class="n">parameter_value</span><span class="o">.</span><span class="n">default</span>
+                        <span class="k">for</span> <span class="n">parameter_name</span><span class="p">,</span> <span class="n">parameter_value</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span><span class="n">dct</span><span class="p">[</span><span class="s1">&#39;post_init&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">parameters</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">parameter_value</span><span class="o">.</span><span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">inspect</span><span class="o">.</span><span class="n">Parameter</span><span class="o">.</span><span class="n">empty</span>
+                    <span class="p">}</span>
+                <span class="n">bases</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                  <span class="n">label1</span><span class="p">,</span>
+                                  <span class="n">integrator</span><span class="p">,</span>
+                                  <span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PARAMETERS&#39;</span><span class="p">,</span> <span class="p">{}),</span>
+                                  <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="o">**</span><span class="n">defaults</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">})</span>
+                <span class="k">if</span> <span class="s1">&#39;post_init&#39;</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
+                    <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;post_init&#39;</span><span class="p">](</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;__init__&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_init</span>
+
+        <span class="c1"># Collect all post_init arguments</span>
+        <span class="k">if</span> <span class="s1">&#39;_POST_INIT&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dct</span><span class="p">:</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;_POST_INIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;post_init&#39;</span> <span class="ow">in</span> <span class="n">dct</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">bases</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;_POST_INIT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">*</span><span class="nb">getattr</span><span class="p">(</span><span class="n">bases</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;_POST_INIT&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="o">*</span><span class="n">dct</span><span class="p">[</span><span class="s1">&#39;post_init&#39;</span><span class="p">]</span><span class="o">.</span><span class="vm">__code__</span><span class="o">.</span><span class="n">co_varnames</span><span class="p">}</span>
+
+        <span class="c1"># Add PARAMETERS from the base class</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">dct</span><span class="p">[</span><span class="s1">&#39;PARAMETERS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="nb">getattr</span><span class="p">(</span><span class="n">bases</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;PARAMETERS&#39;</span><span class="p">,</span> <span class="p">{}),</span> <span class="o">**</span><span class="n">dct</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PARAMETERS&#39;</span><span class="p">,</span> <span class="p">{})}</span>
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">dct</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bases</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">dct</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">dct</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__doc__</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="s2">&quot;&quot;&quot;</span>
+
+<span class="s2">    .. rubric:: Command attributes</span>
+
+<span class="s2">    Attributes:</span>
+<span class="s2">            &quot;&quot;&quot;</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="vm">__doc__</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        </span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">=&#39;</span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; (</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">): </span><span class="si">{</span><span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">            &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)][</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">PARAMETERS</span></div>
+
+
+<div class="viewcode-block" id="Element"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.Element">[docs]</a><span class="k">class</span> <span class="nc">Element</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ElementType</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Test test test.</span>
+
+<span class="sd">    More info on this wonderful class.</span>
+<span class="sd">    TODO</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">PARAMETERS</span><span class="p">:</span> <span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;LABEL1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;Primary label for the Zgoubi command (default: auto-generated hash).&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their description .&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TODO</span>
+<span class="sd">        Args:</span>
+<span class="sd">            label1:</span>
+<span class="sd">            label2:</span>
+<span class="sd">            *params:</span>
+<span class="sd">            **kwargs:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="p">(</span><span class="n">Element</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="p">,)</span> <span class="o">+</span> <span class="n">params</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="p">,</span> <span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">d</span><span class="o">.</span><span class="n">items</span><span class="p">()})</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_POST_INIT</span><span class="p">:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">label1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="p">[</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="p">[</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">generate_label</span><span class="p">()</span>
+        <span class="n">Element</span><span class="o">.</span><span class="n">post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Element.generate_label"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.Element.generate_label">[docs]</a>    <span class="k">def</span> <span class="nf">generate_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prefix</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            prefix:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="p">[</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="p">[</span>
+            <span class="n">prefix</span><span class="p">,</span>
+            <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">)</span>
+        <span class="p">]))[:</span><span class="mi">20</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Element.post_init"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.Element.post_init">[docs]</a>    <span class="k">def</span> <span class="nf">post_init</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># -&gt; NoReturn:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TODO</span>
+<span class="sd">        Args:</span>
+<span class="sd">            **kwargs: all arguments from the initializer (constructor) are passed to ``post_init`` as keyword arguments.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+    <span class="k">def</span> <span class="fm">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TODO</span>
+<span class="sd">        Args:</span>
+<span class="sd">            a:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Custom attribute setter; all non-protected (starting with a &#39;_&#39;) attributes in upper-case are considered</span>
+<span class="sd">        parameters of the `Command`. As such, the method will verify that they are indeed part of the command</span>
+<span class="sd">        definition, if not an exception is raised. For valid attributes, their dimensionality is verified against the</span>
+<span class="sd">        command definition (the dimension of the parameter&#39;s default value).</span>
+
+<span class="sd">        It is also possible to use unit inference by appending an underscore to the attributes&#39; name. In that</span>
+<span class="sd">        case the unit of the default value is implicitely used. This is useful in case it is known that the parameter&#39;s</span>
+<span class="sd">        numerical value is expressed in Zgoubi&#39;s default units set.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; c = Command()</span>
+<span class="sd">            &gt;&gt;&gt; c.LABEL1 = &#39;FOOBAR&#39;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            k: a string representing the attribute</span>
+<span class="sd">            v: the attribute&#39;s value to be set</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            A ZgoubidooException is raised in case the parameter is not part of the class definition or if it has</span>
+<span class="sd">            invalid dimension.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">isupper</span><span class="p">():</span>
+            <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setattr__</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k_</span> <span class="o">=</span> <span class="n">k</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">k_</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="n">ManzoniAttributeException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;The parameter </span><span class="si">{</span><span class="n">k_</span><span class="si">}</span><span class="s2"> is not part of the </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> &quot;</span>
+                                                  <span class="sa">f</span><span class="s2">&quot;definition.&quot;</span><span class="p">)</span>
+
+            <span class="n">default</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retrieve_default_parameter_value</span><span class="p">(</span><span class="n">k_</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>  <span class="c1"># Avoid a bug in pint where a string starting with &#39;#&#39; cannot be parsed</span>
+                <span class="n">default</span> <span class="o">=</span> <span class="n">default</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">))</span> <span class="ow">and</span> <span class="n">k</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">):</span>
+                <span class="n">v</span> <span class="o">=</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="o">.</span><span class="n">units</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">v</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">v</span> <span class="o">=</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">_UndefinedUnitError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dimension</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">dimensionality</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+                <span class="n">dimension</span> <span class="o">=</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dimensionality</span>  <span class="c1"># No dimension</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dimension</span> <span class="o">!=</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="o">.</span><span class="n">dimensionality</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">ManzoniAttributeException</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid dimension (</span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2"> &quot;</span>
+                                                    <span class="sa">f</span><span class="s2">&quot;instead of </span><span class="si">{</span><span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">(</span><span class="n">default</span><span class="p">)</span><span class="o">.</span><span class="n">dimensionality</span><span class="si">}</span><span class="s2">) &quot;</span>
+                                                    <span class="sa">f</span><span class="s2">&quot;for parameter </span><span class="si">{</span><span class="n">k_</span><span class="si">}</span><span class="s2">=</span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2"> of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">.&quot;</span>
+                                                    <span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">,</span> <span class="n">_UndefinedUnitError</span><span class="p">):</span>
+                <span class="k">pass</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="p">[</span><span class="n">k_</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+
+    <span class="k">def</span> <span class="nf">_retrieve_default_parameter_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve the default value of a given parameter as defined in the Command definition (class hierarchy).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            k: the parameter for which the default value is requested.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            the default value of the Command&#39;s parameter &#39;k&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">TypeError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Provides the string representation of the command in the Zgoubi input file format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The string representation.</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; c = Command(&#39;my_label_1&#39;, &#39;my_label_2&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; str(c)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attributes</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">attributes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;All attributes.</span>
+
+<span class="sd">        Provides a dictionary with all attributes for the command.</span>
+
+<span class="sd">        Returns: dictionnary with all attributes.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">defaults</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Default attributes.</span>
+
+<span class="sd">        Provides a dictionary with all attributes that have been assigned a default value.</span>
+
+<span class="sd">        Returns: dictionary with all default attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]}</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nondefaults</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">Quantity</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;Non default attributes.</span>
+
+<span class="sd">        Provides a dictionary with all attributes that have been assigned a non default value.</span>
+
+<span class="sd">        Returns: dictionary with all non default attributes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_attributes</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PARAMETERS</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]}</span></div>
+
+
+<div class="viewcode-block" id="ManzoniElement"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniElement">[docs]</a><span class="k">class</span> <span class="nc">ManzoniElement</span><span class="p">(</span><span class="n">Element</span><span class="p">,</span> <span class="n">_Patchable</span><span class="p">):</span>
+    <span class="n">INTEGRATOR</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IntegratorType</span><span class="p">]</span> <span class="o">=</span> <span class="n">MadXIntegrator</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">label1</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+                 <span class="n">integrator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IntegratorType</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                 <span class="o">*</span><span class="n">params</span><span class="p">,</span>
+                 <span class="o">**</span><span class="n">kwargs</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            label1:</span>
+<span class="sd">            integrator:</span>
+<span class="sd">            *params:</span>
+<span class="sd">            **kwargs:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label1</span><span class="p">,</span> <span class="o">*</span><span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">IntegratorType</span><span class="p">]</span> <span class="o">=</span> <span class="n">integrator</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">INTEGRATOR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">nList</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frozen</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="ManzoniElement.propagate"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniElement.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">beam</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">global_parameters</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            beam:</span>
+<span class="sd">            out:</span>
+<span class="sd">            global_parameters:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beam</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">global_parameters</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ManzoniElement.check_aperture"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniElement.check_aperture">[docs]</a>    <span class="k">def</span> <span class="nf">check_aperture</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                       <span class="n">beam</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                       <span class="n">out</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span>
+                       <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            beam:</span>
+<span class="sd">            out:</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTYPE</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">aperture_check</span><span class="p">,</span> <span class="n">aperture_parameters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aperture</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span>
+                <span class="n">aperture_check</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">aperture_parameters</span><span class="p">),</span>
+                <span class="n">out</span><span class="p">,</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">beam</span><span class="p">,</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="ManzoniElement.freeze"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniElement.freeze">[docs]</a>    <span class="k">def</span> <span class="nf">freeze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span>  <span class="c1"># Calls it!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frozen</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="ManzoniElement.unfreeze"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniElement.unfreeze">[docs]</a>    <span class="k">def</span> <span class="nf">unfreeze</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frozen</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">frozen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frozen</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">unfrozen</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frozen</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">integrator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">IntegratorType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Returns:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span>
+
+    <span class="nd">@integrator</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">integrator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">integrator</span><span class="p">:</span> <span class="n">IntegratorType</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_integrator</span> <span class="o">=</span> <span class="n">integrator</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">aperture</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Callable</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTYPE</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;CIRCULAR&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">circular_aperture_check</span><span class="p">,</span>
+                <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;meter&#39;</span><span class="p">)</span>
+                <span class="p">])</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTYPE</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;RECTANGULAR&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">rectangular_aperture_check</span><span class="p">,</span>
+                <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;meter&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;meter&#39;</span><span class="p">)</span>
+                <span class="p">])</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTYPE</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;ELLIPTICAL&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">elliptical_aperture_check</span><span class="p">,</span>
+                <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;meter&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;meter&#39;</span><span class="p">)</span>
+                <span class="p">])</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTYPE</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;PHASE_SPACE&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">phase_space_aperture_check</span><span class="p">,</span>
+                <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">APERTURE</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+                <span class="p">])</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ManzoniElement.clear_cache"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.elements.ManzoniElement.clear_cache">[docs]</a>    <span class="k">def</span> <span class="nf">clear_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">frozen</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="n">nList</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">cache</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

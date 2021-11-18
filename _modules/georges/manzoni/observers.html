@@ -1,0 +1,444 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.observers &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">georges-src</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+      <li>georges.manzoni.observers</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for georges.manzoni.observers</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TODO</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">_np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">_pd</span>
+<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">curve_fit</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">lmfit</span> <span class="kn">import</span> <span class="n">Model</span><span class="p">,</span> <span class="n">Parameters</span>
+
+
+<div class="viewcode-block" id="ObserverType"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.ObserverType">[docs]</a><span class="k">class</span> <span class="nc">ObserverType</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Observer"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.Observer">[docs]</a><span class="k">class</span> <span class="nc">Observer</span><span class="p">(</span><span class="n">metaclass</span><span class="o">=</span><span class="n">ObserverType</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="o">=</span> <span class="n">elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">elements</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="Observer.to_df"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.Observer.to_df">[docs]</a>    <span class="k">def</span> <span class="nf">to_df</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">headers</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BeamObserver"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.BeamObserver">[docs]</a><span class="k">class</span> <span class="nc">BeamObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">with_input_beams</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_with_input_beams</span> <span class="o">=</span> <span class="n">with_input_beams</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">,</span> <span class="s1">&#39;BEAM_IN&#39;</span><span class="p">,</span> <span class="s1">&#39;BEAM_OUT&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">b1</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_with_input_beams</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">b2</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="SuperObserver"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.SuperObserver">[docs]</a><span class="k">class</span> <span class="nc">SuperObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">,))</span></div>
+
+
+<div class="viewcode-block" id="MeanObserver"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.MeanObserver">[docs]</a><span class="k">class</span> <span class="nc">MeanObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_X&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_X&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_Y&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_Y&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_XP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_XP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_YP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_YP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_DPP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_DPP&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">,</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+                              <span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="SigmaObserver"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.SigmaObserver">[docs]</a><span class="k">class</span> <span class="nc">SigmaObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_X&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_X&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_Y&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_Y&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_XP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_XP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_YP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_YP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_IN_DPP&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_DPP&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">,</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b1</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="n">b2</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+                              <span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LossesObserver"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.LossesObserver">[docs]</a><span class="k">class</span> <span class="nc">LossesObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;PARTICLES_IN&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;PARTICLES_OUT&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;TRANSMISSION&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;LOSSES&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">,</span>
+                              <span class="n">b1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                              <span class="n">b2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                              <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="n">b2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">b1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                              <span class="mi">100</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">b2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">b1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                              <span class="p">))</span>
+
+<div class="viewcode-block" id="LossesObserver.compute_global_transmission"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.LossesObserver.compute_global_transmission">[docs]</a>    <span class="k">def</span> <span class="nf">compute_global_transmission</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">global_transmission</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+            <span class="n">global_transmission</span> <span class="o">*=</span> <span class="n">elem</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100</span>
+        <span class="k">return</span> <span class="n">global_transmission</span> <span class="o">*</span> <span class="mi">100</span></div>
+
+<div class="viewcode-block" id="LossesObserver.compute_global_losses"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.LossesObserver.compute_global_losses">[docs]</a>    <span class="k">def</span> <span class="nf">compute_global_losses</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="mi">100</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_global_transmission</span><span class="p">()</span></div></div>
+
+    <span class="c1"># def adjust_for_efficiency(self, efficiency: float = 1.0):</span>
+    <span class="c1"># do something with self.data</span>
+    <span class="c1"># self.data[&#39;LOSSES&#39;] /= efficiency</span>
+    <span class="c1"># self.data[&#39;TRANSMISSION&#39;] *= effiency</span>
+    <span class="c1">#   ...</span>
+
+
+<div class="viewcode-block" id="SymmetryObserver"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.SymmetryObserver">[docs]</a><span class="k">class</span> <span class="nc">SymmetryObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;SYM_IN&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;SYM_OUT&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">,</span>
+                          <span class="nb">abs</span><span class="p">(</span><span class="n">b1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">-</span> <span class="n">b1</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">b1</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="n">b1</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()),</span>
+                          <span class="nb">abs</span><span class="p">(</span><span class="n">b2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">-</span> <span class="n">b2</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">())</span> <span class="o">/</span> <span class="p">(</span><span class="n">b2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">+</span> <span class="n">b2</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()),</span>
+                          <span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="IbaBpmObserver"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.IbaBpmObserver">[docs]</a><span class="k">class</span> <span class="nc">IbaBpmObserver</span><span class="p">(</span><span class="n">Observer</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">elements</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;LABEL1&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_X&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;BEAM_OUT_Y&#39;</span><span class="p">,</span>
+                        <span class="p">)</span>
+
+<div class="viewcode-block" id="IbaBpmObserver.fit_bpm"><a class="viewcode-back" href="../../../api/georges.manzoni.html#georges.manzoni.observers.IbaBpmObserver.fit_bpm">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">fit_bpm</span><span class="p">(</span><span class="n">distribution</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+
+        <span class="nd">@njit</span>
+        <span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">sigma</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">a</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">sigma</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span><span class="p">)</span>
+
+        <span class="k">def</span> <span class="nf">fit_bpm</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">maxfev</span><span class="o">=</span><span class="mf">1e7</span><span class="p">):</span>
+            <span class="n">bs</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+                <span class="p">[</span><span class="o">-</span><span class="mi">31</span><span class="p">,</span> <span class="o">-</span><span class="mf">19.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">15.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">11.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">7.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.8</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span>
+                 <span class="mf">3.8</span><span class="p">,</span> <span class="mf">5.8</span><span class="p">,</span> <span class="mf">7.8</span><span class="p">,</span> <span class="mf">11.8</span><span class="p">,</span> <span class="mf">15.8</span><span class="p">,</span> <span class="mf">19.8</span><span class="p">,</span> <span class="mi">31</span><span class="p">])</span> <span class="o">/</span> <span class="mi">1000</span>
+            <span class="n">bsp</span> <span class="o">=</span> <span class="p">(</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">bs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">bs</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.7</span>
+            <span class="n">w</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*=</span> <span class="mf">0.7</span>
+            <span class="n">hist</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">bs</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">bsp</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">w</span> <span class="o">*</span> <span class="n">hist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">ar</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">trapz</span><span class="p">(</span><span class="n">y</span> <span class="o">/</span> <span class="n">_np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">x</span><span class="p">)</span>
+            <span class="n">mean</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="n">_np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+            <span class="n">rms</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="n">_np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="n">Parameters</span><span class="p">()</span>  <span class="c1"># Instanciate the Parameters class, then add variables as keywords</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">ar</span><span class="p">,</span> <span class="nb">min</span><span class="o">=-</span><span class="mf">1e6</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">1e6</span><span class="p">)</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;mu&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="n">mean</span><span class="o">-</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mean</span><span class="p">),</span> <span class="nb">max</span><span class="o">=</span><span class="n">mean</span><span class="o">+</span><span class="n">_np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">mean</span><span class="p">))</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;sigma&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">rms</span><span class="p">,</span> <span class="nb">min</span><span class="o">=</span><span class="mf">0.5</span><span class="o">*</span><span class="n">rms</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mi">2</span><span class="o">*</span><span class="n">rms</span><span class="p">)</span>
+            <span class="n">params</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="s1">&#39;max_nfev&#39;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">maxfev</span><span class="p">)</span>
+
+            <span class="n">gmodel</span> <span class="o">=</span> <span class="n">Model</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">gmodel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">y</span><span class="p">,</span>
+                                <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+                                <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+            <span class="c1"># Print the fit result</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;bpm fit result:&#39;</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">best_values</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">best_values</span><span class="p">[</span><span class="s1">&#39;mu&#39;</span><span class="p">],</span> <span class="n">result</span><span class="o">.</span><span class="n">best_values</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">])</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">result</span><span class="o">.</span><span class="n">best_values</span><span class="p">[</span><span class="s1">&#39;sigma&#39;</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="n">fit_bpm</span><span class="p">(</span><span class="n">distribution</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">CLASS</span> <span class="o">==</span> <span class="s1">&#39;Marker&#39;</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">)</span>  <span class="c1"># To identify the BPM whose data are being fitted</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">element</span><span class="o">.</span><span class="n">LABEL1</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">fit_bpm</span><span class="p">(</span><span class="n">b2</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">fit_bpm</span><span class="p">(</span><span class="n">b2</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span>
+                                  <span class="p">))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

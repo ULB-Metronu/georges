@@ -1,0 +1,1140 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.elements package &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="georges.manzoni.maps package" href="georges.manzoni.maps.html" />
+    <link rel="prev" title="georges.manzoni package" href="georges.manzoni.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">georges</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="georges.html">georges package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="georges.fermi.html">georges.fermi package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="georges.madx.html">georges.madx package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="georges.manzoni.html">georges.manzoni package</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">georges.manzoni.elements package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="georges.manzoni.maps.html">georges.manzoni.maps package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="georges.vis.html">georges.vis package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">georges</a> &raquo;</li>
+        
+          <li><a href="georges.html">georges package</a> &raquo;</li>
+        
+          <li><a href="georges.manzoni.html">georges.manzoni package</a> &raquo;</li>
+        
+      <li>georges.manzoni.elements package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/georges.manzoni.elements.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="georges-manzoni-elements-package">
+<h1>georges.manzoni.elements package<a class="headerlink" href="#georges-manzoni-elements-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-georges.manzoni.elements.cavities">
+<span id="georges-manzoni-elements-cavities-module"></span><h2>georges.manzoni.elements.cavities module<a class="headerlink" href="#module-georges.manzoni.elements.cavities" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+</div>
+<div class="section" id="module-georges.manzoni.elements.collimators">
+<span id="georges-manzoni-elements-collimators-module"></span><h2>georges.manzoni.elements.collimators module<a class="headerlink" href="#module-georges.manzoni.elements.collimators" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.CircularCollimator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.collimators.</span></span><span class="sig-name descname"><span class="pre">CircularCollimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/collimators.html#CircularCollimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.collimators.CircularCollimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.collimators.Collimator" title="georges.manzoni.elements.collimators.Collimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.collimators.Collimator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.CircularCollimator.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([None,</span> <span class="pre">None,</span> <span class="pre">None,</span> <span class="pre">None],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">('CIRCULAR',</span> <span class="pre">'Aperture</span> <span class="pre">type'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Drift</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.collimators.CircularCollimator.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.Collimator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.collimators.</span></span><span class="sig-name descname"><span class="pre">Collimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/collimators.html#Collimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.collimators.Collimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Drift" title="georges.manzoni.elements.magnets.Drift"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Drift</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.Collimator.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([None,</span> <span class="pre">None,</span> <span class="pre">None,</span> <span class="pre">None],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Drift</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.collimators.Collimator.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.Dump">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.collimators.</span></span><span class="sig-name descname"><span class="pre">Dump</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/collimators.html#Dump"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.collimators.Dump" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.collimators.RectangularCollimator" title="georges.manzoni.elements.collimators.RectangularCollimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.collimators.RectangularCollimator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.Dump.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">[0.0,</span> <span class="pre">0.0],</span> <span class="pre">'APERTYPE':</span> <span class="pre">('RECTANGULAR',</span> <span class="pre">'Aperture</span> <span class="pre">type'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Drift</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.collimators.Dump.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.EllipticalCollimator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.collimators.</span></span><span class="sig-name descname"><span class="pre">EllipticalCollimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/collimators.html#EllipticalCollimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.collimators.EllipticalCollimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.collimators.Collimator" title="georges.manzoni.elements.collimators.Collimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.collimators.Collimator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.EllipticalCollimator.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([None,</span> <span class="pre">None,</span> <span class="pre">None,</span> <span class="pre">None],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">('ELLIPTICAL',</span> <span class="pre">'Aperture</span> <span class="pre">type'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Drift</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.collimators.EllipticalCollimator.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.RectangularCollimator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.collimators.</span></span><span class="sig-name descname"><span class="pre">RectangularCollimator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/collimators.html#RectangularCollimator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.collimators.RectangularCollimator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.collimators.Collimator" title="georges.manzoni.elements.collimators.Collimator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.collimators.Collimator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.collimators.RectangularCollimator.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([None,</span> <span class="pre">None,</span> <span class="pre">None,</span> <span class="pre">None],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">('RECTANGULAR',</span> <span class="pre">'Aperture</span> <span class="pre">type'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Drift</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.collimators.RectangularCollimator.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.elements.electrostatic">
+<span id="georges-manzoni-elements-electrostatic-module"></span><h2>georges.manzoni.elements.electrostatic module<a class="headerlink" href="#module-georges.manzoni.elements.electrostatic" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.electrostatic.ELSeparator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.electrostatic.</span></span><span class="sig-name descname"><span class="pre">ELSeparator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/electrostatic.html#ELSeparator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.electrostatic.ELSeparator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.electrostatic.ELSeparator.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.electrostatic.ELSeparator.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.elements.elements">
+<span id="georges-manzoni-elements-elements-module"></span><h2>georges.manzoni.elements.elements module<a class="headerlink" href="#module-georges.manzoni.elements.elements" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.Element">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.elements.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.Element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Test test test.</p>
+<p>More info on this wonderful class.
+TODO</p>
+<p class="rubric">Command attributes</p>
+<p>Attributes:</p>
+<blockquote>
+<div><p>LABEL1='' (str): Primary label for the Zgoubi command (default: auto-generated hash).</p>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.Element.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.elements.Element.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.Element.attributes">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">attributes</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict[str,</span> <span class="pre">pint.quantity.build_quantity_class.&lt;locals&gt;.Quantity]</span></em><a class="headerlink" href="#georges.manzoni.elements.elements.Element.attributes" title="Permalink to this definition">¶</a></dt>
+<dd><p>All attributes.</p>
+<p>Provides a dictionary with all attributes for the command.</p>
+<p>Returns: dictionnary with all attributes.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.Element.defaults">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">defaults</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict[str,</span> <span class="pre">pint.quantity.build_quantity_class.&lt;locals&gt;.Quantity]</span></em><a class="headerlink" href="#georges.manzoni.elements.elements.Element.defaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default attributes.</p>
+<p>Provides a dictionary with all attributes that have been assigned a default value.</p>
+<p>Returns: dictionary with all default attributes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.Element.generate_label">
+<span class="sig-name descname"><span class="pre">generate_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#Element.generate_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.Element.generate_label" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>prefix:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.Element.nondefaults">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">nondefaults</span></span><em class="property"><span class="pre">:</span> <span class="pre">Dict[str,</span> <span class="pre">pint.quantity.build_quantity_class.&lt;locals&gt;.Quantity]</span></em><a class="headerlink" href="#georges.manzoni.elements.elements.Element.nondefaults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Non default attributes.</p>
+<p>Provides a dictionary with all attributes that have been assigned a non default value.</p>
+<p>Returns: dictionary with all non default attributes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.Element.post_init">
+<span class="sig-name descname"><span class="pre">post_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#Element.post_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.Element.post_init" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO
+Args:</p>
+<blockquote>
+<div><p><a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs: all arguments from the initializer (constructor) are passed to <code class="docutils literal notranslate"><span class="pre">post_init</span></code> as keyword arguments.</p>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ElementType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.elements.</span></span><span class="sig-name descname"><span class="pre">ElementType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#georges.manzoni.elements.elements.ElementType" title="georges.manzoni.elements.elements.ElementType"><span class="pre">ElementType</span></a><span class="p"><span class="pre">,</span> </span><span class="pre">type</span><span class="p"><span class="pre">,</span> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dct</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ElementType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ElementType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<p>Dark magic.
+Be careful.</p>
+<p>TODO</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniAttributeException">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.elements.</span></span><span class="sig-name descname"><span class="pre">ManzoniAttributeException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniAttributeException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniAttributeException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniException" title="georges.manzoni.elements.elements.ManzoniException"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniException</span></code></a></p>
+<p>Exception raised for errors in the Manzoni elements module.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.elements.</span></span><span class="sig-name descname"><span class="pre">ManzoniElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">str</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">integrator</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="georges.manzoni.html#georges.manzoni.integrators.IntegratorType" title="georges.manzoni.integrators.IntegratorType"><span class="pre">georges.manzoni.integrators.IntegratorType</span></a><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.Element" title="georges.manzoni.elements.elements.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.Element</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">georges_core.patchable.Patchable</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.INTEGRATOR">
+<span class="sig-name descname"><span class="pre">INTEGRATOR</span></span><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.INTEGRATOR" title="Permalink to this definition">¶</a></dt>
+<dd><p>alias of <a class="reference internal" href="georges.manzoni.html#georges.manzoni.integrators.MadXIntegrator" title="georges.manzoni.integrators.MadXIntegrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.MadXIntegrator</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.aperture">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">aperture</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.aperture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.cache">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="pre">:</span> <span class="pre">numba.typed.typedlist.List</span></em><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.check_aperture">
+<span class="sig-name descname"><span class="pre">check_aperture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniElement.check_aperture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.check_aperture" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.clear_cache">
+<span class="sig-name descname"><span class="pre">clear_cache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniElement.clear_cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.clear_cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.freeze">
+<span class="sig-name descname"><span class="pre">freeze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniElement.freeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.frozen">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">frozen</span></span><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.frozen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.integrator">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">integrator</span></span><em class="property"><span class="pre">:</span> <a class="reference internal" href="georges.manzoni.html#georges.manzoni.integrators.IntegratorType" title="georges.manzoni.integrators.IntegratorType"><span class="pre">georges.manzoni.integrators.IntegratorType</span></a></em><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.integrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniElement.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.unfreeze">
+<span class="sig-name descname"><span class="pre">unfreeze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniElement.unfreeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.unfreeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniElement.unfrozen">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">unfrozen</span></span><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniElement.unfrozen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="georges.manzoni.elements.elements.ManzoniException">
+<em class="property"><span class="pre">exception</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.elements.</span></span><span class="sig-name descname"><span class="pre">ManzoniException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/elements.html#ManzoniException"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.elements.ManzoniException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised for errors in the Manzoni elements module.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.elements.magnets">
+<span id="georges-manzoni-elements-magnets-module"></span><h2>georges.manzoni.elements.magnets module<a class="headerlink" href="#module-georges.manzoni.elements.magnets" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Bend">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Bend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Bend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Bend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Magnet" title="georges.manzoni.elements.magnets.Magnet"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Magnet</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Bend.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'ANGLE':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Bending</span> <span class="pre">angle.'),</span> <span class="pre">'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'E1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'E2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Exit</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'FINT':</span> <span class="pre">(0.0,</span> <span class="pre">'Fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'FINTX':</span> <span class="pre">(0.0,</span> <span class="pre">'Exit</span> <span class="pre">fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'HGAP':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">gap.'),</span> <span class="pre">'K0':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter')&gt;,</span> <span class="pre">'Dipolar</span> <span class="pre">normalized</span> <span class="pre">gradient'),</span> <span class="pre">'K1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Quadrupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'K2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">3')&gt;,</span> <span class="pre">'Sextupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">tilt</span> <span class="pre">angle.'),</span> <span class="pre">'d':</span> <span class="pre">(0.0,</span> <span class="pre">'momentum</span> <span class="pre">deviation.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Bend.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Bend.compute_fringe">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">compute_fringe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hgap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Bend.compute_fringe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Bend.compute_fringe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Bend.edges">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">edges</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Bend.edges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Bend.fringe_field_integrals">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fringe_field_integrals</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Bend.fringe_field_integrals" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Bend.length">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Bend.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of the element.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>the length of the element with units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Bend.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Bend.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Decapole">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Decapole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Decapole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Decapole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Decapole.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Decapole.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.DipEdge">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">DipEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#DipEdge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.DipEdge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Magnet" title="georges.manzoni.elements.magnets.Magnet"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Magnet</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.DipEdge.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'E1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'FINT':</span> <span class="pre">(0.0,</span> <span class="pre">'Fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'H':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter')&gt;,</span> <span class="pre">'Inverse</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">curvature</span> <span class="pre">radius.'),</span> <span class="pre">'HGAP':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">gap.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.DipEdge.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.DipEdge.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.DipEdge.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Dodecapole">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Dodecapole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Dodecapole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Dodecapole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Dodecapole.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Dodecapole.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Drift">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Drift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Drift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Drift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Gap" title="georges.manzoni.elements.magnets.Gap"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Gap</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Drift.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Drift</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Drift.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_in">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Fringe_in</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Fringe_in"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_in" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Bend" title="georges.manzoni.elements.magnets.Bend"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Bend</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_in.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'ANGLE':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Bending</span> <span class="pre">angle.'),</span> <span class="pre">'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'E1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'E2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Exit</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'FINT':</span> <span class="pre">(0.0,</span> <span class="pre">'Fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'FINTX':</span> <span class="pre">(0.0,</span> <span class="pre">'Exit</span> <span class="pre">fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'HGAP':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">gap.'),</span> <span class="pre">'K0':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter')&gt;,</span> <span class="pre">'Dipolar</span> <span class="pre">normalized</span> <span class="pre">gradient'),</span> <span class="pre">'K1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Quadrupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'K2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">3')&gt;,</span> <span class="pre">'Sextupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'R1':</span> <span class="pre">(&lt;Quantity(inf,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">curvature</span> <span class="pre">radius'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">tilt</span> <span class="pre">angle.'),</span> <span class="pre">'d':</span> <span class="pre">(0.0,</span> <span class="pre">'momentum</span> <span class="pre">deviation.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_in.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_in.compute_fringe">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">compute_fringe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hgap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Fringe_in.compute_fringe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_in.compute_fringe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_in.edges">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">edges</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_in.edges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_in.fringe_field_integrals">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fringe_field_integrals</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_in.fringe_field_integrals" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_in.length">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_in.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of the element.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>the length of the element with units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_in.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_in.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_out">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Fringe_out</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Fringe_out"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_out" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Bend" title="georges.manzoni.elements.magnets.Bend"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Bend</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_out.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'ANGLE':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Bending</span> <span class="pre">angle.'),</span> <span class="pre">'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'E1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'E2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Exit</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'FINT':</span> <span class="pre">(0.0,</span> <span class="pre">'Fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'FINTX':</span> <span class="pre">(0.0,</span> <span class="pre">'Exit</span> <span class="pre">fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'HGAP':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">gap.'),</span> <span class="pre">'K0':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter')&gt;,</span> <span class="pre">'Dipolar</span> <span class="pre">normalized</span> <span class="pre">gradient'),</span> <span class="pre">'K1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Quadrupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'K2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">3')&gt;,</span> <span class="pre">'Sextupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'R2':</span> <span class="pre">(&lt;Quantity(inf,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">curvature</span> <span class="pre">radius'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">tilt</span> <span class="pre">angle.'),</span> <span class="pre">'d':</span> <span class="pre">(0.0,</span> <span class="pre">'momentum</span> <span class="pre">deviation.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_out.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_out.compute_fringe">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">compute_fringe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">e</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hgap</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fint</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Fringe_out.compute_fringe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_out.compute_fringe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_out.edges">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">edges</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_out.edges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_out.fringe_field_integrals">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fringe_field_integrals</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_out.fringe_field_integrals" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_out.length">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_out.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of the element.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>the length of the element with units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Fringe_out.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Fringe_out.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Gap">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Gap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Gap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Gap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Gap.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Drift</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Gap.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Gap.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Gap.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Gap.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Gap.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Gap.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.HKicker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">HKicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#HKicker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.HKicker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Magnet" title="georges.manzoni.elements.magnets.Magnet"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Magnet</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.HKicker.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'KICK':</span> <span class="pre">(0.0,</span> <span class="pre">'The</span> <span class="pre">momentum</span> <span class="pre">change.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Kicker</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'The</span> <span class="pre">roll</span> <span class="pre">angle</span> <span class="pre">about</span> <span class="pre">the</span> <span class="pre">longitudinal</span> <span class="pre">axis.</span> <span class="pre">A</span> <span class="pre">positive</span> <span class="pre">angle</span> <span class="pre">represents</span> <span class="pre">a</span> <span class="pre">clockwise</span> <span class="pre">rotation</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">kicker')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.HKicker.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.HKicker.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.HKicker.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Kicker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Kicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Kicker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Kicker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Magnet" title="georges.manzoni.elements.magnets.Magnet"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Magnet</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Kicker.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'HKICK':</span> <span class="pre">(0.0,</span> <span class="pre">'The</span> <span class="pre">momentum</span> <span class="pre">change</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">horizontal</span> <span class="pre">plane.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Kicker</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'The</span> <span class="pre">roll</span> <span class="pre">angle</span> <span class="pre">about</span> <span class="pre">the</span> <span class="pre">longitudinal</span> <span class="pre">axis.</span> <span class="pre">A</span> <span class="pre">positive</span> <span class="pre">angle</span> <span class="pre">represents</span> <span class="pre">a</span> <span class="pre">clockwise</span> <span class="pre">rotation</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">kicker'),</span> <span class="pre">'VKICK':</span> <span class="pre">(0.0,</span> <span class="pre">'The</span> <span class="pre">momentum</span> <span class="pre">change</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">vertical</span> <span class="pre">plane.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Kicker.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Kicker.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Kicker.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Magnet">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Magnet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Magnet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Magnet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Magnet.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Magnet.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Marker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Marker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Marker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<p>TODO</p>
+<p class="rubric">Command attributes</p>
+<p>Attributes:</p>
+<blockquote>
+<div><p>LABEL1='' (str): Primary label for the Zgoubi command (default: auto-generated hash).</p>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Marker.INTEGRATOR">
+<span class="sig-name descname"><span class="pre">INTEGRATOR</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">IntegratorType</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Marker.INTEGRATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Marker.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Marker.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Marker.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Marker.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Marker.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Matrix">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Matrix.INTEGRATOR">
+<span class="sig-name descname"><span class="pre">INTEGRATOR</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">IntegratorType</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Matrix.INTEGRATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Matrix.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'MATRIX':</span> <span class="pre">(array([[1.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.,</span> <span class="pre">1.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.,</span> <span class="pre">0.,</span> <span class="pre">1.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">1.,</span> <span class="pre">0.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">1.,</span> <span class="pre">0.],</span>&#160;&#160;&#160;&#160;&#160;&#160;&#160; <span class="pre">[0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">0.,</span> <span class="pre">1.]]),</span> <span class="pre">'Transfer</span> <span class="pre">matrix.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Matrix.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Matrix.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Matrix.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Matrix.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Matrix.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Matrix.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Multipole">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Multipole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Multipole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Multipole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Multipole.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'K1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Quadrupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'K2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">3')&gt;,</span> <span class="pre">'Sextupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Multipole.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Multipole.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Multipole.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Octupole">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Octupole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Octupole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Octupole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Octupole.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Octupole.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Quadrupole">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Quadrupole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Quadrupole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Quadrupole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Magnet" title="georges.manzoni.elements.magnets.Magnet"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Magnet</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Quadrupole.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'K1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'K1S':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Normalized</span> <span class="pre">skew</span> <span class="pre">gradient.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Quadrupole</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">tilt</span> <span class="pre">angle.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Quadrupole.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Quadrupole.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Quadrupole.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.RBend">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">RBend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#RBend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.RBend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Bend" title="georges.manzoni.elements.magnets.Bend"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Bend</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.RBend.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'ANGLE':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Bending</span> <span class="pre">angle.'),</span> <span class="pre">'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'E1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'E2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Exit</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'FINT':</span> <span class="pre">(0.0,</span> <span class="pre">'Fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'FINTX':</span> <span class="pre">(0.0,</span> <span class="pre">'Exit</span> <span class="pre">fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'HGAP':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">gap.'),</span> <span class="pre">'K0':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter')&gt;,</span> <span class="pre">'Dipolar</span> <span class="pre">normalized</span> <span class="pre">gradient'),</span> <span class="pre">'K1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Quadrupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'K2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">3')&gt;,</span> <span class="pre">'Sextupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">tilt</span> <span class="pre">angle.'),</span> <span class="pre">'d':</span> <span class="pre">(0.0,</span> <span class="pre">'momentum</span> <span class="pre">deviation.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.RBend.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.RBend.edges">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">edges</span></span><em class="property"><span class="pre">:</span> <span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.RBend.edges" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.RBend.length">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">length</span></span><em class="property"><span class="pre">:</span> <span class="pre">float</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.RBend.length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Length of the element.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>the length of the element with units.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.SBend">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">SBend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#SBend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.SBend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Bend" title="georges.manzoni.elements.magnets.Bend"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Bend</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.SBend.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'ANGLE':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Bending</span> <span class="pre">angle.'),</span> <span class="pre">'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'E1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Entrance</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'E2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Exit</span> <span class="pre">face</span> <span class="pre">angle.'),</span> <span class="pre">'FINT':</span> <span class="pre">(0.0,</span> <span class="pre">'Fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'FINTX':</span> <span class="pre">(0.0,</span> <span class="pre">'Exit</span> <span class="pre">fringe</span> <span class="pre">field</span> <span class="pre">integral.'),</span> <span class="pre">'HGAP':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">gap.'),</span> <span class="pre">'K0':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter')&gt;,</span> <span class="pre">'Dipolar</span> <span class="pre">normalized</span> <span class="pre">gradient'),</span> <span class="pre">'K1':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">2')&gt;,</span> <span class="pre">'Quadrupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'K2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">3')&gt;,</span> <span class="pre">'Sextupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">tilt</span> <span class="pre">angle.'),</span> <span class="pre">'d':</span> <span class="pre">(0.0,</span> <span class="pre">'momentum</span> <span class="pre">deviation.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.SBend.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.SRotation">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">SRotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#SRotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.SRotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.SRotation.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'ANGLE':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'Angle</span> <span class="pre">of</span> <span class="pre">rotation</span> <span class="pre">along</span> <span class="pre">the</span> <span class="pre">s-axis.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.SRotation.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.SRotation.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.SRotation.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Sextupole">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Sextupole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Sextupole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Sextupole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Sextupole.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'K2':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'1</span> <span class="pre">/</span> <span class="pre">meter</span> <span class="pre">**</span> <span class="pre">3')&gt;,</span> <span class="pre">'Sextupolar</span> <span class="pre">normalized</span> <span class="pre">gradient.'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Magnet</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Sextupole.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Sextupole.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Sextupole.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Solenoid">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">Solenoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#Solenoid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.Solenoid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Magnet" title="georges.manzoni.elements.magnets.Magnet"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Magnet</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.Solenoid.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.Solenoid.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.TKicker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">TKicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#TKicker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.TKicker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Kicker" title="georges.manzoni.elements.magnets.Kicker"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Kicker</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.TKicker.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'HKICK':</span> <span class="pre">(0.0,</span> <span class="pre">'The</span> <span class="pre">momentum</span> <span class="pre">change</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">horizontal</span> <span class="pre">plane.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Kicker</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'The</span> <span class="pre">roll</span> <span class="pre">angle</span> <span class="pre">about</span> <span class="pre">the</span> <span class="pre">longitudinal</span> <span class="pre">axis.</span> <span class="pre">A</span> <span class="pre">positive</span> <span class="pre">angle</span> <span class="pre">represents</span> <span class="pre">a</span> <span class="pre">clockwise</span> <span class="pre">rotation</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">kicker'),</span> <span class="pre">'VKICK':</span> <span class="pre">(0.0,</span> <span class="pre">'The</span> <span class="pre">momentum</span> <span class="pre">change</span> <span class="pre">in</span> <span class="pre">the</span> <span class="pre">vertical</span> <span class="pre">plane.')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.TKicker.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.VKicker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.magnets.</span></span><span class="sig-name descname"><span class="pre">VKicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/magnets.html#VKicker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.magnets.VKicker" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.magnets.Magnet" title="georges.manzoni.elements.magnets.Magnet"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.magnets.Magnet</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.VKicker.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'KICK':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'The</span> <span class="pre">momentum</span> <span class="pre">change.'),</span> <span class="pre">'KINEMATICS':</span> <span class="pre">(None,</span> <span class="pre">'Reference</span> <span class="pre">kinematics'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Kicker</span> <span class="pre">length.'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'TILT':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'radian')&gt;,</span> <span class="pre">'The</span> <span class="pre">roll</span> <span class="pre">angle</span> <span class="pre">about</span> <span class="pre">the</span> <span class="pre">longitudinal</span> <span class="pre">axis.</span> <span class="pre">A</span> <span class="pre">positive</span> <span class="pre">angle</span> <span class="pre">represents</span> <span class="pre">a</span> <span class="pre">clockwise</span> <span class="pre">rotation</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">kicker')}</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.VKicker.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.magnets.VKicker.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.magnets.VKicker.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.elements.scatterers">
+<span id="georges-manzoni-elements-scatterers-module"></span><h2>georges.manzoni.elements.scatterers module<a class="headerlink" href="#module-georges.manzoni.elements.scatterers" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.BeamStop">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.scatterers.</span></span><span class="sig-name descname"><span class="pre">BeamStop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#BeamStop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.BeamStop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.scatterers.MaterialElement" title="georges.manzoni.elements.scatterers.MaterialElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.scatterers.MaterialElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.BeamStop.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'KINETIC_ENERGY':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'megaelectronvolt')&gt;,</span> <span class="pre">'Incoming</span> <span class="pre">beam</span> <span class="pre">energy'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Beam</span> <span class="pre">Stop</span> <span class="pre">length'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'MATERIAL':</span> <span class="pre">(&lt;class</span> <span class="pre">'georges.fermi.materials.Vacuum'&gt;,</span> <span class="pre">'Beam</span> <span class="pre">Stop</span> <span class="pre">material'),</span> <span class="pre">'RADIUS':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Beam</span> <span class="pre">Stop</span> <span class="pre">radius')}</span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.BeamStop.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.BeamStop.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.BeamStop.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.BeamStop.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#BeamStop.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.BeamStop.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Degrader">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.scatterers.</span></span><span class="sig-name descname"><span class="pre">Degrader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#Degrader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.Degrader" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.scatterers.MaterialElement" title="georges.manzoni.elements.scatterers.MaterialElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.scatterers.MaterialElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Degrader.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'KINETIC_ENERGY':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'megaelectronvolt')&gt;,</span> <span class="pre">'Incoming</span> <span class="pre">beam</span> <span class="pre">energy'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Degrader</span> <span class="pre">length'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'MATERIAL':</span> <span class="pre">(&lt;class</span> <span class="pre">'georges.fermi.materials.Vacuum'&gt;,</span> <span class="pre">'Degrader</span> <span class="pre">material'),</span> <span class="pre">'WITH_LOSSES':</span> <span class="pre">(False,</span> <span class="pre">'Boolean</span> <span class="pre">to</span> <span class="pre">compute</span> <span class="pre">losses</span> <span class="pre">and</span> <span class="pre">dpp')}</span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.Degrader.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Degrader.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.Degrader.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Degrader.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#Degrader.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.Degrader.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.scatterers.</span></span><span class="sig-name descname"><span class="pre">MaterialElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#MaterialElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.elements.ManzoniElement" title="georges.manzoni.elements.elements.ManzoniElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.elements.ManzoniElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement.INTEGRATOR">
+<span class="sig-name descname"><span class="pre">INTEGRATOR</span></span><em class="property"><span class="pre">:</span> <span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">IntegratorType</span><span class="p"><span class="pre">]</span></span></em><em class="property"> <span class="pre">=</span> <span class="pre">None</span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement.INTEGRATOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).')}</span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their description .</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement.beta">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">beta</span></span><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement.beta" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement.cache">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="pre">:</span> <span class="pre">list</span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement.degraded_energy">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">degraded_energy</span></span><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement.degraded_energy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement.material">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">material</span></span><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement.material" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.MaterialElement.pseudo_aperture_check">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">pseudo_aperture_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#MaterialElement.pseudo_aperture_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.MaterialElement.pseudo_aperture_check" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Scatterer">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.elements.scatterers.</span></span><span class="sig-name descname"><span class="pre">Scatterer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">label1:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">''</span></em>, <em class="sig-param"><span class="pre">integrator:</span> <span class="pre">georges.manzoni.integrators.IntegratorType</span> <span class="pre">=</span> <span class="pre">&lt;class</span> <span class="pre">'georges.manzoni.integrators.MadXIntegrator'&gt;</span></em>, <em class="sig-param"><span class="pre">*params</span></em>, <em class="sig-param"><span class="pre">**kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#Scatterer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.Scatterer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.elements.scatterers.MaterialElement" title="georges.manzoni.elements.scatterers.MaterialElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.elements.scatterers.MaterialElement</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Scatterer.PARAMETERS">
+<span class="sig-name descname"><span class="pre">PARAMETERS</span></span><em class="property"><span class="pre">:</span> <span class="pre">dict</span></em><em class="property"> <span class="pre">=</span> <span class="pre">{'APERTURE':</span> <span class="pre">([],</span> <span class="pre">''),</span> <span class="pre">'APERTYPE':</span> <span class="pre">(None,</span> <span class="pre">'Aperture</span> <span class="pre">type</span> <span class="pre">(CIRCULAR,</span> <span class="pre">ELIPTIC</span> <span class="pre">or</span> <span class="pre">RECTANGULAR)'),</span> <span class="pre">'KINETIC_ENERGY':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'megaelectronvolt')&gt;,</span> <span class="pre">'Incoming</span> <span class="pre">beam</span> <span class="pre">energy'),</span> <span class="pre">'L':</span> <span class="pre">(&lt;Quantity(0.0,</span> <span class="pre">'meter')&gt;,</span> <span class="pre">'Degrader</span> <span class="pre">length'),</span> <span class="pre">'LABEL1':</span> <span class="pre">('',</span> <span class="pre">'Primary</span> <span class="pre">label</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">Zgoubi</span> <span class="pre">command</span> <span class="pre">(default:</span> <span class="pre">auto-generated</span> <span class="pre">hash).'),</span> <span class="pre">'MATERIAL':</span> <span class="pre">(&lt;class</span> <span class="pre">'georges.fermi.materials.Vacuum'&gt;,</span> <span class="pre">'Degrader</span> <span class="pre">material')}</span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.Scatterer.PARAMETERS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parameters of the element, with their default value and their descriptions.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Scatterer.parameters">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">parameters</span></span><em class="property"><span class="pre">:</span> <span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#georges.manzoni.elements.scatterers.Scatterer.parameters" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.elements.scatterers.Scatterer.propagate">
+<span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">list</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/elements/scatterers.html#Scatterer.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.elements.scatterers.Scatterer.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+out:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.elements">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-georges.manzoni.elements" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="georges.manzoni.maps.html" class="btn btn-neutral float-right" title="georges.manzoni.maps package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="georges.manzoni.html" class="btn btn-neutral float-left" title="georges.manzoni package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

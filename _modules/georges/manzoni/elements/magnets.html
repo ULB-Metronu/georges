@@ -1,0 +1,704 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.elements.magnets &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">georges-src</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>georges.manzoni.elements.magnets</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for georges.manzoni.elements.magnets</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">TODO</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">_np</span>
+<span class="kn">from</span> <span class="nn">...</span> <span class="kn">import</span> <span class="n">ureg</span> <span class="k">as</span> <span class="n">_ureg</span>
+<span class="kn">from</span> <span class="nn">.elements</span> <span class="kn">import</span> <span class="n">ManzoniElement</span> <span class="k">as</span> <span class="n">_ManzoniElement</span>
+<span class="kn">from</span> <span class="nn">..kernels</span> <span class="kn">import</span> <span class="n">batched_vector_matrix</span>
+
+
+<div class="viewcode-block" id="Marker"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Marker">[docs]</a><span class="k">class</span> <span class="nc">Marker</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    TODO</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">INTEGRATOR</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="Marker.propagate"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Marker.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beam_in</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">beam_out</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">_np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">beam_out</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">beam_in</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span></div></div>
+
+
+<div class="viewcode-block" id="Matrix"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Matrix">[docs]</a><span class="k">class</span> <span class="nc">Matrix</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="n">INTEGRATOR</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;MATRIX&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">6</span><span class="p">),</span> <span class="s1">&#39;Transfer matrix.&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+
+<div class="viewcode-block" id="Matrix.propagate"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Matrix.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">beam_in</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">beam_out</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">global_parameters</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">batched_vector_matrix</span><span class="p">(</span>
+            <span class="n">beam_in</span><span class="p">,</span>
+            <span class="n">beam_out</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MATRIX</span>
+        <span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">MATRIX</span>
+        <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Gap"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Gap">[docs]</a><span class="k">class</span> <span class="nc">Gap</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Drift length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTYPE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTURE&#39;</span><span class="p">:</span> <span class="p">([],</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Gap.propagate"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Gap.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                  <span class="n">beam_in</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span>
+                  <span class="n">beam_out</span><span class="p">:</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="n">global_parameters</span><span class="p">:</span> <span class="nb">list</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+                  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">_np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">magnitude</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">_np</span><span class="o">.</span><span class="n">copyto</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">beam_out</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="n">beam_in</span><span class="p">,</span> <span class="n">casting</span><span class="o">=</span><span class="s1">&#39;no&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">integrator</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">beam_in</span><span class="p">,</span> <span class="n">beam_out</span><span class="p">,</span> <span class="n">global_parameters</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;meter&#39;</span><span class="p">),</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="Drift"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Drift">[docs]</a><span class="k">class</span> <span class="nc">Drift</span><span class="p">(</span><span class="n">Gap</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;APERTYPE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTURE&#39;</span><span class="p">:</span> <span class="p">([],</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="SRotation"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.SRotation">[docs]</a><span class="k">class</span> <span class="nc">SRotation</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;ANGLE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Angle of rotation along the s-axis.&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="Magnet"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Magnet">[docs]</a><span class="k">class</span> <span class="nc">Magnet</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;APERTYPE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;APERTURE&#39;</span><span class="p">:</span> <span class="p">([],</span> <span class="s1">&#39;&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;KINEMATICS&#39;</span><span class="p">:</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;Reference kinematics&#39;</span><span class="p">)</span>
+    <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="Quadrupole"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Quadrupole">[docs]</a><span class="k">class</span> <span class="nc">Quadrupole</span><span class="p">(</span><span class="n">Magnet</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Quadrupole length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K1S&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Normalized skew gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;TILT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Magnet tilt angle.&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">k1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">K1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-2&#39;</span><span class="p">)</span>
+        <span class="n">k1s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">K1S</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-2&#39;</span><span class="p">)</span>
+        <span class="n">tilt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">TILT</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">k1s</span> <span class="o">!=</span> <span class="mf">0.0</span> <span class="ow">or</span> <span class="n">tilt</span> <span class="o">!=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">tilt</span> <span class="o">-=</span> <span class="n">_np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">k1s</span><span class="p">,</span> <span class="n">k1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="n">k1</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">k1</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">k1s</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="n">k1</span><span class="p">,</span>
+            <span class="n">tilt</span><span class="p">,</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="Bend"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Bend">[docs]</a><span class="k">class</span> <span class="nc">Bend</span><span class="p">(</span><span class="n">Magnet</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;ANGLE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Bending angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K0&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Dipolar normalized gradient&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Quadrupolar normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Sextupolar normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Entrance face angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Exit face angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;TILT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Magnet tilt angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;HGAP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet gap.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;FINT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Fringe field integral.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;FINTX&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Exit fringe field integral.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;momentum deviation.&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Bend.compute_fringe"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Bend.compute_fringe">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">hgap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">fint</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fringe_x</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">hgap</span><span class="p">)</span> <span class="o">*</span> <span class="n">fint</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">e</span> <span class="o">-</span> <span class="n">corr</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">_np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">_np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">fringe_y</span> <span class="o">=</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fringe_x</span><span class="p">,</span> <span class="n">fringe_y</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">E2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fringe_field_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINT</span>
+        <span class="n">fintx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINTX</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINTX</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">fint</span>  <span class="c1"># For exact compatibility with MAD-X</span>
+        <span class="k">return</span> <span class="n">fint</span><span class="p">,</span> <span class="n">fintx</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="c1"># Generic parameters</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span>
+        <span class="n">hgap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HGAP</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
+        <span class="n">fint</span><span class="p">,</span> <span class="n">fintx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fringe_field_integrals</span>
+        <span class="n">entrance_fringe_x</span><span class="p">,</span> <span class="n">entrance_fringe_y</span> <span class="o">=</span> <span class="n">Bend</span><span class="o">.</span><span class="n">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">hgap</span><span class="p">,</span> <span class="n">fint</span><span class="p">)</span>
+        <span class="n">exit_fringe_x</span><span class="p">,</span> <span class="n">exit_fringe_y</span> <span class="o">=</span> <span class="n">Bend</span><span class="o">.</span><span class="n">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">hgap</span><span class="p">,</span> <span class="n">fintx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="n">length</span><span class="p">,</span>  <span class="c1"># 0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span>  <span class="c1"># 1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-2&#39;</span><span class="p">),</span>  <span class="c1"># 2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-3&#39;</span><span class="p">),</span>  <span class="c1"># 3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">TILT</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span>  <span class="c1"># 4</span>
+            <span class="n">h</span><span class="p">,</span>  <span class="c1"># 5</span>
+            <span class="n">k0</span><span class="p">,</span>  <span class="c1"># 6</span>
+            <span class="n">entrance_fringe_x</span><span class="p">,</span>  <span class="c1"># 7</span>
+            <span class="n">entrance_fringe_y</span><span class="p">,</span>  <span class="c1"># 8</span>
+            <span class="n">exit_fringe_x</span><span class="p">,</span>  <span class="c1"># 9</span>
+            <span class="n">exit_fringe_y</span><span class="p">,</span>  <span class="c1"># 10</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="SBend"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.SBend">[docs]</a><span class="k">class</span> <span class="nc">SBend</span><span class="p">(</span><span class="n">Bend</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="RBend"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.RBend">[docs]</a><span class="k">class</span> <span class="nc">RBend</span><span class="p">(</span><span class="n">Bend</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;rad&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">angle</span> <span class="o">&gt;</span> <span class="mf">1e-8</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">length</span> <span class="o">*</span> <span class="n">angle</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="o">/</span><span class="mf">2.0</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">length</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">alpha</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">E2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">alpha</span></div>
+
+<div class="viewcode-block" id="Fringe_in"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Fringe_in">[docs]</a><span class="k">class</span> <span class="nc">Fringe_in</span><span class="p">(</span><span class="n">Bend</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;ANGLE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Bending angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K0&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Dipolar normalized gradient&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Quadrupolar normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Sextupolar normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Entrance face angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;TILT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Magnet tilt angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;HGAP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet gap.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;FINT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Fringe field integral.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;FINTX&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Exit fringe field integral.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;momentum deviation.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;R1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">inf</span><span class="o">*</span><span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Entrance face curvature radius&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+<div class="viewcode-block" id="Fringe_in.compute_fringe"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Fringe_in.compute_fringe">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">hgap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">fint</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fringe_x</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">hgap</span><span class="p">)</span> <span class="o">*</span> <span class="n">fint</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">e</span> <span class="o">-</span> <span class="n">corr</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">_np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">_np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">fringe_y</span> <span class="o">=</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fringe_x</span><span class="p">,</span> <span class="n">fringe_y</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">E2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fringe_field_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINT</span>
+        <span class="n">fintx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINTX</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINTX</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">fint</span>  <span class="c1"># For exact compatibility with MAD-X</span>
+        <span class="k">return</span> <span class="n">fint</span><span class="p">,</span> <span class="n">fintx</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="c1"># Generic parameters</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span>
+        <span class="n">hgap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HGAP</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
+        <span class="n">fint</span><span class="p">,</span> <span class="n">fintx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fringe_field_integrals</span>
+        <span class="n">entrance_fringe_x</span><span class="p">,</span> <span class="n">entrance_fringe_y</span> <span class="o">=</span> <span class="n">Bend</span><span class="o">.</span><span class="n">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">hgap</span><span class="p">,</span> <span class="n">fint</span><span class="p">)</span>
+        <span class="n">exit_fringe_x</span><span class="p">,</span> <span class="n">exit_fringe_y</span> <span class="o">=</span> <span class="n">Bend</span><span class="o">.</span><span class="n">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">hgap</span><span class="p">,</span> <span class="n">fintx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="n">h</span><span class="p">,</span>  <span class="c1"># 0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-2&#39;</span><span class="p">),</span>  <span class="c1"># 1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-3&#39;</span><span class="p">),</span>  <span class="c1"># 2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span>  <span class="c1"># 3    </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">TILT</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span>  <span class="c1"># 4</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">HGAP</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span> <span class="c1"># 5</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FINT</span><span class="p">,</span>  <span class="c1"># 6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">R1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span> <span class="c1">#7</span>
+        <span class="p">]))</span></div>
+    
+<div class="viewcode-block" id="Fringe_out"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Fringe_out">[docs]</a><span class="k">class</span> <span class="nc">Fringe_out</span><span class="p">(</span><span class="n">Bend</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;ANGLE&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Bending angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K0&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Dipolar normalized gradient&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Quadrupolar normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Sextupolar normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;E2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Exit face angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;TILT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Magnet tilt angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;HGAP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet gap.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;FINT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Fringe field integral.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;FINTX&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Exit fringe field integral.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;d&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;momentum deviation.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;R2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">_np</span><span class="o">.</span><span class="n">inf</span><span class="o">*</span><span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Entrance face curvature radius&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    
+<div class="viewcode-block" id="Fringe_out.compute_fringe"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Fringe_out.compute_fringe">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">hgap</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">fint</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fringe_x</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">h</span> <span class="o">*</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">hgap</span><span class="p">)</span> <span class="o">*</span> <span class="n">fint</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">e</span> <span class="o">-</span> <span class="n">corr</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">_np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">e</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">_np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">fringe_y</span> <span class="o">=</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">_np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fringe_x</span><span class="p">,</span> <span class="n">fringe_y</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">length</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">edges</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">E2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">fringe_field_integrals</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+        <span class="n">fint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINT</span>
+        <span class="n">fintx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINTX</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINTX</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">fint</span>  <span class="c1"># For exact compatibility with MAD-X</span>
+        <span class="k">return</span> <span class="n">fint</span><span class="p">,</span> <span class="n">fintx</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="c1"># Generic parameters</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ANGLE</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">length</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="n">h</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">K0</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span>
+        <span class="n">hgap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HGAP</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">e1</span><span class="p">,</span> <span class="n">e2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span>
+        <span class="n">fint</span><span class="p">,</span> <span class="n">fintx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fringe_field_integrals</span>
+        <span class="n">entrance_fringe_x</span><span class="p">,</span> <span class="n">entrance_fringe_y</span> <span class="o">=</span> <span class="n">Bend</span><span class="o">.</span><span class="n">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">hgap</span><span class="p">,</span> <span class="n">fint</span><span class="p">)</span>
+        <span class="n">exit_fringe_x</span><span class="p">,</span> <span class="n">exit_fringe_y</span> <span class="o">=</span> <span class="n">Bend</span><span class="o">.</span><span class="n">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">e2</span><span class="p">,</span> <span class="n">hgap</span><span class="p">,</span> <span class="n">fintx</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="n">h</span><span class="p">,</span>  <span class="c1"># 0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-2&#39;</span><span class="p">),</span>  <span class="c1"># 1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-3&#39;</span><span class="p">),</span>  <span class="c1"># 2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">E2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span>  <span class="c1"># 3    </span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">TILT</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">),</span>  <span class="c1"># 4</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">HGAP</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span> <span class="c1"># 5</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FINT</span><span class="p">,</span>  <span class="c1"># 6</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">R2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span> <span class="c1">#7</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="DipEdge"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.DipEdge">[docs]</a><span class="k">class</span> <span class="nc">DipEdge</span><span class="p">(</span><span class="n">Magnet</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;H&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="o">**-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Inverse of the curvature radius.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;E1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;Entrance face angle.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;HGAP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet gap.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;FINT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;Fringe field integral.&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">H</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-1&#39;</span><span class="p">)</span>
+        <span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">E1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+        <span class="n">hgap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HGAP</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+        <span class="n">fint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">FINT</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">Bend</span><span class="o">.</span><span class="n">compute_fringe</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">e1</span><span class="p">,</span> <span class="n">hgap</span><span class="p">,</span> <span class="n">fint</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Solenoid"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Solenoid">[docs]</a><span class="k">class</span> <span class="nc">Solenoid</span><span class="p">(</span><span class="n">Magnet</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Multipole"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Multipole">[docs]</a><span class="k">class</span> <span class="nc">Multipole</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Quadrupolar normalized gradient.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Sextupolar normalized gradient.&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K1</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-2&#39;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-3&#39;</span><span class="p">)</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="Sextupole"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Sextupole">[docs]</a><span class="k">class</span> <span class="nc">Sextupole</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Magnet length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;K2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span> <span class="o">**</span> <span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;Sextupolar normalized gradient.&#39;</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">K2</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m**-3&#39;</span><span class="p">),</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="Octupole"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Octupole">[docs]</a><span class="k">class</span> <span class="nc">Octupole</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Decapole"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Decapole">[docs]</a><span class="k">class</span> <span class="nc">Decapole</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Dodecapole"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Dodecapole">[docs]</a><span class="k">class</span> <span class="nc">Dodecapole</span><span class="p">(</span><span class="n">_ManzoniElement</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Kicker"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.Kicker">[docs]</a><span class="k">class</span> <span class="nc">Kicker</span><span class="p">(</span><span class="n">Magnet</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Kicker length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;HKICK&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;The momentum change in the horizontal plane.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;VKICK&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;The momentum change in the vertical plane.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;TILT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;The roll angle about the longitudinal axis. A positive angle represents a &#39;</span>
+                                     <span class="s1">&#39;clockwise rotation of the kicker&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">tilt</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">TILT</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+        <span class="n">hkick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HKICK</span>
+        <span class="n">vkick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">VKICK</span>
+        <span class="n">_hkick</span> <span class="o">=</span> <span class="n">ct</span> <span class="o">*</span> <span class="n">hkick</span> <span class="o">+</span> <span class="n">st</span> <span class="o">*</span> <span class="n">vkick</span>
+        <span class="n">_vkick</span> <span class="o">=</span> <span class="n">ct</span> <span class="o">*</span> <span class="n">vkick</span> <span class="o">-</span> <span class="n">st</span> <span class="o">*</span> <span class="n">hkick</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="n">_hkick</span><span class="p">,</span>
+            <span class="n">_vkick</span><span class="p">,</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="TKicker"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.TKicker">[docs]</a><span class="k">class</span> <span class="nc">TKicker</span><span class="p">(</span><span class="n">Kicker</span><span class="p">):</span>
+    <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="HKicker"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.HKicker">[docs]</a><span class="k">class</span> <span class="nc">HKicker</span><span class="p">(</span><span class="n">Magnet</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Kicker length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;KICK&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="s1">&#39;The momentum change.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;TILT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;The roll angle about the longitudinal axis. A positive angle represents a &#39;</span>
+                                     <span class="s1">&#39;clockwise rotation of the kicker&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">tilt</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">TILT</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+        <span class="n">kick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">KICK</span>
+        <span class="n">hkick</span> <span class="o">=</span> <span class="n">ct</span> <span class="o">*</span> <span class="n">kick</span>
+        <span class="n">vkick</span> <span class="o">=</span> <span class="o">-</span> <span class="n">st</span> <span class="o">*</span> <span class="n">kick</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="n">hkick</span><span class="p">,</span>
+            <span class="n">vkick</span><span class="p">,</span>
+        <span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="VKicker"><a class="viewcode-back" href="../../../../api/georges.manzoni.elements.html#georges.manzoni.elements.magnets.VKicker">[docs]</a><span class="k">class</span> <span class="nc">VKicker</span><span class="p">(</span><span class="n">Magnet</span><span class="p">):</span>
+    <span class="n">PARAMETERS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;L&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">m</span><span class="p">,</span> <span class="s1">&#39;Kicker length.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;KICK&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;The momentum change.&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;TILT&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">0.0</span> <span class="o">*</span> <span class="n">_ureg</span><span class="o">.</span><span class="n">radian</span><span class="p">,</span> <span class="s1">&#39;The roll angle about the longitudinal axis. A positive angle represents a &#39;</span>
+                                     <span class="s1">&#39;clockwise rotation of the kicker&#39;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="sd">&quot;&quot;&quot;Parameters of the element, with their default value and their descriptions.&quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+        <span class="n">tilt</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">TILT</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;radian&#39;</span><span class="p">)</span>
+        <span class="n">ct</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+        <span class="n">st</span> <span class="o">=</span> <span class="n">_np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>
+        <span class="n">kick</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">KICK</span>
+        <span class="n">hkick</span> <span class="o">=</span> <span class="n">st</span> <span class="o">*</span> <span class="n">kick</span>
+        <span class="n">vkick</span> <span class="o">=</span> <span class="n">ct</span> <span class="o">*</span> <span class="n">kick</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">L</span><span class="o">.</span><span class="n">m_as</span><span class="p">(</span><span class="s1">&#39;m&#39;</span><span class="p">),</span>
+            <span class="n">hkick</span><span class="p">,</span>
+            <span class="n">vkick</span><span class="p">,</span>
+        <span class="p">]))</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

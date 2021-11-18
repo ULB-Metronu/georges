@@ -1,0 +1,668 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.maps package &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="georges.vis package" href="georges.vis.html" />
+    <link rel="prev" title="georges.manzoni.elements package" href="georges.manzoni.elements.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">georges</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="georges.html">georges package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="georges.fermi.html">georges.fermi package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="georges.madx.html">georges.madx package</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="georges.manzoni.html">georges.manzoni package</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="georges.manzoni.elements.html">georges.manzoni.elements package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">georges.manzoni.maps package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="georges.vis.html">georges.vis package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">georges</a> &raquo;</li>
+        
+          <li><a href="georges.html">georges package</a> &raquo;</li>
+        
+          <li><a href="georges.manzoni.html">georges.manzoni package</a> &raquo;</li>
+        
+      <li>georges.manzoni.maps package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/georges.manzoni.maps.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="georges-manzoni-maps-package">
+<h1>georges.manzoni.maps package<a class="headerlink" href="#georges-manzoni-maps-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-georges.manzoni.maps.mad8_combined_dipole">
+<span id="georges-manzoni-maps-mad8-combined-dipole-module"></span><h2>georges.manzoni.maps.mad8_combined_dipole module<a class="headerlink" href="#module-georges.manzoni.maps.mad8_combined_dipole" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_combined_dipole.compute_mad_combined_dipole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_combined_dipole.</span></span><span class="sig-name descname"><span class="pre">compute_mad_combined_dipole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_combined_dipole.html#compute_mad_combined_dipole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_combined_dipole.compute_mad_combined_dipole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_combined_dipole.compute_mad_combined_dipole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_combined_dipole.</span></span><span class="sig-name descname"><span class="pre">compute_mad_combined_dipole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_combined_dipole.html#compute_mad_combined_dipole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_combined_dipole.compute_mad_combined_dipole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.mad8_drift">
+<span id="georges-manzoni-maps-mad8-drift-module"></span><h2>georges.manzoni.maps.mad8_drift module<a class="headerlink" href="#module-georges.manzoni.maps.mad8_drift" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_drift.compute_mad_drift_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_drift.</span></span><span class="sig-name descname"><span class="pre">compute_mad_drift_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_drift.html#compute_mad_drift_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_drift.compute_mad_drift_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_drift.compute_mad_drift_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_drift.</span></span><span class="sig-name descname"><span class="pre">compute_mad_drift_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_drift.html#compute_mad_drift_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_drift.compute_mad_drift_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_drift.drift2">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_drift.</span></span><span class="sig-name descname"><span class="pre">drift2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_drift.html#drift2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_drift.drift2" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_drift.drift4">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_drift.</span></span><span class="sig-name descname"><span class="pre">drift4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_drift.html#drift4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_drift.drift4" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performance tests on MBP i9 show that the explicit loop is faster, both at compile-time and at runtime
+than the nb broadcast variant.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>b1: a numpy array containing all the particles
+b2: explicit destination for the result
+kargs: the drift length (in meters)</p>
+</dd>
+<dt>Returns:</dt><dd><p>the destination (result) array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_drift.drift5">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_drift.</span></span><span class="sig-name descname"><span class="pre">drift5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_drift.html#drift5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_drift.drift5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performance tests on MBP i9 show that the explicit loop is faster, both at compile-time and at runtime
+than the nb broadcast variant.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>b1: a numpy array containing all the particles
+b2: explicit destination for the result
+kargs: the drift length (in meters)</p>
+</dd>
+<dt>Returns:</dt><dd><p>the destination (result) array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_drift.drift6">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_drift.</span></span><span class="sig-name descname"><span class="pre">drift6</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">length</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_drift.html#drift6"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_drift.drift6" title="Permalink to this definition">¶</a></dt>
+<dd><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Performance tests on MBP i9 show that the explicit loop is faster, both at compile-time and at runtime</p>
+</div>
+<p>than the nb broadcast variant.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>b1: a numpy array containing all the particles
+b2: explicit destination for the result
+length: the drift length (in meters)</p>
+</dd>
+<dt>Returns:</dt><dd><p>the destination (result) array</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.mad8_quadrupole">
+<span id="georges-manzoni-maps-mad8-quadrupole-module"></span><h2>georges.manzoni.maps.mad8_quadrupole module<a class="headerlink" href="#module-georges.manzoni.maps.mad8_quadrupole" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_quadrupole.compute_mad_quadrupole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_quadrupole.</span></span><span class="sig-name descname"><span class="pre">compute_mad_quadrupole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_quadrupole.html#compute_mad_quadrupole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_quadrupole.compute_mad_quadrupole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.mad8_quadrupole.compute_mad_quadrupole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.mad8_quadrupole.</span></span><span class="sig-name descname"><span class="pre">compute_mad_quadrupole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/mad8_quadrupole.html#compute_mad_quadrupole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.mad8_quadrupole.compute_mad_quadrupole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.madx_combined_dipole">
+<span id="georges-manzoni-maps-madx-combined-dipole-module"></span><h2>georges.manzoni.maps.madx_combined_dipole module<a class="headerlink" href="#module-georges.manzoni.maps.madx_combined_dipole" title="Permalink to this headline">¶</a></h2>
+<p>This code is from MAD-X twiss.f90. It is used to allow comparisons between the MAD-X tensor and
+the generated code for MAD8 or Transport style tensor computation.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_combined_dipole.tmfoc">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_combined_dipole.</span></span><span class="sig-name descname"><span class="pre">tmfoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sk1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_combined_dipole.html#tmfoc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_combined_dipole.tmfoc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_combined_dipole.tmsect">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_combined_dipole.</span></span><span class="sig-name descname"><span class="pre">tmsect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fsec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">el</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sk1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sk2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_combined_dipole.html#tmsect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_combined_dipole.tmsect" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.madx_thick">
+<span id="georges-manzoni-maps-madx-thick-module"></span><h2>georges.manzoni.maps.madx_thick module<a class="headerlink" href="#module-georges.manzoni.maps.madx_thick" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_thick.track_madx_bend">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_thick.</span></span><span class="sig-name descname"><span class="pre">track_madx_bend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_thick.html#track_madx_bend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_thick.track_madx_bend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track through a (thick) combined function bend. This methods follows directly from the method implemented in MAD-X.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From MAD-X: <cite>ttcfd</cite> in <cite>trrun.f90</cite></p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+b2:
+element_parameters:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_thick.track_madx_dipedge">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_thick.</span></span><span class="sig-name descname"><span class="pre">track_madx_dipedge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_thick.html#track_madx_dipedge"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_thick.track_madx_dipedge" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_thick.track_madx_drift">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_thick.</span></span><span class="sig-name descname"><span class="pre">track_madx_drift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_thick.html#track_madx_drift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_thick.track_madx_drift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track through a drift. This methods follows directly from the method implemented in MAD-X.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From MAD-X: <cite>ttdrf</cite> in <cite>trrun.f90</cite></p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+b2:
+element_parameters:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_thick.track_madx_drift_paraxial">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_thick.</span></span><span class="sig-name descname"><span class="pre">track_madx_drift_paraxial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_thick.html#track_madx_drift_paraxial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_thick.track_madx_drift_paraxial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track through a drift using the paraxial approximation. Not used by MAD-X.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+b2:
+element_parameters:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_thick.track_madx_kicker">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_thick.</span></span><span class="sig-name descname"><span class="pre">track_madx_kicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_thick.html#track_madx_kicker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_thick.track_madx_kicker" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_thick.track_madx_quadrupole">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_thick.</span></span><span class="sig-name descname"><span class="pre">track_madx_quadrupole</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_thick.html#track_madx_quadrupole"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_thick.track_madx_quadrupole" title="Permalink to this definition">¶</a></dt>
+<dd><p>Track through a (thick) quadrupole. This methods follows directly from the method implemented in MAD-X.</p>
+<p>The Hamiltonian is</p>
+<p>H = (1/2) K1 x^2 + (1/2) px^2/(delta + 1)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From MAD-X: <cite>ttcfd</cite> in <cite>trrun.f90</cite></p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+b2:
+element_parameters:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.madx_thick.track_madx_srotation">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.madx_thick.</span></span><span class="sig-name descname"><span class="pre">track_madx_srotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/maps/madx_thick.html#track_madx_srotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.madx_thick.track_madx_srotation" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+b2:
+element_parameters:
+global_parameters:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_combined_dipole">
+<span id="georges-manzoni-maps-transport-combined-dipole-module"></span><h2>georges.manzoni.maps.transport_combined_dipole module<a class="headerlink" href="#module-georges.manzoni.maps.transport_combined_dipole" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_combined_dipole.compute_transport_combined_dipole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_combined_dipole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_combined_dipole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_combined_dipole.html#compute_transport_combined_dipole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_combined_dipole.compute_transport_combined_dipole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_combined_dipole.compute_transport_combined_dipole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_combined_dipole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_combined_dipole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_combined_dipole.html#compute_transport_combined_dipole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_combined_dipole.compute_transport_combined_dipole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_combined_dipole_Ex">
+<span id="georges-manzoni-maps-transport-combined-dipole-ex-module"></span><h2>georges.manzoni.maps.transport_combined_dipole_Ex module<a class="headerlink" href="#module-georges.manzoni.maps.transport_combined_dipole_Ex" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_combined_dipole_Ex.compute_transport_combined_dipole_Ex_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_combined_dipole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_combined_dipole_Ex_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_combined_dipole_Ex.html#compute_transport_combined_dipole_Ex_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_combined_dipole_Ex.compute_transport_combined_dipole_Ex_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_combined_dipole_Ex.compute_transport_combined_dipole_Ex_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_combined_dipole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_combined_dipole_Ex_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_combined_dipole_Ex.html#compute_transport_combined_dipole_Ex_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_combined_dipole_Ex.compute_transport_combined_dipole_Ex_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_combined_dipole_old">
+<span id="georges-manzoni-maps-transport-combined-dipole-old-module"></span><h2>georges.manzoni.maps.transport_combined_dipole_old module<a class="headerlink" href="#module-georges.manzoni.maps.transport_combined_dipole_old" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_combined_dipole_old.compute_transport_combined_dipole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_combined_dipole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_combined_dipole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_combined_dipole_old.html#compute_transport_combined_dipole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_combined_dipole_old.compute_transport_combined_dipole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_combined_dipole_old.compute_transport_combined_dipole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_combined_dipole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_combined_dipole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_combined_dipole_old.html#compute_transport_combined_dipole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_combined_dipole_old.compute_transport_combined_dipole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_drift">
+<span id="georges-manzoni-maps-transport-drift-module"></span><h2>georges.manzoni.maps.transport_drift module<a class="headerlink" href="#module-georges.manzoni.maps.transport_drift" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_fringe_in">
+<span id="georges-manzoni-maps-transport-fringe-in-module"></span><h2>georges.manzoni.maps.transport_fringe_in module<a class="headerlink" href="#module-georges.manzoni.maps.transport_fringe_in" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_in.compute_transport_fringe_in_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_in.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_in_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_in.html#compute_transport_fringe_in_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_in.compute_transport_fringe_in_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_in.compute_transport_fringe_in_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_in.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_in_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_in.html#compute_transport_fringe_in_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_in.compute_transport_fringe_in_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_fringe_in_Ex">
+<span id="georges-manzoni-maps-transport-fringe-in-ex-module"></span><h2>georges.manzoni.maps.transport_fringe_in_Ex module<a class="headerlink" href="#module-georges.manzoni.maps.transport_fringe_in_Ex" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_in_Ex.compute_transport_fringe_in_Ex_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_in_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_in_Ex_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_in_Ex.html#compute_transport_fringe_in_Ex_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_in_Ex.compute_transport_fringe_in_Ex_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_in_Ex.compute_transport_fringe_in_Ex_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_in_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_in_Ex_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_in_Ex.html#compute_transport_fringe_in_Ex_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_in_Ex.compute_transport_fringe_in_Ex_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_fringe_out">
+<span id="georges-manzoni-maps-transport-fringe-out-module"></span><h2>georges.manzoni.maps.transport_fringe_out module<a class="headerlink" href="#module-georges.manzoni.maps.transport_fringe_out" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_out.compute_transport_fringe_out_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_out.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_out_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_out.html#compute_transport_fringe_out_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_out.compute_transport_fringe_out_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_out.compute_transport_fringe_out_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_out.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_out_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_out.html#compute_transport_fringe_out_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_out.compute_transport_fringe_out_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_fringe_out_Ex">
+<span id="georges-manzoni-maps-transport-fringe-out-ex-module"></span><h2>georges.manzoni.maps.transport_fringe_out_Ex module<a class="headerlink" href="#module-georges.manzoni.maps.transport_fringe_out_Ex" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_out_Ex.compute_transport_fringe_out_Ex_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_out_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_out_Ex_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_out_Ex.html#compute_transport_fringe_out_Ex_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_out_Ex.compute_transport_fringe_out_Ex_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_fringe_out_Ex.compute_transport_fringe_out_Ex_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_fringe_out_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_fringe_out_Ex_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_fringe_out_Ex.html#compute_transport_fringe_out_Ex_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_fringe_out_Ex.compute_transport_fringe_out_Ex_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_multipole">
+<span id="georges-manzoni-maps-transport-multipole-module"></span><h2>georges.manzoni.maps.transport_multipole module<a class="headerlink" href="#module-georges.manzoni.maps.transport_multipole" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_multipole.compute_transport_multipole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_multipole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_multipole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_multipole.html#compute_transport_multipole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_multipole.compute_transport_multipole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_multipole.compute_transport_multipole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_multipole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_multipole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_multipole.html#compute_transport_multipole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_multipole.compute_transport_multipole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_multipole_Ex">
+<span id="georges-manzoni-maps-transport-multipole-ex-module"></span><h2>georges.manzoni.maps.transport_multipole_Ex module<a class="headerlink" href="#module-georges.manzoni.maps.transport_multipole_Ex" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_multipole_Ex.compute_transport_multipole_Ex_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_multipole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_multipole_Ex_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_multipole_Ex.html#compute_transport_multipole_Ex_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_multipole_Ex.compute_transport_multipole_Ex_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_multipole_Ex.compute_transport_multipole_Ex_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_multipole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_multipole_Ex_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_multipole_Ex.html#compute_transport_multipole_Ex_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_multipole_Ex.compute_transport_multipole_Ex_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_multipole_old">
+<span id="georges-manzoni-maps-transport-multipole-old-module"></span><h2>georges.manzoni.maps.transport_multipole_old module<a class="headerlink" href="#module-georges.manzoni.maps.transport_multipole_old" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_multipole_old.compute_transport_multipole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_multipole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_multipole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_multipole_old.html#compute_transport_multipole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_multipole_old.compute_transport_multipole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_multipole_old.compute_transport_multipole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_multipole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_multipole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_multipole_old.html#compute_transport_multipole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_multipole_old.compute_transport_multipole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_quadrupole">
+<span id="georges-manzoni-maps-transport-quadrupole-module"></span><h2>georges.manzoni.maps.transport_quadrupole module<a class="headerlink" href="#module-georges.manzoni.maps.transport_quadrupole" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_quadrupole.compute_transport_quadrupole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_quadrupole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_quadrupole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_quadrupole.html#compute_transport_quadrupole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_quadrupole.compute_transport_quadrupole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_quadrupole.compute_transport_quadrupole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_quadrupole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_quadrupole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_quadrupole.html#compute_transport_quadrupole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_quadrupole.compute_transport_quadrupole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_quadrupole_Ex">
+<span id="georges-manzoni-maps-transport-quadrupole-ex-module"></span><h2>georges.manzoni.maps.transport_quadrupole_Ex module<a class="headerlink" href="#module-georges.manzoni.maps.transport_quadrupole_Ex" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_quadrupole_Ex.compute_transport_quadrupole_Ex_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_quadrupole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_quadrupole_Ex_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_quadrupole_Ex.html#compute_transport_quadrupole_Ex_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_quadrupole_Ex.compute_transport_quadrupole_Ex_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_quadrupole_Ex.compute_transport_quadrupole_Ex_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_quadrupole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_quadrupole_Ex_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_quadrupole_Ex.html#compute_transport_quadrupole_Ex_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_quadrupole_Ex.compute_transport_quadrupole_Ex_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_quadrupole_old">
+<span id="georges-manzoni-maps-transport-quadrupole-old-module"></span><h2>georges.manzoni.maps.transport_quadrupole_old module<a class="headerlink" href="#module-georges.manzoni.maps.transport_quadrupole_old" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_quadrupole_old.compute_transport_quadrupole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_quadrupole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_quadrupole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_quadrupole_old.html#compute_transport_quadrupole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_quadrupole_old.compute_transport_quadrupole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_quadrupole_old.compute_transport_quadrupole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_quadrupole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_quadrupole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_quadrupole_old.html#compute_transport_quadrupole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_quadrupole_old.compute_transport_quadrupole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_sextupole">
+<span id="georges-manzoni-maps-transport-sextupole-module"></span><h2>georges.manzoni.maps.transport_sextupole module<a class="headerlink" href="#module-georges.manzoni.maps.transport_sextupole" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_sextupole.compute_transport_sextupole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_sextupole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_sextupole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_sextupole.html#compute_transport_sextupole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_sextupole.compute_transport_sextupole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_sextupole.compute_transport_sextupole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_sextupole.</span></span><span class="sig-name descname"><span class="pre">compute_transport_sextupole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_sextupole.html#compute_transport_sextupole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_sextupole.compute_transport_sextupole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_sextupole_Ex">
+<span id="georges-manzoni-maps-transport-sextupole-ex-module"></span><h2>georges.manzoni.maps.transport_sextupole_Ex module<a class="headerlink" href="#module-georges.manzoni.maps.transport_sextupole_Ex" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_sextupole_Ex.compute_transport_sextupole_Ex_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_sextupole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_sextupole_Ex_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_sextupole_Ex.html#compute_transport_sextupole_Ex_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_sextupole_Ex.compute_transport_sextupole_Ex_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_sextupole_Ex.compute_transport_sextupole_Ex_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_sextupole_Ex.</span></span><span class="sig-name descname"><span class="pre">compute_transport_sextupole_Ex_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_sextupole_Ex.html#compute_transport_sextupole_Ex_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_sextupole_Ex.compute_transport_sextupole_Ex_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps.transport_sextupole_old">
+<span id="georges-manzoni-maps-transport-sextupole-old-module"></span><h2>georges.manzoni.maps.transport_sextupole_old module<a class="headerlink" href="#module-georges.manzoni.maps.transport_sextupole_old" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_sextupole_old.compute_transport_sextupole_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_sextupole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_sextupole_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_sextupole_old.html#compute_transport_sextupole_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_sextupole_old.compute_transport_sextupole_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.maps.transport_sextupole_old.compute_transport_sextupole_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.maps.transport_sextupole_old.</span></span><span class="sig-name descname"><span class="pre">compute_transport_sextupole_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">L</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">K2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/maps/transport_sextupole_old.html#compute_transport_sextupole_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.maps.transport_sextupole_old.compute_transport_sextupole_tensor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.maps">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-georges.manzoni.maps" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="georges.vis.html" class="btn btn-neutral float-right" title="georges.vis package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="georges.manzoni.elements.html" class="btn btn-neutral float-left" title="georges.manzoni.elements package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

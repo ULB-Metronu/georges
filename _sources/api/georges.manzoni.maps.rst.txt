@@ -1,0 +1,189 @@
+georges.manzoni.maps package
+============================
+
+Submodules
+----------
+
+georges.manzoni.maps.mad8\_combined\_dipole module
+--------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.mad8_combined_dipole
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.mad8\_drift module
+---------------------------------------
+
+.. automodule:: georges.manzoni.maps.mad8_drift
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.mad8\_quadrupole module
+--------------------------------------------
+
+.. automodule:: georges.manzoni.maps.mad8_quadrupole
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.madx\_combined\_dipole module
+--------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.madx_combined_dipole
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.madx\_thick module
+---------------------------------------
+
+.. automodule:: georges.manzoni.maps.madx_thick
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_combined\_dipole module
+-------------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_combined_dipole
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_combined\_dipole\_Ex module
+-----------------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_combined_dipole_Ex
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_combined\_dipole\_old module
+------------------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_combined_dipole_old
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_drift module
+--------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_drift
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_fringe\_in module
+-------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_fringe_in
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_fringe\_in\_Ex module
+-----------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_fringe_in_Ex
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_fringe\_out module
+--------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_fringe_out
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_fringe\_out\_Ex module
+------------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_fringe_out_Ex
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_multipole module
+------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_multipole
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_multipole\_Ex module
+----------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_multipole_Ex
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_multipole\_old module
+-----------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_multipole_old
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_quadrupole module
+-------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_quadrupole
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_quadrupole\_Ex module
+-----------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_quadrupole_Ex
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_quadrupole\_old module
+------------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_quadrupole_old
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_sextupole module
+------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_sextupole
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_sextupole\_Ex module
+----------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_sextupole_Ex
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+georges.manzoni.maps.transport\_sextupole\_old module
+-----------------------------------------------------
+
+.. automodule:: georges.manzoni.maps.transport_sextupole_old
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: georges.manzoni.maps
+   :members:
+   :undoc-members:
+   :show-inheritance:

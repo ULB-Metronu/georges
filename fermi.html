@@ -1,0 +1,326 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>Fermi &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Optim" href="optim.html" />
+    <link rel="prev" title="Manzoni" href="manzoni.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html#id1">georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">Modules</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core.html">Core modules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manzoni.html">Manzoni</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Fermi</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#fermi-eyges">Fermi-Eyges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#typical-use-case">Typical use case</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="optim.html">Optim</a></li>
+<li class="toctree-l2"><a class="reference internal" href="madx.html">MAD-X</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpymad.html">cpymad</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">Modules</a> &raquo;</li>
+        
+      <li>Fermi</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/fermi.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="fermi">
+<h1>Fermi<a class="headerlink" href="#fermi" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="fermi-eyges">
+<h2>Fermi-Eyges<a class="headerlink" href="#fermi-eyges" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>Fermi-Eyges</cite> module is a reimplementation of the Fermi-Eyges transport framework, largely based on the work and publications of Bernard Gottschalk.</p>
+<dl class="simple">
+<dt>The module is composed of:</dt><dd><ul class="simple">
+<li><p><em>Materials database</em> (<cite>materials_db.py</cite>): reads, loads and provides an interface to data (stopping power, radiation lengths, etc.) for a large set of materials commonly used in protontherapy. When using the Fermi-Eyges module, a database must be instanciated and passed around to the other components. The database reads stopping power and range tables from the p-star database format;</p></li>
+<li><p><em>Stopping power</em> (<cite>stopping.py</cite>): computes the various range-energy direct and inverse relationships from measured range stopping power data tables;</p></li>
+<li><p><em>MCS</em> (multiple Coulomb scattering) (<cite>mcs.py</cite>): implements various scattering angle models (Gottschalk's <cite>DifferentialMoliere</cite> being the default);</p></li>
+<li><p><em>Fermi-Eyges</em> (<cite>fermi_eyges.py</cite>): computes the transport integrales (A0, A1, A2 and B) for a given material, thickness and incident energy. It also returns the residual energy to allow easy chaining through multiple slabs;</p></li>
+<li><p><em>Propagation</em> (<cite>propagation.py</cite>): propagation of a beam through a mutli-material beamline following the Fermi-Eyges transport theory.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="typical-use-case">
+<h2>Typical use case<a class="headerlink" href="#typical-use-case" title="Permalink to this headline">¶</a></h2>
+<p>python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">georges.fermi</span>
+<span class="n">db</span> <span class="o">=</span> <span class="n">georges</span><span class="o">.</span><span class="n">fermi</span><span class="o">.</span><span class="n">MaterialsDB</span><span class="p">()</span>
+<span class="n">georges</span><span class="o">.</span><span class="n">fermi</span><span class="o">.</span><span class="n">get_range_from_energy</span><span class="p">(</span><span class="n">material</span><span class="o">=</span><span class="s1">&#39;water&#39;</span><span class="p">,</span>
+                                    <span class="n">energy</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="n">georges</span><span class="o">.</span><span class="n">fermi</span><span class="o">.</span><span class="n">get_energy_from_range</span><span class="p">(</span><span class="n">material</span><span class="o">=</span><span class="s1">&#39;graphite&#39;</span><span class="p">,</span>
+                                    <span class="n">r</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                    <span class="n">db</span><span class="o">=</span><span class="n">db</span>
+                                    <span class="p">)</span>
+
+<span class="n">georges</span><span class="o">.</span><span class="n">fermi</span><span class="o">.</span><span class="n">residual_energy</span><span class="p">(</span><span class="n">material</span><span class="o">=</span><span class="s1">&#39;graphite&#39;</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">k_in</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">)</span>
+
+<span class="n">georges</span><span class="o">.</span><span class="n">fermi</span><span class="o">.</span><span class="n">compute_fermi_eyges</span><span class="p">(</span><span class="n">material</span><span class="o">=</span><span class="s1">&#39;graphite&#39;</span><span class="p">,</span>
+                                  <span class="n">energy</span><span class="o">=</span><span class="mf">228.15</span><span class="p">,</span>
+                                  <span class="n">thickness</span><span class="o">=</span><span class="mf">18.5</span><span class="p">,</span>
+                                  <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span>
+                                  <span class="n">T</span><span class="o">=</span><span class="n">georges</span><span class="o">.</span><span class="n">fermi</span><span class="o">.</span><span class="n">DifferentialMoliere</span><span class="p">)</span>
+
+<span class="n">bl</span> <span class="o">=</span> <span class="n">georges</span><span class="o">.</span><span class="n">Beamline</span><span class="p">([</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;shifter&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AT_ENTRY&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="s1">&#39;TYPE&#39;</span><span class="p">:</span> <span class="s1">&#39;slab&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MATERIAL&#39;</span><span class="p">:</span> <span class="s1">&#39;beryllium&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LENGTH&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;scatterer&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AT_ENTRY&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span>
+        <span class="s1">&#39;TYPE&#39;</span><span class="p">:</span> <span class="s1">&#39;slab&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MATERIAL&#39;</span><span class="p">:</span> <span class="s1">&#39;graphite&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LENGTH&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;scatterer2&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AT_ENTRY&#39;</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span>
+        <span class="s1">&#39;TYPE&#39;</span><span class="p">:</span> <span class="s1">&#39;slab&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;MATERIAL&#39;</span><span class="p">:</span> <span class="s1">&#39;water&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LENGTH&#39;</span><span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+        <span class="s1">&#39;NAME&#39;</span><span class="p">:</span> <span class="s1">&#39;isocenter&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;AT_ENTRY&#39;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="s1">&#39;TYPE&#39;</span><span class="p">:</span> <span class="s1">&#39;mp&#39;</span>
+    <span class="p">}</span>
+<span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;NOZZLE&quot;</span><span class="p">)</span>
+
+<span class="n">pbs</span> <span class="o">=</span> <span class="n">georges</span><span class="o">.</span><span class="n">fermi</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span>
+                        <span class="n">line</span><span class="o">=</span><span class="n">bl</span><span class="p">,</span>
+                        <span class="n">db</span><span class="o">=</span><span class="n">db</span><span class="p">,</span>
+                        <span class="n">beam</span><span class="o">=</span><span class="p">{</span>
+                            <span class="s1">&#39;energy&#39;</span><span class="p">:</span> <span class="mi">230</span><span class="p">,</span>
+                            <span class="s1">&#39;A0&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;A1&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s1">&#39;A2&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="p">},</span>
+                        <span class="n">gaps</span><span class="o">=</span><span class="s1">&#39;air&#39;</span>
+</pre></div>
+</div>
+<p>Plotting support is provided in the <cite>georges/plotting</cite> module for the visualization of scattering beamlines:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">georges</span><span class="o">.</span><span class="n">plotting</span><span class="o">.</span><span class="n">scattering</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">pbs</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="optim.html" class="btn btn-neutral float-right" title="Optim" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="manzoni.html" class="btn btn-neutral float-left" title="Manzoni" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

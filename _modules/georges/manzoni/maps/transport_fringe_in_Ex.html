@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni.maps.transport_fringe_in_Ex &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../../" src="../../../../_static/documentation_options.js"></script>
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">georges-src</a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+      <li>georges.manzoni.maps.transport_fringe_in_Ex</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for georges.manzoni.maps.transport_fringe_in_Ex</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">cosh</span><span class="p">,</span> <span class="n">sinh</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">tan</span>
+
+
+<div class="viewcode-block" id="compute_transport_fringe_in_Ex_matrix"><a class="viewcode-back" href="../../../../api/georges.manzoni.maps.html#georges.manzoni.maps.transport_fringe_in_Ex.compute_transport_fringe_in_Ex_matrix">[docs]</a><span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">compute_transport_fringe_in_Ex_matrix</span><span class="p">(</span><span class="n">element_parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">h</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+<span class="c1">#     alpha: float = element_parameters[1] </span>
+    <span class="n">beta1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> 
+    <span class="n">R1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> 
+    <span class="n">FINT</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> 
+    <span class="n">Y_APPERTURE</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> 
+    <span class="n">d</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> 
+    <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">d</span><span class="p">)</span>     
+    <span class="n">phi1</span> <span class="o">=</span> <span class="n">FINT</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">Y_APPERTURE</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> 
+    <span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span> 
+    <span class="n">R</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> 
+    <span class="n">R</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> 
+    <span class="n">R</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span> <span class="o">-</span> <span class="n">phi1</span><span class="p">)</span> 
+    <span class="n">R</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span> 
+    <span class="n">R</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">R</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">R</span> </div>
+<span class="c1">#             h,  # 0</span>
+<span class="c1">#             self.K1.m_as(&#39;m**-2&#39;),  # 1</span>
+<span class="c1">#             self.K2.m_as(&#39;m**-3&#39;),  # 2</span>
+<span class="c1">#             face_angle,  # 3    </span>
+<span class="c1">#             self.TILT.m_as(&#39;radian&#39;),  # 4</span>
+<span class="c1">#             HGAP, # 5</span>
+<span class="c1">#             fringe_x,  # 6</span>
+<span class="c1">#             self.R2 #7</span>
+<div class="viewcode-block" id="compute_transport_fringe_in_Ex_tensor"><a class="viewcode-back" href="../../../../api/georges.manzoni.maps.html#georges.manzoni.maps.transport_fringe_in_Ex.compute_transport_fringe_in_Ex_tensor">[docs]</a><span class="k">def</span> <span class="nf">compute_transport_fringe_in_Ex_tensor</span><span class="p">(</span><span class="n">element_parameters</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+    <span class="n">h</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> 
+<span class="c1">#     alpha: float = element_parameters[1] </span>
+    <span class="n">K1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> 
+    <span class="n">beta1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> 
+    <span class="n">R1</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> 
+    <span class="n">FINT</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> 
+    <span class="n">Y_APPERTURE</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> 
+    <span class="n">d</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">element_parameters</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> 
+    <span class="n">h</span> <span class="o">=</span> <span class="n">h</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">d</span><span class="p">)</span> 
+    <span class="n">K1</span> <span class="o">=</span> <span class="n">K1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">d</span><span class="p">)</span> 
+    <span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+    <span class="n">phi1</span> <span class="o">=</span> <span class="n">FINT</span><span class="o">*</span><span class="n">h</span><span class="o">*</span><span class="n">Y_APPERTURE</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">sin</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mi">2</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">K1</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">h</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">R1</span><span class="p">)</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">K1</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">h</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span> <span class="o">+</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span> <span class="o">-</span> <span class="n">h</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">R1</span><span class="p">)</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">*</span><span class="n">K1</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span> <span class="o">-</span> <span class="n">h</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">3</span><span class="o">/</span><span class="n">R1</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> 
+    <span class="n">T</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">h</span><span class="o">*</span><span class="n">phi1</span><span class="o">*</span><span class="n">cos</span><span class="p">(</span><span class="n">beta1</span> <span class="o">-</span> <span class="n">phi1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">h</span><span class="o">*</span><span class="n">tan</span><span class="p">(</span><span class="n">beta1</span><span class="p">)</span> 
+    <span class="k">return</span> <span class="n">T</span> </div>
+
+
+
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

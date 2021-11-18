@@ -1,0 +1,821 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="python" >
+<head>
+  <meta charset="utf-8" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <title>georges.manzoni package &mdash; Georges 2018.2-beta documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+
+  
+  
+
+  
+  
+
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="georges.manzoni.elements package" href="georges.manzoni.elements.html" />
+    <link rel="prev" title="georges.madx package" href="georges.madx.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Georges
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                2018.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption" role="heading"><span class="caption-text">Georges README</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../readme.html">Georges</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Documentation:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../authors.html">Authorship and citation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../news.html">News</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Using and executing Georges</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">Modules</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">georges</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="georges.html">georges package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="georges.fermi.html">georges.fermi package</a></li>
+<li class="toctree-l3"><a class="reference internal" href="georges.madx.html">georges.madx package</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">georges.manzoni package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="georges.manzoni.elements.html">georges.manzoni.elements package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="georges.manzoni.maps.html">georges.manzoni.maps package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="georges.vis.html">georges.vis package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Georges</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+        
+          <li><a href="modules.html">georges</a> &raquo;</li>
+        
+          <li><a href="georges.html">georges package</a> &raquo;</li>
+        
+      <li>georges.manzoni package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/georges.manzoni.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="georges-manzoni-package">
+<h1>georges.manzoni package<a class="headerlink" href="#georges-manzoni-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="georges.manzoni.elements.html">georges.manzoni.elements package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#module-georges.manzoni.elements.cavities">georges.manzoni.elements.cavities module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#module-georges.manzoni.elements.collimators">georges.manzoni.elements.collimators module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#module-georges.manzoni.elements.electrostatic">georges.manzoni.elements.electrostatic module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#module-georges.manzoni.elements.elements">georges.manzoni.elements.elements module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#module-georges.manzoni.elements.magnets">georges.manzoni.elements.magnets module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#module-georges.manzoni.elements.scatterers">georges.manzoni.elements.scatterers module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.elements.html#module-georges.manzoni.elements">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="georges.manzoni.maps.html">georges.manzoni.maps package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.mad8_combined_dipole">georges.manzoni.maps.mad8_combined_dipole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.mad8_drift">georges.manzoni.maps.mad8_drift module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.mad8_quadrupole">georges.manzoni.maps.mad8_quadrupole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.madx_combined_dipole">georges.manzoni.maps.madx_combined_dipole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.madx_thick">georges.manzoni.maps.madx_thick module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_combined_dipole">georges.manzoni.maps.transport_combined_dipole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_combined_dipole_Ex">georges.manzoni.maps.transport_combined_dipole_Ex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_combined_dipole_old">georges.manzoni.maps.transport_combined_dipole_old module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_drift">georges.manzoni.maps.transport_drift module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_fringe_in">georges.manzoni.maps.transport_fringe_in module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_fringe_in_Ex">georges.manzoni.maps.transport_fringe_in_Ex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_fringe_out">georges.manzoni.maps.transport_fringe_out module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_fringe_out_Ex">georges.manzoni.maps.transport_fringe_out_Ex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_multipole">georges.manzoni.maps.transport_multipole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_multipole_Ex">georges.manzoni.maps.transport_multipole_Ex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_multipole_old">georges.manzoni.maps.transport_multipole_old module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_quadrupole">georges.manzoni.maps.transport_quadrupole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_quadrupole_Ex">georges.manzoni.maps.transport_quadrupole_Ex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_quadrupole_old">georges.manzoni.maps.transport_quadrupole_old module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_sextupole">georges.manzoni.maps.transport_sextupole module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_sextupole_Ex">georges.manzoni.maps.transport_sextupole_Ex module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps.transport_sextupole_old">georges.manzoni.maps.transport_sextupole_old module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="georges.manzoni.maps.html#module-georges.manzoni.maps">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-georges.manzoni.apertures">
+<span id="georges-manzoni-apertures-module"></span><h2>georges.manzoni.apertures module<a class="headerlink" href="#module-georges.manzoni.apertures" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.apertures.circular_aperture_check">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.apertures.</span></span><span class="sig-name descname"><span class="pre">circular_aperture_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/apertures.html#circular_aperture_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.apertures.circular_aperture_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+kargs:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.apertures.elliptical_aperture_check">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.apertures.</span></span><span class="sig-name descname"><span class="pre">elliptical_aperture_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/apertures.html#elliptical_aperture_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.apertures.elliptical_aperture_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+kargs:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.apertures.phase_space_aperture_check">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.apertures.</span></span><span class="sig-name descname"><span class="pre">phase_space_aperture_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/apertures.html#phase_space_aperture_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.apertures.phase_space_aperture_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+kargs:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.apertures.rectangular_aperture_check">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.apertures.</span></span><span class="sig-name descname"><span class="pre">rectangular_aperture_check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kargs</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/apertures.html#rectangular_aperture_check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.apertures.rectangular_aperture_check" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+kargs:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.beam">
+<span id="georges-manzoni-beam-module"></span><h2>georges.manzoni.beam module<a class="headerlink" href="#module-georges.manzoni.beam" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.beam.Beam">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.beam.</span></span><span class="sig-name descname"><span class="pre">Beam</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">kinematics</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">georges_core.kinematics.Kinematics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/beam.html#Beam"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.beam.Beam" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.beam.Beam.compute_dpp">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">compute_dpp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pt</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_order</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/beam.html#Beam.compute_dpp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.beam.Beam.compute_dpp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>pt:
+beta: the relativistic beta
+first_order: approximate dpp from p_t at first order (valid only for beta close to 1)</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.beam.Beam.compute_pt">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">compute_pt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dpp</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_order</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">numpy.ndarray</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/beam.html#Beam.compute_pt"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.beam.Beam.compute_pt" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>dpp:
+beta: the relativistic beta
+first_order: approximate p_t from dpp at first order (valid only for beta close to 1)</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.beam.Beam.distribution">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">distribution</span></span><em class="property"><span class="pre">:</span> <span class="pre">numpy.ndarray</span></em><a class="headerlink" href="#georges.manzoni.beam.Beam.distribution" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.beam.Beam.kinematics">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">kinematics</span></span><em class="property"><span class="pre">:</span> <span class="pre">georges_core.kinematics.Kinematics</span></em><a class="headerlink" href="#georges.manzoni.beam.Beam.kinematics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.core">
+<span id="georges-manzoni-core-module"></span><h2>georges.manzoni.core module<a class="headerlink" href="#module-georges.manzoni.core" title="Permalink to this headline">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.core.match">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.core.</span></span><span class="sig-name descname"><span class="pre">match</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beamline</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_Input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_Beam</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/core.html#match"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.core.match" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.core.track">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.core.</span></span><span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beamline</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_Input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_Beam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">_Observer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_apertures_exit</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_apertures_entry</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/core.html#track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.core.track" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beamline:
+beam:
+observers:
+check_apertures_exit:
+check_apertures_entry:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.core.twiss">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.core.</span></span><span class="sig-name descname"><span class="pre">twiss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beamline</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_Input</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kinematics</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_Kinematics</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_particle</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_np.ndarray</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offsets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">twiss_parametrization</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">twiss_init</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_BetaBlock</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_phase_unrolling</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_pd.DataFrame</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/core.html#twiss"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.core.twiss" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beamline:
+kinematics:
+reference_particle:
+offsets:
+with_twiss_parametrization:
+twiss_init:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.input">
+<span id="georges-manzoni-input-module"></span><h2>georges.manzoni.input module<a class="headerlink" href="#module-georges.manzoni.input" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.input.</span></span><span class="sig-name descname"><span class="pre">Input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">elements.ManzoniElement</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">_Beam</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/input.html#Input"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.input.Input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.adjust_energy">
+<span class="sig-name descname"><span class="pre">adjust_energy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_energy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_ureg.Quantity</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/input.html#Input.adjust_energy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.input.Input.adjust_energy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.beam">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">beam</span></span><a class="headerlink" href="#georges.manzoni.input.Input.beam" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.compute_efficiency">
+<span class="sig-name descname"><span class="pre">compute_efficiency</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_energy</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_ureg.Quantity</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/input.html#Input.compute_efficiency"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.input.Input.compute_efficiency" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.freeze">
+<span class="sig-name descname"><span class="pre">freeze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/input.html#Input.freeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.input.Input.freeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Freezes all elements in the input sequence.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p><cite>self</cite> to allow method chaining</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.from_sequence">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">from_sequence</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">georges_core.sequences.sequence.Sequence</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/input.html#Input.from_sequence"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.input.Input.from_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a new <cite>Input</cite> from a generic sequence from <cite>georges_core</cite>.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>sequence:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.sequence">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">sequence</span></span><a class="headerlink" href="#georges.manzoni.input.Input.sequence" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.track">
+<span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">beam</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">_Beam</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observers</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">_Observer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">_Observer</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_apertures</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">_Observer</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span> </span><span class="pre">_Observer</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/input.html#Input.track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.input.Input.track" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>beam:
+observers:
+check_apertures:</p>
+</dd>
+<dt>Returns:</dt><dd><p>the <cite>Observer</cite> object containing the tracking results.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.input.Input.unfreeze">
+<span class="sig-name descname"><span class="pre">unfreeze</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/input.html#Input.unfreeze"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.input.Input.unfreeze" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unfreezes all elements in the input sequence.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p><cite>self</cite> to allow method chaining</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.integrators">
+<span id="georges-manzoni-integrators-module"></span><h2>georges.manzoni.integrators module<a class="headerlink" href="#module-georges.manzoni.integrators" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Integrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">Integrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Integrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Integrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Integrator.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">,</span> </span><span class="pre">numpy.ndarray</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Integrator.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Integrator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.IntegratorType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">IntegratorType</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#IntegratorType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.IntegratorType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">Mad8FirstOrderTaylorIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Mad8FirstOrderTaylorIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.Mad8Integrator" title="georges.manzoni.integrators.Mad8Integrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.Mad8Integrator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator.MATRICES">
+<span class="sig-name descname"><span class="pre">MATRICES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'BEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_combined_dipole_matrix&gt;),</span> <span class="pre">'DRIFT':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_drift_matrix&gt;),</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_quadrupole_matrix&gt;),</span> <span class="pre">'SBEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_combined_dipole_matrix&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator.MATRICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator.cache">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Mad8FirstOrderTaylorIntegrator.cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Mad8FirstOrderTaylorIntegrator.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8Integrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">Mad8Integrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Mad8Integrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Mad8Integrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.Integrator" title="georges.manzoni.integrators.Integrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.Integrator</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">Mad8SecondOrderTaylorIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Mad8SecondOrderTaylorIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator" title="georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.Mad8FirstOrderTaylorIntegrator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator.TENSORS">
+<span class="sig-name descname"><span class="pre">TENSORS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'BEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_combined_dipole_tensor&gt;),</span> <span class="pre">'DRIFT':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_drift_tensor&gt;),</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_quadrupole_tensor&gt;),</span> <span class="pre">'SBEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_mad_combined_dipole_tensor&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator.TENSORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator.cache">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Mad8SecondOrderTaylorIntegrator.cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#Mad8SecondOrderTaylorIntegrator.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.Mad8SecondOrderTaylorIntegrator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.MadXIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">MadXIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#MadXIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.MadXIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.Integrator" title="georges.manzoni.integrators.Integrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.Integrator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.MadXIntegrator.METHODS">
+<span class="sig-name descname"><span class="pre">METHODS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'CIRCULARCOLLIMATOR':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift&gt;),</span> <span class="pre">'DIPEDGE':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_dipedge&gt;),</span> <span class="pre">'DRIFT':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift&gt;),</span> <span class="pre">'DUMP':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift&gt;),</span> <span class="pre">'ELLIPTICALCOLLIMATOR':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift&gt;),</span> <span class="pre">'GAP':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift&gt;),</span> <span class="pre">'HKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'KICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_quadrupole&gt;),</span> <span class="pre">'RBEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_bend&gt;),</span> <span class="pre">'RECTANGULARCOLLIMATOR':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift&gt;),</span> <span class="pre">'SBEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_bend&gt;),</span> <span class="pre">'SROTATION':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_srotation&gt;),</span> <span class="pre">'VKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.MadXIntegrator.METHODS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.MadXIntegrator.cache">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#MadXIntegrator.cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.MadXIntegrator.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.MadXIntegrator.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#MadXIntegrator.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.MadXIntegrator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.MadXParaxialDriftIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">MadXParaxialDriftIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#MadXParaxialDriftIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.MadXParaxialDriftIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.MadXIntegrator" title="georges.manzoni.integrators.MadXIntegrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.MadXIntegrator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.MadXParaxialDriftIntegrator.METHODS">
+<span class="sig-name descname"><span class="pre">METHODS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'CIRCULARCOLLIMATOR':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift_paraxial&gt;),</span> <span class="pre">'DIPEDGE':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_dipedge&gt;),</span> <span class="pre">'DRIFT':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift_paraxial&gt;),</span> <span class="pre">'DUMP':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift_paraxial&gt;),</span> <span class="pre">'ELLIPTICALCOLLIMATOR':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift_paraxial&gt;),</span> <span class="pre">'HKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'KICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_quadrupole&gt;),</span> <span class="pre">'RBEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_bend&gt;),</span> <span class="pre">'RECTANGULARCOLLIMATOR':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift_paraxial&gt;),</span> <span class="pre">'SBEND':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_bend&gt;),</span> <span class="pre">'SROTATION':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_srotation&gt;),</span> <span class="pre">'VKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.MadXParaxialDriftIntegrator.METHODS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.PTCIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">PTCIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#PTCIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.PTCIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.Integrator" title="georges.manzoni.integrators.Integrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.Integrator</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">TransportFirstOrderTaylorIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportFirstOrderTaylorIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.TransportIntegrator" title="georges.manzoni.integrators.TransportIntegrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.TransportIntegrator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator.MATRICES">
+<span class="sig-name descname"><span class="pre">MATRICES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'BEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_matrix&gt;,</span> <span class="pre">'FRINGE_IN':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_transport_fringe_in_matrix&gt;),</span> <span class="pre">'FRINGE_OUT':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_transport_fringe_out_matrix&gt;),</span> <span class="pre">'HKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'MULTIPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_multipole_matrix&gt;,</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_quadrupole_matrix&gt;,</span> <span class="pre">'SBEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_matrix&gt;,</span> <span class="pre">'SEXTUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_sextupole_matrix&gt;,</span> <span class="pre">'VKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator.MATRICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator.cache">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportFirstOrderTaylorIntegrator.cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportFirstOrderTaylorIntegrator.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">TransportFirstOrderTaylorIntegratorExact</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportFirstOrderTaylorIntegratorExact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.TransportIntegrator" title="georges.manzoni.integrators.TransportIntegrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.TransportIntegrator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact.MATRICES">
+<span class="sig-name descname"><span class="pre">MATRICES</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'BEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_Ex_matrix&gt;,</span> <span class="pre">'FRINGE_IN':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_transport_fringe_in_Ex_matrix&gt;),</span> <span class="pre">'FRINGE_OUT':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">compute_transport_fringe_out_Ex_matrix&gt;),</span> <span class="pre">'HKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'MULTIPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_multipole_Ex_matrix&gt;,</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_quadrupole_Ex_matrix&gt;,</span> <span class="pre">'SBEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_Ex_matrix&gt;,</span> <span class="pre">'SEXTUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_sextupole_Ex_matrix&gt;,</span> <span class="pre">'VKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact.MATRICES" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact.cache">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportFirstOrderTaylorIntegratorExact.cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportFirstOrderTaylorIntegratorExact.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">TransportIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.Integrator" title="georges.manzoni.integrators.Integrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.Integrator</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">TransportSecondOrderTaylorIntegrator</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportSecondOrderTaylorIntegrator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator" title="georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.TransportFirstOrderTaylorIntegrator</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator.TENSORS">
+<span class="sig-name descname"><span class="pre">TENSORS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'BEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_tensor&gt;,</span> <span class="pre">'DRIFT':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_drift&gt;),</span> <span class="pre">'FRINGE_IN':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_fringe_in_tensor&gt;,</span> <span class="pre">'FRINGE_OUT':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_fringe_out_tensor&gt;,</span> <span class="pre">'HKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'MULTIPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_multipole_tensor&gt;,</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_quadrupole_tensor&gt;,</span> <span class="pre">'SBEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_tensor&gt;,</span> <span class="pre">'SEXTUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_sextupole_tensor&gt;,</span> <span class="pre">'VKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator.TENSORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator.cache">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportSecondOrderTaylorIntegrator.cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportSecondOrderTaylorIntegrator.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegrator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.integrators.</span></span><span class="sig-name descname"><span class="pre">TransportSecondOrderTaylorIntegratorExact</span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportSecondOrderTaylorIntegratorExact"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact" title="georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.integrators.TransportFirstOrderTaylorIntegratorExact</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact.TENSORS">
+<span class="sig-name descname"><span class="pre">TENSORS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">{'BEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_Ex_tensor&gt;,</span> <span class="pre">'FRINGE_IN':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_fringe_in_Ex_tensor&gt;,</span> <span class="pre">'FRINGE_OUT':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_fringe_out_Ex_tensor&gt;,</span> <span class="pre">'HKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;),</span> <span class="pre">'MULTIPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_multipole_Ex_tensor&gt;,</span> <span class="pre">'QUADRUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_quadrupole_Ex_tensor&gt;,</span> <span class="pre">'SBEND':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_combined_dipole_Ex_tensor&gt;,</span> <span class="pre">'SEXTUPOLE':</span> <span class="pre">&lt;function</span> <span class="pre">compute_transport_sextupole_Ex_tensor&gt;,</span> <span class="pre">'VKICKER':</span> <span class="pre">CPUDispatcher(&lt;function</span> <span class="pre">track_madx_kicker&gt;)}</span></em><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact.TENSORS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact.cache">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">cache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportSecondOrderTaylorIntegratorExact.cache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact.cache" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact.propagate">
+<em class="property"><span class="pre">classmethod</span> </em><span class="sig-name descname"><span class="pre">propagate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_in</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beam_out</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">global_parameters</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numba.typed.typedlist.List</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/integrators.html#TransportSecondOrderTaylorIntegratorExact.propagate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.integrators.TransportSecondOrderTaylorIntegratorExact.propagate" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.kernels">
+<span id="georges-manzoni-kernels-module"></span><h2>georges.manzoni.kernels module<a class="headerlink" href="#module-georges.manzoni.kernels" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.kernels.batched_vector_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.kernels.</span></span><span class="sig-name descname"><span class="pre">batched_vector_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/kernels.html#batched_vector_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.kernels.batched_vector_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1: a numpy array containing all the particles
+b2: explicit destination for the result
+matrix: the transfer matrix as a numpy array</p>
+</dd>
+<dt>Returns:</dt><dd><p>the destination (result) array</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.kernels.batched_vector_matrix_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.kernels.</span></span><span class="sig-name descname"><span class="pre">batched_vector_matrix_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matrix</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/kernels.html#batched_vector_matrix_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.kernels.batched_vector_matrix_tensor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+b2:
+matrix:
+tensor:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.kernels.batched_vector_tensor">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.kernels.</span></span><span class="sig-name descname"><span class="pre">batched_vector_tensor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">b1</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b2</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tensor</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.ndarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/kernels.html#batched_vector_tensor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.kernels.batched_vector_tensor" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Args:</dt><dd><p>b1:
+b2:
+tensor:</p>
+</dd>
+</dl>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="georges.manzoni.kernels.matrix_matrix">
+<span class="sig-prename descclassname"><span class="pre">georges.manzoni.kernels.</span></span><span class="sig-name descname"><span class="pre">matrix_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/kernels.html#matrix_matrix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.kernels.matrix_matrix" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni.observers">
+<span id="georges-manzoni-observers-module"></span><h2>georges.manzoni.observers module<a class="headerlink" href="#module-georges.manzoni.observers" title="Permalink to this headline">¶</a></h2>
+<p>TODO</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.BeamObserver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">BeamObserver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_input_beams</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#BeamObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.BeamObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.observers.Observer" title="georges.manzoni.observers.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.observers.Observer</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.IbaBpmObserver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">IbaBpmObserver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#IbaBpmObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.IbaBpmObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.observers.Observer" title="georges.manzoni.observers.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.observers.Observer</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.observers.IbaBpmObserver.fit_bpm">
+<em class="property"><span class="pre">static</span> </em><span class="sig-name descname"><span class="pre">fit_bpm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">numpy.array</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#IbaBpmObserver.fit_bpm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.IbaBpmObserver.fit_bpm" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.LossesObserver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">LossesObserver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#LossesObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.LossesObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.observers.Observer" title="georges.manzoni.observers.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.observers.Observer</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.observers.LossesObserver.compute_global_losses">
+<span class="sig-name descname"><span class="pre">compute_global_losses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#LossesObserver.compute_global_losses"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.LossesObserver.compute_global_losses" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.observers.LossesObserver.compute_global_transmission">
+<span class="sig-name descname"><span class="pre">compute_global_transmission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">global_transmission</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#LossesObserver.compute_global_transmission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.LossesObserver.compute_global_transmission" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.MeanObserver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">MeanObserver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#MeanObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.MeanObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.observers.Observer" title="georges.manzoni.observers.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.observers.Observer</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.Observer">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">Observer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#Observer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.Observer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="georges.manzoni.observers.Observer.to_df">
+<span class="sig-name descname"><span class="pre">to_df</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pandas.core.frame.DataFrame</span></span></span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#Observer.to_df"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.Observer.to_df" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.ObserverType">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">ObserverType</span></span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#ObserverType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.ObserverType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.SigmaObserver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">SigmaObserver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#SigmaObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.SigmaObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.observers.Observer" title="georges.manzoni.observers.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.observers.Observer</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.SuperObserver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">SuperObserver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elements</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#SuperObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.SuperObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.observers.Observer" title="georges.manzoni.observers.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.observers.Observer</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="georges.manzoni.observers.SymmetryObserver">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">georges.manzoni.observers.</span></span><span class="sig-name descname"><span class="pre">SymmetryObserver</span></span><a class="reference internal" href="../_modules/georges/manzoni/observers.html#SymmetryObserver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#georges.manzoni.observers.SymmetryObserver" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#georges.manzoni.observers.Observer" title="georges.manzoni.observers.Observer"><code class="xref py py-class docutils literal notranslate"><span class="pre">georges.manzoni.observers.Observer</span></code></a></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-georges.manzoni">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-georges.manzoni" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+        <a href="georges.manzoni.elements.html" class="btn btn-neutral float-right" title="georges.manzoni.elements package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="georges.madx.html" class="btn btn-neutral float-left" title="georges.madx package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &#169; Copyright 2017 - 2018, Cédric Hernalsteens, Robin Tesse, Kévin André.
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
