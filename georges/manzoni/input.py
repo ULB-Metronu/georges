@@ -52,7 +52,6 @@ class Input:
               beam: _Beam,
               observers: Union[List[_Observer], _Observer] = None,
               check_apertures: bool = True,
-
               ) -> Union[List[_Observer], _Observer]:
         """
 

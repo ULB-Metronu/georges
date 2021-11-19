@@ -4,9 +4,7 @@ TODO
 from typing import Optional, List
 import numpy as _np
 import pandas as _pd
-from scipy.optimize import curve_fit
 from numba import njit
-import matplotlib.pyplot as plt
 from lmfit import Model, Parameters
 
 
@@ -23,41 +21,41 @@ class Observer(metaclass=ObserverType):
     def __call__(self, element: Optional[List[str]], b1, b2):
         if self.elements is None:
             return True
-        if element.LABEL1 not in self.elements:
+        if element.NAME not in self.elements:
             return False
         else:
             return True
 
     def to_df(self) -> _pd.DataFrame:
-        return _pd.DataFrame(self.data, columns=self.headers)
+        return _pd.DataFrame(self.data, columns=self.headers).set_index('NAME')
 
 
 class BeamObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None, with_input_beams: bool = False):
         super().__init__(elements)
         self._with_input_beams = with_input_beams
-        self.headers = ('LABEL1', 'BEAM_IN', 'BEAM_OUT')
+        self.headers = ('NAME', 'BEAM_IN', 'BEAM_OUT')
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.LABEL1, _np.copy(b1) if self._with_input_beams else None, _np.copy(b2)))
+            self.data.append((element.NAME, _np.copy(b1) if self._with_input_beams else None, _np.copy(b2)))
 
 
 class SuperObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
-        self.headers = ('LABEL1',
+        self.headers = ('NAME',
                         )
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.LABEL1,))
+            self.data.append((element.NAME,))
 
 
 class MeanObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
-        self.headers = ('LABEL1',
+        self.headers = ('NAME',
                         'BEAM_IN_X',
                         'BEAM_OUT_X',
                         'BEAM_IN_Y',
@@ -72,7 +70,7 @@ class MeanObserver(Observer):
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.LABEL1,
+            self.data.append((element.NAME,
                               b1[:, 0].mean(),
                               b2[:, 0].mean(),
                               b1[:, 2].mean(),
@@ -89,7 +87,7 @@ class MeanObserver(Observer):
 class SigmaObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
-        self.headers = ('LABEL1',
+        self.headers = ('NAME',
                         'BEAM_IN_X',
                         'BEAM_OUT_X',
                         'BEAM_IN_Y',
@@ -104,7 +102,7 @@ class SigmaObserver(Observer):
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.LABEL1,
+            self.data.append((element.NAME,
                               b1[:, 0].std(),
                               b2[:, 0].std(),
                               b1[:, 2].std(),
@@ -121,7 +119,7 @@ class SigmaObserver(Observer):
 class LossesObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
-        self.headers = ('LABEL1',
+        self.headers = ('NAME',
                         'PARTICLES_IN',
                         'PARTICLES_OUT',
                         'TRANSMISSION',
@@ -130,7 +128,7 @@ class LossesObserver(Observer):
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.LABEL1,
+            self.data.append((element.NAME,
                               b1.shape[0],
                               b2.shape[0],
                               100 * (b2.shape[0] / b1.shape[0]),
@@ -156,13 +154,13 @@ class SymmetryObserver(Observer):
     def __init__(self):
         super().__init__()
 
-        self.headers = ('LABEL1',
+        self.headers = ('NAME',
                         'SYM_IN',
                         'SYM_OUT',
                         )
 
     def __call__(self, element, b1, b2):
-        self.data.append((element.LABEL1,
+        self.data.append((element.NAME,
                           abs(b1[:, 0].std() - b1[:, 2].std()) / (b1[:, 0].std() + b1[:, 2].std()),
                           abs(b2[:, 0].std() - b2[:, 2].std()) / (b2[:, 0].std() + b2[:, 2].std()),
                           ))
@@ -171,7 +169,7 @@ class SymmetryObserver(Observer):
 class IbaBpmObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
-        self.headers = ('LABEL1',
+        self.headers = ('NAME',
                         'BEAM_OUT_X',
                         'BEAM_OUT_Y',
                         )
@@ -218,8 +216,8 @@ class IbaBpmObserver(Observer):
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
             if element.CLASS == 'Marker':
-                print(element.LABEL1)  # To identify the BPM whose data are being fitted
-                self.data.append((element.LABEL1,
+                print(element.NAME)  # To identify the BPM whose data are being fitted
+                self.data.append((element.NAME,
                                   self.fit_bpm(b2[:, 0])[0],
                                   self.fit_bpm(b2[:, 2])[0],
                                   ))

@@ -41,7 +41,7 @@ class ElementType(type):
         # Insert a default initializer (constructor) in case one is not present
         if '__init__' not in dct:
             def default_init(self,
-                             label1: str = '',
+                             name: str = '',
                              integrator: IntegratorType = MadXIntegrator,
                              *params, **kwargs):
                 """Default initializer for all Commands."""
@@ -53,7 +53,7 @@ class ElementType(type):
                         if parameter_value.default is not inspect.Parameter.empty
                     }
                 bases[0].__init__(self,
-                                  label1,
+                                  name,
                                   integrator,
                                   dct.get('PARAMETERS', {}),
                                   *params, **{**defaults, **kwargs})
@@ -118,15 +118,15 @@ class Element(metaclass=ElementType):
     TODO
     """
     PARAMETERS: dict = {
-        'LABEL1': ('', 'Primary label for the Zgoubi command (default: auto-generated hash).'),
+        'NAME': ('', 'Primary label for the Zgoubi command (default: auto-generated hash).'),
     }
     """Parameters of the element, with their default value and their description ."""
 
-    def __init__(self, label1: str = '', *params, **kwargs):
+    def __init__(self, name: str = '', *params, **kwargs):
         """
         TODO
         Args:
-            label1:
+            name:
             label2:
             *params:
             **kwargs:
@@ -137,9 +137,9 @@ class Element(metaclass=ElementType):
         for k, v in kwargs.items():
             if k not in self._POST_INIT:
                 setattr(self, k, v)
-        if label1:
-            self._attributes['LABEL1'] = label1
-        if not self._attributes['LABEL1']:
+        if name:
+            self._attributes['NAME'] = name
+        if not self._attributes['NAME']:
             self.generate_label()
         Element.post_init(self, **kwargs)
 
@@ -152,7 +152,7 @@ class Element(metaclass=ElementType):
         Returns:
 
         """
-        self._attributes['LABEL1'] = '_'.join(filter(None, [
+        self._attributes['NAME'] = '_'.join(filter(None, [
             prefix,
             str(uuid.uuid4().hex)
         ]))[:20]
@@ -196,7 +196,7 @@ class Element(metaclass=ElementType):
 
         Examples:
             >>> c = Command()
-            >>> c.LABEL1 = 'FOOBAR'
+            >>> c.NAME = 'FOOBAR'
 
         Args:
             k: a string representing the attribute
@@ -307,7 +307,7 @@ class ManzoniElement(Element, _Patchable):
     INTEGRATOR: Optional[IntegratorType] = MadXIntegrator
 
     def __init__(self,
-                 label1: str = '',
+                 name: str = '',
                  integrator: Optional[IntegratorType] = None,
                  *params,
                  **kwargs
@@ -315,12 +315,12 @@ class ManzoniElement(Element, _Patchable):
         """
 
         Args:
-            label1:
+            name:
             integrator:
             *params:
             **kwargs:
         """
-        super().__init__(label1, *params, **kwargs)
+        super().__init__(name, *params, **kwargs)
         self._integrator: Optional[IntegratorType] = integrator or self.INTEGRATOR
         self._cache: Optional[nList] = None
         self._frozen: bool = False
