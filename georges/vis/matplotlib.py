@@ -10,10 +10,11 @@ from ..manzoni.observers import Observer as _Observer
 from ..manzoni.observers import MeanObserver as _MeanObserver
 from ..manzoni.observers import SigmaObserver as _SigmaObserver
 from ..manzoni.observers import BeamObserver as _BeamObserver
+from ..manzoni.observers import LossesObserver as _LossesObserver
 # from numpy.linalg import eig
 # import matplotlib.pyplot as plt
 # import matplotlib.patches as patches
-# from matplotlib.ticker import MultipleLocator, NullFormatter
+from matplotlib.ticker import MultipleLocator
 # from lmfit.models import GaussianModel
 from georges_core.vis import MatplotlibArtist as _MatplotlibArtist
 from georges_core.vis.artist import PALETTE
@@ -101,7 +102,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             exit = bl_tracking['AT_EXIT'].apply(lambda e: e.m_as('m'))
 
             self._ax.plot(entry.values,
-                          bl_tracking[f"BEAM_IN_{plane}"]*1000,
+                          bl_tracking[f"BEAM_IN_{plane}"] * 1000,
                           '^-',
                           color=tracking_palette[plane],
                           markeredgecolor=tracking_palette[plane],
@@ -110,7 +111,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                           )
 
             self._ax.plot(exit.values,
-                          bl_tracking[f"BEAM_OUT_{plane}"]*1000,
+                          bl_tracking[f"BEAM_OUT_{plane}"] * 1000,
                           '^-',
                           color=tracking_palette[plane],
                           markeredgecolor=tracking_palette[plane],
@@ -124,6 +125,54 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             else:
                 self._ax.set_ylabel("Beam Size (mm)")
 
+    def losses(self, beamline: _pd.DataFrame = None,
+               observers: _LossesObserver = None,
+               log_scale: bool = False,
+               **kwargs):
+        """
+        Plot the losses along the beamline
+        Args:
+            beamline: dataframe of the beamline
+            observers: Observer used for the tracking
+            log_scale: Log scale for transmission
+        """
+
+        if not isinstance(observers, _LossesObserver):
+            raise BeamPlottingException("The observer must be a LossesObserver.")
+
+        # Merge the observers with the beamline
+        bl_losses = _pd.merge(beamline, observers.to_df(), on='NAME')
+        losses_palette = kwargs.get("palette", palette)
+        exit = bl_losses['AT_EXIT'].apply(lambda e: e.m_as('m'))
+
+        self._ax.set_ylabel(r'Losses ($\%$)')
+        self._ax.yaxis.label.set_color(losses_palette['magenta'])
+        self._ax.bar(exit, bl_losses['LOSSES'],
+                     width=-0.125,
+                     alpha=0.7,
+                     edgecolor=losses_palette['magenta'],
+                     color=losses_palette['magenta'],
+                     align='edge',
+                     error_kw=dict(ecolor=losses_palette['base02'], capsize=2, capthick=1))
+        self._ax.yaxis.set_major_locator(MultipleLocator(10))
+        self._ax.set_ylim([0, (bl_losses['LOSSES']).abs().max() + 5.0])
+
+        ax2 = self._ax.twinx()  # self.ax_2 is reserved for cartouche
+        ax2.set_ylabel(r'T ($\%$)')
+        ax2.yaxis.label.set_color(losses_palette['green'])
+        ax2.grid(True)
+        # TODO USE Transmission, shift and compute ?
+        init = bl_losses.iloc[0]['PARTICLES_IN']
+        global_transmission = 100*(bl_losses['PARTICLES_OUT'].values / init)
+        if log_scale:
+            ax2.semilogy(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
+                         's-', color=losses_palette['green'])
+            ax2.set_ylim([min(global_transmission), 100])
+        else:
+            ax2.yaxis.set_major_locator(MultipleLocator(10))
+            ax2.set_ylim([0, 100])
+            ax2.plot(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
+                     's-', color=losses_palette['green'])
 
     def tracking2(self, ax, bl, beam_o_df, mean=False, std=False, halo=True, **kwargs):
 
