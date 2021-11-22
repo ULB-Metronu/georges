@@ -72,9 +72,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         self._tracks_color = color
 
     def tracking(self,
-                 beamline: _pd.DataFrame = None,
-                 observers: _Observer = None,
+                 observer: _Observer = None,
                  plane: str = 'X',
+                 fill_between: bool = False,
                  mean: bool = True,
                  std: bool = False,
                  halo: bool = True,
@@ -82,9 +82,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         """
         Plot the beam envelopes from tracking data.
         Args:
-            beamline: dataframe of the beamline
-            observers: Observer used for the tracking
+            observer: Observer used for the tracking
             plane:
+            fill_between:
             mean:
             std:
             halo:
@@ -93,77 +93,171 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         Returns:
 
         """
-        # Merge the observers with the beamline
-        bl_tracking = _pd.merge(beamline, observers.to_df(), on='NAME')
+
         tracking_palette = kwargs.get("palette", palette)
+        df_observer = observer.to_df()
 
-        if isinstance(observers, _MeanObserver) or isinstance(observers, _SigmaObserver):
-            entry = bl_tracking['AT_ENTRY'].apply(lambda e: e.m_as('m'))
-            exit = bl_tracking['AT_EXIT'].apply(lambda e: e.m_as('m'))
-
-            self._ax.plot(entry.values,
-                          bl_tracking[f"BEAM_IN_{plane}"] * 1000,
+        if isinstance(observer, _MeanObserver):
+            self._ax.plot(_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                          _np.hstack([df_observer.iloc[0][f"BEAM_IN_{plane}"],
+                                      df_observer.iloc[:][f"BEAM_OUT_{plane}"].values]) * 1000,
                           '^-',
                           color=tracking_palette[plane],
                           markeredgecolor=tracking_palette[plane],
                           markersize=2,
                           linewidth=1
                           )
-
-            self._ax.plot(exit.values,
-                          bl_tracking[f"BEAM_OUT_{plane}"] * 1000,
-                          '^-',
-                          color=tracking_palette[plane],
-                          markeredgecolor=tracking_palette[plane],
-                          markersize=2,
-                          linewidth=1
-                          )
-
             self._ax.set_xlabel("S (m)")
-            if isinstance(observers, _MeanObserver):
-                self._ax.set_ylabel("Mean Position (mm)")
-            else:
-                self._ax.set_ylabel("Beam Size (mm)")
+            self._ax.set_ylabel("Mean Position (mm)")
 
-    def losses(self, beamline: _pd.DataFrame = None,
-               observers: _LossesObserver = None,
+        elif isinstance(observer, _SigmaObserver):
+            x = _np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values])
+            yp = _np.hstack([df_observer.iloc[0][f"BEAM_IN_{plane}"],
+                             df_observer.iloc[:][f"BEAM_OUT_{plane}"].values]) * 1000
+            ym = -yp
+
+            self._ax.plot(x, yp, x, ym,
+                          marker='^',
+                          color=tracking_palette[plane],
+                          markeredgecolor=tracking_palette[plane],
+                          markersize=2,
+                          linewidth=1
+                          )
+            if fill_between:
+                self._ax.fill_between(x, ym, yp, facecolor=tracking_palette[plane],
+                                      linewidth=0.0,
+                                      edgecolor=tracking_palette[plane],
+                                      **kwargs)
+
+            self._ax.set_ylabel("Beam Size (mm)")
+
+        elif isinstance(observer, _BeamObserver):
+
+            dico_plane = {'X': 0, 'PX': 1, 'Y': 2, 'PY': 3}
+            t = df_observer.apply(lambda r: _pd.Series({
+                'S': r['AT_EXIT'].m_as('m'),
+                'mean': 1000 * r['BEAM_OUT'][:, dico_plane[plane]].mean() if mean else 0.0,
+                'std': 1000 * r['BEAM_OUT'][:, dico_plane[plane]].std() if std else 0.0,
+                '1%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.023)
+                              - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
+                '5%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.159)
+                              - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
+                '95%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.841)
+                               - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
+                '99%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.977)
+                               - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
+            }), axis=1)
+
+            if df_observer.iloc[0]['BEAM_IN'] is not None:
+                data_entry = df_observer.iloc[0]
+                t0 = _pd.DataFrame(data={"S": [data_entry['AT_ENTRY'].m_as('m')],
+                                         'mean': [1000 * data_entry['BEAM_IN'][:,
+                                                         dico_plane[plane]].mean() if mean else 0.0],
+                                         'std': [
+                                             1000 * data_entry['BEAM_IN'][:, dico_plane[plane]].std() if std else 0.0],
+                                         '1%': [1000 * (self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                                          0.023)
+                                                        - self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                                            0.5))],
+                                         '5%': [1000 * (self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                                          0.159)
+                                                        - self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                                            0.5))],
+                                         '95%': [1000 * (self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                                           0.841)
+                                                         - self.compute_halo(
+                                                     data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                     0.5))],
+                                         '99%': [1000 * (self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                                           0.977)
+                                                         - self.compute_halo(
+                                                     data_entry['BEAM_IN'][:, dico_plane[plane]],
+                                                     0.5))]
+                                         },
+                                   index=["Start"])
+                t = _pd.concat([t0, t])
+
+            if t['S'].count == 0:
+                return
+
+            if halo:
+                self.filled_plot(self._ax, t['S'], t['mean'] + t['5%'], t['mean'] + t['95%'],
+                                 tracking_palette[plane], fill=True, alpha=0.3)
+                self.filled_plot(self._ax, t['S'], t['mean'] + t['5%'], t['mean'] + t['95%'],
+                                 tracking_palette[plane], fill=True, alpha=0.3)
+                self.filled_plot(self._ax, t['S'], t['mean'] + t['1%'], t['mean'] + t['99%'],
+                                 tracking_palette[plane], fill=True, alpha=0.3)
+
+            if mean:
+                self._ax.plot(t['S'], t['mean'],
+                              '*-',
+                              color=tracking_palette[plane],
+                              markeredgecolor=tracking_palette[plane],
+                              markersize=2,
+                              linewidth=1,
+                              label=kwargs.get("label")
+                              )
+
+            if std:
+                self._ax.plot(t['S'], t['mean'] + t['std'],
+                              '^-',
+                              color=tracking_palette[plane],
+                              markeredgecolor=tracking_palette[plane],
+                              markersize=2,
+                              linewidth=1
+                              )
+                self._ax.plot(t['S'], t['mean'] - t['std'],
+                              'v-',
+                              color=tracking_palette[plane],
+                              markeredgecolor=tracking_palette[plane],
+                              markersize=2,
+                              linewidth=1
+                              )
+
+        elif isinstance(observer, _LossesObserver):
+            raise BeamPlottingException(f"Use method vis.ManzoniMatplotlibArtist(ax=ax).losses to plot losses.")
+
+        else:
+            raise BeamPlottingException(f"No plotting method for {observer} is implemented")
+
+    def losses(self,
+               observer: _LossesObserver = None,
                log_scale: bool = False,
                **kwargs):
         """
         Plot the losses along the beamline
         Args:
-            beamline: dataframe of the beamline
-            observers: Observer used for the tracking
+            observer: Observer used for the tracking
             log_scale: Log scale for transmission
         """
 
-        if not isinstance(observers, _LossesObserver):
+        if not isinstance(observer, _LossesObserver):
             raise BeamPlottingException("The observer must be a LossesObserver.")
 
-        # Merge the observers with the beamline
-        bl_losses = _pd.merge(beamline, observers.to_df(), on='NAME')
         losses_palette = kwargs.get("palette", palette)
-        exit = bl_losses['AT_EXIT'].apply(lambda e: e.m_as('m'))
+        df_observer = observer.to_df()
+        exit = df_observer['AT_EXIT'].apply(lambda e: e.m_as('m'))
 
         self._ax.set_ylabel(r'Losses ($\%$)')
         self._ax.yaxis.label.set_color(losses_palette['magenta'])
-        self._ax.bar(exit, bl_losses['LOSSES'],
+        self._ax.bar(exit, df_observer['LOSSES'],
                      width=-0.125,
                      alpha=0.7,
                      edgecolor=losses_palette['magenta'],
                      color=losses_palette['magenta'],
                      align='edge',
                      error_kw=dict(ecolor=losses_palette['base02'], capsize=2, capthick=1))
-        self._ax.yaxis.set_major_locator(MultipleLocator(10))
-        self._ax.set_ylim([0, (bl_losses['LOSSES']).abs().max() + 5.0])
+        max_val = (df_observer['LOSSES']).abs().max()
+        self._ax.yaxis.set_major_locator(MultipleLocator(_np.ceil(max_val/10)))
+        self._ax.set_ylim([0, max_val + 5.0])
 
         ax2 = self._ax.twinx()  # self.ax_2 is reserved for cartouche
         ax2.set_ylabel(r'T ($\%$)')
         ax2.yaxis.label.set_color(losses_palette['green'])
         ax2.grid(True)
         # TODO USE Transmission, shift and compute ?
-        init = bl_losses.iloc[0]['PARTICLES_IN']
-        global_transmission = 100*(bl_losses['PARTICLES_OUT'].values / init)
+        init = df_observer.iloc[0]['PARTICLES_IN']
+        global_transmission = 100 * (df_observer['PARTICLES_OUT'].values / init)
         if log_scale:
             ax2.semilogy(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
                          's-', color=losses_palette['green'])
@@ -173,6 +267,18 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             ax2.set_ylim([0, 100])
             ax2.plot(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
                      's-', color=losses_palette['green'])
+
+    @staticmethod
+    def compute_halo(data, percentile):
+        """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
+        return _np.quantile(data, percentile)
+
+    @staticmethod
+    def filled_plot(ax, x, y0, y, c, fill=False, **kwargs):
+        ax.plot(x, y, '.', markersize=0,
+                markerfacecolor=c, markeredgecolor=c, color=c, **kwargs)
+        if fill:
+            ax.fill_between(x, y0, y, facecolor=c, linewidth=0.0, edgecolor=c, **kwargs)
 
     def tracking2(self, ax, bl, beam_o_df, mean=False, std=False, halo=True, **kwargs):
 
@@ -187,83 +293,19 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         halo_99 = kwargs.get("halo_99")
         std_bpm = kwargs.get("std_bpm", False)
 
-        dico_plane = {'X': 0, 'PX': 1, 'Y': 2, 'PY': 3}
-
-        bl = bl.reset_index()
-
-        t = bl.apply(lambda r: _pd.Series({
-            'NAME': r['NAME'],
-            'S': r[kwargs.get("reference_plane", 'AT_EXIT')],
-            '1%': 1000 * (
-                    self.compute_halo(beam_o_df, r['NAME'], 0.023, plane) - self.compute_halo(beam_o_df, r['NAME'],
-                                                                                              0.5,
-                                                                                              plane)) if halo_99 else 0.0,
-            '5%': 1000 * (
-                    self.compute_halo(beam_o_df, r['NAME'], 0.159, plane) - self.compute_halo(beam_o_df, r['NAME'],
-                                                                                              0.5,
-                                                                                              plane)) if halo else 0.0,
-            '95%': 1000 * (
-                    self.compute_halo(beam_o_df, r['NAME'], 0.841, plane) - self.compute_halo(beam_o_df, r['NAME'],
-                                                                                              0.5,
-                                                                                              plane)) if halo else 0.0,
-            '99%': 1000 * (
-                    self.compute_halo(beam_o_df, r['NAME'], 0.977, plane) - self.compute_halo(beam_o_df, r['NAME'],
-                                                                                              0.5,
-                                                                                              plane)) if halo_99 else 0.0,
-            'mean': 1000 * beam_o_df['BEAM_OUT'][r['NAME']][:, dico_plane[plane]].mean() if mean else 0.0,
-            'std': 1000 * beam_o_df['BEAM_OUT'][r['NAME']][:, dico_plane[plane]].std() if std else 0.0,
-        }), axis=1)
-
-        t.set_index('NAME')
-
-        if t['S'].count == 0:
-            return
-
-        if halo:
-            self.filled_plot(ax, t['S'], t['5%'], t['95%'], tracking_palette[plane], True, alpha=0.3)
-            self.filled_plot(ax, t['S'], t['5%'], t['95%'], tracking_palette[plane], True, alpha=0.3)
-            if halo_99:
-                self.filled_plot(ax, t['S'], t['1%'], t['99%'], tracking_palette[plane], True, alpha=0.3)
-
-        if std:
-            ax.plot(t['S'], t['mean'] + t['std'],
-                    '^-',
-                    color=tracking_palette[plane],
-                    markeredgecolor=tracking_palette[plane],
-                    markersize=2,
-                    linewidth=1
-                    )
-            ax.plot(t['S'], t['mean'] - t['std'],
-                    'v-',
-                    color=tracking_palette[plane],
-                    markeredgecolor=tracking_palette[plane],
-                    markersize=2,
-                    linewidth=1
-                    )
-
-        if std_bpm:
-            # Adjustment to avoid plotting zero values where no BPM is present
-            t.loc[t.std_bpm == 0, 'std_bpm'] = -1000
-            ax.errorbar(t['S'] - 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
-                        fmt='none',
-                        elinewidth=2.0,
-                        linewidth=0.0,
-                        color=tracking_palette['green'])
-            ax.errorbar(t['S'] - 0.05, -t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
-                        fmt='none',
-                        elinewidth=2.0,
-                        linewidth=0.0,
-                        color=tracking_palette['green'])
-
-        if mean:
-            ax.plot(t['S'], t['mean'],
-                    '*-',
-                    color=tracking_palette[plane],
-                    markeredgecolor=tracking_palette[plane],
-                    markersize=2,
-                    linewidth=1,
-                    label=kwargs.get("label")
-                    )
+        # if std_bpm:
+        #     # Adjustment to avoid plotting zero values where no BPM is present
+        #     t.loc[t.std_bpm == 0, 'std_bpm'] = -1000
+        #     ax.errorbar(t['S'] - 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
+        #                 fmt='none',
+        #                 elinewidth=2.0,
+        #                 linewidth=0.0,
+        #                 color=tracking_palette['green'])
+        #     ax.errorbar(t['S'] - 0.05, -t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
+        #                 fmt='none',
+        #                 elinewidth=2.0,
+        #                 linewidth=0.0,
+        #                 color=tracking_palette['green'])
 
         # if kwargs.get("size_arrows", False):
         #     ax.set_yticklabels([str(abs(x)) for x in ax.get_yticks()])
@@ -348,12 +390,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             if planes == 'both' or planes == 'Y':
                 ax.plot(bl['S'], bl[f + y], color=palette['Y'])
 
-# @staticmethod
-# def filled_plot(ax, x, y0, y, c, fill=False, **kwargs):
-#     ax.plot(x, y, '.', markersize=0,
-#             markerfacecolor=c, markeredgecolor=c, color=c, **kwargs)
-#     if fill:
-#         ax.fill_between(x, y0, y, facecolor=c, linewidth=0.0, edgecolor=c, **kwargs)
 #
 # @staticmethod
 # def halo(distribution, dimensions=['X', 'Y', 'PX', 'PY']):
@@ -376,19 +412,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 #                       )
 #     return halo
 #
-# @staticmethod
-# def compute_halo(beam_o_df, element, percentile, dimensions=['X', 'Y', 'PX', 'PY']):
-#     """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
-#
-#     data = _pd.DataFrame(columns=['X', 'Y', 'PX', 'PY'])
-#     data['X'] = beam_o_df['BEAM_OUT'][element][:, 0]
-#     data['Y'] = beam_o_df['BEAM_OUT'][element][:, 2]
-#     data['PX'] = beam_o_df['BEAM_OUT'][element][:, 1]
-#     data['PY'] = beam_o_df['BEAM_OUT'][element][:, 3]
-#
-#     halo = data[dimensions].quantile(percentile)
-#
-#     return halo
 
 # # THIS IS THE OLD aperture.py
 # @staticmethod
