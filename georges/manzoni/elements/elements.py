@@ -9,7 +9,9 @@ import numpy as _np
 from numba.typed import List as nList
 from pint import UndefinedUnitError as _UndefinedUnitError
 from ... import ureg as _ureg
-from ..integrators import IntegratorType, MadXIntegrator, TransportSecondOrderTaylorIntegrator, TransportFirstOrderTaylorIntegrator, TransportSecondOrderTaylorIntegratorExact, TransportFirstOrderTaylorIntegratorExact
+from ..integrators import IntegratorType, MadXIntegrator, TransportSecondOrderTaylorIntegrator, \
+    TransportFirstOrderTaylorIntegrator, TransportSecondOrderTaylorIntegratorExact, \
+    TransportFirstOrderTaylorIntegratorExact
 from ..apertures import circular_aperture_check, \
     rectangular_aperture_check, \
     elliptical_aperture_check, \
@@ -119,6 +121,9 @@ class Element(metaclass=ElementType):
     """
     PARAMETERS: dict = {
         'NAME': ('', 'Primary label for the Zgoubi command (default: auto-generated hash).'),
+        'AT_ENTRY': (0 * _ureg.m, 'Entrance position of the element.'),
+        'AT_CENTER': (0 * _ureg.m, 'Entrance position of the element.'),
+        'AT_EXIT': (0 * _ureg.m, 'Exit position of the element.')
     }
     """Parameters of the element, with their default value and their description ."""
 
@@ -212,7 +217,7 @@ class Element(metaclass=ElementType):
             k_ = k.rstrip('_')
             if k_ not in self._attributes.keys():
                 raise ManzoniAttributeException(f"The parameter {k_} is not part of the {self.__class__.__name__} "
-                                                  f"definition.")
+                                                f"definition.")
 
             default = self._retrieve_default_parameter_value(k_)
             try:  # Avoid a bug in pint where a string starting with '#' cannot be parsed

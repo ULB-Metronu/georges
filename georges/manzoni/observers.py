@@ -34,28 +34,44 @@ class BeamObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None, with_input_beams: bool = False):
         super().__init__(elements)
         self._with_input_beams = with_input_beams
-        self.headers = ('NAME', 'BEAM_IN', 'BEAM_OUT')
+        self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
+                        'BEAM_IN',
+                        'BEAM_OUT'
+                        )
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.NAME, _np.copy(b1) if self._with_input_beams else None, _np.copy(b2)))
+            self.data.append((element.NAME,
+                              element.AT_ENTRY,
+                              element.AT_CENTER,
+                              element.AT_EXIT,
+                              _np.copy(b1) if self._with_input_beams else None, _np.copy(b2)))
 
 
 class SuperObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
                         )
 
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
-            self.data.append((element.NAME,))
+            self.data.append((element.NAME, element.AT_ENTRY, element.AT_CENTER, element.AT_EXIT))
 
 
 class MeanObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
                         'BEAM_IN_X',
                         'BEAM_OUT_X',
                         'BEAM_IN_Y',
@@ -71,6 +87,9 @@ class MeanObserver(Observer):
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
             self.data.append((element.NAME,
+                              element.AT_ENTRY,
+                              element.AT_CENTER,
+                              element.AT_EXIT,
                               b1[:, 0].mean(),
                               b2[:, 0].mean(),
                               b1[:, 2].mean(),
@@ -88,6 +107,9 @@ class SigmaObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
                         'BEAM_IN_X',
                         'BEAM_OUT_X',
                         'BEAM_IN_Y',
@@ -103,6 +125,9 @@ class SigmaObserver(Observer):
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
             self.data.append((element.NAME,
+                              element.AT_ENTRY,
+                              element.AT_CENTER,
+                              element.AT_EXIT,
                               b1[:, 0].std(),
                               b2[:, 0].std(),
                               b1[:, 2].std(),
@@ -120,6 +145,9 @@ class LossesObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
                         'PARTICLES_IN',
                         'PARTICLES_OUT',
                         'TRANSMISSION',
@@ -129,6 +157,9 @@ class LossesObserver(Observer):
     def __call__(self, element, b1, b2):
         if super().__call__(element, b1, b2):
             self.data.append((element.NAME,
+                              element.AT_ENTRY,
+                              element.AT_CENTER,
+                              element.AT_EXIT,
                               b1.shape[0],
                               b2.shape[0],
                               100 * (b2.shape[0] / b1.shape[0]),
@@ -155,12 +186,18 @@ class SymmetryObserver(Observer):
         super().__init__()
 
         self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
                         'SYM_IN',
                         'SYM_OUT',
                         )
 
     def __call__(self, element, b1, b2):
         self.data.append((element.NAME,
+                          element.AT_ENTRY,
+                          element.AT_CENTER,
+                          element.AT_EXIT,
                           abs(b1[:, 0].std() - b1[:, 2].std()) / (b1[:, 0].std() + b1[:, 2].std()),
                           abs(b2[:, 0].std() - b2[:, 2].std()) / (b2[:, 0].std() + b2[:, 2].std()),
                           ))
@@ -170,6 +207,9 @@ class IbaBpmObserver(Observer):
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
                         'BEAM_OUT_X',
                         'BEAM_OUT_Y',
                         )
@@ -198,8 +238,8 @@ class IbaBpmObserver(Observer):
 
             params = Parameters()  # Instanciate the Parameters class, then add variables as keywords
             params.add('a', value=ar, min=-1e6, max=1e6)
-            params.add('mu', value=mean, min=mean-_np.abs(mean), max=mean+_np.abs(mean))
-            params.add('sigma', value=rms, min=0.5*rms, max=2*rms)
+            params.add('mu', value=mean, min=mean - _np.abs(mean), max=mean + _np.abs(mean))
+            params.add('sigma', value=rms, min=0.5 * rms, max=2 * rms)
             params.add('max_nfev', value=maxfev)
 
             gmodel = Model(gaussian)
@@ -218,6 +258,9 @@ class IbaBpmObserver(Observer):
             if element.CLASS == 'Marker':
                 print(element.NAME)  # To identify the BPM whose data are being fitted
                 self.data.append((element.NAME,
+                                  element.AT_ENTRY,
+                                  element.AT_CENTER,
+                                  element.AT_EXIT,
                                   self.fit_bpm(b2[:, 0])[0],
                                   self.fit_bpm(b2[:, 2])[0],
                                   ))
