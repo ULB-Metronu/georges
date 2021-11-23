@@ -129,6 +129,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                                       edgecolor=tracking_palette[plane],
                                       **kwargs)
 
+            self._ax.set_xlabel("S (m)")
             self._ax.set_ylabel("Beam Size (mm)")
 
         elif isinstance(observer, _BeamObserver):
@@ -183,8 +184,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             if halo:
                 self.filled_plot(self._ax, t['S'], t['mean'] + t['5%'], t['mean'] + t['95%'],
                                  tracking_palette[plane], fill=True, alpha=0.3)
-                self.filled_plot(self._ax, t['S'], t['mean'] + t['5%'], t['mean'] + t['95%'],
-                                 tracking_palette[plane], fill=True, alpha=0.3)
                 self.filled_plot(self._ax, t['S'], t['mean'] + t['1%'], t['mean'] + t['99%'],
                                  tracking_palette[plane], fill=True, alpha=0.3)
 
@@ -214,6 +213,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                               linewidth=1
                               )
 
+            self._ax.set_xlabel("S (m)")
+            self._ax.set_ylabel("Beam Size (mm)")
+
         elif isinstance(observer, _LossesObserver):
             raise BeamPlottingException(f"Use method vis.ManzoniMatplotlibArtist(ax=ax).losses to plot losses.")
 
@@ -238,6 +240,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         df_observer = observer.to_df()
         exit = df_observer['AT_EXIT'].apply(lambda e: e.m_as('m'))
 
+        self._ax.set_xlabel(r'S (m)')
         self._ax.set_ylabel(r'Losses ($\%$)')
         self._ax.yaxis.label.set_color(losses_palette['magenta'])
         self._ax.bar(exit, df_observer['LOSSES'],
