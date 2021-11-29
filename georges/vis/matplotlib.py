@@ -108,7 +108,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                           color=tracking_palette[plane],
                           markeredgecolor=tracking_palette[plane],
                           markersize=2,
-                          linewidth=1
+                          linewidth=1,
+                          label=kwargs.get('label', plane)
                           )
             self._ax.set_xlabel("S (m)")
             self._ax.set_ylabel("Mean Position (mm)")
@@ -131,13 +132,13 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                           color=tracking_palette[plane],
                           markeredgecolor=tracking_palette[plane],
                           markersize=2,
-                          linewidth=1
+                          linewidth=1,
+                          label=kwargs.get('label', plane)
                           )
             if fill_between:
                 self._ax.fill_between(x, y[1], y[0], facecolor=tracking_palette[plane],
                                       linewidth=0.0,
-                                      edgecolor=tracking_palette[plane],
-                                      **kwargs)
+                                      edgecolor=tracking_palette[plane])
             self._ax.set_xlabel("S (m)")
             self._ax.set_ylabel("Beam Size (mm)")
 
@@ -228,7 +229,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                               markeredgecolor=tracking_palette[plane],
                               markersize=2,
                               linewidth=1,
-                              label=kwargs.get("label")
+                              label='mean'
                               )
 
             if std:
@@ -237,7 +238,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                               color=tracking_palette[plane],
                               markeredgecolor=tracking_palette[plane],
                               markersize=2,
-                              linewidth=1
+                              linewidth=1,
+                              label='std'
                               )
                 self._ax.plot(t['S'], t['mean'] - t['std'],
                               'v-',
@@ -297,13 +299,13 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         global_transmission = 100 * (df_observer['PARTICLES_OUT'].values / init)
         if log_scale:
             ax2.semilogy(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
-                         's-', color=losses_palette['green'])
+                         's-', color=losses_palette['green'], **kwargs)
             ax2.set_ylim([min(global_transmission), 100])
         else:
             ax2.yaxis.set_major_locator(mticker.MultipleLocator(10))
             ax2.set_ylim([0, 100])
             ax2.plot(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
-                     's-', color=losses_palette['green'])
+                     's-', color=losses_palette['green'], **kwargs)
 
     @staticmethod
     def compute_halo(data, percentile):

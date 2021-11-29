@@ -78,7 +78,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                          line={'width': 1},
                          mode='markers+lines',
                          showlegend=False,
-                         name='mean'
+                         name=kwargs.get('name', plane)
                          )
             self.layout['xaxis']['title'] = "S (m)"
             self.layout['yaxis']['title'] = "Mean position (mm)"
@@ -101,7 +101,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                          marker={'symbol': 4, 'color': tracking_palette[plane], 'size': 7},
                          line={'width': 1, 'color': tracking_palette[plane]},
                          mode='markers+lines',
-                         name='std',
+                         name=kwargs.get('name', plane),
                          showlegend=False,
                          )
 
@@ -111,7 +111,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                          line={'width': 1, 'color': tracking_palette[plane]},
                          mode='markers+lines',
                          showlegend=False,
-                         name='std',
+                         name=kwargs.get('name', plane),
                          fill='tonexty' if fill_between else None,
                          fillcolor=tracking_palette[plane]
                          )
