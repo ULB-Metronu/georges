@@ -14,12 +14,15 @@ from ..manzoni.observers import LossesObserver as _LossesObserver
 # from numpy.linalg import eig
 # import matplotlib.pyplot as plt
 # import matplotlib.patches as patches
-from matplotlib.ticker import MultipleLocator
+import matplotlib.ticker as mticker
+
+
 # from lmfit.models import GaussianModel
 from georges_core.vis import MatplotlibArtist as _MatplotlibArtist
 from georges_core.vis.artist import PALETTE
 
 palette = PALETTE['solarized']
+palette['both'] = palette['base03']
 palette['X'] = palette['cyan']
 palette['Y'] = palette['orange']
 palette['XP'] = palette['red']
@@ -112,11 +115,18 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
         elif isinstance(observer, _SigmaObserver):
             x = _np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values])
-            yp = _np.hstack([df_observer.iloc[0][f"BEAM_IN_{plane}"],
-                             df_observer.iloc[:][f"BEAM_OUT_{plane}"].values]) * 1000
-            ym = -yp
+            if plane == 'both':
+                y0 = _np.hstack([df_observer.iloc[0][f"BEAM_IN_X"],
+                                 df_observer.iloc[:][f"BEAM_OUT_X"].values]) * 1000
+                y1 = _np.hstack([df_observer.iloc[0][f"BEAM_IN_Y"],
+                                 df_observer.iloc[:][f"BEAM_OUT_Y"].values]) * 1000
+            else:
+                y0 = _np.hstack([df_observer.iloc[0][f"BEAM_IN_{plane}"],
+                                 df_observer.iloc[:][f"BEAM_OUT_{plane}"].values]) * 1000
+                y1 = y0
+            y = [y1, -y0]
 
-            self._ax.plot(x, yp, x, ym,
+            self._ax.plot(x, y[0], x, y[1],
                           marker='^',
                           color=tracking_palette[plane],
                           markeredgecolor=tracking_palette[plane],
@@ -124,13 +134,39 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                           linewidth=1
                           )
             if fill_between:
-                self._ax.fill_between(x, ym, yp, facecolor=tracking_palette[plane],
+                self._ax.fill_between(x, y[1], y[0], facecolor=tracking_palette[plane],
                                       linewidth=0.0,
                                       edgecolor=tracking_palette[plane],
                                       **kwargs)
-
             self._ax.set_xlabel("S (m)")
-            self._ax.set_ylabel("Beam Size (mm)")
+            if plane == 'both':
+                self._ax.set_ylabel("Beam Size (mm)")
+                self._ax.get_lines()[0].set_color(tracking_palette['Y'])
+                self._ax.get_lines()[1].set_color(tracking_palette['X'])
+                ticks_loc = self._ax.get_yticks().tolist()
+                self._ax.yaxis.set_major_locator(mticker.FixedLocator(ticks_loc))
+                self._ax.set_yticklabels([abs(x) for x in ticks_loc])
+
+                self._ax.annotate('',
+                                  xy=(-0.08 / (self._ax.get_figure().get_size_inches()[0] / 10), 0.97),
+                                  xytext=(-0.08 / (self._ax.get_figure().get_size_inches()[0] / 10), 0.75),
+                                  arrowprops=dict(arrowstyle="->", color='k'), xycoords=self._ax.transAxes)
+
+                self._ax.annotate('',
+                                  xy=(-0.08 / (self._ax.get_figure().get_size_inches()[0] / 10), 0.25),
+                                  xycoords='axes fraction',
+                                  xytext=(-0.08 / (self._ax.get_figure().get_size_inches()[0] / 10), 0.03),
+                                  arrowprops=dict(arrowstyle="<-", color='k'))
+
+                self._ax.text(-0.1 / (self._ax.get_figure().get_size_inches()[0] / 10), 0.86, "Vertical", fontsize=9,
+                              rotation=90,
+                              transform=self._ax.transAxes)
+                self._ax.text(-0.1 / (self._ax.get_figure().get_size_inches()[0] / 10), 0.11, "Horizontal", fontsize=9,
+                              rotation=90,
+                              transform=self._ax.transAxes)
+
+            else:
+                self._ax.set_ylabel("Beam Size (mm)")
 
         elif isinstance(observer, _BeamObserver):
 
@@ -251,7 +287,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                      align='edge',
                      error_kw=dict(ecolor=losses_palette['base02'], capsize=2, capthick=1))
         max_val = (df_observer['LOSSES']).abs().max()
-        self._ax.yaxis.set_major_locator(MultipleLocator(_np.ceil(max_val/10)))
+        self._ax.yaxis.set_major_locator(mticker.MultipleLocator(_np.ceil(max_val / 10)))
         self._ax.set_ylim([0, max_val + 5.0])
 
         ax2 = self._ax.twinx()  # self.ax_2 is reserved for cartouche
@@ -266,7 +302,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                          's-', color=losses_palette['green'])
             ax2.set_ylim([min(global_transmission), 100])
         else:
-            ax2.yaxis.set_major_locator(MultipleLocator(10))
+            ax2.yaxis.set_major_locator(mticker.MultipleLocator(10))
             ax2.set_ylim([0, 100])
             ax2.plot(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
                      's-', color=losses_palette['green'])
