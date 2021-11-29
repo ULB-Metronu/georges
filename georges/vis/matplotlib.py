@@ -139,8 +139,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                                       edgecolor=tracking_palette[plane],
                                       **kwargs)
             self._ax.set_xlabel("S (m)")
+            self._ax.set_ylabel("Beam Size (mm)")
+
             if plane == 'both':
-                self._ax.set_ylabel("Beam Size (mm)")
                 self._ax.get_lines()[0].set_color(tracking_palette['Y'])
                 self._ax.get_lines()[1].set_color(tracking_palette['X'])
                 ticks_loc = self._ax.get_yticks().tolist()
@@ -164,9 +165,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 self._ax.text(-0.1 / (self._ax.get_figure().get_size_inches()[0] / 10), 0.11, "Horizontal", fontsize=9,
                               rotation=90,
                               transform=self._ax.transAxes)
-
-            else:
-                self._ax.set_ylabel("Beam Size (mm)")
 
         elif isinstance(observer, _BeamObserver):
 

@@ -15,6 +15,7 @@ from georges_core.vis import PlotlyArtist as _PlotlyArtist
 from georges_core.vis.artist import PALETTE
 
 palette = PALETTE['solarized']
+palette['both'] = palette['base03']
 palette['X'] = palette['cyan']
 palette['Y'] = palette['orange']
 palette['XP'] = palette['red']
@@ -83,30 +84,64 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
             self.layout['yaxis']['title'] = "Mean position (mm)"
         elif isinstance(observer, _SigmaObserver):
             x = _np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values])
-            yp = _np.hstack([df_observer.iloc[0][f"BEAM_IN_{plane}"],
-                             df_observer.iloc[:][f"BEAM_OUT_{plane}"].values]) * 1000
+
+            if plane == 'both':
+                y0 = _np.hstack([df_observer.iloc[0][f"BEAM_IN_X"],
+                                 df_observer.iloc[:][f"BEAM_OUT_X"].values]) * 1000
+                y1 = _np.hstack([df_observer.iloc[0][f"BEAM_IN_Y"],
+                                 df_observer.iloc[:][f"BEAM_OUT_Y"].values]) * 1000
+            else:
+                y0 = _np.hstack([df_observer.iloc[0][f"BEAM_IN_{plane}"],
+                                 df_observer.iloc[:][f"BEAM_OUT_{plane}"].values]) * 1000
+                y1 = y0
+            y = [y1, -y0]
 
             self.scatter(x=x,
-                         y=yp,
+                         y=y[0],
                          marker={'symbol': 4, 'color': tracking_palette[plane], 'size': 7},
-                         line={'width': 1},
+                         line={'width': 1, 'color': tracking_palette[plane]},
                          mode='markers+lines',
                          name='std',
                          showlegend=False,
                          )
 
             self.scatter(x=x,
-                         y=-yp,
+                         y=y[1],
                          marker={'symbol': 4, 'color': tracking_palette[plane], 'size': 7},
-                         line={'width': 1},
+                         line={'width': 1, 'color': tracking_palette[plane]},
                          mode='markers+lines',
                          showlegend=False,
                          name='std',
-                         fill='tonexty' if fill_between else None
+                         fill='tonexty' if fill_between else None,
+                         fillcolor=tracking_palette[plane]
                          )
 
             self.layout['xaxis']['title'] = "S (m)"
             self.layout['yaxis']['title'] = "Beam Size (mm)"
+
+            if plane == 'both':
+                self.fig['data'][0]['line']['color'] = tracking_palette['Y']
+                self.fig['data'][0]['marker']['color'] = tracking_palette['Y']
+                self.fig['data'][1]['line']['color'] = tracking_palette['X']
+                self.fig['data'][1]['marker']['color'] = tracking_palette['X']
+                ticks_val = _np.arange(_np.min(10 * _np.floor(y[1] / 10)), _np.max(10 * _np.ceil(y[0] / 10)) + 10, 10)
+                self.layout['yaxis']['tickvals'] = ticks_val
+                self.layout['yaxis']['ticktext'] = [_np.abs(d) for d in ticks_val]
+
+                # Optimized for a general layout
+                self.layout['yaxis']['title'] = f"<--------------   Beam size (mm)   -------------->"
+                self.layout['annotations'] = [{'x': -0.075,
+                                               'y': 0.65 + self.layout['height'] / 6000,
+                                               'xref': 'paper',
+                                               'yref': 'paper',
+                                               'text': "Vertical",
+                                               'textangle': -90},
+                                              {'x': -0.075,
+                                               'y': self.layout['height'] / 6000,
+                                               'xref': 'paper',
+                                               'yref': 'paper',
+                                               'text': "Horizontal",
+                                               'textangle': -90}]
 
         elif isinstance(observer, _BeamObserver):
 
