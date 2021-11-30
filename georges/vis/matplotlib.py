@@ -299,13 +299,13 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         global_transmission = 100 * (df_observer['PARTICLES_OUT'].values / init)
         if log_scale:
             ax2.semilogy(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
-                         's-', color=losses_palette['green'], **kwargs)
+                         's-', color=losses_palette['green'])
             ax2.set_ylim([min(global_transmission), 100])
         else:
             ax2.yaxis.set_major_locator(mticker.MultipleLocator(10))
             ax2.set_ylim([0, 100])
             ax2.plot(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
-                     's-', color=losses_palette['green'], **kwargs)
+                     's-', color=losses_palette['green'])
 
     @staticmethod
     def compute_halo(data, percentile):

@@ -256,6 +256,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
 
         self.layout['xaxis']['title'] = "S (m)"
         self.layout['yaxis']['title'] = r"Losses (%)"
+        self.layout['yaxis']['titlefont'] = {'color': losses_palette['magenta']}
 
         self.bar(x=exit,
                  y=df_observer['LOSSES'],
@@ -269,6 +270,8 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
         self.layout['yaxis']['range'] = [0, max_val + 5.0]
 
         self.add_secondary_axis(title=r'T (%)')
+        self.layout['yaxis2']['titlefont'] = {'color': losses_palette['green']}
+
         # TODO USE Transmission, shift and compute ?
         init = df_observer.iloc[0]['PARTICLES_IN']
         global_transmission = 100 * (df_observer['PARTICLES_OUT'].values / init)
@@ -282,7 +285,9 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                          name='Transmission',
                          showlegend=False)
             self.layout['yaxis2']['type'] = 'log'
-            self.layout['yaxis2']['range'] = [min(global_transmission), 100]
+            self.layout['yaxis2']['range'] = [_np.floor(_np.log(_np.min(global_transmission))), 2]
+            self.layout['yaxis2']['tickvals'] = 10**(_np.arange(_np.floor(_np.log(_np.min(global_transmission))), 3, 1))
+
         else:
             self.scatter(x=_np.hstack([0, exit.values]),
                          y=_np.hstack([100, global_transmission]),
