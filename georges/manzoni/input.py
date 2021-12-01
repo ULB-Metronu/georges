@@ -7,6 +7,7 @@ from georges_core.sequences import Sequence as _Sequence
 from . import elements
 from .core import track
 from .elements.scatterers import MaterialElement
+from ..fermi import materials
 if TYPE_CHECKING:
     from georges_core import ureg as _ureg
     from .beam import Beam as _Beam
@@ -90,18 +91,27 @@ class Input:
     @classmethod
     def from_sequence(cls,
                       sequence: _Sequence,
+                      from_element: str = None,
+                      to_element: str = None
                       ):
         """
         Creates a new `Input` from a generic sequence from `georges_core`.
 
         Args:
             sequence:
-
+            from_element:
+            to_element:
         Returns:
 
         """
         input_sequence = list()
-        for name, element in sequence.df.iterrows():
+        df_sequence = sequence.df.loc[from_element:to_element]
+        if 'MATERIAL' in df_sequence.columns:
+            idx = df_sequence[sequence.df['MATERIAL'].notnull()].index
+            for ele in idx:
+                df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
+
+        for name, element in df_sequence.iterrows():
             element_class = getattr(elements, element['CLASS'])
             parameters = list(set(list(element.index.values)).intersection(element_class.PARAMETERS.keys()))
             input_sequence.append(
