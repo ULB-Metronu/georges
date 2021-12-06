@@ -4,6 +4,9 @@ TODO
 """
 
 from __future__ import annotations
+
+import logging
+
 import pandas as _pd
 import numpy as _np
 from ..manzoni.observers import Observer as _Observer
@@ -11,6 +14,7 @@ from ..manzoni.observers import MeanObserver as _MeanObserver
 from ..manzoni.observers import SigmaObserver as _SigmaObserver
 from ..manzoni.observers import BeamObserver as _BeamObserver
 from ..manzoni.observers import LossesObserver as _LossesObserver
+from ..manzoni.observers import TwissObserver as _TwissObserver
 from georges_core.vis import PlotlyArtist as _PlotlyArtist
 from georges_core.vis.artist import PALETTE
 
@@ -163,8 +167,8 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
             if df_observer.iloc[0]['BEAM_IN'] is not None:
                 data_entry = df_observer.iloc[0]
                 t0 = _pd.DataFrame(data={"S": [data_entry['AT_ENTRY'].m_as('m')],
-                                         'mean': [1000 * data_entry['BEAM_IN'][:,
-                                                         dico_plane[plane]].mean() if mean else 0.0],
+                                         'mean': [1000 * data_entry['BEAM_IN'][
+                                                         :, dico_plane[plane]].mean() if mean else 0.0],
                                          'std': [
                                              1000 * data_entry['BEAM_IN'][:, dico_plane[plane]].std() if std else 0.0],
                                          '1%': [1000 * (self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
@@ -309,3 +313,9 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
         ax.scatter(x=x, y=y, mode='lines', line={'width': 1, 'color': c}, showlegend=False)
         if fill:
             ax.scatter(x=x, y=y0, mode='lines', line={'width': 1, 'color': c}, showlegend=False, fill='tonexty')
+
+    def twiss(self, observer: _TwissObserver = None,):
+        logging.error("The method is not yet implemented")
+
+    def phase_space(self, observer: _TwissObserver = None, ):
+        logging.error("The method is not yet implemented")

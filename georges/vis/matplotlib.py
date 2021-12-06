@@ -4,18 +4,20 @@ TODO
 """
 
 from __future__ import annotations
+
 import pandas as _pd
 import numpy as _np
+
 from ..manzoni.observers import Observer as _Observer
 from ..manzoni.observers import MeanObserver as _MeanObserver
 from ..manzoni.observers import SigmaObserver as _SigmaObserver
 from ..manzoni.observers import BeamObserver as _BeamObserver
 from ..manzoni.observers import LossesObserver as _LossesObserver
-# from numpy.linalg import eig
-# import matplotlib.pyplot as plt
-# import matplotlib.patches as patches
-import matplotlib.ticker as mticker
+from ..manzoni.observers import TwissObserver as _TwissObserver
+from lmfit.models import GaussianModel
 
+import matplotlib.patches as patches
+import matplotlib.ticker as mticker
 
 # from lmfit.models import GaussianModel
 from georges_core.vis import MatplotlibArtist as _MatplotlibArtist
@@ -27,6 +29,10 @@ palette['X'] = palette['cyan']
 palette['Y'] = palette['orange']
 palette['XP'] = palette['red']
 palette['YP'] = palette['green']
+palette['TWISS_X'] = palette['blue']
+palette['TWISS_Y'] = palette['red']
+palette['DX'] = palette['green']
+palette['DY'] = palette['orange']
 
 
 # THIS IS THE OLD beam.py
@@ -73,6 +79,45 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
     @tracks_color.setter
     def tracks_color(self, color: str):
         self._tracks_color = color
+
+    @staticmethod
+    def histogram_fit(data, bounds_binning=50, verbose=False, model=GaussianModel):
+        """ All models are available on https://lmfit.github.io/lmfit-py/builtin_models.html#lmfit.models"""
+        y, bin_edges = _np.histogram(data, density=False, bins=bounds_binning)
+        x = (bin_edges[:-1] + bin_edges[1:]) / 2
+        result = model().fit(data=y, x=x, center=data.mean(), sigma=data.std())
+        if verbose:
+            print(result.fit_report())
+        return x, result
+
+    @staticmethod
+    def ellipse(ra, rb, angle, x0, y0, **kwargs):
+        """
+        Create an ellipse from beam parameters.
+        :param ra: semi-major axis
+        :param rb: semi-minor axis
+        :param angle: oritentation angle
+        :param x0: center X coordinate
+        :param y0: center Y coordinate
+        :return: `matplotlib.patches.Ellipse` object
+        """
+        width = ra
+        height = rb
+        return patches.Ellipse((x0, y0), width, height,
+                               angle=angle,
+                               linewidth=kwargs.get('linewidth', 2),
+                               fill=kwargs.get('fill', False),
+                               linestyle=kwargs.get('linestyle', '--'),
+                               edgecolor=kwargs.get('color', 'red'),
+                               label=kwargs.get('label'),
+                               )
+
+    @staticmethod
+    def rotation_angle(e_val, evec):
+        if e_val[0] * evec[0, 0] > e_val[1] * evec[0, 1]:
+            return _np.degrees(_np.arctan(evec[1, 0] / evec[0, 0]))
+        else:
+            return _np.degrees(_np.arctan(evec[1, 1] / evec[0, 1]))
 
     def tracking(self,
                  observer: _Observer = None,
@@ -178,6 +223,10 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                               - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
                 '5%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.159)
                               - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
+                '20%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 1 - 0.842701)
+                               - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
+                '80%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.842701)
+                               - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
                 '95%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.841)
                                - self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.5)),
                 '99%': 1000 * (self.compute_halo(r['BEAM_OUT'][:, dico_plane[plane]], 0.977)
@@ -187,8 +236,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             if df_observer.iloc[0]['BEAM_IN'] is not None:
                 data_entry = df_observer.iloc[0]
                 t0 = _pd.DataFrame(data={"S": [data_entry['AT_ENTRY'].m_as('m')],
-                                         'mean': [1000 * data_entry['BEAM_IN'][:,
-                                                         dico_plane[plane]].mean() if mean else 0.0],
+                                         'mean': [1000 * data_entry['BEAM_IN'][
+                                                         :, dico_plane[plane]].mean() if mean else 0.0],
                                          'std': [
                                              1000 * data_entry['BEAM_IN'][:, dico_plane[plane]].std() if std else 0.0],
                                          '1%': [1000 * (self.compute_halo(data_entry['BEAM_IN'][:, dico_plane[plane]],
@@ -258,6 +307,20 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         else:
             raise BeamPlottingException(f"No plotting method for {observer} is implemented")
 
+    # if std_bpm:
+    #     # Adjustment to avoid plotting zero values where no BPM is present
+    #     t.loc[t.std_bpm == 0, 'std_bpm'] = -1000
+    #     ax.errorbar(t['S'] - 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
+    #                 fmt='none',
+    #                 elinewidth=2.0,
+    #                 linewidth=0.0,
+    #                 color=tracking_palette['green'])
+    #     ax.errorbar(t['S'] - 0.05, -t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
+    #                 fmt='none',
+    #                 elinewidth=2.0,
+    #                 linewidth=0.0,
+    #                 color=tracking_palette['green'])
+
     def losses(self,
                observer: _LossesObserver = None,
                log_scale: bool = False,
@@ -274,12 +337,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
         losses_palette = kwargs.get("palette", palette)
         df_observer = observer.to_df()
-        exit = df_observer['AT_EXIT'].apply(lambda e: e.m_as('m'))
+        data_exit = df_observer['AT_EXIT'].apply(lambda e: e.m_as('m'))
 
         self._ax.set_xlabel(r'S (m)')
         self._ax.set_ylabel(r'Losses ($\%$)')
         self._ax.yaxis.label.set_color(losses_palette['magenta'])
-        self._ax.bar(exit, df_observer['LOSSES'],
+        self._ax.bar(data_exit, df_observer['LOSSES'],
                      width=-0.125,
                      alpha=0.7,
                      edgecolor=losses_palette['magenta'],
@@ -298,13 +361,13 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         init = df_observer.iloc[0]['PARTICLES_IN']
         global_transmission = 100 * (df_observer['PARTICLES_OUT'].values / init)
         if log_scale:
-            ax2.semilogy(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
+            ax2.semilogy(_np.hstack([0, data_exit.values]), _np.hstack([100, global_transmission]),
                          's-', color=losses_palette['green'])
             ax2.set_ylim([min(global_transmission), 100])
         else:
             ax2.yaxis.set_major_locator(mticker.MultipleLocator(10))
             ax2.set_ylim([0, 100])
-            ax2.plot(_np.hstack([0, exit.values]), _np.hstack([100, global_transmission]),
+            ax2.plot(_np.hstack([0, data_exit.values]), _np.hstack([100, global_transmission]),
                      's-', color=losses_palette['green'])
 
     @staticmethod
@@ -319,166 +382,330 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         if fill:
             ax.fill_between(x, y0, y, facecolor=c, linewidth=0.0, edgecolor=c, **kwargs)
 
-    def tracking2(self, ax, bl, beam_o_df, mean=False, std=False, halo=True, **kwargs):
+    def twiss(self, observer: _TwissObserver = None,
+              with_beta: bool = True,
+              with_alpha: bool = False,
+              with_dispersion: bool = False,
+              tfs_data: _pd.DataFrame = None,
+              **kwargs):
+        """
+        Plot the Twiss function along the beamline
+        Args:
+            observer: Observer used for the tracking
+            with_beta: plot the beta
+            with_alpha: plot the alpha
+            with_dispersion: plot the dispersion
+            tfs_data: if provided, plot the data.
 
-        """Plot the beam envelopes from tracking data."""
-        if kwargs.get("plane") is None:
-            raise Exception("Plane (plane='X' or plane='Y') must be specified.")
+        """
+        if not isinstance(observer, _TwissObserver):
+            raise BeamPlottingException("The observer must be a TwissObserver.")
+        df_observer = observer.to_df()
+        twiss_palette = kwargs.get("palette", palette)
 
-        plane = kwargs.get("plane")
-        tracking_palette = kwargs.get("palette", palette)
-        if plane is None:
-            raise Exception("The 'plane' keyword argument must be set to 'X' or 'Y'.")
-        halo_99 = kwargs.get("halo_99")
-        std_bpm = kwargs.get("std_bpm", False)
+        if with_beta:
+            self._ax.plot(_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                          _np.hstack([df_observer.iloc[0][f"BETA_IN_X"],
+                                      df_observer.iloc[:][f"BETA_OUT_X"].values]),
+                          '-',
+                          color=twiss_palette['TWISS_X'],
+                          linewidth=1,
+                          label="BETX - Manzoni"
+                          )
 
-        # if std_bpm:
-        #     # Adjustment to avoid plotting zero values where no BPM is present
-        #     t.loc[t.std_bpm == 0, 'std_bpm'] = -1000
-        #     ax.errorbar(t['S'] - 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
-        #                 fmt='none',
-        #                 elinewidth=2.0,
-        #                 linewidth=0.0,
-        #                 color=tracking_palette['green'])
-        #     ax.errorbar(t['S'] - 0.05, -t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
-        #                 fmt='none',
-        #                 elinewidth=2.0,
-        #                 linewidth=0.0,
-        #                 color=tracking_palette['green'])
+            self._ax.plot(_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                          _np.hstack([df_observer.iloc[0][f"BETA_IN_Y"],
+                                      df_observer.iloc[:][f"BETA_OUT_Y"].values]),
+                          '-',
+                          color=twiss_palette['TWISS_Y'],
+                          linewidth=1,
+                          label="BETY - Manzoni"
+                          )
+            if tfs_data is not None:
+                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                              tfs_data['BETX'].values,
+                              color=twiss_palette['TWISS_X'],
+                              markeredgecolor=twiss_palette['TWISS_X'],
+                              markersize=4,
+                              marker='x',
+                              ls='None',
+                              label="BETX - MADX"
+                              )
 
-        # if kwargs.get("size_arrows", False):
-        #     ax.set_yticklabels([str(abs(x)) for x in ax.get_yticks()])
-        #     ax.annotate('', xy=(-0.103, 0.97), xytext=(-0.103, 0.75),
-        #                 arrowprops=dict(arrowstyle="->", color='k'), xycoords=ax.transAxes)
-        #     ax.annotate('', xy=(-0.103, 0.25), xycoords='axes fraction', xytext=(-0.103, 0.03),
-        #                 arrowprops=dict(arrowstyle="<-", color='k'))
-        #     ax.text(-0.126, 0.86, "Vertical", fontsize=7, rotation=90, transform=ax.transAxes)
-        #     ax.text(-0.126, 0.22, "Horizontal", fontsize=7, rotation=90, transform=ax.transAxes)
+                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                              tfs_data['BETY'].values,
+                              color=twiss_palette['TWISS_Y'],
+                              markeredgecolor=twiss_palette['TWISS_Y'],
+                              markersize=4,
+                              marker='x',
+                              ls='None',
+                              label="BETY - MADX"
+                              )
 
-    # THIS IS THE OLD twiss.py
-    # TODO do the same thing as in Zgoubidoo
+            self._ax.set_xlabel("S (m)")
+            self._ax.set_ylabel(r"$\beta$ (m)")
+            max_val = _np.ceil(_np.maximum(df_observer['BETA_OUT_X'].max(), df_observer['BETA_OUT_Y'].max()))
+            self._ax.yaxis.set_major_locator(mticker.MultipleLocator(_np.ceil(max_val / 10)))
+            self._ax.set_ylim([0, max_val + 5.0])
 
-    def twiss(self, ax, bl, **kwargs):
-        """Plot the Twiss beam envelopes from a beamline Twiss computation and a context."""
-        context = kwargs.get('context', {})
-        bl = bl.line
+        if with_alpha:
+            self._ax.plot(_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                          _np.hstack([df_observer.iloc[0][f"ALPHA_IN_X"],
+                                      df_observer.iloc[:][f"ALPHA_OUT_X"].values]),
+                          '-',
+                          color=twiss_palette['TWISS_X'],
+                          linewidth=1,
+                          label="ALPHAX - Manzoni"
+                          )
 
-        bl['XMAXMONO'] = _np.sqrt(bl['BETX'] * context['EMITX'])
-        bl['XMAX'] = _np.sqrt(bl['XMAXMONO'] ** 2 + (context['DPP'] * bl['DX']) ** 2)
-        bl['YMAX'] = _np.sqrt(bl['BETY'] * context['EMITY'])
-        p = kwargs.get('plane', None)
-        cx = kwargs.get('color', 'X')
-        cy = kwargs.get('color', 'Y')
-        if p is None:
-            self.filled_plot(ax, bl['S'], 0, -1000 * bl['XMAXMONO'], palette[cx], True, alpha=0.8)
-            self.filled_plot(ax, bl['S'], 0, -1000 * bl['XMAX'], palette[cx], True, alpha=0.4)
-            self.filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['XMAX'], palette[cx], True, alpha=0.2)
-            self.filled_plot(ax, bl['S'], 0, 1000 * bl['YMAX'], palette[cy], True, alpha=0.4)
-            self.filled_plot(ax, bl['S'], 0, 2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
-        elif p == 'X':
-            self.filled_plot(ax, bl['S'], 0, -1000 * bl['XMAXMONO'], palette[cx], True, alpha=0.8)
-            self.filled_plot(ax, bl['S'], 0, -1000 * bl['XMAX'], palette[cx], True, alpha=0.4)
-            self.filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['XMAX'], palette[cx], True, alpha=0.2)
-            self.filled_plot(ax, bl['S'], 0, 1000 * bl['XMAXMONO'], palette[cx], True, alpha=0.8)
-            self.filled_plot(ax, bl['S'], 0, 1000 * bl['XMAX'], palette[cx], True, alpha=0.4)
-            self.filled_plot(ax, bl['S'], 0, 2 * 1000 * bl['XMAX'], palette[cx], True, alpha=0.2)
+            self._ax.plot(_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                          _np.hstack([df_observer.iloc[0][f"ALPHA_IN_Y"],
+                                      df_observer.iloc[:][f"ALPHA_OUT_Y"].values]),
+                          '-',
+                          color=twiss_palette['TWISS_Y'],
+                          linewidth=1,
+                          label="ALPHAY - Manzoni"
+                          )
+            if tfs_data is not None:
+                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                              tfs_data['ALFX'].values,
+                              color=twiss_palette['TWISS_X'],
+                              markeredgecolor=twiss_palette['TWISS_X'],
+                              markersize=4,
+                              marker='x',
+                              ls='None',
+                              label="ALPHAX - MADX"
+                              )
+
+                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                              tfs_data['ALFY'].values,
+                              color=twiss_palette['TWISS_Y'],
+                              markeredgecolor=twiss_palette['TWISS_Y'],
+                              markersize=4,
+                              marker='x',
+                              ls='None',
+                              label="ALPHAY - MADX"
+                              )
+
+            self._ax.set_xlabel("S (m)")
+            self._ax.set_ylabel(r"$\alpha$ (m)")
+            max_val = _np.ceil(_np.maximum(df_observer['ALPHA_OUT_X'].max(), df_observer['ALPHA_OUT_Y'].max()))
+            min_val = _np.ceil(_np.minimum(df_observer['ALPHA_OUT_X'].min(), df_observer['ALPHA_OUT_Y'].min()))
+            self._ax.yaxis.set_major_locator(mticker.MultipleLocator(_np.ceil(max_val / 10)))
+            self._ax.set_ylim([min_val - 5.0, max_val + 5.0])
+
+        if with_dispersion:
+            ax2 = self._ax.twinx()
+            ax2.plot(_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                     _np.hstack([df_observer.iloc[0][f"DISP_IN_X"],
+                                 df_observer.iloc[:][f"DISP_OUT_X"].values]),
+                     '-',
+                     color=twiss_palette['DX'],
+                     linewidth=1,
+                     label="DX - Manzoni"
+                     )
+
+            ax2.plot(_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                     _np.hstack([df_observer.iloc[0][f"DISP_IN_Y"],
+                                 df_observer.iloc[:][f"DISP_OUT_Y"].values]),
+                     '-',
+                     color=twiss_palette['DY'],
+                     linewidth=1,
+                     label="DY - Manzoni"
+                     )
+            if tfs_data is not None:
+                ax2.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                         tfs_data['DX'].values,
+                         color=twiss_palette['DX'],
+                         markeredgecolor=twiss_palette['DX'],
+                         markersize=4,
+                         marker='x',
+                         ls='None',
+                         label="DX - MADX"
+                         )
+
+                ax2.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                         tfs_data['DY'].values,
+                         color=twiss_palette['DY'],
+                         markeredgecolor=twiss_palette['DY'],
+                         markersize=4,
+                         marker='x',
+                         ls='None',
+                         label="DY - MADX"
+                         )
+
+            ax2.set_xlabel("S (m)")
+            ax2.set_ylabel("Dispersion (m)")
+            max_val = _np.ceil(_np.maximum(df_observer['DISP_OUT_X'].max(), df_observer['DISP_OUT_Y'].max()))
+            min_val = _np.floor(_np.minimum(df_observer['DISP_OUT_X'].min(), df_observer['DISP_OUT_Y'].min()))
+            if max_val > 0:
+                ax2.yaxis.set_major_locator(mticker.MultipleLocator(_np.ceil(max_val / 10)))
+            ax2.set_ylim([min_val - 5.0, max_val + 5.0])
+            ax2.legend()
+
+    def phase_space(self, observer: _BeamObserver = None, element: str = None, location: str = 'OUT', dim=None,
+                    nbins=None, draw_ellipse: bool = True):
+        """
+
+        Args:
+            observer:
+            element:
+            location:
+            dim:
+            nbins:
+            draw_ellipse:
+
+        Returns:
+
+        """
+
+        if nbins is None:
+            nbins = [50, 50]
+
+        if dim is None:
+            dim = ["X", "Y"]
+
+        if not isinstance(observer, _BeamObserver):
+            raise BeamPlottingException("The observer must be a BeamObserver.")
+
+        df_observer = observer.to_df()
+        if element is None:
+            element = df_observer.iloc[0].name
+
+        data_element = df_observer.loc[element, f"BEAM_{location}"]
+
+        if dim[0] == 'X' or dim[0] == 'Y':
+            unit_col_0 = '[mm]'
         else:
-            self.filled_plot(ax, bl['S'], 0, 1000 * bl['YMAX'], palette[cy], True, alpha=0.4)
-            self.filled_plot(ax, bl['S'], 0, 2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
-            self.filled_plot(ax, bl['S'], 0, -1000 * bl['YMAX'], palette[cy], True, alpha=0.4)
-            self.filled_plot(ax, bl['S'], 0, -2 * 1000 * bl['YMAX'], palette[cy], True, alpha=0.2)
-
-    def beta(self, ax, bl, **kwargs):
-        """Plot the Twiss beta functions."""
-        if kwargs.get('ptc', False):
-            self.twiss_function_plot(ax, bl, ['BETA'], x='11', y='22', **kwargs)
+            unit_col_0 = '[mrad]'
+        if dim[1] == 'X' or dim[1] == 'Y':
+            unit_col_1 = '[mm]'
         else:
-            self.twiss_function_plot(ax, bl, ['BET'], **kwargs)
+            unit_col_1 = '[mrad]'
 
-    def alpha(self, ax, bl, **kwargs):
-        """Plot the Twiss alpha functions."""
-        self.twiss_function_plot(ax, bl, ['ALF'], **kwargs)
+        dico_plane = {'X': 0, 'PX': 1, 'Y': 2, 'PY': 3}
+        x = 1000 * data_element[:, dico_plane[dim[0]]]
+        y = 1000 * data_element[:, dico_plane[dim[1]]]
 
-    def dispersion(self, ax, bl, planes='both', rel_beta=1, **kwargs):
-        """Plot the dispersion functions."""
-        if kwargs.get('ptc', True):
-            self.twiss_function_plot(ax, bl, ['DISP'], ptc=True, planes=planes)
-        else:
-            # Caution: MAD-X dispersion is affected by relativistic factors
-            # See section 1.7.4 of the MAD-X user guide
-            ax.plot(bl.line['S'], rel_beta * bl.line['DX'], color=palette['X'])
-            ax.plot(bl.line['S'], rel_beta * bl.line['DY'], color=palette['Y'])
+        self._prepare()
+        # Main Figure
+        xlim = [_np.mean(x) - 5 * _np.std(x), _np.mean(x) + 5 * _np.std(x)]
+        ylim = [_np.mean(y) - 5 * _np.std(y), _np.mean(y) + 5 * _np.std(y)]
+        h, xedges, yedges = _np.histogram2d(x, y, bins=[nbins[0], nbins[1]], range=[xlim, ylim])
+        self._fig.axes[0].imshow(h.T, extent=[xlim[0], xlim[1], ylim[0], ylim[1]],
+                                 interpolation='nearest', origin='lower',
+                                 aspect='auto', cmap='gist_gray_r')
 
-    def phase_advance(self, ax, bl, **kwargs):
-        """Plot the phase advance."""
-        self.twiss_function_plot(ax, bl, ['MU'], kwargs.get('ptc', False))
+        if draw_ellipse:
+            self.draw_ellipse(x, y)
 
-    @staticmethod
-    def twiss_function_plot(ax, bl, functions, planes='both', **kwargs):
-        bl = bl.line
+        self._fig.axes[1].hist(x, bins=nbins[0], color='blue', histtype='step')
+        self._fig.axes[2].hist(y, bins=nbins[1], orientation='horizontal', color='red', histtype='step')
+        bin_centerx, fitresults_x = self.histogram_fit(x, bounds_binning=nbins[0], verbose=False)
+        self._fig.axes[1].plot(bin_centerx, fitresults_x.best_fit, 'k--', linewidth=1)
+        bin_centery, fitresults_y = self.histogram_fit(y, bounds_binning=nbins[0], verbose=False)
+        self._fig.axes[2].plot(fitresults_y.best_fit, bin_centery, 'k--', linewidth=1)
 
-        if kwargs.get('ptc', False):
-            x = kwargs.get('x', '1')
-            y = kwargs.get('y', '3')
-        else:
-            x = 'X'
-            y = 'Y'
-        for f in functions:
-            if planes == 'both' or planes == 'X':
-                ax.plot(bl['S'], bl[f + x], color=palette['X'])
-            if planes == 'both' or planes == 'Y':
-                ax.plot(bl['S'], bl[f + y], color=palette['Y'])
+        # Table
+        self.draw_table(x, y, dim, unit_col_0, unit_col_1)
 
-#
-# @staticmethod
-# def halo(distribution, dimensions=['X', 'Y', 'PX', 'PY']):
-#     """Return a dataframe containing the 1st, 5th, 95th and 99th percentiles of each dimensions."""
-#
-#     halo = _pd.concat([
-#         distribution[dimensions].quantile(0.01),
-#         distribution[dimensions].quantile(0.05),
-#         distribution[dimensions].quantile(1.0 - 0.842701),
-#         distribution[dimensions].quantile(0.842701),
-#         distribution[dimensions].quantile(0.95),
-#         distribution[dimensions].quantile(0.99)
-#     ], axis=1).rename(columns={0.01: '1%',
-#                                0.05: '5%',
-#                                1.0 - 0.842701: '20%',
-#                                0.842701: '80%',
-#                                0.95: '95%',
-#                                0.99: '99%'
-#                                }
-#                       )
-#     return halo
-#
+    def _prepare(self):
+        space = 0.02
+        width, height = 0.25, 0.25
+        left, hwidth = 0.05, width / 2
+        bottom, hheight = 0.05, height / 2
+        bottom_h = left_h = left + width + space
+        # Set up the geometry of the three plots
+        rect_beam = [left, bottom, width, height]  # dimensions of temp plot
+        rect_histx = [left, bottom_h, width, hheight]  # dimensions of x-histogram
+        rect_histy = [left_h, bottom, hwidth, height]  # dimensions of y-histogram
+        rect_tab = [left_h, bottom_h, hwidth, hheight]  # dimensions of tab
+        # Make the three plots
+        self._fig.delaxes(self._ax)
+        self._fig.delaxes(self._ax2)
+        ax_global = self._fig.add_axes(rect_beam)  # beam plot
+        ax_histx = self._fig.add_axes(rect_histx)  # x histogram
+        ax_histy = self._fig.add_axes(rect_histy)  # y histogram
+        ax_histx.set_ylabel("Counts")
+        ax_histx.grid(True)
+        ax_histy.set_xlabel("Counts")
+        ax_histy.grid(True)
+        nullfmt = mticker.NullFormatter()
+        ax_histx.xaxis.set_major_formatter(nullfmt)
+        ax_histy.yaxis.set_major_formatter(nullfmt)
+        ax_tab = self._fig.add_axes(rect_tab)  # y histogram
+        ax_tab.tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
 
-# # THIS IS THE OLD aperture.py
-# @staticmethod
-# def xy_from_string(a, i, c):
-#     def convert(x):
-#         try:
-#             converted = float(x)
-#         except ValueError:
-#             try:
-#                 converted = float(c.get(x))
-#             except TypeError:
-#                 converted = 1.0
-#         return converted
-#
-#     if len(str(a).strip('[]').strip('{}').split(',')) >= int(i) + 1:
-#         return convert(str(a).strip('[]').strip('{}').split(',')[int(i)])
-#     elif len(str(a).strip('[]').strip('{}').split(',')) > 0:
-#         return convert(str(a).strip('[]').strip('{}').split(',')[0])
-#     else:
-#         return _np.inf
-#
-# @staticmethod
-# def fill_aperture(element, context):
-#     if element.name + '_APERTURE' in context and element['TYPE'] == 'SLITS':
-#         element['APERTURE'] = context[element.name + '_APERTURE']
-#     if element['TYPE'] == 'COLLIMATOR' and \
-#             element['PLUG'] == 'APERTURE' and \
-#             element['APERTURE'] is not None and \
-#             _np.isnan(element['APERTURE']):
-#         element['APERTURE'] = element['CIRCUIT']
-#     return element
+    def draw_ellipse(self, x, y):
+        [e_val, evec] = _np.linalg.eig(_np.cov(x, y))
+        chisq = [2.278868566, 5.991464547, 11.61828598]
+        x_r, y_r = [], []
+        for i in range(0, len(chisq)):
+            x_r.append(2 * (chisq[i] * e_val[0]) ** 0.5)
+            y_r.append(2 * (chisq[i] * e_val[1]) ** 0.5)
+
+        ang = self.rotation_angle(e_val, evec)
+
+        self._fig.axes[0].add_patch(self.ellipse(x_r[0], y_r[0], ang, _np.mean(x), _np.mean(y),
+                                                 color='red', label='$1\\sigma$'))
+        self._fig.axes[0].add_patch(self.ellipse(x_r[1], y_r[1], ang, _np.mean(x), _np.mean(y),
+                                                 color='blue', label='$2\\sigma$'))
+        self._fig.axes[0].add_patch(self.ellipse(x_r[2], y_r[2], ang, _np.mean(x), _np.mean(y),
+                                                 color='green', label='$3\\sigma$'))
+        self._fig.axes[0].legend()
+
+    def draw_table(self, x, y, dim, unit_col_0, unit_col_1):
+        mean_x = f"{_np.round(_np.mean(x), 3)}"
+        std_x = f"{_np.round(_np.std(x), 3)}"
+        median_x = f"{_np.round(_np.median(x), 3)}"
+        mean_y = f"{_np.round(_np.mean(y), 3)}"
+        std_y = f"{_np.round(_np.std(y), 3)}"
+        median_y = f"{_np.round(_np.median(y), 3)}"
+
+        self._fig.axes[3].tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
+        self._fig.axes[3].get_xaxis().set_visible(False)
+        self._fig.axes[3].get_yaxis().set_visible(False)
+        x0 = self._fig.axes[3].get_xlim()[0]
+        y0 = self._fig.axes[3].get_ylim()[0]
+        self._fig.axes[3].axvline(x0 + 0.25, color='k', linewidth=1)
+        self._fig.axes[3].axvline(x0 + 0.5, color='k', linewidth=1)
+        self._fig.axes[3].axvline(x0 + 0.75, color='k', linewidth=1)
+        self._fig.axes[3].axhline(y0 + 0.4, color='k', linewidth=1)
+        self._fig.axes[3].axhline(y0 + 0.8, color='k', linewidth=1)
+        self._fig.axes[3].axhline(y0 + 0.83, color='k', linewidth=1)
+        self._fig.axes[3].annotate('mean', xy=(x0 + 0.375, y0 + 0.9), xytext=(x0 + 0.375, y0 + 0.9),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate('std ', xy=(x0 + 0.625, y0 + 0.9), xytext=(x0 + 0.625, y0 + 0.9),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate('median', xy=(x0 + 0.875, y0 + 0.9), xytext=(x0 + 0.875, y0 + 0.9),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+
+        xname = f"{dim[0]} {unit_col_0}"
+        yname = f"{dim[1]} {unit_col_1}"
+        self._fig.axes[3].annotate(xname, xy=(x0 + 0.125, 0.6), xytext=(x0 + 0.125, 0.6),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=11)
+        self._fig.axes[3].annotate(yname, xy=(x0 + 0.125, 0.2), xytext=(x0 + 0.125, 0.2),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate(mean_x, xy=(x0 + 0.375, 0.6), xytext=(x0 + 0.375, 0.6),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate(std_x, xy=(x0 + 0.625, 0.6), xytext=(x0 + 0.625, 0.6),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate(median_x, xy=(x0 + 0.875, 0.6), xytext=(x0 + 0.875, 0.6),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate(mean_y, xy=(x0 + 0.375, 0.2), xytext=(x0 + 0.375, 0.2),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate(std_y, xy=(x0 + 0.625, 0.2), xytext=(x0 + 0.625, 0.2),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
+        self._fig.axes[3].annotate(median_y, xy=(x0 + 0.875, 0.2), xytext=(x0 + 0.875, 0.2),
+                                   horizontalalignment='center', verticalalignment='center',
+                                   fontsize=12)
