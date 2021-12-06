@@ -2,16 +2,18 @@
 TODO
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, List, Union
+from typing import Optional, List, Union
 from georges_core.sequences import Sequence as _Sequence
 from . import elements
 from .core import track
 from .elements.scatterers import MaterialElement
 from ..fermi import materials
-if TYPE_CHECKING:
-    from georges_core import ureg as _ureg
-    from .beam import Beam as _Beam
-    from .observers import Observer as _Observer
+
+from georges_core import ureg as _ureg
+from .beam import Beam as _Beam
+from .observers import Observer as _Observer
+
+MANZONI_FLAVOR = {"Sbend": "SBend"}
 
 
 class Input:
