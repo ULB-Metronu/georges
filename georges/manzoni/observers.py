@@ -6,6 +6,7 @@ import numpy as _np
 import pandas as _pd
 from numba import njit
 from lmfit import Model, Parameters
+from georges_core.distribution import Distribution
 
 
 class ObserverType(type):
@@ -201,6 +202,68 @@ class SymmetryObserver(Observer):
                           abs(b1[:, 0].std() - b1[:, 2].std()) / (b1[:, 0].std() + b1[:, 2].std()),
                           abs(b2[:, 0].std() - b2[:, 2].std()) / (b2[:, 0].std() + b2[:, 2].std()),
                           ))
+
+
+class TwissObserver(Observer):
+    def __init__(self, elements=None):
+        super().__init__(elements)
+        self.headers = ('NAME',
+                        'AT_ENTRY',
+                        'AT_CENTER',
+                        'AT_EXIT',
+                        'EMIT_IN_X',
+                        'EMIT_OUT_X',
+                        'BETA_IN_X',
+                        'BETA_OUT_X',
+                        'ALPHA_IN_X',
+                        'ALPHA_OUT_X',
+                        'DISP_IN_X',
+                        'DISP_OUT_X',
+                        'DISP_IN_XP',
+                        'DISP_OUT_XP',
+                        'EMIT_IN_Y',
+                        'EMIT_OUT_Y',
+                        'BETA_IN_Y',
+                        'BETA_OUT_Y',
+                        'ALPHA_IN_Y',
+                        'ALPHA_OUT_Y',
+                        'DISP_IN_Y',
+                        'DISP_OUT_Y',
+                        'DISP_IN_YP',
+                        'DISP_OUT_YP'
+                        )
+
+    def __call__(self, element, b1, b2):
+        if super().__call__(element, b1, b2):
+            # Do not use distribution but directly use numpy with numba
+            twiss_in = Distribution.compute_twiss(b1)
+            twiss_out = Distribution.compute_twiss(b2)
+
+            self.data.append((element.NAME,
+                              element.AT_ENTRY,
+                              element.AT_CENTER,
+                              element.AT_EXIT,
+                              twiss_in[0],
+                              twiss_out[0],
+                              twiss_in[1],
+                              twiss_out[1],
+                              twiss_in[2],
+                              twiss_out[2],
+                              twiss_in[3],
+                              twiss_out[3],
+                              twiss_in[4],
+                              twiss_out[4],
+                              twiss_in[5],
+                              twiss_out[5],
+                              twiss_in[6],
+                              twiss_out[6],
+                              twiss_in[7],
+                              twiss_out[7],
+                              twiss_in[8],
+                              twiss_out[8],
+                              twiss_in[9],
+                              twiss_out[9],
+                              ))
 
 
 class IbaBpmObserver(Observer):
