@@ -33,6 +33,7 @@ pytest = { version = "^6.2.2", optional = true }
 pytest-bdd = { version = "^4.0.2", optional = true }
 pytest-cov = "^3.0.0"
 vtk = "< 9.1.0"
+hist = {extras = ["plot"], version = "^2.5.2"}
 [tool.poetry.dev-dependencies]
 
 [tool.poetry.extras]

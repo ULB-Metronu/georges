@@ -236,6 +236,17 @@ python-versions = ">=3.5.0"
 unicode_backport = ["unicodedata2"]
 
 [[package]]
+name = "click"
+version = "8.0.3"
+description = "Composable command line interface toolkit"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+colorama = {version = "*", markers = "platform_system == \"Windows\""}
+
+[[package]]
 name = "colorama"
 version = "0.4.4"
 description = "Cross-platform colored terminal text."
@@ -444,6 +455,47 @@ optional = true
 python-versions = "*"
 
 [[package]]
+name = "hist"
+version = "2.5.2"
+description = "Hist classes and utilities"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+boost-histogram = ">=1.2.0,<1.3.0"
+histoprint = ">=2.2.0"
+iminuit = {version = ">=2", optional = true, markers = "extra == \"plot\""}
+matplotlib = {version = ">=3.0", optional = true, markers = "extra == \"plot\""}
+mplhep = {version = ">=0.2.16", optional = true, markers = "extra == \"plot\""}
+numpy = ">=1.14.5"
+scipy = {version = ">=1.4", optional = true, markers = "extra == \"plot\""}
+
+[package.extras]
+all = ["Sphinx (>=3.0.0)", "iminuit (>=2)", "ipykernel", "ipython", "matplotlib (>=3.0)", "mplhep (>=0.2.16)", "myst-parser (>=0.14)", "nbsphinx", "pillow", "pytest (>=6)", "pytest-mpl (>=0.12)", "scipy (>=1.4)", "sphinx-book-theme (>=0.0.38)", "sphinx-copybutton", "sphinx-rtd-theme (>=0.5.0)", "uncertainties (>=3)"]
+dev = ["pytest (>=6)", "pytest-mpl (>=0.12)", "matplotlib (>=3.0)", "scipy (>=1.4)", "iminuit (>=2)", "mplhep (>=0.2.16)", "ipykernel"]
+docs = ["matplotlib (>=3.0)", "scipy (>=1.4)", "iminuit (>=2)", "mplhep (>=0.2.16)", "nbsphinx", "Sphinx (>=3.0.0)", "sphinx-copybutton", "sphinx-rtd-theme (>=0.5.0)", "sphinx-book-theme (>=0.0.38)", "ipython", "ipykernel", "pillow", "uncertainties (>=3)", "myst-parser (>=0.14)"]
+plot = ["matplotlib (>=3.0)", "scipy (>=1.4)", "iminuit (>=2)", "mplhep (>=0.2.16)"]
+test = ["pytest (>=6)", "pytest-mpl (>=0.12)"]
+
+[[package]]
+name = "histoprint"
+version = "2.2.0"
+description = "Pretty print of NumPy (and other) histograms to the console"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+click = ">=7.0.0"
+numpy = "*"
+uhi = ">=0.2.1"
+
+[package.extras]
+boost = ["boost-histogram (>=1.1)"]
+test = ["pytest (>=6.0)"]
+
+[[package]]
 name = "hyperlink"
 version = "21.0.0"
 description = "A featureful, immutable, and correct URL for Python."
@@ -522,7 +574,7 @@ python-versions = "*"
 
 [[package]]
 name = "ipykernel"
-version = "6.0.3"
+version = "6.6.0"
 description = "IPython Kernel for Jupyter"
 category = "main"
 optional = false
@@ -532,20 +584,20 @@ develop = false
 [package.dependencies]
 appnope = {version = "*", markers = "platform_system == \"Darwin\""}
 debugpy = ">=1.0.0,<2.0"
-ipython = ">=7.23.1,<8.0"
-jupyter-client = "<7.0"
+ipython = ">=7.23.1"
+jupyter-client = "<8.0"
 matplotlib-inline = ">=0.1.0,<0.2.0"
 tornado = ">=4.2,<7.0"
-traitlets = ">=4.1.0,<6.0"
+traitlets = ">=5.1.0,<6.0"
 
 [package.extras]
-test = ["pytest (!=5.3.4)", "pytest-cov", "flaky", "nose", "ipyparallel"]
+test = ["pytest (!=5.3.4)", "pytest-cov", "flaky", "ipyparallel"]
 
 [package.source]
 type = "git"
 url = "https://github.com/ipython/ipykernel.git"
 reference = "master"
-resolved_reference = "4be87ded4e62ab208eb1d7c831edef98af59baa6"
+resolved_reference = "bb1ad855b9e96c6a9776f30b6cfd26e023baffce"
 
 [[package]]
 name = "ipyparallel"
@@ -855,6 +907,38 @@ description = "The fastest markdown parser in pure Python"
 category = "main"
 optional = true
 python-versions = "*"
+
+[[package]]
+name = "mplhep"
+version = "0.3.15"
+description = "Matplotlib styles for HEP"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+matplotlib = ">=3.4"
+mplhep-data = "*"
+numpy = ">=1.16.0"
+packaging = "*"
+uhi = ">=0.2.0"
+
+[package.extras]
+all = ["black", "boost-histogram", "bumpversion", "flake8", "jupyter", "nteract-scrapbook (>=0.3,<1.0)", "papermill (>=1.0,<2.0)", "pre-commit", "pytest", "pytest-mock", "pytest-mpl", "scikit-hep-testdata", "scipy (>=1.1.0)", "twine", "uproot", "uproot4"]
+dev = ["flake8", "jupyter", "bumpversion", "twine", "black", "pre-commit"]
+test = ["scipy (>=1.1.0)", "pytest", "pytest-mpl", "pytest-mock", "papermill (>=1.0,<2.0)", "nteract-scrapbook (>=0.3,<1.0)", "uproot", "uproot4", "boost-histogram", "scikit-hep-testdata"]
+
+[[package]]
+name = "mplhep-data"
+version = "0.0.3"
+description = "Font (Data) sub-package for mplhep"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.extras]
+dev = ["pytest (>=4.6)"]
+test = ["pytest (>=4.6)"]
 
 [[package]]
 name = "multidict"
@@ -1198,7 +1282,7 @@ name = "prompt-toolkit"
 version = "3.0.28"
 description = "Library for building powerful interactive command lines in Python"
 category = "main"
-optional = true
+optional = false
 python-versions = ">=3.6.2"
 
 [package.dependencies]
@@ -1862,6 +1946,21 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "uhi"
+version = "0.3.0"
+description = "Unified Histogram Interface: tools to help library authors work with histograms"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+numpy = ">=1.13.3"
+
+[package.extras]
+test = ["boost-histogram (>=1.0.0,<1.1.0)", "importlib_metadata (>=1.0)", "pytest (>=5.2)"]
+docs = ["sphinx (>=3.0,<4.0)", "sphinx_book_theme (>=0.0.40)", "sphinx_copybutton (>=0.3.1)"]
+
+[[package]]
 name = "uncertainties"
 version = "3.1.6"
 description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation); fast calculation of derivatives"
@@ -2281,6 +2380,10 @@ charset-normalizer = [
     {file = "charset-normalizer-2.0.11.tar.gz", hash = "sha256:98398a9d69ee80548c762ba991a4728bfc3836768ed226b3945908d1a688371c"},
     {file = "charset_normalizer-2.0.11-py3-none-any.whl", hash = "sha256:2842d8f5e82a1f6aa437380934d5e1cd4fcf2003b06fed6940769c164a480a45"},
 ]
+click = [
+    {file = "click-8.0.3-py3-none-any.whl", hash = "sha256:353f466495adaeb40b6b5f592f9f91cb22372351c84caeb068132442a4518ef3"},
+    {file = "click-8.0.3.tar.gz", hash = "sha256:410e932b050f5eed773c4cda94de75971c89cdb3155a72a0831139a79e5ecb5b"},
+]
 colorama = [
     {file = "colorama-0.4.4-py2.py3-none-any.whl", hash = "sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2"},
     {file = "colorama-0.4.4.tar.gz", hash = "sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b"},
@@ -2541,6 +2644,14 @@ future = [
 georges-core = []
 glob2 = [
     {file = "glob2-0.7.tar.gz", hash = "sha256:85c3dbd07c8aa26d63d7aacee34fa86e9a91a3873bc30bf62ec46e531f92ab8c"},
+]
+hist = [
+    {file = "hist-2.5.2-py3-none-any.whl", hash = "sha256:4d54c0b6afe62e6a1b4c8b7018b63085770b589aba4f887c02a1e49c3b4016d2"},
+    {file = "hist-2.5.2.tar.gz", hash = "sha256:0bafb8b956cc041f1b26e8f5663fb8d3b8f7673f56336facb84d8cfdc30ae2cf"},
+]
+histoprint = [
+    {file = "histoprint-2.2.0-py3-none-any.whl", hash = "sha256:bb2278172379b82aaa3b79e56896b51aad084902ddea7f076b5c4bf08c19ca6d"},
+    {file = "histoprint-2.2.0.tar.gz", hash = "sha256:ef8b65f7926aaa989f076857b76291175245dd974804b408483091d1e28b00f6"},
 ]
 hyperlink = [
     {file = "hyperlink-21.0.0-py2.py3-none-any.whl", hash = "sha256:e6b14c37ecb73e89c77d78cdb4c2cc8f3fb59a885c5b3f819ff4ed80f25af1b4"},
@@ -2879,6 +2990,14 @@ minrpc = [
 mistune = [
     {file = "mistune-0.8.4-py2.py3-none-any.whl", hash = "sha256:88a1051873018da288eee8538d476dffe1262495144b33ecb586c4ab266bb8d4"},
     {file = "mistune-0.8.4.tar.gz", hash = "sha256:59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e"},
+]
+mplhep = [
+    {file = "mplhep-0.3.15-py3-none-any.whl", hash = "sha256:d5719d19d247caa18916b93e4484cb1c519d8528fb09e1671094f947eaa407ab"},
+    {file = "mplhep-0.3.15.tar.gz", hash = "sha256:595f796ea65930094e86a805214e0d44537ead267a7487ae16eda02d1670653e"},
+]
+mplhep-data = [
+    {file = "mplhep_data-0.0.3-py3-none-any.whl", hash = "sha256:a1eba7727fab31902e6fcd113c8f4b12ff3fb0666781e7514f8b79093cdc1c65"},
+    {file = "mplhep_data-0.0.3.tar.gz", hash = "sha256:b54d257f3f53c93a442cda7a6681ce267277e09173c0b41fd78820f78321772f"},
 ]
 multidict = [
     {file = "multidict-6.0.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:0b9e95a740109c6047602f4db4da9949e6c5945cefbad34a1299775ddc9a62e2"},
@@ -3599,6 +3718,10 @@ typed-ast = [
 typing-extensions = [
     {file = "typing_extensions-4.0.1-py3-none-any.whl", hash = "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"},
     {file = "typing_extensions-4.0.1.tar.gz", hash = "sha256:4ca091dea149f945ec56afb48dae714f21e8692ef22a395223bcd328961b6a0e"},
+]
+uhi = [
+    {file = "uhi-0.3.0-py3-none-any.whl", hash = "sha256:20fe823e7e34f8f0a5a223ba3c22c164b43cb8fc2b2f9b4ed2e2cd6fceea583e"},
+    {file = "uhi-0.3.0.tar.gz", hash = "sha256:3f441bfa89fae11aa762ae1ef1b1b454362d228e9084477773ffb82d6e9f5d2c"},
 ]
 uncertainties = [
     {file = "uncertainties-3.1.6-py2.py3-none-any.whl", hash = "sha256:cb4a66d5ceda006475ec845bf43ee8956c26138b08f93c41851c25a4ffe19a33"},
