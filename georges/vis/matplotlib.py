@@ -564,7 +564,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             dim:
             nbins:
             draw_ellipse:
-
         Returns:
 
         """
@@ -583,6 +582,10 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             element = df_observer.iloc[0].name
 
         data_element = df_observer.loc[element, f"BEAM_{location}"]
+        if location == 'IN':
+            s_position = df_observer.loc[element, 'AT_ENTRY']
+        else:
+            s_position = df_observer.loc[element, 'AT_EXIT']
 
         if dim[0] == 'X' or dim[0] == 'Y':
             unit_col_0 = '[mm]'
@@ -597,42 +600,68 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         x = 1000 * data_element[:, dico_plane[dim[0]]]
         y = 1000 * data_element[:, dico_plane[dim[1]]]
 
-        self._prepare()
+        self._prepare(sposition=s_position)
+
         # Main Figure
         xlim = [_np.mean(x) - 5 * _np.std(x), _np.mean(x) + 5 * _np.std(x)]
         ylim = [_np.mean(y) - 5 * _np.std(y), _np.mean(y) + 5 * _np.std(y)]
         h, xedges, yedges = _np.histogram2d(x, y, bins=[nbins[0], nbins[1]], range=[xlim, ylim])
-        self._fig.axes[0].imshow(h.T, extent=[xlim[0], xlim[1], ylim[0], ylim[1]],
-                                 interpolation='nearest', origin='lower',
-                                 aspect='auto', cmap='gist_gray_r')
+        self._fig.axes[len(self._fig.axes) - 4].imshow(h.T, extent=[xlim[0], xlim[1], ylim[0], ylim[1]],
+                                                       interpolation='nearest', origin='lower',
+                                                       aspect='auto', cmap='gist_gray_r')
 
+        self._fig.axes[len(self._fig.axes) - 4].set_xlabel(f"{dim[0]} {unit_col_0}")
+        self._fig.axes[len(self._fig.axes) - 4].set_ylabel(f"{dim[1]} {unit_col_1}")
         if draw_ellipse:
             self.draw_ellipse(x, y)
 
-        self._fig.axes[1].hist(x, bins=nbins[0], color='blue', histtype='step')
-        self._fig.axes[2].hist(y, bins=nbins[1], orientation='horizontal', color='red', histtype='step')
+        self._fig.axes[len(self._fig.axes) - 3].hist(x, bins=nbins[0], color='blue', histtype='step')
+        self._fig.axes[len(self._fig.axes) - 2].hist(y, bins=nbins[1], orientation='horizontal', color='red',
+                                                     histtype='step')
         bin_centerx, fitresults_x = self.histogram_fit(x, bounds_binning=nbins[0], verbose=False)
-        self._fig.axes[1].plot(bin_centerx, fitresults_x.best_fit, 'k--', linewidth=1)
+        self._fig.axes[len(self._fig.axes) - 3].plot(bin_centerx, fitresults_x.best_fit, 'k--', linewidth=1)
         bin_centery, fitresults_y = self.histogram_fit(y, bounds_binning=nbins[0], verbose=False)
-        self._fig.axes[2].plot(fitresults_y.best_fit, bin_centery, 'k--', linewidth=1)
+        self._fig.axes[len(self._fig.axes) - 2].plot(fitresults_y.best_fit, bin_centery, 'k--', linewidth=1)
 
         # Table
-        self.draw_table(x, y, dim, unit_col_0, unit_col_1)
+        self.draw_table(x, y, dim, unit_col_0, unit_col_1, element)
 
-    def _prepare(self):
-        space = 0.02
-        width, height = 0.25, 0.25
-        left, hwidth = 0.05, width / 2
-        bottom, hheight = 0.05, height / 2
-        bottom_h = left_h = left + width + space
+    def _prepare(self, sposition):
+        if len(self._fig.axes) == 1:  # We don't have a cartouche
+            space = 0.02
+            width, height = 0.25, 0.25
+            left, hwidth = 0.05, width / 2
+            bottom, hheight = 0.05, height / 2
+            bottom_h = left_h = left + width + space
+
+        else:
+            bounds = self._ax.get_position().bounds
+            space = 0.02
+            width, height = 0.8 * (bounds[2] - bounds[0]) - space, 0.8 * (bounds[3] - bounds[1]) - space
+            left, hwidth = bounds[0], bounds[2] - width - space
+            bottom, hheight = bounds[1], bounds[3] - height - space
+            bottom_h = left + height + space
+            left_h = left + width + space
+            self._ax2.add_patch(patches.Rectangle((sposition.m_as('m'), 1.15 - 0.075),
+                                                  0.01,
+                                                  .15,
+                                                  hatch='',
+                                                  facecolor='m',
+                                                  clip_on=False,
+                                                  )
+                                )
+            self._ax2.spines["top"].set_visible(False)
+            self._ax2.spines["bottom"].set_visible(False)
+            self._ax2.spines["right"].set_visible(False)
+            self._ax2.spines["left"].set_visible(False)
+
+        self._fig.delaxes(self._ax)
         # Set up the geometry of the three plots
         rect_beam = [left, bottom, width, height]  # dimensions of temp plot
         rect_histx = [left, bottom_h, width, hheight]  # dimensions of x-histogram
         rect_histy = [left_h, bottom, hwidth, height]  # dimensions of y-histogram
         rect_tab = [left_h, bottom_h, hwidth, hheight]  # dimensions of tab
         # Make the three plots
-        self._fig.delaxes(self._ax)
-        self._fig.delaxes(self._ax2)
         ax_global = self._fig.add_axes(rect_beam)  # beam plot
         ax_histx = self._fig.add_axes(rect_histx)  # x histogram
         ax_histy = self._fig.add_axes(rect_histy)  # y histogram
@@ -656,15 +685,15 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
         ang = self.rotation_angle(e_val, evec)
 
-        self._fig.axes[0].add_patch(self.ellipse(x_r[0], y_r[0], ang, _np.mean(x), _np.mean(y),
-                                                 color='red', label='$1\\sigma$'))
-        self._fig.axes[0].add_patch(self.ellipse(x_r[1], y_r[1], ang, _np.mean(x), _np.mean(y),
-                                                 color='blue', label='$2\\sigma$'))
-        self._fig.axes[0].add_patch(self.ellipse(x_r[2], y_r[2], ang, _np.mean(x), _np.mean(y),
-                                                 color='green', label='$3\\sigma$'))
-        self._fig.axes[0].legend()
+        self._fig.axes[len(self._fig.axes) - 4].add_patch(self.ellipse(x_r[0], y_r[0], ang, _np.mean(x), _np.mean(y),
+                                                                       color='red', label='$1\\sigma$'))
+        self._fig.axes[len(self._fig.axes) - 4].add_patch(self.ellipse(x_r[1], y_r[1], ang, _np.mean(x), _np.mean(y),
+                                                                       color='blue', label='$2\\sigma$'))
+        self._fig.axes[len(self._fig.axes) - 4].add_patch(self.ellipse(x_r[2], y_r[2], ang, _np.mean(x), _np.mean(y),
+                                                                       color='green', label='$3\\sigma$'))
+        self._fig.axes[len(self._fig.axes) - 4].legend()
 
-    def draw_table(self, x, y, dim, unit_col_0, unit_col_1):
+    def draw_table(self, x, y, dim, unit_col_0, unit_col_1, element):
         mean_x = f"{_np.round(_np.mean(x), 3)}"
         std_x = f"{_np.round(_np.std(x), 3)}"
         median_x = f"{_np.round(_np.median(x), 3)}"
@@ -672,53 +701,56 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         std_y = f"{_np.round(_np.std(y), 3)}"
         median_y = f"{_np.round(_np.median(y), 3)}"
 
-        self._fig.axes[3].tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
-        self._fig.axes[3].get_xaxis().set_visible(False)
-        self._fig.axes[3].get_yaxis().set_visible(False)
-        x0 = self._fig.axes[3].get_xlim()[0]
-        y0 = self._fig.axes[3].get_ylim()[0]
-        self._fig.axes[3].axvline(x0 + 0.25, color='k', linewidth=1)
-        self._fig.axes[3].axvline(x0 + 0.5, color='k', linewidth=1)
-        self._fig.axes[3].axvline(x0 + 0.75, color='k', linewidth=1)
-        self._fig.axes[3].axhline(y0 + 0.4, color='k', linewidth=1)
-        self._fig.axes[3].axhline(y0 + 0.8, color='k', linewidth=1)
-        self._fig.axes[3].axhline(y0 + 0.83, color='k', linewidth=1)
-        self._fig.axes[3].annotate('mean', xy=(x0 + 0.375, y0 + 0.9), xytext=(x0 + 0.375, y0 + 0.9),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate('std ', xy=(x0 + 0.625, y0 + 0.9), xytext=(x0 + 0.625, y0 + 0.9),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate('median', xy=(x0 + 0.875, y0 + 0.9), xytext=(x0 + 0.875, y0 + 0.9),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
+        self._fig.axes[-1].tick_params(labelbottom='off', labelleft='off', left='off', bottom='off')
+        self._fig.axes[-1].get_xaxis().set_visible(False)
+        self._fig.axes[-1].get_yaxis().set_visible(False)
+        x0 = self._fig.axes[-1].get_xlim()[0]
+        y0 = self._fig.axes[-1].get_ylim()[0]
+        self._fig.axes[-1].axvline(x0 + 0.25, color='k', linewidth=1)
+        self._fig.axes[-1].axvline(x0 + 0.5, color='k', linewidth=1)
+        self._fig.axes[-1].axvline(x0 + 0.75, color='k', linewidth=1)
+        self._fig.axes[-1].axhline(y0 + 0.4, color='k', linewidth=1)
+        self._fig.axes[-1].axhline(y0 + 0.8, color='k', linewidth=1)
+        self._fig.axes[-1].axhline(y0 + 0.83, color='k', linewidth=1)
+        self._fig.axes[-1].annotate(element, xy=(x0 + 0.125, y0 + 0.9), xytext=(x0 + 0.125, y0 + 0.9),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate('mean', xy=(x0 + 0.375, y0 + 0.9), xytext=(x0 + 0.375, y0 + 0.9),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate('std ', xy=(x0 + 0.625, y0 + 0.9), xytext=(x0 + 0.625, y0 + 0.9),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate('median', xy=(x0 + 0.875, y0 + 0.9), xytext=(x0 + 0.875, y0 + 0.9),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
 
         xname = f"{dim[0]} {unit_col_0}"
         yname = f"{dim[1]} {unit_col_1}"
-        self._fig.axes[3].annotate(xname, xy=(x0 + 0.125, 0.6), xytext=(x0 + 0.125, 0.6),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=11)
-        self._fig.axes[3].annotate(yname, xy=(x0 + 0.125, 0.2), xytext=(x0 + 0.125, 0.2),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate(mean_x, xy=(x0 + 0.375, 0.6), xytext=(x0 + 0.375, 0.6),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate(std_x, xy=(x0 + 0.625, 0.6), xytext=(x0 + 0.625, 0.6),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate(median_x, xy=(x0 + 0.875, 0.6), xytext=(x0 + 0.875, 0.6),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate(mean_y, xy=(x0 + 0.375, 0.2), xytext=(x0 + 0.375, 0.2),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate(std_y, xy=(x0 + 0.625, 0.2), xytext=(x0 + 0.625, 0.2),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
-        self._fig.axes[3].annotate(median_y, xy=(x0 + 0.875, 0.2), xytext=(x0 + 0.875, 0.2),
-                                   horizontalalignment='center', verticalalignment='center',
-                                   fontsize=12)
+        self._fig.axes[-1].annotate(xname, xy=(x0 + 0.125, 0.6), xytext=(x0 + 0.125, 0.6),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=11)
+        self._fig.axes[-1].annotate(yname, xy=(x0 + 0.125, 0.2), xytext=(x0 + 0.125, 0.2),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate(mean_x, xy=(x0 + 0.375, 0.6), xytext=(x0 + 0.375, 0.6),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate(std_x, xy=(x0 + 0.625, 0.6), xytext=(x0 + 0.625, 0.6),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate(median_x, xy=(x0 + 0.875, 0.6), xytext=(x0 + 0.875, 0.6),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate(mean_y, xy=(x0 + 0.375, 0.2), xytext=(x0 + 0.375, 0.2),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate(std_y, xy=(x0 + 0.625, 0.2), xytext=(x0 + 0.625, 0.2),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
+        self._fig.axes[-1].annotate(median_y, xy=(x0 + 0.875, 0.2), xytext=(x0 + 0.875, 0.2),
+                                    horizontalalignment='center', verticalalignment='center',
+                                    fontsize=12)
 
     # Plotting five spot map
     def five_spot_map(self, bl_track0, bl_track1, bl_track2, bl_track3, bl_track4):
