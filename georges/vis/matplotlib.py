@@ -5,6 +5,8 @@ TODO
 
 from __future__ import annotations
 
+import logging
+
 import pandas as _pd
 import numpy as _np
 
@@ -14,6 +16,7 @@ from ..manzoni.observers import SigmaObserver as _SigmaObserver
 from ..manzoni.observers import BeamObserver as _BeamObserver
 from ..manzoni.observers import LossesObserver as _LossesObserver
 from ..manzoni.observers import TwissObserver as _TwissObserver
+from ..manzoni.observers import IbaBpmObserver as _IbaBpmObserver
 from lmfit.models import GaussianModel
 
 import matplotlib.patches as patches
@@ -119,6 +122,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         else:
             return _np.degrees(_np.arctan(evec[1, 1] / evec[0, 1]))
 
+    # Plotting for the tracking
     def tracking(self,
                  observer: _Observer = None,
                  plane: str = 'X',
@@ -301,26 +305,30 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             self._ax.set_xlabel("S (m)")
             self._ax.set_ylabel("Beam Size (mm)")
 
+        elif isinstance(observer, _IbaBpmObserver):
+            logging.warning("The plotting method for IbaBpmObserver is not yet implemented.")
+            # Adjustment to avoid plotting zero values where no BPM is present
+            # if std_bpm:
+            #
+            #     t.loc[t.std_bpm == 0, 'std_bpm'] = -1000
+            #     ax.errorbar(t['S'] - 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
+            #                 fmt='none',
+            #                 elinewidth=2.0,
+            #                 linewidth=0.0,
+            #                 color=tracking_palette['green'])
+            #     ax.errorbar(t['S'] - 0.05, -t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
+            #                 fmt='none',
+            #                 elinewidth=2.0,
+            #                 linewidth=0.0,
+            #                 color=tracking_palette['green'])
+
         elif isinstance(observer, _LossesObserver):
             raise BeamPlottingException(f"Use method vis.ManzoniMatplotlibArtist(ax=ax).losses to plot losses.")
 
         else:
             raise BeamPlottingException(f"No plotting method for {observer} is implemented")
 
-    # if std_bpm:
-    #     # Adjustment to avoid plotting zero values where no BPM is present
-    #     t.loc[t.std_bpm == 0, 'std_bpm'] = -1000
-    #     ax.errorbar(t['S'] - 0.05, t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
-    #                 fmt='none',
-    #                 elinewidth=2.0,
-    #                 linewidth=0.0,
-    #                 color=tracking_palette['green'])
-    #     ax.errorbar(t['S'] - 0.05, -t['std_bpm'], xerr=0.1, yerr=t['std_bpm_err'],
-    #                 fmt='none',
-    #                 elinewidth=2.0,
-    #                 linewidth=0.0,
-    #                 color=tracking_palette['green'])
-
+    # Plotting for the losses
     def losses(self,
                observer: _LossesObserver = None,
                log_scale: bool = False,
@@ -382,6 +390,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         if fill:
             ax.fill_between(x, y0, y, facecolor=c, linewidth=0.0, edgecolor=c, **kwargs)
 
+    # Plotting for the Twiss
     def twiss(self, observer: _TwissObserver = None,
               with_beta: bool = True,
               with_alpha: bool = False,
@@ -543,6 +552,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             ax2.set_ylim([min_val - 5.0, max_val + 5.0])
             ax2.legend()
 
+    # Plotting for the phase space
     def phase_space(self, observer: _BeamObserver = None, element: str = None, location: str = 'OUT', dim=None,
                     nbins=None, draw_ellipse: bool = True):
         """
@@ -709,3 +719,94 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         self._fig.axes[3].annotate(median_y, xy=(x0 + 0.875, 0.2), xytext=(x0 + 0.875, 0.2),
                                    horizontalalignment='center', verticalalignment='center',
                                    fontsize=12)
+
+    # Plotting five spot map
+    def five_spot_map(self, bl_track0, bl_track1, bl_track2, bl_track3, bl_track4):
+        # TODO
+        pass
+        # try:
+        #     # Order the 5 simulations outputs
+        #     center = _pd.DataFrame(bl_track0.line['BEAM']['ISO'].distribution['X'])
+        #     blcorner = _pd.DataFrame(bl_track1.line['BEAM']['ISO'].distribution['X'])
+        #     brcorner = _pd.DataFrame(bl_track2.line['BEAM']['ISO'].distribution['X'])
+        #     tlcorner = _pd.DataFrame(bl_track3.line['BEAM']['ISO'].distribution['X'])
+        #     trcorner = _pd.DataFrame(bl_track4.line['BEAM']['ISO'].distribution['X'])
+        #     datax = _pd.concat([center, blcorner, brcorner, tlcorner, trcorner], ignore_index=True)
+        #
+        #     center = _pd.DataFrame(bl_track0.line['BEAM']['ISO'].distribution['Y'])
+        #     blcorner = _pd.DataFrame(bl_track1.line['BEAM']['ISO'].distribution['Y'])
+        #     brcorner = _pd.DataFrame(bl_track2.line['BEAM']['ISO'].distribution['Y'])
+        #     tlcorner = _pd.DataFrame(bl_track3.line['BEAM']['ISO'].distribution['Y'])
+        #     trcorner = _pd.DataFrame(bl_track4.line['BEAM']['ISO'].distribution['Y'])
+        #     datay = _pd.concat([center, blcorner, brcorner, tlcorner, trcorner], ignore_index=True)
+        # except:
+        #     print('Error, one simulation is missing. You have to put the 5 simulations outputs in the functions')
+        #
+        # # Create the 2D histogram with the 5 spots.
+        # _ = plt.hist2d(datax['X'].values, datay['Y'].values, bins=400, cmap='gist_gray_r')
+        # data_X = []
+        # data_X.append(1e3 * bl_track0.line['BEAM']['ISO'].std['X'])
+        # data_X.append(1e3 * bl_track1.line['BEAM']['ISO'].std['X'])
+        # data_X.append(1e3 * bl_track2.line['BEAM']['ISO'].std['X'])
+        # data_X.append(1e3 * bl_track3.line['BEAM']['ISO'].std['X'])
+        # data_X.append(1e3 * bl_track4.line['BEAM']['ISO'].std['X'])
+        #
+        # data_S = []
+        # data_S.append(100 * _np.abs(bl_track0.line['BEAM']['ISO'].std['X'] - bl_track0.line['BEAM']['ISO'].std['Y']) / (
+        #         bl_track0.line['BEAM']['ISO'].std['X'] + bl_track0.line['BEAM']['ISO'].std['Y']))
+        # data_S.append(100 * _np.abs(bl_track1.line['BEAM']['ISO'].std['X'] - bl_track1.line['BEAM']['ISO'].std['Y']) / (
+        #         bl_track1.line['BEAM']['ISO'].std['X'] + bl_track1.line['BEAM']['ISO'].std['Y']))
+        # data_S.append(100 * _np.abs(bl_track2.line['BEAM']['ISO'].std['X'] - bl_track2.line['BEAM']['ISO'].std['Y']) / (
+        #         bl_track2.line['BEAM']['ISO'].std['X'] + bl_track2.line['BEAM']['ISO'].std['Y']))
+        # data_S.append(100 * _np.abs(bl_track3.line['BEAM']['ISO'].std['X'] - bl_track3.line['BEAM']['ISO'].std['Y']) / (
+        #         bl_track3.line['BEAM']['ISO'].std['X'] + bl_track3.line['BEAM']['ISO'].std['Y']))
+        # data_S.append(100 * _np.abs(bl_track4.line['BEAM']['ISO'].std['X'] - bl_track4.line['BEAM']['ISO'].std['Y']) / (
+        #         bl_track4.line['BEAM']['ISO'].std['X'] + bl_track4.line['BEAM']['ISO'].std['Y']))
+        #
+        # data_T = []
+        # data_T.append(_np.degrees(
+        #     self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track0.line['BEAM']['ISO'].distribution['X'],
+        #                                                    1e3 * bl_track0.line['BEAM']['ISO'].distribution[
+        #                                                        'Y']))))
+        # data_T.append(_np.degrees(
+        #     self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track1.line['BEAM']['ISO'].distribution['X'],
+        #                                                    1e3 * bl_track1.line['BEAM']['ISO'].distribution[
+        #                                                        'Y']))))
+        # data_T.append(_np.degrees(
+        #     self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track2.line['BEAM']['ISO'].distribution['X'],
+        #                                                    1e3 * bl_track2.line['BEAM']['ISO'].distribution[
+        #                                                        'Y']))))
+        # data_T.append(_np.degrees(
+        #     self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track3.line['BEAM']['ISO'].distribution['X'],
+        #                                                    1e3 * bl_track3.line['BEAM']['ISO'].distribution[
+        #                                                        'Y']))))
+        # data_T.append(_np.degrees(
+        #     self.ellipse_angle_of_rotation(self.fitEllipse(1e3 * bl_track4.line['BEAM']['ISO'].distribution['X'],
+        #                                                    1e3 * bl_track4.line['BEAM']['ISO'].distribution[
+        #                                                        'Y']))))
+        #
+        # plt.annotate(
+        #     rf"$\sigma_X = {round(data_X[1], 2)}$mm \n $S = {round(data_S[1], 2)}$% \n $\phi={round(data_T[1], 2)} °$"
+        #     , xy=(- 0.1 + 0.03, 0.1), xytext=(- 0.1 + 0.03, 0.1),
+        #     horizontalalignment='center', verticalalignment='center',
+        #     fontsize=12)
+        # plt.annotate(
+        #     rf"$\sigma_X = {round(data_X[4], 2)}$mm \n $S = {round(data_S[4], 2)}$% \n $\phi={round(data_T[4], 2)} °$"
+        #     , xy=(0.1 - 0.03, 0.1), xytext=(0.1 - 0.03, 0.1),
+        #     horizontalalignment='center', verticalalignment='center',
+        #     fontsize=12)
+        # plt.annotate(
+        #     rf"$\sigma_X = {round(data_X[2], 2)}$mm \n $S = {round(data_S[2], 2)}$% \n $\phi={round(data_T[2], 2)} °$"
+        #     , xy=(- 0.1 + 0.03, -0.1), xytext=(- 0.1 + 0.03, -0.1),
+        #     horizontalalignment='center', verticalalignment='center',
+        #     fontsize=12)
+        # plt.annotate(
+        #     rf"$\sigma_X = {round(data_X[3], 2)}$mm \n $S = {round(data_S[3], 2)}$% \n $\phi={round(data_T[3], 2)} °$"
+        #     , xy=(0.1 - 0.03, -0.1), xytext=(0.1 - 0.03, -0.1),
+        #     horizontalalignment='center', verticalalignment='center',
+        #     fontsize=12)
+        # plt.annotate(
+        #     rf"$\sigma_X = {round(data_X[0], 2)}$mm \n $S = {round(data_S[0], 2)}$% \n $\phi={round(data_T[0], 2)} °$"
+        #     , xy=(0.0 + 0.03, 0.0), xytext=(0.0 + 0.03, 0.0),
+        #     horizontalalignment='center', verticalalignment='center',
+        #     fontsize=12)
