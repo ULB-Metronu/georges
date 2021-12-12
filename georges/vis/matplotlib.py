@@ -345,17 +345,17 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
         losses_palette = kwargs.get("palette", palette)
         df_observer = observer.to_df()
-        data_exit = df_observer['AT_EXIT'].apply(lambda e: e.m_as('m'))
+        data_center = df_observer['AT_CENTER'].apply(lambda e: e.m_as('m'))
 
         self._ax.set_xlabel(r'S (m)')
         self._ax.set_ylabel(r'Losses ($\%$)')
         self._ax.yaxis.label.set_color(losses_palette['magenta'])
-        self._ax.bar(data_exit, df_observer['LOSSES'],
-                     width=-0.125,
+        self._ax.bar(data_center, df_observer['LOSSES'],
+                     width=0.125,
                      alpha=0.7,
                      edgecolor=losses_palette['magenta'],
                      color=losses_palette['magenta'],
-                     align='edge',
+                     align='center',
                      error_kw=dict(ecolor=losses_palette['base02'], capsize=2, capthick=1))
         max_val = (df_observer['LOSSES']).abs().max()
         self._ax.yaxis.set_major_locator(mticker.MultipleLocator(_np.ceil(max_val / 10)))
@@ -369,13 +369,13 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         init = df_observer.iloc[0]['PARTICLES_IN']
         global_transmission = 100 * (df_observer['PARTICLES_OUT'].values / init)
         if log_scale:
-            ax2.semilogy(_np.hstack([0, data_exit.values]), _np.hstack([100, global_transmission]),
+            ax2.semilogy(_np.hstack([0, data_center.values]), _np.hstack([100, global_transmission]),
                          's-', color=losses_palette['green'])
             ax2.set_ylim([min(global_transmission), 100])
         else:
             ax2.yaxis.set_major_locator(mticker.MultipleLocator(10))
             ax2.set_ylim([0, 100])
-            ax2.plot(_np.hstack([0, data_exit.values]), _np.hstack([100, global_transmission]),
+            ax2.plot(_np.hstack([0, data_center.values]), _np.hstack([100, global_transmission]),
                      's-', color=losses_palette['green'])
 
     @staticmethod
