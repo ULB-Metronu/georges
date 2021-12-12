@@ -289,8 +289,9 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                          name='Transmission',
                          showlegend=False)
             self.layout['yaxis2']['type'] = 'log'
-            self.layout['yaxis2']['range'] = [_np.floor(_np.log(_np.min(global_transmission))), 2]
-            self.layout['yaxis2']['tickvals'] = 10**(_np.arange(_np.floor(_np.log(_np.min(global_transmission))), 3, 1))
+            self.layout['yaxis2']['range'] = [_np.floor(_np.log(_np.min(global_transmission))/10)-1, 2]
+            yticksval = 10**(_np.arange(_np.floor(_np.log(_np.min(global_transmission)/10))-1, 3, 1))
+            self.layout['yaxis2']['tickvals'] = yticksval
 
         else:
             self.scatter(x=_np.hstack([0, exit.values]),
