@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: Hernalsteens
+  given-names: Cédric
+  orcid: "https://orcid.org/0000-0003-4038-6246"
+- family-names: Tesse
+  given-names: Robin
+  orcid: "https://orcid.org/0000-0002-9617-0287"
+- family-names: Gnacadja
+  given-names: Eustache
+  orcid: "https://orcid.org/0000-0002-3719-0771"
+- family-names: Ramoisiaux
+  given-names: Eliott
+  orcid: "https://orcid.org/0000-0001-6523-2337"
+- family-names: Vanwelde
+  given-names: Marion
+  orcid: "https://orcid.org/0000-0002-0339-0759"
+title: "Georges"
+version: 2019.2
+url: "https://github.com/ULB-Metronu/georges/"
