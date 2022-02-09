@@ -77,9 +77,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             with_frames: draw the entry and exit frames of each elements
             with_centers: draw the center of each polar coordinate elements
             tracks_color: color for the plotting of tracks
-            kwargs: forwarded to `ZgoubiPlot` and to `init_plot`.
+            kwargs: forwarded to `MatplotlibPlot` and to `init_plot`.
         """
-        super().__init__(with_boxes, **kwargs)
+        super().__init__(ax=ax, **kwargs)
         self._with_centers = with_centers
         self._tracks_color = tracks_color
 
@@ -1469,7 +1469,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             x = 'X'
             y = 'Y'
         for f in functions:
-            if planes is 'both' or planes is 'X':
+            if planes == 'both' or planes == 'X':
                 ax.plot(bl['S'], bl[f + x], color=palette['X'])
-            if planes is 'both' or planes is 'Y':
+            if planes == 'both' or planes == 'Y':
                 ax.plot(bl['S'], bl[f + y], color=palette['Y'])
