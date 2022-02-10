@@ -1,6 +1,6 @@
  ==================================================================
               SRIM version ---> SRIM-2008.04
-              Calc. date   ---> fÈvrier 07, 2022 
+              Calc. date   ---> f√©vrier 07, 2022 
  ==================================================================
  Disk File Name = SRIM Outputs\kapton
  Ion = Hydrogen [1] , Mass = 1.008 amu

@@ -586,3 +586,11 @@ compounds:
     fractions:
       uranium: 1.0
     rho: 18.95
+
+  kapton:
+    fractions:
+      hydrogen: 2.64
+      carbon: 69.11
+      nitrogen: 7.33
+      oxygen: 20.92
+    rho: 1.42
