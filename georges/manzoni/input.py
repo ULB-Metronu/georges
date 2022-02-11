@@ -2,7 +2,7 @@
 TODO
 """
 from __future__ import annotations
-from typing import Optional, List, Union
+from typing import Optional, List, Union, Dict
 from georges_core.sequences import Sequence as _Sequence
 from . import elements
 from .core import track
@@ -17,9 +17,12 @@ MANZONI_FLAVOR = {"Sbend": "SBend"}
 
 
 class Input:
-    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None, beam: Optional[_Beam] = None):
+    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None,
+                 beam: Optional[_Beam] = None,
+                 mapper: Dict[str, int] = None):
         self._sequence = sequence
         self._beam = beam
+        self._mapper = mapper
 
     @property
     def sequence(self):
@@ -90,6 +93,14 @@ class Input:
                 efficiency *= e.cache[5]
         return efficiency
 
+    # TODO: use method __setitem__ instead ?
+    def set_parameters(self, element: str, parameters: Dict):
+        for param in parameters.keys():
+            self.sequence[self._mapper[element]].__setattr__(param, parameters[param])
+
+    def get_parameters(self, element: str, parameters: List):
+        return dict(zip(parameters, list(map(self.sequence[self._mapper[element]].__getattr__, parameters))))
+
     @classmethod
     def from_sequence(cls,
                       sequence: _Sequence,
@@ -119,4 +130,5 @@ class Input:
             input_sequence.append(
                 element_class(name, **element[parameters])
             )
-        return cls(sequence=input_sequence)
+        element_mapper = {k: v for v, k in enumerate(list(df_sequence.index.values))}
+        return cls(sequence=input_sequence, mapper=element_mapper)
