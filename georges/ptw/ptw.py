@@ -129,9 +129,9 @@ class SpreadOutBraggPeakAnalysis:
             normalized_bragg_peak = 1e2 * self.dose_data.iloc[i, :] / _np.max(self.dose_data.iloc[i, :])
             bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'z': self.z_axis,
                                                              'dose': normalized_bragg_peak}),
-                                            method='polynom_fit')
+                                            method='scipy.optimize')
 
-            max_ranges[i] = bp_analysis.get_maximum()
+            max_ranges[i] = bp_analysis.get_xrange(100)
 
         return max_ranges
 
@@ -144,7 +144,7 @@ class SpreadOutBraggPeakAnalysis:
             for j in range(self.dose_data.shape[0]):
                 bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'z': self.z_axis,
                                                                  'dose': self.dose_data.iloc[j, :]}),
-                                                method='polynom_fit')
+                                                method='scipy.optimize')
 
                 sobp_data[i, j] = bp_analysis.compute_percentage(max_ranges[i])
 
@@ -153,7 +153,7 @@ class SpreadOutBraggPeakAnalysis:
     def compute_weights(self) -> _np.array:
 
         a_matrix = self.sobp_data() / self.sobp_data().max()
-        goal_dose_values = _np.full(a_matrix.shape[0], 1)  # Here we want 1 Gy
+        goal_dose_values = _np.full(a_matrix.shape[0], 1)
 
         if self.method == 'np.linalg.solve':
 
@@ -176,7 +176,9 @@ class SpreadOutBraggPeakAnalysis:
         weighted_dose_data = _np.matmul(self.compute_weights().reshape(1, self.dose_data.shape[0]),
                                         self.dose_data.values)
 
-        return weighted_dose_data.reshape(self.dose_data.shape[1])
+        sobp_profile = weighted_dose_data.reshape(self.dose_data.shape[1])
+
+        return 1e2 * sobp_profile / sobp_profile.max()
 
     def view_sobp(self, with_pristine_peaks=False):
 
@@ -193,11 +195,11 @@ class SpreadOutBraggPeakAnalysis:
         if with_pristine_peaks:
             weighted_dose = self.dose_data.multiply(self.compute_weights(), axis=0)
             weighted_dose.apply(lambda e: plot(x=self.z_axis,
-                                               y=1e2 * e.values),
+                                               y=1e2 * e.values / self.sobp_data().max()),
                                 axis='columns')
 
         plt.plot(self.z_axis,
-                 100 * self.compute_sobp_profile(),
+                 self.compute_sobp_profile(),
                  linestyle='dashed',
                  linewidth=2,
                  color='k',
@@ -209,7 +211,7 @@ class SpreadOutBraggPeakAnalysis:
         plt.ylabel('Normalized dose (\\%)')
         plt.legend(loc='center left', ncol=1)
         plt.xlim(0, _np.max(self.z_axis))
-        plt.ylim(0, _np.max(100 * self.compute_sobp_profile()))
+        plt.ylim(0, _np.max(self.compute_sobp_profile()))
         plt.grid()
 
     def recompute_sobp_for_another_range(self, bp_to_leave):
@@ -240,7 +242,7 @@ class SpreadOutBraggPeakAnalysis:
 
     def compute_ranges_and_flatness(self):
 
-        sobp_array = 1e2 * self.compute_sobp_profile()
+        sobp_array = self.compute_sobp_profile()
         idxmax = _np.where(sobp_array < 1)[0]
         idx = 0
 
