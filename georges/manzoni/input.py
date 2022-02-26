@@ -95,10 +95,15 @@ class Input:
 
     # TODO: use method __setitem__ instead ?
     def set_parameters(self, element: str, parameters: Dict):
+        # unfreeze the element
+        self.sequence[self._mapper[element]].unfreeze()
         for param in parameters.keys():
             self.sequence[self._mapper[element]].__setattr__(param, parameters[param])
+        self.sequence[self._mapper[element]].freeze()
 
-    def get_parameters(self, element: str, parameters: List):
+    def get_parameters(self, element: str, parameters: Optional[List] = None):
+        if parameters is None:
+            parameters = self.sequence[self._mapper[element]].attributes
         return dict(zip(parameters, list(map(self.sequence[self._mapper[element]].__getattr__, parameters))))
 
     @classmethod
