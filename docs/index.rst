@@ -16,6 +16,7 @@ Georges' documentation
    authors
    installation
    bdsim
+   visualisation
 
 Indices and tables
 ==================
