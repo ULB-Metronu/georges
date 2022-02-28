@@ -46,6 +46,7 @@ def test_madx_conversion():
     get_madx_twiss()
     madx_line = georges.TwissSequence(path='.',
                                       filename='twiss.tfs',
+                                      lines=51,
                                       with_units=True,
                                       with_beam=True,
                                       nparticles=500000,
