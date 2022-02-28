@@ -404,7 +404,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             with_beta: plot the beta
             with_alpha: plot the alpha
             with_dispersion: plot the dispersion
-            tfs_data: if provided, plot the data.
+            tfs_data: if provided, plot the data from MAD-X.
 
         """
         if not isinstance(observer, _TwissObserver):

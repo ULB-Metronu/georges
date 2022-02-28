@@ -289,8 +289,8 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                          name='Transmission',
                          showlegend=False)
             self.layout['yaxis2']['type'] = 'log'
-            self.layout['yaxis2']['range'] = [_np.floor(_np.log(_np.min(global_transmission))/10)-1, 2]
-            yticksval = 10**(_np.arange(_np.floor(_np.log(_np.min(global_transmission)/10))-1, 3, 1))
+            self.layout['yaxis2']['range'] = [_np.floor(_np.log(_np.min(global_transmission)) / 10) - 1, 2]
+            yticksval = 10 ** (_np.arange(_np.floor(_np.log(_np.min(global_transmission) / 10)) - 1, 3, 1))
             self.layout['yaxis2']['tickvals'] = yticksval
 
         else:
@@ -315,8 +315,141 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
         if fill:
             ax.scatter(x=x, y=y0, mode='lines', line={'width': 1, 'color': c}, showlegend=False, fill='tonexty')
 
-    def twiss(self, observer: _TwissObserver = None,):
-        logging.error("The method is not yet implemented")
+    def twiss(self, observer: _TwissObserver = None, with_beta: bool = True,
+              with_alpha: bool = False,
+              with_dispersion: bool = False,
+              tfs_data: _pd.DataFrame = None,
+              **kwargs):
+        """
+        Plot the Twiss function along the beamline
+        Args:
+            observer: Observer used for the tracking
+            with_beta: plot the beta
+            with_alpha: plot the alpha
+            with_dispersion: plot the dispersion
+            tfs_data: if provided, plot the data from MAD-X.
+
+        """
+        tracking_palette = kwargs.get("palette", palette)
+        df_observer = observer.to_df()
+
+        if with_beta:
+            self.scatter(x=_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                         y=_np.hstack([df_observer.iloc[0][f"BETA_IN_X"],
+                                       df_observer.iloc[:][f"BETA_OUT_X"].values]),
+                         line={'width': 1, 'color': tracking_palette['blue']},
+                         mode='lines',
+                         showlegend=True,
+                         name=r"$\beta_x \text{ - Manzoni}$"
+                         )
+            self.scatter(x=_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                         y=_np.hstack([df_observer.iloc[0][f"BETA_IN_Y"],
+                                       df_observer.iloc[:][f"BETA_OUT_Y"].values]),
+                         line={'width': 1, 'color': tracking_palette['red']},
+                         mode='lines',
+                         showlegend=True,
+                         name=r"$\beta_y \text{ - Manzoni}$"
+                         )
+            self.layout['yaxis']['title'] = r"$\beta \text{(m)}$"
+
+            if tfs_data is not None:
+                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                             y=tfs_data['BETX'].values,
+                             marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
+                             mode='markers',
+                             showlegend=True,
+                             name=r"$\beta_x \text{ - MAD-X}$"
+                             )
+
+                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                             y=tfs_data['BETY'].values,
+                             marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
+                             mode='markers',
+                             showlegend=True,
+                             name=r"$\beta_y \text{ - MAD-X}$"
+                             )
+        if with_alpha:
+            self.scatter(x=_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                         y=_np.hstack([df_observer.iloc[0][f"ALPHA_IN_X"],
+                                       df_observer.iloc[:][f"ALPHA_OUT_X"].values]),
+                         marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
+                         line={'width': 1},
+                         mode='markers+lines',
+                         showlegend=True,
+                         name=r"$\alpha_x \text{- Manzoni}$"
+                         )
+            self.scatter(x=_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                         y=_np.hstack([df_observer.iloc[0][f"ALPHA_IN_Y"],
+                                       df_observer.iloc[:][f"ALPHA_OUT_Y"].values]),
+                         marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
+                         line={'width': 1},
+                         mode='markers+lines',
+                         showlegend=True,
+                         name=r"$\alpha_y$ \text{- Manzoni}$"
+                         )
+            self.layout['yaxis']['title'] = r"$\alpha$"
+
+            if tfs_data is not None:
+                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                             y=tfs_data['ALFX'].values,
+                             marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
+                             mode='markers',
+                             showlegend=True,
+                             name=r"$\alpha_x \text{- MAD-X}$"
+                             )
+
+                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                             y=tfs_data['ALFY'].values,
+                             marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
+                             mode='markers',
+                             showlegend=True,
+                             name=r"$\alpha_y \text{- MAD-X}$"
+                             )
+        if with_dispersion:
+            self.add_secondary_axis('Dispersion')
+            self.scatter(x=_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                         y=_np.hstack([df_observer.iloc[0][f"DISP_IN_X"],
+                                       df_observer.iloc[:][f"DISP_OUT_X"].values]),
+                         marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
+                         line={'width': 1},
+                         mode='markers+lines',
+                         showlegend=True,
+                         yaxis='y2',
+                         name=r"$D_x \text{- Manzoni}$"
+                         )
+            self.scatter(x=_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
+                         y=_np.hstack([df_observer.iloc[0][f"DISP_IN_Y"],
+                                       df_observer.iloc[:][f"DISP_OUT_Y"].values]),
+                         marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
+                         line={'width': 1},
+                         mode='markers+lines',
+                         showlegend=True,
+                         yaxis='y2',
+                         name=r"$D_y \text{- Manzoni}$"
+                         )
+            self.layout['yaxis2']['title'] = r"Dispersion"
+
+            if tfs_data is not None:
+                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                             y=tfs_data['DX'].values,
+                             marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
+                             mode='markers',
+                             showlegend=True,
+                             yaxis='y2',
+                             name=r"$D_x \text{- MAD-X}$"
+                             )
+
+                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                             y=tfs_data['DY'].values,
+                             marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
+                             mode='markers',
+                             showlegend=True,
+                             yaxis='y2',
+                             name=r"$D_y \text{- MAD-X}$"
+                             )
+        self.layout['xaxis']['title'] = "S (m)"
 
     def phase_space(self, observer: _TwissObserver = None, ):
+        # TODO
         logging.error("The method is not yet implemented")
+
