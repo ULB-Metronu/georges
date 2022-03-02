@@ -101,8 +101,8 @@ class Magnet(_ManzoniElement):
 class Quadrupole(Magnet):
     PARAMETERS = {
         'L': (0.0 * _ureg.m, 'Quadrupole length.'),
-        'K1': (0.0 * _ureg.m**-2, 'Normalized gradient.'),
-        'K1S': (0.0 * _ureg.m**-2, 'Normalized skew gradient.'),
+        'K1': (0.0 * _ureg.m ** -2, 'Normalized gradient.'),
+        'K1S': (0.0 * _ureg.m ** -2, 'Normalized skew gradient.'),
         'TILT': (0.0 * _ureg.radian, 'Magnet tilt angle.'),
     }
     """Parameters of the element, with their default value and their descriptions."""
@@ -127,9 +127,9 @@ class Quadrupole(Magnet):
 class Bend(Magnet):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Bending angle.'),
-        'K0': (0.0 * _ureg.m**-1, 'Dipolar normalized gradient'),
-        'K1': (0.0 * _ureg.m**-2, 'Quadrupolar normalized gradient.'),
-        'K2': (0.0 * _ureg.m**-3, 'Sextupolar normalized gradient.'),
+        'K0': (0.0 * _ureg.m ** -1, 'Dipolar normalized gradient'),
+        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
+        'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
         'L': (0.0 * _ureg.m, 'Magnet length.'),
         'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
         'E2': (0.0 * _ureg.radian, 'Exit face angle.'),
@@ -203,7 +203,7 @@ class RBend(Bend):
         length = self.L.m_as('m')
         angle = self.ANGLE.m_as('rad')
         if angle > 1e-8:
-            return length * angle / (2.0 * _np.sin(angle/2.0))
+            return length * angle / (2.0 * _np.sin(angle / 2.0))
         else:
             return length
 
@@ -212,12 +212,13 @@ class RBend(Bend):
         alpha = self.ANGLE.m_as('radian') / 2.0
         return self.E1.m_as('radian') + alpha, self.E2.m_as('radian') + alpha
 
-class Fringe_in(Bend):
+
+class Fringein(Magnet):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Bending angle.'),
-        'K0': (0.0 * _ureg.m**-1, 'Dipolar normalized gradient'),
-        'K1': (0.0 * _ureg.m**-2, 'Quadrupolar normalized gradient.'),
-        'K2': (0.0 * _ureg.m**-3, 'Sextupolar normalized gradient.'),
+        'K0': (0.0 * _ureg.m ** -1, 'Dipolar normalized gradient'),
+        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
+        'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
         'L': (0.0 * _ureg.m, 'Magnet length.'),
         'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
         'TILT': (0.0 * _ureg.radian, 'Magnet tilt angle.'),
@@ -225,9 +226,9 @@ class Fringe_in(Bend):
         'FINT': (0.0, 'Fringe field integral.'),
         'FINTX': (0.0, 'Exit fringe field integral.'),
         'd': (0.0, 'momentum deviation.'),
-        'R1': (_np.inf*_ureg.m, 'Entrance face curvature radius')
+        'R1': (_np.inf * _ureg.m, 'Entrance face curvature radius')
     }
-    
+
     @staticmethod
     def compute_fringe(h: float, e: float, hgap: float, fint: float) -> Tuple[float, float]:
         fringe_x = h * _np.tan(e)
@@ -241,47 +242,57 @@ class Fringe_in(Bend):
         return self.L.m_as('m')
 
     @property
-    def edges(self) -> Tuple[float, float]:
-        return self.E1.m_as('radian'), self.E2.m_as('radian')
-
-    @property
     def fringe_field_integrals(self) -> Tuple[float, float]:
         fint = self.FINT
         fintx = self.FINTX if self.FINTX >= 0 else fint  # For exact compatibility with MAD-X
         return fint, fintx
-    
+
     @property
     def parameters(self) -> list:
         # Generic parameters
         length = self.length
+        print('l', length)
         h = self.ANGLE.m_as('radian') / self.length
+        print('h', h)
         if self.K0.m_as('m**-1') is None or self.K0.m_as('m**-1') == 0:
             k0 = h
         else:
             k0 = self.K0.m_as('m**-1')
         hgap = self.HGAP.m_as('m')
-        e1, e2 = self.edges
+        e1 = self.E1.m_as('radians')
         fint, fintx = self.fringe_field_integrals
-        entrance_fringe_x, entrance_fringe_y = Bend.compute_fringe(h, e1, hgap, fint)
-        exit_fringe_x, exit_fringe_y = Bend.compute_fringe(h, e2, hgap, fintx)
+        # entrance_fringe_x, entrance_fringe_y = Fringein.compute_fringe(h, e1, hgap, fint)
+        # exit_fringe_x, exit_fringe_y = Fringein.compute_fringe(h, e2, hgap, fintx)
+
+        print(list(map(float, [
+            h,  # 0
+            self.K1.m_as('m**-2'),  # 1
+            self.K2.m_as('m**-3'),  # 2
+            self.E1.m_as('radian'),  # 3
+            self.TILT.m_as('radian'),  # 4
+            self.HGAP.m_as('m'), # 5
+            self.FINT,  # 6
+            self.R1.m_as('m') #7
+        ])))
 
         return list(map(float, [
             h,  # 0
             self.K1.m_as('m**-2'),  # 1
             self.K2.m_as('m**-3'),  # 2
-            self.E1.m_as('radian'),  # 3    
+            self.E1.m_as('radian'),  # 3
             self.TILT.m_as('radian'),  # 4
             self.HGAP.m_as('m'), # 5
             self.FINT,  # 6
             self.R1.m_as('m') #7
         ]))
-    
-class Fringe_out(Bend):
+
+
+class Fringeout(Magnet):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Bending angle.'),
-        'K0': (0.0 * _ureg.m**-1, 'Dipolar normalized gradient'),
-        'K1': (0.0 * _ureg.m**-2, 'Quadrupolar normalized gradient.'),
-        'K2': (0.0 * _ureg.m**-3, 'Sextupolar normalized gradient.'),
+        'K0': (0.0 * _ureg.m ** -1, 'Dipolar normalized gradient'),
+        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
+        'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
         'L': (0.0 * _ureg.m, 'Magnet length.'),
         'E2': (0.0 * _ureg.radian, 'Exit face angle.'),
         'TILT': (0.0 * _ureg.radian, 'Magnet tilt angle.'),
@@ -289,9 +300,9 @@ class Fringe_out(Bend):
         'FINT': (0.0, 'Fringe field integral.'),
         'FINTX': (0.0, 'Exit fringe field integral.'),
         'd': (0.0, 'momentum deviation.'),
-        'R2': (_np.inf*_ureg.m, 'Entrance face curvature radius')
+        'R2': (_np.inf * _ureg.m, 'Entrance face curvature radius')
     }
-    
+
     @staticmethod
     def compute_fringe(h: float, e: float, hgap: float, fint: float) -> Tuple[float, float]:
         fringe_x = h * _np.tan(e)
@@ -305,15 +316,11 @@ class Fringe_out(Bend):
         return self.L.m_as('m')
 
     @property
-    def edges(self) -> Tuple[float, float]:
-        return self.E1.m_as('radian'), self.E2.m_as('radian')
-
-    @property
     def fringe_field_integrals(self) -> Tuple[float, float]:
         fint = self.FINT
         fintx = self.FINTX if self.FINTX >= 0 else fint  # For exact compatibility with MAD-X
         return fint, fintx
-    
+
     @property
     def parameters(self) -> list:
         # Generic parameters
@@ -324,26 +331,25 @@ class Fringe_out(Bend):
         else:
             k0 = self.K0.m_as('m**-1')
         hgap = self.HGAP.m_as('m')
-        e1, e2 = self.edges
+        e2 = self.E2.m_as('radians')
         fint, fintx = self.fringe_field_integrals
-        entrance_fringe_x, entrance_fringe_y = Bend.compute_fringe(h, e1, hgap, fint)
-        exit_fringe_x, exit_fringe_y = Bend.compute_fringe(h, e2, hgap, fintx)
+        exit_fringe_x, exit_fringe_y = Fringeout.compute_fringe(h, e2, hgap, fintx)
 
         return list(map(float, [
             h,  # 0
             self.K1.m_as('m**-2'),  # 1
             self.K2.m_as('m**-3'),  # 2
-            self.E2.m_as('radian'),  # 3    
+            self.E2.m_as('radian'),  # 3
             self.TILT.m_as('radian'),  # 4
-            self.HGAP.m_as('m'), # 5
+            self.HGAP.m_as('m'),  # 5
             self.FINT,  # 6
-            self.R2.m_as('m') #7
+            self.R2.m_as('m')  # 7
         ]))
 
 
 class DipEdge(Magnet):
     PARAMETERS = {
-        'H': (0.0 * _ureg.m**-1, 'Inverse of the curvature radius.'),
+        'H': (0.0 * _ureg.m ** -1, 'Inverse of the curvature radius.'),
         'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
         'HGAP': (0.0 * _ureg.m, 'Magnet gap.'),
         'FINT': (0.0, 'Fringe field integral.'),

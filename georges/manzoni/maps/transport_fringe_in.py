@@ -5,7 +5,7 @@ from numpy import cos, sin, cosh, sinh, sqrt, tan
 
 @njit
 def compute_transport_fringe_in_matrix(element_parameters: list) -> np.ndarray:
-    h: float = element_parameters[0] 
+    h: float = element_parameters[0]
 #     alpha: float = element_parameters[1] 
     beta1: float = element_parameters[3] 
     R1: float = element_parameters[7] 

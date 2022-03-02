@@ -185,8 +185,8 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
         'MULTIPOLE': compute_transport_multipole_matrix,
         'HKICKER': track_madx_kicker,
         'VKICKER': track_madx_kicker,
-        'FRINGE_IN': compute_transport_fringe_in_matrix,
-        'FRINGE_OUT': compute_transport_fringe_out_matrix
+        'FRINGEIN': compute_transport_fringe_in_matrix,
+        'FRINGEOUT': compute_transport_fringe_out_matrix
     }
 
     @classmethod
@@ -220,8 +220,8 @@ class TransportFirstOrderTaylorIntegratorExact(TransportIntegrator):
         'MULTIPOLE': compute_transport_multipole_Ex_matrix,
         'HKICKER': track_madx_kicker,
         'VKICKER': track_madx_kicker,
-        'FRINGE_IN': compute_transport_fringe_in_Ex_matrix,
-        'FRINGE_OUT': compute_transport_fringe_out_Ex_matrix
+        'FRINGEIN': compute_transport_fringe_in_Ex_matrix,
+        'FRINGEOUT': compute_transport_fringe_out_Ex_matrix
     }
 
     @classmethod
@@ -251,20 +251,25 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
         'DRIFT': track_madx_drift,
         'HKICKER': track_madx_kicker,
         'VKICKER': track_madx_kicker,
-        'FRINGE_IN': compute_transport_fringe_in_tensor,
-        'FRINGE_OUT': compute_transport_fringe_out_tensor
+        'FRINGEIN': compute_transport_fringe_in_tensor,
+        'FRINGEOUT': compute_transport_fringe_out_tensor
     }
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
 
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
+            print(element.parameters)
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
         elif element.__class__.__name__.upper() == 'DRIFT':
+            print(element.parameters)
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
         else:
+            # print(element)
+            # print(element.__class__.__name__.upper())
+            # print(element.parameters)
             b = batched_vector_matrix_tensor(
                 beam_in,
                 beam_out,
@@ -287,8 +292,8 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
         'MULTIPOLE': compute_transport_multipole_Ex_tensor,
         'HKICKER': track_madx_kicker,
         'VKICKER': track_madx_kicker,
-        'FRINGE_IN': compute_transport_fringe_in_Ex_tensor,
-        'FRINGE_OUT': compute_transport_fringe_out_Ex_tensor
+        'FRINGEIN': compute_transport_fringe_in_Ex_tensor,
+        'FRINGEOUT': compute_transport_fringe_out_Ex_tensor
     }
 
     @classmethod
