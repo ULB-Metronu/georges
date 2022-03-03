@@ -14,8 +14,6 @@ cpymad = "^1.8.1"
 mypy = "^0.812"
 lmfit = "^1.0.2"
 ipyparallel = "^6.3.0"
-ipykernel = {git = "https://github.com/ipython/ipykernel.git", branch = "master"}
-
 georges-core = { path = "libs/georges-core/", develop = true }
 
 sphinx = { version = "^4.0.2", optional = true }

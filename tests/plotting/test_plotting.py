@@ -166,17 +166,17 @@ def test_plotting():
     # Add kinematics to the sequence
     sequence.metadata.kinematics = kin
     input_beam = georges.manzoni.Beam(kinematics=kin,
-                                      distribution=georges.generate_from_5d_sigma_matrix(n=10000,
-                                                                                         s11=0.001,
-                                                                                         s22=0.001,
-                                                                                         s33=0.005)
+                                      distribution=georges.generate_from_5d_sigma_matrix(n=100000,
+                                                                                         s11=0.0001,
+                                                                                         s22=0.0001,
+                                                                                         s33=0.0005)
                                       )
     mi = georges.manzoni.Input.from_sequence(sequence=sequence)
+    mi.freeze()
     beam_observer_std = mi.track(beam=input_beam, observers=observers.SigmaObserver())
     beam_observer_mean = mi.track(beam=input_beam, observers=observers.MeanObserver())
     beam_observer_beam = mi.track(beam=input_beam, observers=observers.BeamObserver(with_input_beams=True))
     beam_observer_losses = mi.track(beam=input_beam, observers=observers.LossesObserver())
-
     plot_mean_observer(sequence, beam_observer_mean)
     plot_std_observer(sequence, beam_observer_std)
     plot_beam_observer(sequence, beam_observer_beam)
