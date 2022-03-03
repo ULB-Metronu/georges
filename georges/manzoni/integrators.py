@@ -259,17 +259,12 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
 
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
-            print(element.parameters)
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
         elif element.__class__.__name__.upper() == 'DRIFT':
-            print(element.parameters)
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
         else:
-            # print(element)
-            # print(element.__class__.__name__.upper())
-            # print(element.parameters)
             b = batched_vector_matrix_tensor(
                 beam_in,
                 beam_out,
