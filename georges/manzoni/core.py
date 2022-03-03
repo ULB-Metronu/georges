@@ -69,9 +69,9 @@ def twiss(beamline: _Input,
         kinematics:
         reference_particle:
         offsets:
-        with_twiss_parametrization:
+        twiss_parametrization:
         twiss_init:
-
+        with_phase_unrolling:
     Returns:
 
     """
@@ -105,8 +105,7 @@ def twiss(beamline: _Input,
     def compute_matrix_for_twiss(data: _pd.DataFrame) -> _pd.DataFrame:
         normalization = 2 * offsets
         _matrix = {}
-        for _, d in data.iterrows():
-            label = d['LABEL1']
+        for label, d in data.iterrows():
             m = d['BEAM_OUT']
             m[:, 4] = m[:, 5]
             m = m[:, 0:5]

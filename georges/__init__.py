@@ -16,5 +16,8 @@ except ModuleNotFoundError:
 try:
     from georges_core import Kinematics
     from georges_core.sequences import *
+    from georges_core.distribution import *
+    from georges_core import particles
+    from georges_core.sequences.betablock import BetaBlock
 except ModuleNotFoundError:
     pass

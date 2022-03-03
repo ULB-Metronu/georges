@@ -203,3 +203,7 @@ class BeamStop(MaterialElement):
                 axis=0,
             )
             return beam_in, beam_out
+
+
+class Gap(Degrader):
+    pass

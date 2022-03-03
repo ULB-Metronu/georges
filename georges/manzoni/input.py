@@ -2,21 +2,27 @@
 TODO
 """
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, List, Union
+from typing import Optional, List, Union, Dict
 from georges_core.sequences import Sequence as _Sequence
 from . import elements
 from .core import track
 from .elements.scatterers import MaterialElement
-if TYPE_CHECKING:
-    from georges_core import ureg as _ureg
-    from .beam import Beam as _Beam
-    from .observers import Observer as _Observer
+from ..fermi import materials
+
+from georges_core import ureg as _ureg
+from .beam import Beam as _Beam
+from .observers import Observer as _Observer
+
+MANZONI_FLAVOR = {"Sbend": "SBend"}
 
 
 class Input:
-    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None, beam: Optional[_Beam] = None):
+    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None,
+                 beam: Optional[_Beam] = None,
+                 mapper: Dict[str, int] = None):
         self._sequence = sequence
         self._beam = beam
+        self._mapper = mapper
 
     @property
     def sequence(self):
@@ -52,7 +58,6 @@ class Input:
               beam: _Beam,
               observers: Union[List[_Observer], _Observer] = None,
               check_apertures: bool = True,
-
               ) -> Union[List[_Observer], _Observer]:
         """
 
@@ -88,24 +93,47 @@ class Input:
                 efficiency *= e.cache[5]
         return efficiency
 
+    # TODO: use method __setitem__ instead ?
+    def set_parameters(self, element: str, parameters: Dict):
+        # unfreeze the element
+        self.sequence[self._mapper[element]].unfreeze()
+        for param in parameters.keys():
+            self.sequence[self._mapper[element]].__setattr__(param, parameters[param])
+        self.sequence[self._mapper[element]].freeze()
+
+    def get_parameters(self, element: str, parameters: Optional[List] = None):
+        if parameters is None:
+            parameters = self.sequence[self._mapper[element]].attributes
+        return dict(zip(parameters, list(map(self.sequence[self._mapper[element]].__getattr__, parameters))))
+
     @classmethod
     def from_sequence(cls,
                       sequence: _Sequence,
+                      from_element: str = None,
+                      to_element: str = None
                       ):
         """
         Creates a new `Input` from a generic sequence from `georges_core`.
 
         Args:
             sequence:
-
+            from_element:
+            to_element:
         Returns:
 
         """
         input_sequence = list()
-        for name, element in sequence.df.iterrows():
+        df_sequence = sequence.df.loc[from_element:to_element]
+        if 'MATERIAL' in df_sequence.columns:
+            idx = df_sequence[sequence.df['MATERIAL'].notnull()].index
+            for ele in idx:
+                df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
+
+        for name, element in df_sequence.iterrows():
             element_class = getattr(elements, element['CLASS'])
             parameters = list(set(list(element.index.values)).intersection(element_class.PARAMETERS.keys()))
             input_sequence.append(
                 element_class(name, **element[parameters])
             )
-        return cls(sequence=input_sequence)
+        element_mapper = {k: v for v, k in enumerate(list(df_sequence.index.values))}
+        return cls(sequence=input_sequence, mapper=element_mapper)
