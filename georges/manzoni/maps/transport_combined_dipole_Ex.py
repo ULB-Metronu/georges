@@ -3,6 +3,7 @@ import numpy as np
 from numba.typed import List as nList
 
 
+@njit(parallel=True, fastmath=True)
 def compute_transport_combined_dipole_Ex_matrix(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]

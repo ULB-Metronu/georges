@@ -183,8 +183,6 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
         'QUADRUPOLE': compute_transport_quadrupole_matrix,
         'SEXTUPOLE': compute_transport_sextupole_matrix,
         'MULTIPOLE': compute_transport_multipole_matrix,
-        'HKICKER': track_madx_kicker,
-        'VKICKER': track_madx_kicker,
         'FRINGEIN': compute_transport_fringe_in_matrix,
         'FRINGEOUT': compute_transport_fringe_out_matrix
     }
@@ -218,23 +216,29 @@ class TransportFirstOrderTaylorIntegratorExact(TransportIntegrator):
         'QUADRUPOLE': compute_transport_quadrupole_Ex_matrix,
         'SEXTUPOLE': compute_transport_sextupole_Ex_matrix,
         'MULTIPOLE': compute_transport_multipole_Ex_matrix,
-        'HKICKER': track_madx_kicker,
-        'VKICKER': track_madx_kicker,
         'FRINGEIN': compute_transport_fringe_in_Ex_matrix,
         'FRINGEOUT': compute_transport_fringe_out_Ex_matrix
     }
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-        b2 = _np.zeros(beam_in.shape)
-        for i in range(beam_in.shape[0]):
-            updated_parameters = element.cache.copy()
 
-            updated_parameters.append(beam_in[i, 4])
-            matrix = cls.MATRICES.get(element.__class__.__name__.upper())(updated_parameters)
-            b2[i, :] = batched_vector_matrix(_np.array([beam_in[i, :]]), _np.array([beam_out[i, :]]), matrix)[1]
+        if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
+            return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
-        return beam_in, b2
+        elif element.__class__.__name__.upper() == 'DRIFT':
+            return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
+
+        else:
+            b2 = _np.zeros(beam_in.shape)
+            for i in range(beam_in.shape[0]):
+                updated_parameters = element.cache.copy()
+
+                updated_parameters.append(beam_in[i, 4])
+                matrix = cls.MATRICES.get(element.__class__.__name__.upper())(updated_parameters)
+                b2[i, :] = batched_vector_matrix(_np.array([beam_in[i, :]]), _np.array([beam_out[i, :]]), matrix)[1]
+
+            return beam_in, b2
 
     @classmethod
     def cache(cls, element) -> List:
@@ -248,9 +252,6 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
         'QUADRUPOLE': compute_transport_quadrupole_tensor,
         'SEXTUPOLE': compute_transport_sextupole_tensor,
         'MULTIPOLE': compute_transport_multipole_tensor,
-        'DRIFT': track_madx_drift,
-        'HKICKER': track_madx_kicker,
-        'VKICKER': track_madx_kicker,
         'FRINGEIN': compute_transport_fringe_in_tensor,
         'FRINGEOUT': compute_transport_fringe_out_tensor
     }
@@ -285,24 +286,30 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
         'QUADRUPOLE': compute_transport_quadrupole_Ex_tensor,
         'SEXTUPOLE': compute_transport_sextupole_Ex_tensor,
         'MULTIPOLE': compute_transport_multipole_Ex_tensor,
-        'HKICKER': track_madx_kicker,
-        'VKICKER': track_madx_kicker,
         'FRINGEIN': compute_transport_fringe_in_Ex_tensor,
         'FRINGEOUT': compute_transport_fringe_out_Ex_tensor
     }
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-        b2 = _np.zeros(beam_in.shape)
-        for i in range(beam_in.shape[0]):
-            updated_parameters = element.cache.copy()
-            updated_parameters.append(beam_in[i, 4])
-            matrix = cls.MATRICES.get(element.__class__.__name__.upper())(updated_parameters)
-            tensor = cls.TENSORS.get(element.__class__.__name__.upper())(updated_parameters)
-            b2[i, :] = \
-                batched_vector_matrix_tensor(_np.array([beam_in[i, :]]), _np.array([beam_out[i, :]]), matrix, tensor)[1]
 
-        return beam_in, b2
+        if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
+            return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
+
+        elif element.__class__.__name__.upper() == 'DRIFT':
+            return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
+
+        else:
+            b2 = _np.zeros(beam_in.shape)
+            for i in range(beam_in.shape[0]):
+                updated_parameters = element.cache.copy()
+                updated_parameters.append(beam_in[i, 4])
+                matrix = cls.MATRICES.get(element.__class__.__name__.upper())(updated_parameters)
+                tensor = cls.TENSORS.get(element.__class__.__name__.upper())(updated_parameters)
+                b2[i, :] = \
+                    batched_vector_matrix_tensor(_np.array([beam_in[i, :]]), _np.array([beam_out[i, :]]), matrix, tensor)[1]
+
+            return beam_in, b2
 
     @classmethod
     def cache(cls, element) -> List:

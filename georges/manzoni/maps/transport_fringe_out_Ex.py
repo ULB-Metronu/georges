@@ -3,7 +3,7 @@ import numpy as np
 from numba.typed import List as nList
 
 
-@njit
+@njit(parallel=True, fastmath=True)
 def compute_transport_fringe_out_Ex_matrix(element_parameters: nList) -> np.ndarray:
     h: float = element_parameters[0]
     beta2: float = element_parameters[3]
@@ -24,6 +24,7 @@ def compute_transport_fringe_out_Ex_matrix(element_parameters: nList) -> np.ndar
     return R
 
 
+@njit(parallel=True, fastmath=True)
 def compute_transport_fringe_out_Ex_tensor(element_parameters: nList) -> np.ndarray:
     h: float = element_parameters[0]
     k1: float = element_parameters[1]
