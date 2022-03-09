@@ -396,6 +396,40 @@ class LateralProfileAnalysis:
     def get_penumbra(self):
         return _np.mean([self.get_penumbra_left(), self.get_penumbra_right()])
 
+    def plot(self):
+        plt.vlines(x=[self.get_p_20_left(), self.get_p_50_left(), self.get_p_80_left(),
+                      self.get_p_20_right(), self.get_p_50_right(), self.get_p_80_right()],
+                   ymin=0,
+                   ymax=100,
+                   color='k',
+                   linestyle='dashed')
+
+        plt.hlines(y=[100, self.get_ur_min_dose(), self.get_ur_max_dose()],
+                   xmin=-2 * self.get_penumbra_left() - self.get_field_size() / 2,
+                   xmax=2 * self.get_penumbra_right() + self.get_field_size() / 2,
+                   color='k',
+                   linestyle='dashed')
+
+        plt.text(s=f'Flatness: {_np.round(self.get_ur_flatness(), 2)} \\%',
+                 x=-self.get_field_size() / 5,
+                 y=80,
+                 fontsize=14,
+                 color='g')
+
+        plt.text(s=f'P$_l$: {_np.round(self.get_penumbra_left(), 2)} mm',
+                 x=-5 * self.get_penumbra_left() - self.get_field_size() / 2,
+                 y=20,
+                 fontsize=14,
+                 color='g')
+
+        plt.text(s=f'P$_r$: {_np.round(self.get_penumbra_right(), 2)} mm',
+                 x=self.get_penumbra_right() + self.get_field_size() / 2,
+                 y=20,
+                 fontsize=14,
+                 color='g')
+
+        plt.grid()
+
 
 def compute_dvh(dose_data, voxel_volume):
     """
@@ -424,5 +458,4 @@ def compute_dvh(dose_data, voxel_volume):
 
 
 class GammaAnalysis:
-
     pass
