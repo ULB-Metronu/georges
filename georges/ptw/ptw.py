@@ -116,7 +116,7 @@ class BraggPeakAnalysis:
 
 class SpreadOutBraggPeakAnalysis:
 
-    def __init__(self, dose_data: pd.DataFrame, method: str, z_axis: _np.array, modul_type: str):
+    def __init__(self, dose_data: pd.DataFrame, method: str, z_axis: _np.array):
         self.dose_data = dose_data
         self.method = method
         self.z_axis = z_axis
@@ -212,7 +212,6 @@ class SpreadOutBraggPeakAnalysis:
         plt.legend(loc='center left', ncol=1)
         plt.xlim(0, _np.max(self.z_axis))
         plt.ylim(0, _np.max(self.compute_sobp_profile()))
-        plt.grid()
 
     def recompute_sobp_for_another_range(self, bp_to_leave):
 
@@ -412,21 +411,28 @@ class LateralProfileAnalysis:
 
         plt.text(s=f'Flatness: {_np.round(self.get_ur_flatness(), 2)} \\%',
                  x=-self.get_field_size() / 5,
-                 y=80,
-                 fontsize=14,
-                 color='g')
-
+                 y=85,
+                 fontsize=12,
+                 color='b')
         plt.text(s=f'P$_l$: {_np.round(self.get_penumbra_left(), 2)} mm',
-                 x=-5 * self.get_penumbra_left() - self.get_field_size() / 2,
-                 y=20,
-                 fontsize=14,
-                 color='g')
-
+                 x=-6 * self.get_penumbra_left() - self.get_field_size() / 2,
+                 y=30,
+                 fontsize=12,
+                 color='b')
         plt.text(s=f'P$_r$: {_np.round(self.get_penumbra_right(), 2)} mm',
                  x=self.get_penumbra_right() + self.get_field_size() / 2,
-                 y=20,
-                 fontsize=14,
-                 color='g')
+                 y=30,
+                 fontsize=12,
+                 color='b')
+
+        plt.plot(self.positions, self.dose_profile,
+                 marker='o',
+                 markersize=1.5,
+                 linestyle='dashed',
+                 color='b')
+
+        plt.xlabel('Transverse position (mm)')
+        plt.ylabel('Normalized dose (\\%)')
 
         plt.grid()
 
