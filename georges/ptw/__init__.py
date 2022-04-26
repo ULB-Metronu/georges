@@ -1,1 +1,2 @@
-from .ptw import BraggPeakAnalysis, SpreadOutBraggPeakAnalysis, LateralProfileAnalysis
+from .ptw import BraggPeakAnalysis, SpreadOutBraggPeakAnalysis, LateralProfileAnalysis, \
+                 RegularSpotScanning, ContourSpotScanning

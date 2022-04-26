@@ -2,7 +2,7 @@ import numpy as _np
 import pandas as pd
 from numpy.polynomial import Polynomial
 import scipy
-from scipy.optimize import minimize
+from scipy.optimize import minimize, Bounds
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
 
@@ -362,10 +362,10 @@ class LateralProfileAnalysis:
         return self.get_p_50_right() - self.get_p_50_left()
 
     def get_ur_left(self):
-        return self.get_p_50_left() + 2 * self.get_penumbra_left()
+        return self.get_p_50_left() + 3 * self.get_penumbra_left()
 
     def get_ur_right(self):
-        return self.get_p_50_right() - 2 * self.get_penumbra_right()
+        return self.get_p_50_right() - 3 * self.get_penumbra_right()
 
     def get_ur_size(self):
         return self.get_ur_right() - self.get_ur_left()
@@ -465,3 +465,116 @@ def compute_dvh(dose_data, voxel_volume):
 
 class GammaAnalysis:
     pass
+
+
+class RegularSpotScanning:
+
+    def __init__(self, sigma, fieldsize, n_spots_per_axis):
+        self.sigma = sigma
+        self.fieldsize = fieldsize
+        self.n_spots_per_axis = n_spots_per_axis
+
+    def double_gaussian_function(self, x, y, a, mu_x, mu_y):
+        return a * _np.exp(-(x - mu_x) ** 2 / (2 * self.sigma ** 2) -
+                           (y - mu_y) ** 2 / (2 * self.sigma ** 2)) / (_np.sqrt(2 * _np.pi) * self.sigma)
+
+    def compute_2d_scanned_profile(self, spot_space):
+
+        positions = _np.arange(-50, 51, 1)
+        x, y = _np.meshgrid(positions, positions)
+        shape = x.shape
+
+        dose_df = pd.DataFrame({'x': x.reshape(shape[0] * shape[1]),
+                                'y': y.reshape(shape[0] * shape[1])})
+
+        for i in range(self.n_spots_per_axis):
+            for j in range(self.n_spots_per_axis):
+                dose_df[f'dose_{i}_{j}'] = self.double_gaussian_function(x=dose_df['x'],
+                                                                         y=dose_df['y'],
+                                                                         a=100,
+                                                                         mu_x=(-(self.n_spots_per_axis-1)/2+i)*spot_space,
+                                                                         mu_y=(-(self.n_spots_per_axis-1)/2+j)*spot_space,
+                                                                         sigma=self.sigma)
+
+        total_dose = dose_df.drop(columns=['x', 'y']).sum(axis=1)
+        dose_df['total_dose'] = total_dose
+
+        return dose_df
+
+    def optimize_regular_grid_spots_placement(self):
+
+        def compute_2d_profile_flatness(x):
+            df = self.compute_2d_scanned_profile(self.sigma, self.n_spots_per_axis, x)
+            profile = df.query('x**2+y**2<=@field_edge**2')['total_dose']
+
+            flatness = 1e2 * (_np.max(profile) - _np.min(profile)) / (_np.max(profile) + _np.min(profile))
+
+            return flatness
+
+        optim = minimize(fun=compute_2d_profile_flatness,
+                         bounds=Bounds(lb=0,
+                                       ub=5 * self.sigma),
+                         x0=3 * self.sigma,
+                         method='trust-constr',
+                         options={'verbose': 1,
+                                  'xtol': 1e-10,
+                                  'maxiter': 1e5})
+
+        return optim
+
+
+class ContourSpotScanning:
+
+    def __init__(self, sigma, fieldsize):
+        self.sigma = sigma
+        self.fieldsize = fieldsize
+
+    def double_gaussian_function(self, x, y, a, mu_x, mu_y):
+        return a * _np.exp(-(x - mu_x) ** 2 / (2 * self.sigma ** 2) -
+                           (y - mu_y) ** 2 / (2 * self.sigma ** 2)) / (_np.sqrt(2 * _np.pi) * self.sigma)
+
+    def compute_2d_contour_scanned_profile(self, angle, weight):
+        positions = _np.arange(-50, 51, 1)
+        x, y = _np.meshgrid(positions,
+                            positions)
+
+        n_contour_spots = _np.int(2 * _np.pi / angle)
+        dose_df = pd.DataFrame({'x': x.reshape(x.shape[0] * x.shape[1]),
+                                'y': y.reshape(x.shape[0] * x.shape[1])})
+
+        dose_df['dose_central_spot'] = self.double_gaussian_function(x=dose_df['x'],
+                                                                     y=dose_df['y'],
+                                                                     a=100,
+                                                                     mu_x=0.0,
+                                                                     mu_y=0.0)
+        for i in range(n_contour_spots):
+            tmp_theta = - _np.pi + i * angle
+            dose_df[f'dose_{i}'] = self.double_gaussian_function(x=dose_df['x'],
+                                                                 y=dose_df['y'],
+                                                                 a=100,
+                                                                 mu_x=self.fieldsize * _np.cos(tmp_theta),
+                                                                 mu_y=self.fieldsize * _np.sin(tmp_theta)) * weight
+
+        total_dose = dose_df.drop(columns=['x', 'y']).sum(axis=1)
+        dose_df['total_dose'] = total_dose
+
+        return dose_df
+
+    def optimize_contour_spots(self):
+        def compute_contour_profile_flatness(x):
+            df = self.compute_2d_contour_scanned_profile(angle=x[0],
+                                                         weight=x[1])
+
+            profile = df.query('x**2+y**2<=@self.fieldsize**2')['total_dose']
+            flatness = 1e2 * (_np.max(profile) - _np.min(profile)) / (_np.max(profile) + _np.min(profile))
+
+            return flatness
+
+        optim = minimize(fun=compute_contour_profile_flatness,
+                         bounds=Bounds([0, 0],
+                                       [_np.pi, 1]),
+                         x0=[_np.pi / 6, 0.5],
+                         method='trust-constr',
+                         options={'verbose': 1, 'xtol': 1e-50, 'maxiter': 1e5})
+
+        return optim
