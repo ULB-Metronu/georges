@@ -5,8 +5,8 @@ from .elements import Marker, \
     Bend, \
     RBend, \
     SBend, \
-    Fringe_in,\
-    Fringe_out,\
+    Fringein,\
+    Fringeout,\
     Quadrupole, \
     Multipole, \
     Sextupole, \
