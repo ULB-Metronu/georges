@@ -14,6 +14,8 @@ cpymad = "^1.8.1"
 mypy = "^0.812"
 lmfit = "^1.0.2"
 ipyparallel = "^6.3.0"
+vtk = "< 9.1.0"
+hist = {extras = ["plot"], version = "^2.5.2"}
 georges-core = { path = "libs/georges-core/", develop = true }
 
 sphinx = { version = "^4.0.2", optional = true }
@@ -27,12 +29,12 @@ m2r2 = { version = "^0.2.7", optional = true }
 pandoc = { version = "^1.0.2", optional = true }
 nbsphinx = { version = "^0.8.2", optional = true }
 ipython = { version = "^7.24.1", optional = true }
+
+
+[tool.poetry.dev-dependencies]
 pytest = { version = "^6.2.2", optional = true }
 pytest-bdd = { version = "^4.0.2", optional = true }
 pytest-cov = "^3.0.0"
-vtk = "< 9.1.0"
-hist = {extras = ["plot"], version = "^2.5.2"}
-[tool.poetry.dev-dependencies]
 
 [tool.poetry.extras]
 sphinx = [
@@ -46,9 +48,7 @@ sphinx = [
     "m2r2",
     "pandoc",
     "nbsphinx",
-    "ipython",
-    "pytest",
-    "pytest-bdd",
+    "ipython"
 ]
 
 [build-system]
