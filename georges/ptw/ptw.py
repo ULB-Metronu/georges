@@ -116,11 +116,13 @@ class BraggPeakAnalysis:
 
 class SpreadOutBraggPeakAnalysis:
 
-    def __init__(self, dose_data: pd.DataFrame, method: str, z_axis: _np.array):
+    def __init__(self, dose_data: pd.DataFrame, method: str, z_axis: _np.array, color: str, str_on_legend: str):
         self.dose_data = dose_data
         self.method = method
         self.z_axis = z_axis
         self.modul_type = 'Full'
+        self.color = color
+        self.str_on_legend = str_on_legend
 
     def get_library_max_ranges(self):
         max_ranges = _np.zeros(self.dose_data.shape[0])
@@ -186,7 +188,7 @@ class SpreadOutBraggPeakAnalysis:
             plt.plot(x,
                      y,
                      linestyle='dashed',
-                     linewidth=1.2,
+                     linewidth=0.7,
                      color='r',
                      marker='*',
                      markersize=2,
@@ -198,20 +200,20 @@ class SpreadOutBraggPeakAnalysis:
                                                y=1e2 * e.values / self.sobp_data().max()),
                                 axis='columns')
 
-        plt.plot(self.z_axis,
+        plt.plot(self.z_axis-0.4,
                  self.compute_sobp_profile(),
                  linestyle='dashed',
-                 linewidth=2,
-                 color='k',
+                 linewidth=0.8,
+                 color=self.color,
                  marker='*',
-                 markersize=3,
-                 label='SOBP')
+                 markersize=2,
+                 label=self.str_on_legend)
 
         plt.xlabel('Depth (mm)')
         plt.ylabel('Normalized dose (\\%)')
-        plt.legend(loc='center left', ncol=1)
+        plt.legend(loc=(0.16, 1.01), fontsize=15, ncol=2, frameon=False)
         plt.xlim(0, _np.max(self.z_axis))
-        plt.ylim(0, _np.max(self.compute_sobp_profile()))
+        # plt.ylim(0, _np.max(self.compute_sobp_profile()))
 
     def recompute_sobp_for_another_range(self, bp_to_leave):
 
@@ -274,6 +276,8 @@ class SpreadOutBraggPeakAnalysis:
             return res
 
         r_10 = compute_range(flipped_data, 10, self.z_axis)
+        r_20 = compute_range(flipped_data, 20, self.z_axis)
+        r_80 = compute_range(flipped_data, 80, self.z_axis)
         r_90 = compute_range(flipped_data, 90, self.z_axis)
         r_98 = compute_range(flipped_data, 98, self.z_axis)
 
@@ -282,19 +286,25 @@ class SpreadOutBraggPeakAnalysis:
             min_dose = _np.min(sobp_array[_np.where(self.z_axis < r_98)[0]])
             flatness = 100 * ((max_dose - min_dose) / (max_dose + min_dose))
 
-            return r_10, r_90, r_98, flatness
+            return r_10, r_20, r_80, r_90, r_98, flatness
 
     def get_sobp_r10(self):
         return self.compute_ranges_and_flatness()[0]
 
-    def get_sobp_r90(self):
+    def get_sobp_r20(self):
         return self.compute_ranges_and_flatness()[1]
 
-    def get_sobp_r98(self):
+    def get_sobp_r80(self):
         return self.compute_ranges_and_flatness()[2]
 
-    def get_sobp_flatness(self):
+    def get_sobp_r90(self):
         return self.compute_ranges_and_flatness()[3]
+
+    def get_sobp_r98(self):
+        return self.compute_ranges_and_flatness()[4]
+
+    def get_sobp_flatness(self):
+        return self.compute_ranges_and_flatness()[5]
 
 
 class LateralProfileAnalysis:
@@ -492,9 +502,8 @@ class RegularSpotScanning:
                 dose_df[f'dose_{i}_{j}'] = self.double_gaussian_function(x=dose_df['x'],
                                                                          y=dose_df['y'],
                                                                          a=100,
-                                                                         mu_x=(-(self.n_spots_per_axis-1)/2+i)*spot_space,
-                                                                         mu_y=(-(self.n_spots_per_axis-1)/2+j)*spot_space,
-                                                                         sigma=self.sigma)
+                                                                         mu_x=(-(self.n_spots_per_axis - 1) / 2 + i) * spot_space,
+                                                                         mu_y=(-(self.n_spots_per_axis - 1) / 2 + j) * spot_space)
 
         total_dose = dose_df.drop(columns=['x', 'y']).sum(axis=1)
         dose_df['total_dose'] = total_dose
@@ -504,8 +513,8 @@ class RegularSpotScanning:
     def optimize_regular_grid_spots_placement(self):
 
         def compute_2d_profile_flatness(x):
-            df = self.compute_2d_scanned_profile(self.sigma, self.n_spots_per_axis, x)
-            profile = df.query('x**2+y**2<=@field_edge**2')['total_dose']
+            df = self.compute_2d_scanned_profile(spot_space=x)
+            profile = df.query('x**2+y**2<=@self.fieldsize**2')['total_dose']
 
             flatness = 1e2 * (_np.max(profile) - _np.min(profile)) / (_np.max(profile) + _np.min(profile))
 
@@ -517,17 +526,21 @@ class RegularSpotScanning:
                          x0=3 * self.sigma,
                          method='trust-constr',
                          options={'verbose': 1,
-                                  'xtol': 1e-10,
-                                  'maxiter': 1e5})
+                                  'xtol': 1e-20,
+                                  'maxiter': 1e6})
 
         return optim
 
 
 class ContourSpotScanning:
 
-    def __init__(self, sigma, fieldsize):
+    def __init__(self, sigma, fieldsize, desired_angle, shoot_on_aperture: bool = True, angle_imposed: bool = False):
         self.sigma = sigma
         self.fieldsize = fieldsize
+        self.desired_angle = desired_angle
+        self.shoot_on_aperture = shoot_on_aperture
+        self.angle_imposed = angle_imposed
+
 
     def double_gaussian_function(self, x, y, a, mu_x, mu_y):
         return a * _np.exp(-(x - mu_x) ** 2 / (2 * self.sigma ** 2) -
@@ -560,21 +573,110 @@ class ContourSpotScanning:
 
         return dose_df
 
+    def compute_2d_contour_scanned_profile_angle_imposed(self, weight):
+        positions = _np.arange(-50, 51, 1)
+        x, y = _np.meshgrid(positions,
+                            positions)
+
+        n_contour_spots = _np.int(2 * _np.pi / self.desired_angle)
+        dose_df = pd.DataFrame({'x': x.reshape(x.shape[0] * x.shape[1]),
+                                'y': y.reshape(x.shape[0] * x.shape[1])})
+
+        dose_df['dose_central_spot'] = self.double_gaussian_function(x=dose_df['x'],
+                                                                     y=dose_df['y'],
+                                                                     a=100,
+                                                                     mu_x=0.0,
+                                                                     mu_y=0.0)
+        for i in range(n_contour_spots):
+            tmp_theta = - _np.pi + i * self.desired_angle
+            dose_df[f'dose_{i}'] = self.double_gaussian_function(x=dose_df['x'],
+                                                                 y=dose_df['y'],
+                                                                 a=100,
+                                                                 mu_x=self.fieldsize * _np.cos(tmp_theta),
+                                                                 mu_y=self.fieldsize * _np.sin(tmp_theta)) * weight
+
+        total_dose = dose_df.drop(columns=['x', 'y']).sum(axis=1)
+        dose_df['total_dose'] = total_dose
+
+        return dose_df
+
+    def compute_2d_contour_scanned_profile_radius_not_imposed(self, angle, weight, shoot_at):
+        positions = _np.arange(-50, 51, 1)
+        x, y = _np.meshgrid(positions,
+                            positions)
+
+        n_contour_spots = _np.int(2 * _np.pi / angle)
+        dose_df = pd.DataFrame({'x': x.reshape(x.shape[0] * x.shape[1]),
+                                'y': y.reshape(x.shape[0] * x.shape[1])})
+
+        dose_df['dose_central_spot'] = self.double_gaussian_function(x=dose_df['x'],
+                                                                     y=dose_df['y'],
+                                                                     a=100,
+                                                                     mu_x=0.0,
+                                                                     mu_y=0.0)
+        for i in range(n_contour_spots):
+            tmp_theta = - _np.pi + i * angle
+            dose_df[f'dose_{i}'] = self.double_gaussian_function(x=dose_df['x'],
+                                                                 y=dose_df['y'],
+                                                                 a=100,
+                                                                 mu_x=shoot_at * _np.cos(tmp_theta),
+                                                                 mu_y=shoot_at * _np.sin(tmp_theta)) * weight
+
+        total_dose = dose_df.drop(columns=['x', 'y']).sum(axis=1)
+        dose_df['total_dose'] = total_dose
+
+        return dose_df
+
     def optimize_contour_spots(self):
+
         def compute_contour_profile_flatness(x):
             df = self.compute_2d_contour_scanned_profile(angle=x[0],
                                                          weight=x[1])
-
             profile = df.query('x**2+y**2<=@self.fieldsize**2')['total_dose']
             flatness = 1e2 * (_np.max(profile) - _np.min(profile)) / (_np.max(profile) + _np.min(profile))
 
             return flatness
 
-        optim = minimize(fun=compute_contour_profile_flatness,
-                         bounds=Bounds([0, 0],
-                                       [_np.pi, 1]),
-                         x0=[_np.pi / 6, 0.5],
-                         method='trust-constr',
-                         options={'verbose': 1, 'xtol': 1e-50, 'maxiter': 1e5})
+        def compute_contour_profile_flatness_angle_imposed(x):
+            df = self.compute_2d_contour_scanned_profile_angle_imposed(weight=x)
+            profile = df.query('x**2+y**2<=@self.fieldsize**2')['total_dose']
+            flatness = 1e2 * (_np.max(profile) - _np.min(profile)) / (_np.max(profile) + _np.min(profile))
+
+            return flatness
+
+        def compute_contour_profile_flatness_radius_not_imposed(x):
+            df = self.compute_2d_contour_scanned_profile_radius_not_imposed(angle=x[0],
+                                                                            weight=x[1],
+                                                                            shoot_at=x[2])
+            profile = df.query('x**2+y**2<=@self.fieldsize**2')['total_dose']
+            flatness = 1e2 * (_np.max(profile) - _np.min(profile)) / (_np.max(profile) + _np.min(profile))
+
+            return flatness
+
+        if self.shoot_on_aperture and not self.angle_imposed:
+            optim = minimize(fun=compute_contour_profile_flatness,
+                             bounds=Bounds([0, 0],
+                                           [_np.pi, 10]),
+                             x0=[_np.pi / 6, 0.5],
+                             method='trust-constr',
+                             options={'verbose': 1, 'xtol': 1e-10, 'maxiter': 1e5})
+
+        elif self.shoot_on_aperture and self.angle_imposed:
+            optim = minimize(fun=compute_contour_profile_flatness_angle_imposed,
+                             bounds=Bounds([0],
+                                           [10]),
+                             x0=0.5,
+                             method='trust-constr',
+                             options={'verbose': 1, 'xtol': 1e-10, 'maxiter': 1e5})
+
+        else:
+            optim = minimize(fun=compute_contour_profile_flatness_radius_not_imposed,
+                             bounds=Bounds([0, 0, 0],
+                                           [_np.pi, 10, 2*self.fieldsize]),
+                             x0=[_np.pi / 6, 0.5, self.fieldsize],
+                             method='trust-constr',
+                             options={'verbose': 1, 'xtol': 1e-10, 'maxiter': 1e5})
 
         return optim
+
+
