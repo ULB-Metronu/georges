@@ -139,11 +139,26 @@ class Mad8FirstOrderTaylorIntegrator(Mad8Integrator):
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-        return batched_vector_matrix(
-            beam_in,
-            beam_out,
-            cls.MATRICES.get(element.__class__.__name__.upper())(element.cache, global_parameters)
-        )
+        if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
+            return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
+
+        elif element.__class__.__name__.upper() in ['GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
+                                                    'CIRCULARCOLLIMATOR', 'DUMP']:
+            return batched_vector_matrix(
+                beam_in,
+                beam_out,
+                compute_mad_drift_matrix(element.cache, global_parameters)
+            )
+
+        elif element.__class__.__name__.upper() == 'SROTATION':
+            return track_madx_srotation(beam_in, beam_out, element.cache, global_parameters)
+
+        else:
+            return batched_vector_matrix(
+                beam_in,
+                beam_out,
+                cls.MATRICES.get(element.__class__.__name__.upper())(element.cache, global_parameters)
+            )
 
     @classmethod
     def cache(cls, element) -> List:
@@ -160,12 +175,28 @@ class Mad8SecondOrderTaylorIntegrator(Mad8FirstOrderTaylorIntegrator):
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-        return batched_vector_matrix_tensor(
-            beam_in,
-            beam_out,
-            cls.MATRICES.get(element.__class__.__name__.upper())(element.cache, global_parameters),
-            cls.TENSORS.get(element.__class__.__name__.upper())(element.cache, global_parameters)
-        )
+        if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
+            return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
+
+        elif element.__class__.__name__.upper() in ['GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
+                                                    'CIRCULARCOLLIMATOR', 'DUMP']:
+            return batched_vector_matrix_tensor(
+                beam_in,
+                beam_out,
+                compute_mad_drift_matrix(element.cache, global_parameters),
+                compute_mad_drift_tensor(element.cache, global_parameters)
+            )
+
+        elif element.__class__.__name__.upper() == 'SROTATION':
+            return track_madx_srotation(beam_in, beam_out, element.cache, global_parameters)
+
+        else:
+            return batched_vector_matrix_tensor(
+                beam_in,
+                beam_out,
+                cls.MATRICES.get(element.__class__.__name__.upper())(element.cache, global_parameters),
+                cls.TENSORS.get(element.__class__.__name__.upper())(element.cache, global_parameters)
+            )
 
     @classmethod
     def cache(cls, element) -> List:
@@ -193,8 +224,12 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
-        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR','ELLIPTICALCOLLIMATOR','CIRCULARCOLLIMATOR', 'DUMP']:
+        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
+                                                    'CIRCULARCOLLIMATOR', 'DUMP']:
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
+
+        elif element.__class__.__name__.upper() == 'SROTATION':
+            return track_madx_srotation(beam_in, beam_out, element.cache, global_parameters)
 
         else:
             b = batched_vector_matrix(
@@ -227,8 +262,11 @@ class TransportFirstOrderTaylorIntegratorExact(TransportIntegrator):
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
         elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
-                                            'CIRCULARCOLLIMATOR', 'DUMP']:
+                                                    'CIRCULARCOLLIMATOR', 'DUMP']:
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
+
+        elif element.__class__.__name__.upper() == 'SROTATION':
+            return track_madx_srotation(beam_in, beam_out, element.cache, global_parameters)
 
         else:
             b2 = _np.zeros(beam_in.shape)
@@ -264,8 +302,11 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
         elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
-                                            'CIRCULARCOLLIMATOR', 'DUMP']:
+                                                    'CIRCULARCOLLIMATOR', 'DUMP']:
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
+
+        elif element.__class__.__name__.upper() == 'SROTATION':
+            return track_madx_srotation(beam_in, beam_out, element.cache, global_parameters)
 
         else:
             b = batched_vector_matrix_tensor(
@@ -304,6 +345,9 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
 
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
+        elif element.__class__.__name__.upper() == 'SROTATION':
+            return track_madx_srotation(beam_in, beam_out, element.cache, global_parameters)
+
         else:
             b2 = _np.zeros(beam_in.shape)
             for i in range(beam_in.shape[0]):
@@ -312,7 +356,8 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
                 matrix = cls.MATRICES.get(element.__class__.__name__.upper())(updated_parameters)
                 tensor = cls.TENSORS.get(element.__class__.__name__.upper())(updated_parameters)
                 b2[i, :] = \
-                    batched_vector_matrix_tensor(_np.array([beam_in[i, :]]), _np.array([beam_out[i, :]]), matrix, tensor)[1]
+                    batched_vector_matrix_tensor(_np.array([beam_in[i, :]]), _np.array([beam_out[i, :]]), matrix,
+                                                 tensor)[1]
 
             return beam_in, b2
 
