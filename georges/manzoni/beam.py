@@ -51,3 +51,7 @@ class Beam:
     @property
     def distribution(self) -> np.ndarray:
         return self._distribution
+
+    @distribution.setter
+    def distribution(self, dist: np.ndarray):
+        self._distribution = dist
