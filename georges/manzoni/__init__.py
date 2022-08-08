@@ -1,5 +1,5 @@
-from .input import Input
 from .beam import Beam
+from .core import track, twiss, match
 from .elements import Marker, \
     Drift, \
     Bend, \
@@ -21,6 +21,6 @@ from .elements import Marker, \
     Degrader, \
     Scatterer, \
     BeamStop
-
-from .core import track, twiss, match
+from .input import Input
+from .integrators import *
 from .observers import Observer, BeamObserver, SigmaObserver, LossesObserver, MeanObserver, IbaBpmObserver

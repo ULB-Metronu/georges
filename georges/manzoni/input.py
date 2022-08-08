@@ -2,16 +2,17 @@
 TODO
 """
 from __future__ import annotations
-from typing import Optional, List, Union, Dict
-from georges_core.sequences import Sequence as _Sequence
-from . import elements
-from .core import track
-from .elements.scatterers import MaterialElement
-from ..fermi import materials
+
+from typing import Optional, Union, Dict
 
 from georges_core import ureg as _ureg
+from georges_core.sequences import Sequence as _Sequence
+from . import elements
 from .beam import Beam as _Beam
+from .elements.scatterers import MaterialElement
+from .integrators import *
 from .observers import Observer as _Observer
+from ..fermi import materials
 
 MANZONI_FLAVOR = {"Sbend": "SBend"}
 
@@ -22,7 +23,7 @@ class Input:
                  mapper: Dict[str, int] = None):
         self._sequence = sequence
         self._beam = beam
-        self._mapper = mapper
+        self.mapper = mapper
 
     @property
     def sequence(self):
@@ -93,18 +94,22 @@ class Input:
                 efficiency *= e.cache[5]
         return efficiency
 
+    def set_integrator(self, integrator: Integrator = MadXIntegrator):
+        for i in range(len(self.mapper)):
+            self.sequence[i].integrator = integrator
+
     # TODO: use method __setitem__ instead ?
     def set_parameters(self, element: str, parameters: Dict):
         # unfreeze the element
-        self.sequence[self._mapper[element]].unfreeze()
+        self.sequence[self.mapper[element]].unfreeze()
         for param in parameters.keys():
-            self.sequence[self._mapper[element]].__setattr__(param, parameters[param])
-        self.sequence[self._mapper[element]].freeze()
+            self.sequence[self.mapper[element]].__setattr__(param, parameters[param])
+        self.sequence[self.mapper[element]].freeze()
 
     def get_parameters(self, element: str, parameters: Optional[List] = None):
         if parameters is None:
-            parameters = self.sequence[self._mapper[element]].attributes
-        return dict(zip(parameters, list(map(self.sequence[self._mapper[element]].__getattr__, parameters))))
+            parameters = self.sequence[self.mapper[element]].attributes
+        return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
 
     @classmethod
     def from_sequence(cls,

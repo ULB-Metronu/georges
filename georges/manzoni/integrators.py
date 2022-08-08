@@ -193,7 +193,7 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
-        elif element.__class__.__name__.upper() == 'DRIFT':
+        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR','ELLIPTICALCOLLIMATOR','CIRCULARCOLLIMATOR', 'DUMP']:
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
         else:
@@ -226,7 +226,8 @@ class TransportFirstOrderTaylorIntegratorExact(TransportIntegrator):
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
-        elif element.__class__.__name__.upper() == 'DRIFT':
+        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
+                                            'CIRCULARCOLLIMATOR', 'DUMP']:
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
         else:
@@ -262,7 +263,8 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
-        elif element.__class__.__name__.upper() == 'DRIFT':
+        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
+                                            'CIRCULARCOLLIMATOR', 'DUMP']:
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
         else:
@@ -296,7 +298,10 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
-        elif element.__class__.__name__.upper() == 'DRIFT':
+
+        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
+                                                    'CIRCULARCOLLIMATOR', 'DUMP']:
+
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
         else:
