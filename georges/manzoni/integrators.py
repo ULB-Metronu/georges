@@ -20,15 +20,14 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_transport_quadrupole_tensor, \
     compute_transport_sextupole_matrix, \
     compute_transport_sextupole_tensor, \
-    compute_transport_combined_dipole_Ex_matrix, \
-    compute_transport_combined_dipole_Ex_tensor, \
-    compute_transport_multipole_Ex_matrix, \
-    compute_transport_multipole_Ex_tensor, \
-    compute_transport_quadrupole_Ex_matrix, \
-    compute_transport_quadrupole_Ex_tensor, \
-    compute_transport_sextupole_Ex_matrix, \
-    compute_transport_sextupole_Ex_tensor, \
-    compute_transport_drift_matrix, \
+    compute_transport_combined_dipole_ex_matrix, \
+    compute_transport_combined_dipole_ex_tensor, \
+    compute_transport_multipole_ex_matrix, \
+    compute_transport_multipole_ex_tensor, \
+    compute_transport_quadrupole_ex_matrix, \
+    compute_transport_quadrupole_ex_tensor, \
+    compute_transport_sextupole_ex_matrix, \
+    compute_transport_sextupole_ex_tensor, \
     compute_transport_fringe_in_Ex_matrix, \
     compute_transport_fringe_in_Ex_tensor, \
     compute_transport_fringe_in_matrix, \
@@ -246,11 +245,11 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
 
 class TransportFirstOrderTaylorIntegratorExact(TransportIntegrator):
     MATRICES = {
-        'BEND': compute_transport_combined_dipole_Ex_matrix,
-        'SBEND': compute_transport_combined_dipole_Ex_matrix,
-        'QUADRUPOLE': compute_transport_quadrupole_Ex_matrix,
-        'SEXTUPOLE': compute_transport_sextupole_Ex_matrix,
-        'MULTIPOLE': compute_transport_multipole_Ex_matrix,
+        'BEND': compute_transport_combined_dipole_ex_matrix,
+        'SBEND': compute_transport_combined_dipole_ex_matrix,
+        'QUADRUPOLE': compute_transport_quadrupole_ex_matrix,
+        'SEXTUPOLE': compute_transport_sextupole_ex_matrix,
+        'MULTIPOLE': compute_transport_multipole_ex_matrix,
         'FRINGEIN': compute_transport_fringe_in_Ex_matrix,
         'FRINGEOUT': compute_transport_fringe_out_Ex_matrix
     }
@@ -324,11 +323,11 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
 
 class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegratorExact):
     TENSORS = {
-        'BEND': compute_transport_combined_dipole_Ex_tensor,
-        'SBEND': compute_transport_combined_dipole_Ex_tensor,
-        'QUADRUPOLE': compute_transport_quadrupole_Ex_tensor,
-        'SEXTUPOLE': compute_transport_sextupole_Ex_tensor,
-        'MULTIPOLE': compute_transport_multipole_Ex_tensor,
+        'BEND': compute_transport_combined_dipole_ex_tensor,
+        'SBEND': compute_transport_combined_dipole_ex_tensor,
+        'QUADRUPOLE': compute_transport_quadrupole_ex_tensor,
+        'SEXTUPOLE': compute_transport_sextupole_ex_tensor,
+        'MULTIPOLE': compute_transport_multipole_ex_tensor,
         'FRINGEIN': compute_transport_fringe_in_Ex_tensor,
         'FRINGEOUT': compute_transport_fringe_out_Ex_tensor
     }
@@ -352,7 +351,7 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
             b2 = _np.zeros(beam_in.shape)
             for i in range(beam_in.shape[0]):
                 updated_parameters = element.cache.copy()
-                updated_parameters.append(beam_in[i, 4])
+                updated_parameters.append(beam_in[i, 5])
                 matrix = cls.MATRICES.get(element.__class__.__name__.upper())(updated_parameters)
                 tensor = cls.TENSORS.get(element.__class__.__name__.upper())(updated_parameters)
                 b2[i, :] = \

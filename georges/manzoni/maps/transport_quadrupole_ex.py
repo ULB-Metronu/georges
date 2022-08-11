@@ -5,10 +5,12 @@ from numpy import sqrt, cos, sin, cosh, sinh
 
 
 @njit(cache=True)
-def compute_transport_quadrupole_matrix(element_parameters: nList) -> np.ndarray:
+def compute_transport_quadrupole_ex_matrix(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
     k1: float = element_parameters[1]
+    d: float = element_parameters[2]
+    k1 = k1/(1+d)
     R = np.zeros((6, 6))
     R[4, 4] = 1
     R[5, 5] = 1 
@@ -41,11 +43,13 @@ def compute_transport_quadrupole_matrix(element_parameters: nList) -> np.ndarray
 
 
 @njit(cache=True)
-def compute_transport_quadrupole_tensor(element_parameters: nList) -> np.ndarray:
+def compute_transport_quadrupole_ex_tensor(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
     k1: float = element_parameters[1]
-    T = np.zeros((6, 6, 6))
+    d: float = element_parameters[len(element_parameters) - 1]
+    k1 = k1/(1+d)
+    T = np.zeros((6, 6, 6)) 
     if k1 > 0:
         T[0, 0, 5] = L*sqrt(k1)*sin(L*sqrt(k1))/2
         T[0, 1, 5] = -L*cos(L*sqrt(k1))/2 + sin(L*sqrt(k1))/(2*sqrt(k1))
