@@ -4,7 +4,7 @@ from numpy import cos, sin, tan
 from numba.typed import List as nList
 
 
-@njit(parallel=True, fastmath=True)
+@njit(cache=True)
 def compute_transport_fringe_in_matrix(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]
@@ -25,7 +25,7 @@ def compute_transport_fringe_in_matrix(element_parameters: nList) -> np.ndarray:
     return R
 
 
-@njit(parallel=True, fastmath=True)
+@njit(cache=True)
 def compute_transport_fringe_in_tensor(element_parameters: nList) -> np.ndarray:
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]

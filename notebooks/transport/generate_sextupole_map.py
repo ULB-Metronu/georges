@@ -19,7 +19,7 @@ from numba import njit
     \n\n""")
 
         # MATRIX
-        f.write(f"@njit(parallel=True, fastmath=True)\n")
+        f.write(f"@njit(cache=True)\n")
         if exact_dpp:
             f.write(f"""def compute_transport_sextupole_ex_matrix(element_parameters: nList) -> np.ndarray:\n""")
         else:
@@ -35,7 +35,7 @@ from numba import njit
         f.write("\treturn R\n\n\n")
 
         # TENSOR
-        f.write(f"@njit(parallel=True, fastmath=True)\n")
+        f.write(f"@njit(cache=True)\n")
         if exact_dpp:
             f.write(f"""def compute_transport_sextupole_ex_tensor(element_parameters: nList) -> np.ndarray:\n""")
         else:

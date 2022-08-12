@@ -65,7 +65,6 @@ def compute_mad_combined_dipole_matrix(element_parameters: list, global_paramete
     R[4, 5] = -((h ** 2 * j1) / beta ** 2) + L / (beta ** 2 * gamma ** 2)
     R[5, 5] = 1
 
-    print("MAD8", R)
     return R
 
 

@@ -112,6 +112,28 @@ class Input:
         return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
 
     @classmethod
+    def insert_thin_element(cls,
+                            sequence: georges.manzoni.input.Input = None,
+                            position: int = 0,
+                            thin_element: georges.manzoni.elements.elements.ManzoniElement = None) -> georges.manzoni.input.Input:
+        """
+        Insert a thin element (e.g fringes) in the sequence.
+
+        Args:
+            sequence: the manzoni sequence
+            position: index of the position to insert in the sequence
+            thin_element: element to insert
+
+        Returns:
+            A new instance of manzoni.Input
+        """
+
+        new_sequence = sequence.sequence.copy()
+        new_sequence.insert(position, thin_element)
+        element_mapper = {k.NAME: v for v, k in enumerate(new_sequence)}
+        return cls(sequence=new_sequence, mapper=element_mapper)
+
+    @classmethod
     def from_sequence(cls,
                       sequence: _Sequence,
                       from_element: str = None,
