@@ -4,7 +4,7 @@ from numba.typed import List as nList
 from numpy import sqrt, cos, sin, cosh, sinh
 
 
-@njit(cache=True)
+@njit(parallel=True, fastmath=True)
 def compute_transport_quadrupole_ex_matrix(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
@@ -42,7 +42,7 @@ def compute_transport_quadrupole_ex_matrix(element_parameters: nList) -> np.ndar
     return R
 
 
-@njit(cache=True)
+@njit(parallel=True, fastmath=True)
 def compute_transport_quadrupole_ex_tensor(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]

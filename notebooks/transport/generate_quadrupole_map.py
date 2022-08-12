@@ -20,7 +20,7 @@ from numba.typed import List as nList
     \n\n""")
 
         # MATRIX
-        f.write(f"@njit(cache=True)\n")
+        f.write(f"@njit(parallel=True, fastmath=True)\n")
         if exact_dpp:
             f.write(f"""def compute_transport_quadrupole_ex_matrix(element_parameters: nList) -> np.ndarray:\n""")
         else:
@@ -51,7 +51,7 @@ from numba.typed import List as nList
         f.write("\treturn R\n\n\n")
 
         # TENSOR
-        f.write(f"@njit(cache=True)\n")
+        f.write(f"@njit(parallel=True, fastmath=True)\n")
         if exact_dpp:
             f.write(f"""def compute_transport_quadrupole_ex_tensor(element_parameters: nList) -> np.ndarray:\n""")
         else:

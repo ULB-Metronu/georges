@@ -28,12 +28,12 @@ from .maps import compute_mad_combined_dipole_matrix, \
     compute_transport_quadrupole_ex_tensor, \
     compute_transport_sextupole_ex_matrix, \
     compute_transport_sextupole_ex_tensor, \
-    compute_transport_fringe_in_Ex_matrix, \
-    compute_transport_fringe_in_Ex_tensor, \
+    compute_transport_fringe_in_ex_matrix, \
+    compute_transport_fringe_in_ex_tensor, \
     compute_transport_fringe_in_matrix, \
     compute_transport_fringe_in_tensor, \
-    compute_transport_fringe_out_Ex_matrix, \
-    compute_transport_fringe_out_Ex_tensor, \
+    compute_transport_fringe_out_ex_matrix, \
+    compute_transport_fringe_out_ex_tensor, \
     compute_transport_fringe_out_matrix, \
     compute_transport_fringe_out_tensor, \
     track_madx_quadrupole, \
@@ -102,7 +102,7 @@ class MadXIntegrator(Integrator):
         )
 
     @classmethod
-    def cache(cls, element) -> list:
+    def cache(cls, element) -> List:
         return element.parameters
 
 
@@ -250,8 +250,8 @@ class TransportFirstOrderTaylorIntegratorExact(TransportIntegrator):
         'QUADRUPOLE': compute_transport_quadrupole_ex_matrix,
         'SEXTUPOLE': compute_transport_sextupole_ex_matrix,
         'MULTIPOLE': compute_transport_multipole_ex_matrix,
-        'FRINGEIN': compute_transport_fringe_in_Ex_matrix,
-        'FRINGEOUT': compute_transport_fringe_out_Ex_matrix
+        'FRINGEIN': compute_transport_fringe_in_ex_matrix,
+        'FRINGEOUT': compute_transport_fringe_out_ex_matrix
     }
 
     @classmethod
@@ -328,8 +328,8 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
         'QUADRUPOLE': compute_transport_quadrupole_ex_tensor,
         'SEXTUPOLE': compute_transport_sextupole_ex_tensor,
         'MULTIPOLE': compute_transport_multipole_ex_tensor,
-        'FRINGEIN': compute_transport_fringe_in_Ex_tensor,
-        'FRINGEOUT': compute_transport_fringe_out_Ex_tensor
+        'FRINGEIN': compute_transport_fringe_in_ex_tensor,
+        'FRINGEOUT': compute_transport_fringe_out_ex_tensor
     }
 
     @classmethod
@@ -338,8 +338,8 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
         if element.__class__.__name__.upper() in ['HKICKER', 'VKICKER']:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
-
-        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP', 'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
+        elif element.__class__.__name__.upper() in ['DRIFT', 'GAP',
+                                                    'RECTANGULARCOLLIMATOR', 'ELLIPTICALCOLLIMATOR',
                                                     'CIRCULARCOLLIMATOR', 'DUMP']:
 
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)

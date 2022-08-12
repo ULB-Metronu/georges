@@ -28,12 +28,12 @@ from .transport_fringe_in import \
 from .transport_fringe_out import \
     compute_transport_fringe_out_matrix, \
     compute_transport_fringe_out_tensor
-from .transport_fringe_in_Ex import \
-    compute_transport_fringe_in_Ex_matrix, \
-    compute_transport_fringe_in_Ex_tensor
-from .transport_fringe_out_Ex import \
-    compute_transport_fringe_out_Ex_matrix, \
-    compute_transport_fringe_out_Ex_tensor
+from .transport_fringe_in_ex import \
+    compute_transport_fringe_in_ex_matrix, \
+    compute_transport_fringe_in_ex_tensor
+from .transport_fringe_out_ex import \
+    compute_transport_fringe_out_ex_matrix, \
+    compute_transport_fringe_out_ex_tensor
 from .transport_drift import \
     compute_transport_drift_matrix
 from .mad8_quadrupole import \

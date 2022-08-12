@@ -4,7 +4,7 @@ from numba import njit
 from numba.typed import List as nList
     
 
-@njit(cache=True)
+@njit(parallel=True, fastmath=True)
 def compute_transport_multipole_ex_matrix(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
@@ -42,7 +42,7 @@ def compute_transport_multipole_ex_matrix(element_parameters: nList) -> np.ndarr
     return R
 
 
-@njit(cache=True)
+@njit(parallel=True, fastmath=True)
 def compute_transport_multipole_ex_tensor(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]

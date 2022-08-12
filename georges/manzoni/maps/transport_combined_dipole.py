@@ -4,7 +4,7 @@ from numba import njit
 from numba.typed import List as nList 
     
 
-@njit(cache=True)
+@njit(parallel=True, fastmath=True)
 def compute_transport_combined_dipole_matrix(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
@@ -98,7 +98,7 @@ def compute_transport_combined_dipole_matrix(element_parameters: nList) -> np.nd
     return R
 
 
-@njit(cache=True)
+@njit(parallel=True, fastmath=True)
 def compute_transport_combined_dipole_tensor(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
