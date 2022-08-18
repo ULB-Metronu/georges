@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from typing import Optional, Union, Dict
 
+import pandas as pd
+
 from georges_core import ureg as _ureg
 from georges_core.sequences import Sequence as _Sequence
 from . import elements
@@ -32,6 +34,22 @@ class Input:
     @property
     def beam(self):
         return self._beam
+
+    def to_df(self):
+        """
+
+        Returns: A pandas.DataFrame of the sequence
+
+        """
+
+        _ = list(map(lambda e: pd.Series(e.attributes), self.sequence))
+        df = pd.concat(_, axis=1).T
+        df['CLASS'] = list(map(lambda e: e.__class__.__name__, self.sequence))
+        return df.set_index("NAME")
+
+    @property
+    def df(self):
+        return self.to_df()
 
     def freeze(self):
         """
