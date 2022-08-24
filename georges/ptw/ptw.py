@@ -281,12 +281,13 @@ class SpreadOutBraggPeakAnalysis:
         r_90 = compute_range(flipped_data, 90, self.z_axis)
         r_98 = compute_range(flipped_data, 98, self.z_axis)
 
-        if self.modul_type == 'Full':
-            max_dose = _np.max(sobp_array[_np.where(self.z_axis < r_98)[0]])
-            min_dose = _np.min(sobp_array[_np.where(self.z_axis < r_98)[0]])
-            flatness = 100 * ((max_dose - min_dose) / (max_dose + min_dose))
+        idx_98 = _np.where(_np.isclose(sobp_array, 98, atol=1))[0]
+        max_dose = _np.max(sobp_array[idx_98[0]:idx_98[-1]])
+        min_dose = _np.min(sobp_array[idx_98[0]:idx_98[-1]])
 
-            return r_10, r_20, r_80, r_90, r_98, flatness
+        flatness = 1e2 * (max_dose - min_dose) / (max_dose + min_dose)
+
+        return r_10, r_20, r_80, r_90, r_98, flatness
 
     def get_sobp_r10(self):
         return self.compute_ranges_and_flatness()[0]
