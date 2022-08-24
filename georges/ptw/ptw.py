@@ -504,8 +504,10 @@ class RegularSpotScanning:
                 dose_df[f'dose_{i}_{j}'] = self.double_gaussian_function(x=dose_df['x'],
                                                                          y=dose_df['y'],
                                                                          a=100,
-                                                                         mu_x=(-(self.n_spots_per_axis - 1) / 2 + i) * spot_space,
-                                                                         mu_y=(-(self.n_spots_per_axis - 1) / 2 + j) * spot_space)
+                                                                         mu_x=(-(
+                                                                                     self.n_spots_per_axis - 1) / 2 + i) * spot_space,
+                                                                         mu_y=(-(
+                                                                                     self.n_spots_per_axis - 1) / 2 + j) * spot_space)
 
         total_dose = dose_df.drop(columns=['x', 'y']).sum(axis=1)
         dose_df['total_dose'] = total_dose
@@ -542,7 +544,6 @@ class ContourSpotScanning:
         self.desired_angle = desired_angle
         self.shoot_on_aperture = shoot_on_aperture
         self.angle_imposed = angle_imposed
-
 
     def double_gaussian_function(self, x, y, a, mu_x, mu_y):
         return a * _np.exp(-(x - mu_x) ** 2 / (2 * self.sigma ** 2) -
@@ -674,11 +675,9 @@ class ContourSpotScanning:
         else:
             optim = minimize(fun=compute_contour_profile_flatness_radius_not_imposed,
                              bounds=Bounds([0, 0, 0],
-                                           [_np.pi, 10, 2*self.fieldsize]),
+                                           [_np.pi, 10, 2 * self.fieldsize]),
                              x0=[_np.pi / 6, 0.5, self.fieldsize],
                              method='trust-constr',
                              options={'verbose': 1, 'xtol': 1e-10, 'maxiter': 1e5})
 
         return optim
-
-
