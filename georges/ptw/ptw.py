@@ -18,8 +18,10 @@ class BraggPeakAnalysis:
         self.method = method
 
     def compute_percentage(self, x):
-        f = interp1d(self.data[self.data.columns[0]].values, self.data[self.data.columns[1]].values,
-                     kind='linear', bounds_error=False)
+        f = interp1d(self.data[self.data.columns[0]].values,
+                     self.data[self.data.columns[1]].values,
+                     kind='linear',
+                     bounds_error=False)
         return f(x)
 
     def fitting_function(self, x):
@@ -315,8 +317,7 @@ class LateralProfileAnalysis:
         self.positions = positions
 
     def set_data(self):
-        idxmax = _np.where(self.positions > 0)[0][0]
-
+        idxmax = _np.where(self.positions == self.positions[_np.int(self.positions.shape[0]/2)])[0][0]
         positions_left = self.positions[0:idxmax]
         positions_right = self.positions[idxmax:]
         dose_left = self.dose_profile[0:idxmax]
@@ -327,10 +328,10 @@ class LateralProfileAnalysis:
     def define_f(self):
         f_left = interp1d(self.set_data()[1],
                           self.set_data()[2],
-                          kind='cubic', bounds_error=False)
+                          kind=1, bounds_error=False)
         f_right = interp1d(self.set_data()[3],
                            self.set_data()[4],
-                           kind='cubic', bounds_error=False)
+                           kind=1, bounds_error=False)
         return f_left, f_right
 
     def get_position_left(self, percentage):
@@ -373,10 +374,10 @@ class LateralProfileAnalysis:
         return self.get_p_50_right() - self.get_p_50_left()
 
     def get_ur_left(self):
-        return self.get_p_50_left() + 3 * self.get_penumbra_left()
+        return self.get_p_50_left() + 2 * self.get_penumbra_left()
 
     def get_ur_right(self):
-        return self.get_p_50_right() - 3 * self.get_penumbra_right()
+        return self.get_p_50_right() - 2 * self.get_penumbra_right()
 
     def get_ur_size(self):
         return self.get_ur_right() - self.get_ur_left()
@@ -415,25 +416,25 @@ class LateralProfileAnalysis:
                    linestyle='dashed')
 
         plt.hlines(y=[100, self.get_ur_min_dose(), self.get_ur_max_dose()],
-                   xmin=-2 * self.get_penumbra_left() - self.get_field_size() / 2,
-                   xmax=2 * self.get_penumbra_right() + self.get_field_size() / 2,
+                   xmin=self.get_p_20_left(),
+                   xmax=self.get_p_20_right(),
                    color='k',
                    linestyle='dashed')
 
         plt.text(s=f'Flatness: {_np.round(self.get_ur_flatness(), 2)} \\%',
                  x=-self.get_field_size() / 5,
                  y=85,
-                 fontsize=12,
+                 fontsize=15,
                  color='b')
-        plt.text(s=f'P$_l$: {_np.round(self.get_penumbra_left(), 2)} mm',
-                 x=-6 * self.get_penumbra_left() - self.get_field_size() / 2,
+        plt.text(s=f'P$_L$: {_np.round(self.get_penumbra_left(), 2)} mm',
+                 x=self.get_p_50_left() - 2 * self.get_penumbra_left(),
                  y=30,
-                 fontsize=12,
+                 fontsize=15,
                  color='b')
-        plt.text(s=f'P$_r$: {_np.round(self.get_penumbra_right(), 2)} mm',
-                 x=self.get_penumbra_right() + self.get_field_size() / 2,
+        plt.text(s=f'P$_R$: {_np.round(self.get_penumbra_right(), 2)} mm',
+                 x=self.get_p_50_right() + self.get_penumbra_right(),
                  y=30,
-                 fontsize=12,
+                 fontsize=15,
                  color='b')
 
         plt.plot(self.positions, self.dose_profile,
