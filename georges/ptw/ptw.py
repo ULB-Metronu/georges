@@ -459,18 +459,18 @@ def compute_dvh(dose_data, voxel_volume):
         dvh_dataframe: The dvh stored into a 2 columns dataframe
 
     """
-    dvh_histogram = plt.hist(dose_data,
+    dvh_histogram = plt.hist(dose_data.flatten(),
                              bins=100,
                              cumulative=-1,
                              density=True
                              )
 
-    dvh_dataframe = pd.DataFrame(columns=['dose_value',
-                                          'volume'
-                                          ])
+    dvh_dataframe = pd.DataFrame(columns=['volume',
+                                          'dose_value'])
 
     dvh_dataframe['volume'] = dvh_histogram[0]
-    dvh_dataframe['dose_value'] = voxel_volume * dvh_histogram[1]
+    dvh_dataframe['dose_value'] = voxel_volume * (
+                dvh_histogram[1][:-1] + (dvh_histogram[1][1] - dvh_histogram[1][0]) / 2)
 
     return dvh_dataframe
 
