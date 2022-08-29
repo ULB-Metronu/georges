@@ -5,7 +5,7 @@ import sympy as sy
 from generate_transport_maps import generate_transport_matrix_tensor, write_matrix, write_tensor
 
 if __name__ == '__main__':
-    exact_dpp = False
+    exact_dpp = True
     if exact_dpp:
         file = "transport_combined_dipole_ex.py"
     else:
@@ -51,14 +51,14 @@ from numba.typed import List as nList
         write_matrix(generate_transport_matrix_tensor(0, k1, 0, 1, 1), f)
 
         f.write(f"\t\tif k1 < 0: \n")
-        k1 = sy.symbols('k1', real=True, positive=False, nonzero=True)
-        write_matrix(generate_transport_matrix_tensor(0, k1, 0, 1, 1), f)
+        k1 = sy.symbols('k1', real=True, negative=True, nonzero=True)
+        write_matrix(generate_transport_matrix_tensor(0, k1, 0, 1, -1), f)
 
         f.write(f"\tif h != 0:\n")
-        h = sy.symbols('h', real=True, positive=True)
+        h = sy.symbols('h', real=True, positive=True, nonzero=True)
 
         f.write(f"\t\tif k1 == 0: \n")
-        write_matrix(generate_transport_matrix_tensor(h, 0, 0, 1, 0), f)
+        write_matrix(generate_transport_matrix_tensor(h, 0, 0, 1, 1), f)
 
         f.write(f"\t\tif k1 != 0: \n")
         f.write(f"\t\t\tif h ** 2 + k1 == 0: \n")

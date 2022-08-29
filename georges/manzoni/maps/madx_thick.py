@@ -378,5 +378,6 @@ def track_madx_kicker(b1, b2, element_parameters: nList, global_parameters: nLis
 
     # Half drift
     track_madx_drift(b1, b2, element_parameters[0:1], global_parameters)
+    element_parameters[0] *= 2
 
     return b1_copy, b2
