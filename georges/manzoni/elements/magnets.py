@@ -6,7 +6,7 @@ import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
 from ..kernels import batched_vector_matrix
-
+from ..integrators import MadXIntegrator, MadXParaxialDriftIntegrator
 
 class Marker(_ManzoniElement):
     """
@@ -30,11 +30,16 @@ class Matrix(_ManzoniElement):
                   beam_out: Optional[_np.ndarray] = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
-        return batched_vector_matrix(
-            beam_in,
-            beam_out,
-            self.MATRIX
-        )
+        if self.integrator not in [MadXIntegrator, MadXParaxialDriftIntegrator]:
+            beam_in[:, [-2, -1]] = beam_in[:, [-1, -2]]
+
+        bvm = batched_vector_matrix(beam_in, beam_out, self.MATRIX)
+
+        if self.integrator not in [MadXIntegrator, MadXParaxialDriftIntegrator]:
+            bvm[0][:, [-1, -2]] = bvm[0][:, [-2, -1]]
+            bvm[1][:, [-1, -2]] = bvm[1][:, [-2, -1]]
+
+        return bvm
 
     @property
     def parameters(self) -> list:

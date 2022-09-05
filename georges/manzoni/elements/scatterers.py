@@ -12,6 +12,8 @@ from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
 from ...fermi import materials
 from ... import Kinematics
+from ..integrators import MadXIntegrator, MadXParaxialDriftIntegrator
+from ..beam import Beam as _Beam
 
 
 class MaterialElement(_ManzoniElement):
@@ -149,6 +151,10 @@ class Degrader(MaterialElement):
         )
         beam_out = beam_out.dot(matrix.T)
 
+        # If the integrator is not MAD-X based, swap the last 2 columns
+        if self.integrator not in [MadXIntegrator, MadXParaxialDriftIntegrator]:
+            beam_out[:, [-2, -1]] = beam_out[:, [-1, -2]]
+
         # Interactions
         if self.material is not materials.Vacuum:
             beam_out += nprandom.multivariate_normal(
@@ -159,13 +165,17 @@ class Degrader(MaterialElement):
                         [a1, a0, 0.0, 0.0, 0.0, 0.0],
                         [0.0, 0.0, a2, a1, 0.0, 0.0],
                         [0.0, 0.0, a1, a0, 0.0, 0.0],
-                        [0.0, 0.0, 0.0, 0.0, dpp**2, 0.0],
+                        [0.0, 0.0, 0.0, 0.0, dpp ** 2, 0.0],
                         [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
                     ]
                 ),
                 int(beam_out.shape[0]))
 
-        beam_out = self.pseudo_aperture_check(beam_out, self.beta)
+        if self.integrator not in [MadXIntegrator, MadXParaxialDriftIntegrator]:
+            beam_out[:, [-1, -2]] = beam_out[:, [-2, -1]]
+        else:
+            beam_out[:, -1] = _Beam.compute_pt(beam_out[:, -2], self.beta, first_order=False)
+            beam_out = self.pseudo_aperture_check(beam_out, self.beta)
 
         return beam_in, beam_out
 
