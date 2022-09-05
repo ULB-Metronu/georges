@@ -172,7 +172,8 @@ class Input:
         if 'MATERIAL' in df_sequence.columns:
             idx = df_sequence[sequence.df['MATERIAL'].notnull()].index
             for ele in idx:
-                df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
+                if not isinstance(df_sequence.loc[ele, "MATERIAL"], materials.CompoundType):
+                    df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
 
         for name, element in df_sequence.iterrows():
             element_class = getattr(elements, MANZONI_FLAVOR.get(element['CLASS'], element['CLASS']))
