@@ -74,7 +74,7 @@ class BraggPeakAnalysis:
             return 0
 
         elif self.method == 'scipy.optimize':
-            var = scipy.optimize.newton_krylov(lambda x: self.compute_percentage(x=x) - val,
+            var = scipy.optimize.newton_krylov(lambda x: _np.abs(self.compute_percentage(x=x) - val),
                                                xin=self.data[self.data.columns[0]][
                                                    _np.abs(self.data[self.data.columns[1]] - val).idxmin()],
                                                maxiter=10000,
@@ -335,22 +335,30 @@ class LateralProfileAnalysis:
         return f_left, f_right
 
     def get_position_left(self, percentage):
-        position = scipy.optimize.newton_krylov(lambda x: self.define_f()[0](x=x) - percentage,
-                                                xin=self.set_data()[1][
-                                                    _np.abs(pd.DataFrame(self.set_data()[2] - percentage)).idxmin()],
-                                                maxiter=100000,
-                                                f_tol=1e-2,
-                                                x_tol=1e-2)
-        return position[0]
+
+        nearest_val = self.set_data()[1][_np.abs(pd.DataFrame(self.set_data()[2] - percentage)).idxmin()]
+        position = minimize(fun=lambda x: _np.abs(self.define_f()[0](x=x) - percentage),
+                            bounds=Bounds(lb=nearest_val-3,
+                                          ub=nearest_val+3),
+                            x0=nearest_val,
+                            method='trust-constr',
+                            options={'xtol': 1e-20,
+                                     'verbose': 0,
+                                     'maxiter': 1e6})
+        return position.x[0]
 
     def get_position_right(self, percentage):
-        position = scipy.optimize.newton_krylov(lambda x: self.define_f()[1](x=x) - percentage,
-                                                xin=self.set_data()[3][
-                                                    _np.abs(pd.DataFrame(self.set_data()[4] - percentage)).idxmin()],
-                                                maxiter=100000,
-                                                f_tol=1e-2,
-                                                x_tol=1e-2)
-        return position[0]
+
+        nearest_val = self.set_data()[3][_np.abs(pd.DataFrame(self.set_data()[4] - percentage)).idxmin()]
+        position = minimize(fun=lambda x: _np.abs(self.define_f()[1](x=x) - percentage),
+                            bounds=Bounds(lb=nearest_val-3,
+                                          ub=nearest_val+3),
+                            x0=nearest_val,
+                            method='trust-constr',
+                            options={'xtol': 1e-20,
+                                     'verbose': 0,
+                                     'maxiter': 1e6})
+        return position.x[0]
 
     def get_p_20_left(self):
         return self.get_position_left(20)
