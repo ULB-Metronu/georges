@@ -2,14 +2,14 @@ import numpy as _np
 import pandas as pd
 from numpy.polynomial import Polynomial
 import scipy
-from scipy.optimize import minimize, Bounds
+from scipy.optimize import minimize, Bounds, newton_krylov
 from scipy.interpolate import interp1d
 import matplotlib.pyplot as plt
 
 
 class BraggPeakAnalysis:
 
-    def __init__(self, bp: pd.DataFrame, method: str, low_dose=1, high_dose=60):
+    def __init__(self, bp: pd.DataFrame, method: str, low_dose=1, high_dose=70):
         self.data = bp
         self.low_bound = low_dose
         self.high_bound = high_dose
@@ -17,11 +17,38 @@ class BraggPeakAnalysis:
         self.bp_interval = None
         self.method = method
 
-    def compute_percentage(self, x):
-        f = interp1d(self.data[self.data.columns[0]].values,
-                     self.data[self.data.columns[1]].values,
-                     kind='linear',
+    def get_distal_interval(self):
+        idx = _np.where(self.data[self.data.columns[1]] == 100)
+        distal_interval = self.data[idx[0][0]:]
+
+        return distal_interval
+
+    def get_bp_interval(self):
+        idx1 = _np.where(self.data[self.data.columns[1]] > self.high_bound)
+        idx2 = _np.where(self.data[self.data.columns[1]] < self.low_bound)
+
+        idx_min = idx1[0][0]
+        idx_max = idx2[0][0]
+        bp_interval = self.data[idx_min:idx_max]
+
+        return bp_interval
+
+    def compute_percentage(self, x): # Gives dose percentage in the distal region for a given z position
+
+        f = interp1d(self.get_distal_interval()[self.get_distal_interval().columns[0]].values,
+                     self.get_distal_interval()[self.get_distal_interval().columns[1]].values,
+                     kind=2,
                      bounds_error=False)
+
+        return f(x)
+
+    def compute_percentage_full_bp(self, x): # Gives dose percentage in the distal region for a given z position
+
+        f = interp1d(self.get_distal_interval()[self.get_distal_interval().columns[0]].values,
+                     self.get_distal_interval()[self.get_distal_interval().columns[1]].values,
+                     kind=2,
+                     bounds_error=False)
+
         return f(x)
 
     def fitting_function(self, x):
@@ -42,7 +69,7 @@ class BraggPeakAnalysis:
 
         idx_min = idx1[0][0]
         idx_max = idx2[0][0]
-        bp_interval = self.data[idx_min:idx_max]
+        bp_interval = self.get_bp_interval()
         bp_interval.reset_index(drop=True, inplace=True)
 
         x = _np.float32(bp_interval[bp_interval.columns[0]])
@@ -59,31 +86,34 @@ class BraggPeakAnalysis:
     def get_coefficients(self) -> _np.array:
         return self.coefficients.convert().coef
 
-    def get_bp_interval(self) -> _np.array:
-        return self.bp_interval
-
     def get_xrange(self, val):
 
-        if self.method == 'polynom_fit':
+        if self.method == 'polynomial_fit':
             rval = (self.fit_bp()[1] - val).roots()
-            rval = rval[rval.imag == 0].real
-            var = rval[_np.where(_np.logical_and(rval >= self.bp_interval[0], rval <= self.bp_interval[
-                -1]))]  # check if we are in the interval of the BP
+            real_val = rval[rval.imag == 0].real
+            var = real_val[_np.where(_np.logical_and(real_val >= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[0],
+                                                     real_val <= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[-1]))]
+            # check if we are in the distal interval of the BP
             if var.size:
                 return _np.max(var)
             return 0
 
         elif self.method == 'scipy.optimize':
-            var = scipy.optimize.newton_krylov(lambda x: _np.abs(self.compute_percentage(x=x) - val),
-                                               xin=self.data[self.data.columns[0]][
-                                                   _np.abs(self.data[self.data.columns[1]] - val).idxmin()],
+
+            nearest_val = self.get_distal_interval()[self.get_distal_interval().columns[0]][
+                            _np.abs(self.get_distal_interval()[self.get_distal_interval().columns[1]] - val).idxmin()]
+
+            var = newton_krylov(lambda x: _np.abs(self.compute_percentage(x=x) - val),
+                                               xin=nearest_val,
                                                maxiter=10000,
                                                f_tol=1e-12,
                                                x_tol=1e-13)
+
             return var
+
         else:
             raise Exception(
-                "Please choose a valid computation method (must be either 'polynom_fit' or 'scipy.optimize')")
+                "Please choose a valid computation method (must be either 'polynomial_fit' or 'scipy.optimize')")
 
     def get_r90(self) -> float:
         return self.get_xrange(90)
@@ -101,7 +131,8 @@ class BraggPeakAnalysis:
         roots = self.fit_bp()[1].deriv().roots()
         real_roots = roots[roots.imag == 0].real
         var = real_roots[
-            _np.where(_np.logical_and(real_roots >= self.bp_interval[0], real_roots <= self.bp_interval[-1]))]
+            _np.where(_np.logical_and(real_roots >= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[0],
+                                      real_roots <= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[-1]))]
         fit_var = self.fitting_function(var)
         var = var[_np.where(fit_var == _np.max(fit_var))]  # take the value where the fit is maximum (global maximum)
         return var[0]
@@ -131,10 +162,9 @@ class SpreadOutBraggPeakAnalysis:
 
         for i in range(self.dose_data.shape[0]):
             normalized_bragg_peak = 1e2 * self.dose_data.iloc[i, :] / _np.max(self.dose_data.iloc[i, :])
-            bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'z': self.z_axis,
+            bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'centers': self.z_axis,
                                                              'dose': normalized_bragg_peak}),
                                             method='scipy.optimize')
-
             max_ranges[i] = bp_analysis.get_xrange(100)
 
         return max_ranges
@@ -149,17 +179,21 @@ class SpreadOutBraggPeakAnalysis:
                 bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'z': self.z_axis,
                                                                  'dose': self.dose_data.iloc[j, :]}),
                                                 method='scipy.optimize')
-
-                sobp_data[i, j] = bp_analysis.compute_percentage(max_ranges[i])
+                f = interp1d(bp_analysis.data[bp_analysis.data.columns[0]].values,
+                             bp_analysis.data[bp_analysis.data.columns[1]].values,
+                             kind=2,
+                             bounds_error=False)
+                sobp_data[i, j] = f(max_ranges[i])
 
         return sobp_data
 
     def compute_weights(self) -> _np.array:
 
-        a_matrix = self.sobp_data() / self.sobp_data().max()
+        a_matrix = self.sobp_data() / self.sobp_data().max() # Normalize all data to max 1
+        print(a_matrix)
         goal_dose_values = _np.full(a_matrix.shape[0], 1)
 
-        if self.method == 'np.linalg.solve':
+        if self.method == 'np.linalg.solve': # This method may give negative weights !
 
             return _np.linalg.solve(a_matrix, goal_dose_values)
 
@@ -215,7 +249,6 @@ class SpreadOutBraggPeakAnalysis:
         plt.ylabel('Normalized dose (\\%)')
         plt.legend(loc=(0.16, 1.01), fontsize=15, ncol=2, frameon=False)
         plt.xlim(0, _np.max(self.z_axis))
-        # plt.ylim(0, _np.max(self.compute_sobp_profile()))
 
     def recompute_sobp_for_another_range(self, bp_to_leave):
 
@@ -268,9 +301,9 @@ class SpreadOutBraggPeakAnalysis:
 
             function = interp1d(_np.flip(z_axis[idxmax[0] - idx:idxmax[0]]),
                                 _np.flip(sobp_array[idxmax[0] - idx:idxmax[0]]).reshape(idx),
-                                kind='linear',
+                                kind=1,
                                 bounds_error=False)
-            res = scipy.optimize.newton_krylov(lambda x: function(x=x) - r,
+            res = newton_krylov(lambda x: _np.abs(function(x=x) - r),
                                                xin=xin,
                                                maxiter=1000000,
                                                f_tol=1e-1,
