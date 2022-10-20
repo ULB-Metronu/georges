@@ -235,7 +235,7 @@ class SpreadOutBraggPeakAnalysis:
                                                y=1e2 * e.values / self.sobp_data().max()),
                                 axis='columns')
 
-        plt.plot(self.z_axis-0.4,
+        plt.plot(self.z_axis,
                  self.compute_sobp_profile(),
                  linestyle='dashed',
                  linewidth=0.8,
@@ -278,20 +278,16 @@ class SpreadOutBraggPeakAnalysis:
     def compute_ranges_and_flatness(self):
 
         sobp_array = self.compute_sobp_profile()
-        idxmax = _np.where(sobp_array < 1)[0]
-        idx = 0
+        idxmax = _np.where(sobp_array < 1)[0] # Select the dose values higher than 1%
 
+        idx = 0
         for i in range(_np.flip(sobp_array[0:idxmax[0]]).shape[0]):
             if _np.flip(sobp_array[0:idxmax[0]])[i + 1] > _np.flip(sobp_array[0:idxmax[0]])[i]:
                 idx += 1
             else:
                 break
 
-        flipped_data = _np.flip(sobp_array[idxmax[0] - idx:idxmax[0]])
-
-        while _np.max(flipped_data) < 98:
-            idx += 1
-            flipped_data = _np.flip(sobp_array[idxmax[0] - idx:idxmax[0]])
+        flipped_data = _np.flip(sobp_array[idxmax[0] - idx:idxmax[0]]) # Select the ramp
 
         def compute_range(data, r, z_axis):
 
@@ -300,13 +296,13 @@ class SpreadOutBraggPeakAnalysis:
 
             function = interp1d(_np.flip(z_axis[idxmax[0] - idx:idxmax[0]]),
                                 _np.flip(sobp_array[idxmax[0] - idx:idxmax[0]]).reshape(idx),
-                                kind=1,
+                                kind=2,
                                 bounds_error=False)
             res = newton_krylov(lambda x: _np.abs(function(x=x) - r),
                                                xin=xin,
-                                               maxiter=1000000,
-                                               f_tol=1e-1,
-                                               x_tol=1e-1)
+                                               maxiter=100000,
+                                               f_tol=1e-12,
+                                               x_tol=1e-13)
             return res
 
         r_10 = compute_range(flipped_data, 10, self.z_axis)
