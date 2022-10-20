@@ -190,7 +190,6 @@ class SpreadOutBraggPeakAnalysis:
     def compute_weights(self) -> _np.array:
 
         a_matrix = self.sobp_data() / self.sobp_data().max() # Normalize all data to max 1
-        print(a_matrix)
         goal_dose_values = _np.full(a_matrix.shape[0], 1)
 
         if self.method == 'np.linalg.solve': # This method may give negative weights !
