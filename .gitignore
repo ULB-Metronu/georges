@@ -6,3 +6,5 @@ __pycache__/
 .pytest_cache
 .python-version
 *.tfs
+.coverage
+coverage.xml

@@ -1,11 +1,13 @@
 # Georges
 
-[![develop-ubuntu](https://github.com/ULB-Metronu/georges/actions/workflows/develop_ubuntu.yaml/badge.svg)](https://github.com/ULB-Metronu/georges/actions/workflows/develop_ubuntu.yaml)
-[![develop-macos](https://github.com/ULB-Metronu/georges/actions/workflows/develop_macos.yaml/badge.svg)](https://github.com/ULB-Metronu/georges/actions/workflows/develop_macos.yaml)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/ULB-Metronu/georges.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ULB-Metronu/georges/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/ULB-Metronu/georges.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/ULB-Metronu/georges/context:python)
-[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![develop](https://github.com/ULB-Metronu/georges/actions/workflows/develop.yml/badge.svg?branch=develop)](https://github.com/ULB-Metronu/georges/actions/workflows/develop.yml)
+[![develop](https://github.com/rtesse/georges/actions/workflows/documentation.yml/badge.svg?branch=develop)](https://github.com/ULB-Metronu/georges/actions/workflows/documentation.yml)
+![Python](docs/_static/python_versions.svg)
+![version](https://img.shields.io/badge/version-2022.1-blue)
 
-[![codecov](https://codecov.io/gh/ULB-Metronu/georges/branch/develop/graph/badge.svg?token=IN1M54718K)](https://codecov.io/gh/ULB-Metronu/georges)
-![version](https://img.shields.io/badge/version-2019.1-blue)
-[![Python 3.8](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/release/python-380/)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=bugs)](https://sonarcloud.io/summary/new_code?id=rtesse_georges)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=coverage)](https://sonarcloud.io/summary/new_code?id=rtesse_georges)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=rtesse_georges)
+
+[![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ULB-TeamProton/georges)
