@@ -55,3 +55,17 @@ class Beam:
     @distribution.setter
     def distribution(self, dist: np.ndarray):
         self._distribution = dist
+
+
+class MadXBeam(Beam):
+    def __init__(self, kinematics: _Kinematics, distribution: np.ndarray, first_order: bool = False):
+        super().__init__(kinematics=kinematics, distribution=distribution)
+        self._distribution = np.insert(self._distribution, -1,
+                                       Beam.compute_pt(distribution[:, -1],
+                                                       kinematics.beta, first_order=first_order), axis=1)
+
+
+class TransportBeam(Beam):
+    def __init__(self, kinematics: _Kinematics, distribution: np.ndarray):
+        super().__init__(kinematics=kinematics, distribution=distribution)
+
