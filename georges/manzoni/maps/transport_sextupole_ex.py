@@ -1,15 +1,15 @@
 import numpy as np
-from numba.typed import List as nList
 from numba import njit
-    
+from numba.typed import List as nList
+
 
 @njit(cache=True)
-def compute_transport_sextupole_matrix(element_parameters: nList) -> np.ndarray:
+def compute_transport_sextupole_ex_matrix(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
     R = np.zeros((6, 6))
     R[4, 4] = 1
-    R[5, 5] = 1 
+    R[5, 5] = 1
     R[0, 0] = 1
     R[0, 1] = L
     R[1, 1] = 1
@@ -20,10 +20,12 @@ def compute_transport_sextupole_matrix(element_parameters: nList) -> np.ndarray:
 
 
 @njit(cache=True)
-def compute_transport_sextupole_tensor(element_parameters: nList) -> np.ndarray:
+def compute_transport_sextupole_ex_tensor(element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
     k2: float = element_parameters[1]
+    d: float = element_parameters[len(element_parameters) - 1]
+    k2 = k2/(1+d)
     T = np.zeros((6, 6, 6)) 
     T[0, 0, 0] = -L**2*k2/2
     T[0, 0, 1] = -L**3*k2/3

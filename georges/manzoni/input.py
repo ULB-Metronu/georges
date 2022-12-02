@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from typing import Optional, Union, Dict
 
+import pandas as pd
+
 from georges_core import ureg as _ureg
 from georges_core.sequences import Sequence as _Sequence
 from . import elements
@@ -32,6 +34,22 @@ class Input:
     @property
     def beam(self):
         return self._beam
+
+    def to_df(self):
+        """
+
+        Returns: A pandas.DataFrame of the sequence
+
+        """
+
+        _ = list(map(lambda e: pd.Series(e.attributes), self.sequence))
+        df = pd.concat(_, axis=1).T
+        df['CLASS'] = list(map(lambda e: e.__class__.__name__, self.sequence))
+        return df.set_index("NAME")
+
+    @property
+    def df(self):
+        return self.to_df()
 
     def freeze(self):
         """
@@ -112,6 +130,28 @@ class Input:
         return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
 
     @classmethod
+    def insert_thin_element(cls,
+                            sequence: georges.manzoni.input.Input = None,
+                            position: int = 0,
+                            thin_element: georges.manzoni.elements.elements.ManzoniElement = None) -> georges.manzoni.input.Input:
+        """
+        Insert a thin element (e.g fringes) in the sequence.
+
+        Args:
+            sequence: the manzoni sequence
+            position: index of the position to insert in the sequence
+            thin_element: element to insert
+
+        Returns:
+            A new instance of manzoni.Input
+        """
+
+        new_sequence = sequence.sequence.copy()
+        new_sequence.insert(position, thin_element)
+        element_mapper = {k.NAME: v for v, k in enumerate(new_sequence)}
+        return cls(sequence=new_sequence, mapper=element_mapper)
+
+    @classmethod
     def from_sequence(cls,
                       sequence: _Sequence,
                       from_element: str = None,
@@ -132,7 +172,8 @@ class Input:
         if 'MATERIAL' in df_sequence.columns:
             idx = df_sequence[sequence.df['MATERIAL'].notnull()].index
             for ele in idx:
-                df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
+                if not isinstance(df_sequence.loc[ele, "MATERIAL"], materials.CompoundType):
+                    df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
 
         for name, element in df_sequence.iterrows():
             element_class = getattr(elements, MANZONI_FLAVOR.get(element['CLASS'], element['CLASS']))

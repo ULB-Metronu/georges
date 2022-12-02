@@ -6,7 +6,7 @@ import numpy as _np
 from ... import ureg as _ureg
 from .elements import ManzoniElement as _ManzoniElement
 from ..kernels import batched_vector_matrix
-
+from ..integrators import MadXIntegrator, MadXParaxialDriftIntegrator
 
 class Marker(_ManzoniElement):
     """
@@ -30,11 +30,16 @@ class Matrix(_ManzoniElement):
                   beam_out: Optional[_np.ndarray] = None,
                   global_parameters: list = None,
                   ) -> Tuple[_np.ndarray, _np.ndarray]:
-        return batched_vector_matrix(
-            beam_in,
-            beam_out,
-            self.MATRIX
-        )
+        if self.integrator not in [MadXIntegrator, MadXParaxialDriftIntegrator]:
+            beam_in[:, [-2, -1]] = beam_in[:, [-1, -2]]
+
+        bvm = batched_vector_matrix(beam_in, beam_out, self.MATRIX)
+
+        if self.integrator not in [MadXIntegrator, MadXParaxialDriftIntegrator]:
+            bvm[0][:, [-1, -2]] = bvm[0][:, [-2, -1]]
+            bvm[1][:, [-1, -2]] = bvm[1][:, [-2, -1]]
+
+        return bvm
 
     @property
     def parameters(self) -> list:
@@ -137,7 +142,6 @@ class Bend(Magnet):
         'HGAP': (0.0 * _ureg.m, 'Magnet gap.'),
         'FINT': (0.0, 'Fringe field integral.'),
         'FINTX': (0.0, 'Exit fringe field integral.'),
-        'd': (0.0, 'momentum deviation.')
     }
     """Parameters of the element, with their default value and their descriptions."""
 
@@ -216,15 +220,11 @@ class RBend(Bend):
 class Fringein(Bend):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Bending angle.'),
-        'K0': (0.0 * _ureg.m ** -1, 'Dipolar normalized gradient'),
-        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
-        'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
         'L': (0.0 * _ureg.m, 'Magnet length.'),
+        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
         'E1': (0.0 * _ureg.radian, 'Entrance face angle.'),
-        'TILT': (0.0 * _ureg.radian, 'Magnet tilt angle.'),
         'HGAP': (0.0 * _ureg.m, 'Magnet gap.'),
         'FINT': (0.0, 'Fringe field integral.'),
-        'd': (0.0, 'momentum deviation.'),
         'R1': (_np.inf * _ureg.m, 'Entrance face curvature radius')
     }
 
@@ -232,43 +232,37 @@ class Fringein(Bend):
     def parameters(self) -> list:
         # Generic parameters
         return list(map(float, [
-            self.ANGLE.m_as('radian') / self.length,  # 0
-            self.K1.m_as('m**-2'),  # 1
-            self.K2.m_as('m**-3'),  # 2
+            self.length,  # 0
+            self.ANGLE.m_as('radian'),  # 1
+            self.K1.m_as('m**-2'),  # 2
             self.E1.m_as('radian'),  # 3
-            self.TILT.m_as('radian'),  # 4
-            self.HGAP.m_as('m'),  # 5
-            self.FINT,  # 6
-            self.R1.m_as('m')  # 7
+            self.HGAP.m_as('m'),  # 4
+            self.FINT,  # 5
+            self.R1.m_as('m')  # 6
         ]))
 
 
 class Fringeout(Bend):
     PARAMETERS = {
         'ANGLE': (0.0 * _ureg.radian, 'Bending angle.'),
-        'K0': (0.0 * _ureg.m ** -1, 'Dipolar normalized gradient'),
-        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
-        'K2': (0.0 * _ureg.m ** -3, 'Sextupolar normalized gradient.'),
         'L': (0.0 * _ureg.m, 'Magnet length.'),
+        'K1': (0.0 * _ureg.m ** -2, 'Quadrupolar normalized gradient.'),
         'E2': (0.0 * _ureg.radian, 'Exit face angle.'),
-        'TILT': (0.0 * _ureg.radian, 'Magnet tilt angle.'),
         'HGAP': (0.0 * _ureg.m, 'Magnet gap.'),
         'FINTX': (0.0, 'Exit fringe field integral.'),
-        'd': (0.0, 'momentum deviation.'),
         'R2': (_np.inf * _ureg.m, 'Entrance face curvature radius')
     }
 
     @property
     def parameters(self) -> list:
         return list(map(float, [
-            self.ANGLE.m_as('radian') / self.length,  # 0
-            self.K1.m_as('m**-2'),  # 1
-            self.K2.m_as('m**-3'),  # 2
+            self.length,  # 0
+            self.ANGLE.m_as('radian'),  # 1
+            self.K1.m_as('m**-2'),  # 2
             self.E2.m_as('radian'),  # 3
-            self.TILT.m_as('radian'),  # 4
-            self.HGAP.m_as('m'),  # 5
-            self.FINTX,  # 6
-            self.R2.m_as('m')  # 7
+            self.HGAP.m_as('m'),  # 4
+            self.FINTX,  # 5
+            self.R2.m_as('m')  # 6
         ]))
 
 

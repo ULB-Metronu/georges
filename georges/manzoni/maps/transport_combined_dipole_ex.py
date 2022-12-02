@@ -5,13 +5,17 @@ from numba.typed import List as nList
 
 
 @njit(cache=True)
-def compute_transport_combined_dipole_matrix(
+def compute_transport_combined_dipole_ex_matrix(
         element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]
     h = alpha / L
     k1: float = element_parameters[2]
+    d: float = element_parameters[len(element_parameters) - 1]
+    h = h / (1 + d)
+    k1 = k1 / (1 + d)
+
     R = np.zeros((6, 6))
     R[4, 4] = 1
     R[5, 5] = 1
@@ -101,13 +105,17 @@ def compute_transport_combined_dipole_matrix(
 
 
 @njit(cache=True)
-def compute_transport_combined_dipole_tensor(
+def compute_transport_combined_dipole_ex_tensor(
         element_parameters: nList) -> np.ndarray:
 
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]
     h = alpha / L
     k1: float = element_parameters[2]
+    d: float = element_parameters[len(element_parameters) - 1]
+    h = h / (1 + d)
+    k1 = k1 / (1 + d)
+
     T = np.zeros((6, 6, 6))
     if h == 0:
         if k1 > 0:
