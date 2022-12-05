@@ -235,3 +235,24 @@ We can also plot the energy degradation along the line::
     artist.plot_cartouche(beamline=sequence.df)
     artist.plot(s,edep)
 
+
+Python script
+-------------
+
+If you would like to compute the coefficients for another material,
+you must adapt the file `degrader_properties.gmad` and run the script in
+`bdsim-input`:
+
+::
+
+    bdsim --file=deg_tracking.gmad --outfile=output-${material}-E${energy} --ngenerate=nparticles --batch
+
+The program that computes the coefficients for losses and momentum
+deviation is `compute_quantiles.py` and it can be excecuted by:
+
+::
+
+    python compute_coefficients.py path_results nparticles
+
+Where `path_to_results` is the path to the `bdsim` output files and `nparticles` is
+the number of primary particles used in the simulation.
