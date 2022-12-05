@@ -8,3 +8,4 @@ __pycache__/
 *.tfs
 .coverage
 coverage.xml
+docs/_build

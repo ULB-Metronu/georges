@@ -133,6 +133,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                  **kwargs):
         """
         Plot the beam envelopes from tracking data.
+
         Args:
             observer: Observer used for the tracking
             plane:
@@ -335,6 +336,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                **kwargs):
         """
         Plot the losses along the beamline
+
         Args:
             observer: Observer used for the tracking
             log_scale: Log scale for transmission
@@ -399,6 +401,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
               **kwargs):
         """
         Plot the Twiss function along the beamline
+
         Args:
             observer: Observer used for the tracking
             with_beta: plot the beta

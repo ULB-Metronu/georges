@@ -166,6 +166,7 @@ class Element(metaclass=ElementType):
     def post_init(self, **kwargs):  # -> NoReturn:
         """
         TODO
+
         Args:
             **kwargs: all arguments from the initializer (constructor) are passed to ``post_init`` as keyword arguments.
 
