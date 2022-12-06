@@ -9,14 +9,14 @@ from georges import ureg as _ureg
 import georges_core.kinematics as gkin
 
 
-def cut_data(filepath: str = None, epos: float = 100, matname: str = None, nparticles: int = 10) -> pd.DataFrame:
+def cut_data(filepath: str = None, epos: float = 100, matname: str = None, nprimary: int = 10) -> pd.DataFrame:
     """
 
     Args:
         filepath (str): Path to the file
         epos (float): Theoritical energy at the exit of the degrader
         matname (str): Name of the material
-        nparticles (int): Number of particles launched in BDSIM.
+        nprimary (int): Number of particles launched in BDSIM.
 
     Returns:
 
@@ -50,7 +50,7 @@ def cut_data(filepath: str = None, epos: float = 100, matname: str = None, npart
     deviation_cut = (data_cutted['momentum'] - momentum_cut) / momentum_cut
     dpp_mean_cut = np.mean(deviation_cut)
     dpp_rms_cut = np.std(deviation_cut)
-    transmission_cut = len(data_cutted) / nparticles
+    transmission_cut = len(data_cutted) / nprimary
 
     # Return the results
     return pd.DataFrame(data={
@@ -72,14 +72,16 @@ def fit_values(x, **params):
 
 if __name__ == "__main__":
     path = sys.argv[1]
-    nparticles = sys.argv[2]
+    nparticles = int(sys.argv[2])
 
     results = pd.DataFrame()
     for file in os.listdir(path):
-        results = pd.concat([results, cut_data(filepath=os.path.join(path, file),
-                                               epos=float(file.split('-')[2].replace('E', '').replace('root', '')),
-                                               matname=file.split('-')[1],
-                                               nparticles=1000)], axis=0)
+        if 'parquet' in file:
+            print(f"Process {file}")
+            results = pd.concat([results, cut_data(filepath=os.path.join(path, file),
+                                                   epos=float(file.split('-')[2].replace('E', '').replace('root', '')),
+                                                   matname=file.split('-')[1],
+                                                   nprimary=nparticles)], axis=0)
 
     params_transmission = Parameters()
     params_transmission.add('C0', value=1)
@@ -107,5 +109,5 @@ if __name__ == "__main__":
     print(f"""
     materiaName,
     {coeff_transmission['C0']},{coeff_transmission['C1']},{coeff_transmission['C2']},{coeff_transmission['C3']}
-    {coeff_dpp['C0']},{coeff_dpp['C1']},{coeff_dpp['C2']},{coeff_dpp['C3'],coeff_dpp['C4'],coeff_dpp['C5']}
+    {coeff_dpp['C0']},{coeff_dpp['C1']},{coeff_dpp['C2']},{coeff_dpp['C3']},{coeff_dpp['C4']},{coeff_dpp['C5']}
     """)
