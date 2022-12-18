@@ -18,7 +18,7 @@ class BraggPeakAnalysis:
         self.method = method
 
     def get_distal_interval(self):
-        idx = _np.where(self.data[self.data.columns[1]] == 100)
+        idx = _np.where(_np.isclose(self.data[self.data.columns[1]], 1e2))
         distal_interval = self.data[idx[0][0]:]
 
         return distal_interval
@@ -33,7 +33,7 @@ class BraggPeakAnalysis:
 
         return bp_interval
 
-    def compute_percentage(self, x): # Gives dose percentage in the distal region for a given z position
+    def compute_percentage(self, x):  # Gives dose percentage in the distal region for a given z position
 
         f = interp1d(self.get_distal_interval()[self.get_distal_interval().columns[0]].values,
                      self.get_distal_interval()[self.get_distal_interval().columns[1]].values,
@@ -42,7 +42,7 @@ class BraggPeakAnalysis:
 
         return f(x)
 
-    def compute_percentage_full_bp(self, x): # Gives dose percentage in the distal region for a given z position
+    def compute_percentage_full_bp(self, x):  # Gives dose percentage in the distal region for a given z position
 
         f = interp1d(self.get_distal_interval()[self.get_distal_interval().columns[0]].values,
                      self.get_distal_interval()[self.get_distal_interval().columns[1]].values,
@@ -54,7 +54,7 @@ class BraggPeakAnalysis:
     def fitting_function(self, x):
         coeff = self.coefficients.convert().coef
         return coeff[0] + coeff[1] * x + coeff[2] * x ** 2 + coeff[3] * x ** 3 + coeff[4] * x ** 4 + \
-               coeff[5] * x ** 5 + coeff[6] * x ** 6 + coeff[7] * x ** 7 + coeff[8] * x ** 8
+            coeff[5] * x ** 5 + coeff[6] * x ** 6 + coeff[7] * x ** 7 + coeff[8] * x ** 8
 
     def fit_bp(self):
         """
@@ -91,8 +91,10 @@ class BraggPeakAnalysis:
         if self.method == 'polynomial_fit':
             rval = (self.fit_bp()[1] - val).roots()
             real_val = rval[rval.imag == 0].real
-            var = real_val[_np.where(_np.logical_and(real_val >= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[0],
-                                                     real_val <= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[-1]))]
+            var = real_val[_np.where(
+                _np.logical_and(real_val >= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[0],
+                                real_val <= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[
+                                    -1]))]
             # check if we are in the distal interval of the BP
             if var.size:
                 return _np.max(var)
@@ -101,13 +103,13 @@ class BraggPeakAnalysis:
         elif self.method == 'scipy.optimize':
 
             nearest_val = self.get_distal_interval()[self.get_distal_interval().columns[0]][
-                            _np.abs(self.get_distal_interval()[self.get_distal_interval().columns[1]] - val).idxmin()]
+                _np.abs(self.get_distal_interval()[self.get_distal_interval().columns[1]] - val).idxmin()]
 
             var = newton_krylov(lambda x: _np.abs(self.compute_percentage(x=x) - val),
-                                               xin=nearest_val,
-                                               maxiter=10000,
-                                               f_tol=1e-12,
-                                               x_tol=1e-13)
+                                xin=nearest_val,
+                                maxiter=10000,
+                                f_tol=1e-12,
+                                x_tol=1e-13)
 
             return var
 
@@ -131,8 +133,9 @@ class BraggPeakAnalysis:
         roots = self.fit_bp()[1].deriv().roots()
         real_roots = roots[roots.imag == 0].real
         var = real_roots[
-            _np.where(_np.logical_and(real_roots >= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[0],
-                                      real_roots <= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[-1]))]
+            _np.where(_np.logical_and(
+                real_roots >= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[0],
+                real_roots <= self.get_distal_interval()[self.get_distal_interval().columns[0]].values[-1]))]
         fit_var = self.fitting_function(var)
         var = var[_np.where(fit_var == _np.max(fit_var))]  # take the value where the fit is maximum (global maximum)
         return var[0]
@@ -165,6 +168,7 @@ class SpreadOutBraggPeakAnalysis:
             bp_analysis = BraggPeakAnalysis(bp=pd.DataFrame({'centers': self.z_axis,
                                                              'dose': normalized_bragg_peak}),
                                             method='scipy.optimize')
+
             max_ranges[i] = bp_analysis.get_xrange(100)
 
         return max_ranges
@@ -189,10 +193,10 @@ class SpreadOutBraggPeakAnalysis:
 
     def compute_weights(self) -> _np.array:
 
-        a_matrix = self.sobp_data() / self.sobp_data().max() # Normalize all data to max 1
+        a_matrix = self.sobp_data() / self.sobp_data().max()  # Normalize all data to max 1
         goal_dose_values = _np.full(a_matrix.shape[0], 1)
 
-        if self.method == 'np.linalg.solve': # This method may give negative weights !
+        if self.method == 'np.linalg.solve':  # This method may give negative weights !
 
             return _np.linalg.solve(a_matrix, goal_dose_values)
 
@@ -256,86 +260,90 @@ class SpreadOutBraggPeakAnalysis:
                 self.compute_weights().reshape(1, self.dose_data.shape[0]),
                 self.dose_data.values[0:, :])
         else:
-            new_weighted_dose = _np.matmul(self.compute_weights()[:-bp_to_leave].reshape(1,
-                                                                                         self.dose_data.shape[
-                                                                                             0] - bp_to_leave),
+            new_shape = self.dose_data.shape[0] - bp_to_leave
+            weights = self.compute_weights()[0:new_shape]
+
+            new_weighted_dose = _np.matmul(weights.reshape(1, new_shape),
                                            self.dose_data.values[bp_to_leave:, :])
 
-        sobp_array = 1e2 * new_weighted_dose.reshape(self.dose_data.shape[1])
-
-        return sobp_array
-
-    def recompute_sobp_for_another_width(self, bp_to_leave):
-
-        weights = _np.flip(_np.flip(self.compute_weights())[bp_to_leave:])
-        weighted_dose_data = _np.matmul(weights.reshape(1, self.dose_data.shape[0] - bp_to_leave),
-                                        self.dose_data.values[bp_to_leave:, :])
-
-        sobp_data = 1e2 * weighted_dose_data.reshape(self.dose_data.shape[1])
+        sobp_data = new_weighted_dose.reshape(self.dose_data.shape[1])
+        sobp_data = 1e2 * sobp_data / sobp_data.max()
 
         return sobp_data
 
-    def compute_ranges_and_flatness(self):
+    def recompute_sobp_for_another_width(self, bp_to_leave):
+
+        new_shape = self.dose_data.shape[0]-bp_to_leave
+        weights = self.compute_weights()[0:new_shape]
+        new_weighted_dose = _np.matmul(weights.reshape(1, new_shape),
+                                       self.dose_data.values[0:new_shape, :])
+
+        sobp_data = new_weighted_dose.reshape(self.dose_data.shape[1])
+        sobp_data = 1e2 * sobp_data / sobp_data.max()
+
+        return sobp_data
+
+    def compute_ranges(self):
 
         sobp_array = self.compute_sobp_profile()
-        idxmax = _np.where(sobp_array < 1)[0] # Select the dose values higher than 1%
+        idxmax = _np.where(sobp_array < 1)[0][0]  # Select the dose values higher than 1%
 
         idx = 0
-        for i in range(_np.flip(sobp_array[0:idxmax[0]]).shape[0]):
-            if _np.flip(sobp_array[0:idxmax[0]])[i + 1] > _np.flip(sobp_array[0:idxmax[0]])[i]:
+        for i in range(_np.flip(sobp_array[0:idxmax]).shape[0]):
+            if _np.flip(sobp_array[0:idxmax])[i + 1] > _np.flip(sobp_array[0:idxmax])[i]:
                 idx += 1
             else:
                 break
 
-        flipped_data = _np.flip(sobp_array[idxmax[0] - idx:idxmax[0]]) # Select the ramp
+        flipped_data = _np.flip(sobp_array[idxmax - idx:idxmax])  # Select the ramp
 
         def compute_range(data, r, z_axis):
-
-            df_idx = (pd.DataFrame(_np.abs(data - r))).idxmin()
-            xin = _np.flip(z_axis[idxmax[0] - idx:idxmax[0]])[df_idx][0]
-
-            function = interp1d(_np.flip(z_axis[idxmax[0] - idx:idxmax[0]]),
-                                _np.flip(sobp_array[idxmax[0] - idx:idxmax[0]]).reshape(idx),
+            idx_xin = pd.DataFrame(_np.abs(data - r)).idxmin()
+            nearest_val = _np.flip(z_axis[idxmax - idx:idxmax])[idx_xin[0]]
+            function = interp1d(_np.flip(z_axis[idxmax - idx:idxmax]),
+                                data,
                                 kind=2,
                                 bounds_error=False)
-            res = newton_krylov(lambda x: _np.abs(function(x=x) - r),
-                                               xin=xin,
-                                               maxiter=100000,
-                                               f_tol=1e-12,
-                                               x_tol=1e-13)
+
+            res = minimize(fun=lambda x: _np.abs(function(x=x) - r),
+                           bounds=Bounds(lb=nearest_val - 0.5,
+                                         ub=nearest_val + 0.5),
+                           x0=nearest_val,
+                           method='trust-constr',
+                           options={'xtol': 1e-8,
+                                    'verbose': 0,
+                                    'maxiter': 1e5})
             return res
 
-        r_10 = compute_range(flipped_data, 10, self.z_axis)
-        r_20 = compute_range(flipped_data, 20, self.z_axis)
-        r_80 = compute_range(flipped_data, 80, self.z_axis)
-        r_90 = compute_range(flipped_data, 90, self.z_axis)
-        r_98 = compute_range(flipped_data, 98, self.z_axis)
+        r_10 = compute_range(flipped_data, 10, self.z_axis).x[0]
+        r_20 = compute_range(flipped_data, 20, self.z_axis).x[0]
+        r_80 = compute_range(flipped_data, 80, self.z_axis).x[0]
+        r_90 = compute_range(flipped_data, 90, self.z_axis).x[0]
 
+        return r_10, r_20, r_80, r_90
+
+    def get_sobp_r10(self):
+        return self.compute_ranges()[0]
+
+    def get_sobp_r20(self):
+        return self.compute_ranges()[1]
+
+    def get_sobp_r80(self):
+        return self.compute_ranges()[2]
+
+    def get_sobp_r90(self):
+        return self.compute_ranges()[3]
+
+    def get_sobp_flatness(self):
+
+        sobp_array = self.compute_sobp_profile()
         idx_98 = _np.where(_np.isclose(sobp_array, 98, atol=1))[0]
         max_dose = _np.max(sobp_array[idx_98[0]:idx_98[-1]])
         min_dose = _np.min(sobp_array[idx_98[0]:idx_98[-1]])
 
         flatness = 1e2 * (max_dose - min_dose) / (max_dose + min_dose)
 
-        return r_10, r_20, r_80, r_90, r_98, flatness
-
-    def get_sobp_r10(self):
-        return self.compute_ranges_and_flatness()[0]
-
-    def get_sobp_r20(self):
-        return self.compute_ranges_and_flatness()[1]
-
-    def get_sobp_r80(self):
-        return self.compute_ranges_and_flatness()[2]
-
-    def get_sobp_r90(self):
-        return self.compute_ranges_and_flatness()[3]
-
-    def get_sobp_r98(self):
-        return self.compute_ranges_and_flatness()[4]
-
-    def get_sobp_flatness(self):
-        return self.compute_ranges_and_flatness()[5]
+        return flatness
 
 
 class LateralProfileAnalysis:
@@ -345,7 +353,7 @@ class LateralProfileAnalysis:
         self.positions = positions
 
     def set_data(self):
-        idxmax = _np.where(self.positions == self.positions[_np.int(self.positions.shape[0]/2)])[0][0]
+        idxmax = _np.where(self.positions == self.positions[_np.int(self.positions.shape[0] / 2)])[0][0]
         positions_left = self.positions[0:idxmax]
         positions_right = self.positions[idxmax:]
         dose_left = self.dose_profile[0:idxmax]
@@ -363,29 +371,27 @@ class LateralProfileAnalysis:
         return f_left, f_right
 
     def get_position_left(self, percentage):
-
-        nearest_val = self.set_data()[1][_np.abs(pd.DataFrame(self.set_data()[2] - percentage)).idxmin()]
+        nearest_val = self.set_data()[1][pd.DataFrame(_np.abs(self.set_data()[2] - percentage)).idxmin()]
         position = minimize(fun=lambda x: _np.abs(self.define_f()[0](x=x) - percentage),
-                            bounds=Bounds(lb=nearest_val-3,
-                                          ub=nearest_val+3),
+                            bounds=Bounds(lb=nearest_val - 3,
+                                          ub=nearest_val + 3),
                             x0=nearest_val,
                             method='trust-constr',
-                            options={'xtol': 1e-20,
+                            options={'xtol': 1e-8,
                                      'verbose': 0,
-                                     'maxiter': 1e6})
+                                     'maxiter': 1e5})
         return position.x[0]
 
     def get_position_right(self, percentage):
-
-        nearest_val = self.set_data()[3][_np.abs(pd.DataFrame(self.set_data()[4] - percentage)).idxmin()]
+        nearest_val = self.set_data()[3][pd.DataFrame(_np.abs(self.set_data()[4] - percentage)).idxmin()]
         position = minimize(fun=lambda x: _np.abs(self.define_f()[1](x=x) - percentage),
-                            bounds=Bounds(lb=nearest_val-3,
-                                          ub=nearest_val+3),
+                            bounds=Bounds(lb=nearest_val - 3,
+                                          ub=nearest_val + 3),
                             x0=nearest_val,
                             method='trust-constr',
-                            options={'xtol': 1e-20,
+                            options={'xtol': 1e-8,
                                      'verbose': 0,
-                                     'maxiter': 1e6})
+                                     'maxiter': 1e5})
         return position.x[0]
 
     def get_p_20_left(self):
@@ -506,7 +512,7 @@ def compute_dvh(dose_data, voxel_volume):
 
     dvh_dataframe['volume'] = dvh_histogram[0]
     dvh_dataframe['dose_value'] = voxel_volume * (
-                dvh_histogram[1][:-1] + (dvh_histogram[1][1] - dvh_histogram[1][0]) / 2)
+            dvh_histogram[1][:-1] + (dvh_histogram[1][1] - dvh_histogram[1][0]) / 2)
 
     return dvh_dataframe
 
@@ -541,9 +547,9 @@ class RegularSpotScanning:
                                                                          y=dose_df['y'],
                                                                          a=100,
                                                                          mu_x=(-(
-                                                                                     self.n_spots_per_axis - 1) / 2 + i) * spot_space,
+                                                                                 self.n_spots_per_axis - 1) / 2 + i) * spot_space,
                                                                          mu_y=(-(
-                                                                                     self.n_spots_per_axis - 1) / 2 + j) * spot_space)
+                                                                                 self.n_spots_per_axis - 1) / 2 + j) * spot_space)
 
         total_dose = dose_df.drop(columns=['x', 'y']).sum(axis=1)
         dose_df['total_dose'] = total_dose
