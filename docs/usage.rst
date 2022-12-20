@@ -27,14 +27,3 @@ Depending on your needs, the different Georges' modules must be imported separat
     import georges.fermi
     import georges.manzoni
     import georges.vis
-
-See the examples for a typical use case.:
-
-..  toctree::
-    :maxdepth: 2
-    :titlesonly:
-
-    fermi
-    manzoni
-    optim
-    visualisation

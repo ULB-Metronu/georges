@@ -449,7 +449,8 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                              )
         self.layout['xaxis']['title'] = "S (m)"
 
-    def phase_space(self, observer: _TwissObserver = None, ):
+    def phase_space(self, observer: _BeamObserver = None, element: str = None, location: str = 'OUT', dim=None,
+                    nbins=None, draw_ellipse: bool = True):
         # TODO
         logging.error("The method is not yet implemented")
 

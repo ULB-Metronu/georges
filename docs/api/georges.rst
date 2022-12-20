@@ -8,7 +8,6 @@ Subpackages
    :maxdepth: 4
 
    georges.fermi
-   georges.madx
    georges.manzoni
    georges.vis
 

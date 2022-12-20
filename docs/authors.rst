@@ -24,5 +24,4 @@ Authors of papers including reference to or results obtained with Georges are en
 List of publications
 --------------------
 
-* paper georges
-* paper fermi
+.. bibliography::

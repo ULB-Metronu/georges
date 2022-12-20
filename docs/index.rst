@@ -1,35 +1,40 @@
 Welcome to Georges's documentation!
 ========================================
 
-|Actions Status Ubuntu| |Actions Status Mac| |LGTM| |LGTM_label| |License| |codecov| |version| |python|
+|Actions Status| |Documentation Status| |Python version| |version| |Bugs| |Coverage| |Reliability|
+|License| |Code Style| |Gitter|
 
 Introduction
 ------------
 
 Georges is an open source project hosted on Github under the GNU General Public Licence (GPL) version 3.
 
-The succint *README* is linked to and reproduced below. The complete documentation follows.
-
-.. toctree::
-    :maxdepth: 1
-    :caption: Georges README
-
-    readme
-
 Georges's documentation
 =======================
-The documentation is part of the Georges repository itself and is made available *via* _Readthedocs_.
-It is hosted at [georges.readthedocs.io](http://georges.readthedocs.io/).
+The documentation is part of the Georges-core repository itself and is made available *via* `Github Pages <https://pages.github.com>`_ .
+It is hosted at `ulb-metronu.github.io/georges/ <https://ulb-metronu.github.io/georges/>`_
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Documentation:
 
-   introduction
-   authors
-   installation
-   news
-   usage
+..  toctree::
+    :maxdepth: 2
+    :titlesonly:
+    :caption: Developers
+    :glob:
+
+    authors
+    support
+    contributing
+    changelog
+
+..  toctree::
+    :maxdepth: 3
+    :titlesonly:
+    :caption: User Guide
+    :glob:
+
+    installation
+    usage
+    modules
 
 ..  toctree::
     :maxdepth: 2
@@ -48,25 +53,31 @@ Indices and tables
 
 .. automodule:: georges
 
-..  |Actions Status Ubuntu| image:: https://github.com/ULB-Metronu/georges/actions/workflows/develop_ubuntu.yaml/badge.svg?branch=develop
-    :target: https://github.com/ULB-Metronu/georges/actions
+.. |Actions Status| image:: https://github.com/ULB-Metronu/georges-core/actions/workflows/ci.yml/badge.svg?branch=master
+   :target: https://github.com/ULB-Metronu/georges-core/actions
 
-..  |Actions Status Mac| image:: https://github.com/ULB-Metronu/georges/actions/workflows/develop_macos.yaml/badge.svg?branch=develop
-    :target: https://github.com/ULB-Metronu/georges/actions
+.. |Documentation Status| image:: https://github.com/ULB-Metronu/georges-core/actions/workflows/documentation.yml/badge.svg?branch=master
+   :target: https://github.com/ULB-Metronu/georges-core/actions
 
-..  |LGTM| image:: https://img.shields.io/lgtm/alerts/g/ULB-Metronu/georges.svg
-    :target: https://lgtm.com/projects/g/ULB-Metronu/georges/alerts/
+.. |Python version| image:: _static/python_versions.svg
 
-..  |LGTM_label| image:: https://img.shields.io/lgtm/grade/python/g/ULB-Metronu/georges.svg
-    :target: https://lgtm.com/projects/g/ULB-Metronu/georges/context:python
+.. |version| image:: https://img.shields.io/badge/version-2022.1-blue
 
-..  |License| image:: https://img.shields.io/badge/License-GPLv3-blue.svg
-    :target: https://www.gnu.org/licenses/gpl-3.0
+.. |Bugs| image:: https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=bugs
+   :target: https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges
 
-..  |codecov| image:: https://codecov.io/gh/ULB-Metronu/georges/branch/develop/graph/badge.svg?token=IN1M54718K
-    :target: https://codecov.io/gh/ULB-Metronu/georges
+.. |Coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=coverage
+   :target: https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges
 
-..  |version| image:: https://img.shields.io/badge/version-2019.1-blue
+.. |Reliability| image:: https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=reliability_rating
+   :target: https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges
 
-..  |python| image:: https://img.shields.io/badge/python-3.8+-blue.svg
-    :target: https://www.python.org/downloads/release/python-380/
+.. |License| image:: https://img.shields.io/badge/License-GPLv3-blue.svg
+   :target: https://www.gnu.org/licenses/gpl-3.0
+
+.. |Code Style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
+   :target: https://github.com/ambv/black
+
+.. |Gitter| image:: https://badges.gitter.im/ULB-Metronu/georges-core.svg?
+   :target: https://gitter.im/ULB-Metronu/georges-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+

@@ -1,7 +1,51 @@
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::FutureWarning:"
+]
+
+[tool.black]
+line-length = 120
+target-version = ['py38', 'py39', 'py310']
+string_normalization = true
+magic_trailing_comma = true
+
+[tool.isort]
+profile = "black"
+line_length = 120
+include_trailing_comma = true
+extend_skip = ["georges_core/__init__.py"]
+
+[tool.flake8]
+ignore = ['E231', 'E241', 'W503', 'E203']
+per-file-ignores = [
+    '__init__.py:F401',
+]
+max-line-length = 120
+count = true
+exclude = ['docs/**', '.tox/**', '.venv/**']
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py38, py39, py310
+isolated_build = true
+skip_missing_interpreters = true
+
+[testenv]
+description = Run the tests
+locked_deps =
+    pytest
+commands =
+    coverage run -m pytest
+    coverage xml
+"""
+
 [tool.poetry]
 name = "georges"
-version = "0.1.0"
-description = ""
+version = "2022.1"
+description = "Georges' accelerator physics library - Core"
 authors = ["Cédric Hernalsteens <cedric.hernalsteens@ulb.be>",
            "Robin Tesse <robin.tesse@ulb.be>",
            "Eustache Gnacadja <eustache.gnacadja@ulb.be>",
@@ -9,57 +53,71 @@ authors = ["Cédric Hernalsteens <cedric.hernalsteens@ulb.be>",
            "Marion Vanwelde <marion.vanwelde@ulb.be>"]
 
 [tool.poetry.dependencies]
-python = ">3.8.1 <3.10"
-cpymad = "^1.8.1"
-mypy = "^0.812"
-lmfit = "^1.0.2"
-ipyparallel = "^6.3.0"
+python = ">3.8.1 <3.11"
 hist = {extras = ["plot"], version = "^2.5.2"}
-georges-core = { path = "libs/georges-core/", develop = true }
+georges-core = { path = "libs/georges-core/"}
+pymoo = "^0.6.0"
+numba = "^0.56.4"
+lmfit = "^1.1.0"
 
-sphinx = { version = "^4.0.2", optional = true }
-sphinx-material = { version = "^0.0.34", optional = true }
-sphinx-automodapi = { version = "^0.13", optional = true }
-sphinxcontrib-bibtex = { version = "^2.2.0", optional = true }
-sphinx-copybutton = { version = "^0.3.1", optional = true }
-sphinx-autobuild = { version = "^2021.3.14", optional = true }
-sphinx-rtd-theme = {version = "^0.5.2", optional = true}
-m2r2 = { version = "^0.3.0", optional = true }
-pandoc = { version = "^1.0.2", optional = true }
-nbsphinx = { version = "^0.8.2", optional = true }
-ipython = { version = "^7.24.1", optional = true }
-sympy = "^1.10.1"
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.dev]
+optional = true
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+black = {extras = ["jupyter"], version = "^22.10.0"}
+pylint = "^2.15.2"
+flake8 = "^6.0.0"
+isort = "^5.10.1"
+tox = ">=3.27.1 <4.0.0"
+tox-poetry-installer = "^0.10.0"
+flake8-pyproject = "^1.2.2"
+mypy = "^0.991"
+coverage = {extras = ["toml"], version = "^6.5.0"}
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^5.3.0"
+sphinx-material =  "^0.0.35"
+sphinx-automodapi =  "^0.14.1"
+sphinxcontrib-bibtex =  "^2.2.0"
+sphinx-copybutton =  "^0.5.1"
+sphinx-autobuild =  "^2021.3.14"
+m2r2 =  "^0.2.8"
+pandoc =  "^1.1.0"
+nbsphinx =  "^0.8.2"
 jupyter-sphinx = "^0.4.0"
+jupyter-server-mathjax = "^0.2.6"
+cairosvg = "^2.5.2"
+sphinxcontrib-svg2pdfconverter = {extras = ["cairosvg"], version = "^1.2.1"}
+sphinx-tabs = "^3.4.1"
 
+[tool.coverage.paths]
+source = ["georges_core"]
 
-[tool.poetry.dev-dependencies]
-pytest = { version = "^6.2.2", optional = true }
-pytest-bdd = { version = "^4.0.2", optional = true }
-pytest-cov = "^4.0.0"
-flake8 = "^4.0.1"
+[tool.coverage.run]
+branch = true
+relative_files = true
+source = ["georges_core"]
 
-[tool.poetry.extras]
-sphinx = [
-    "sphinx",
-    "sphinx-material",
-    "sphinx-automodapi",
-    "sphinxcontrib-bibtex",
-    "sphinx-copybutton",
-    "sphinx-autobuild",
-    "sphinx-rtd-theme",
-    "m2r2",
-    "pandoc",
-    "nbsphinx",
-    "ipython",
-    "jupyter-sphinx",
-    "flake8"
-]
+[tool.coverage.report]
+skip_covered = true
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if TYPE_CHECKING:",
+    "raise AssertionError",
+    'raise NotImplementedError',
+    'except KeyError',
+    'if 0:',
+    'if __name__ == .__main__.:',
+    'class .*\bProtocol\):',
+    '@(abc\.)?abstractmethod',
+    ]
 
-test = [
-    "pytest",
-    "pytest-bdd",
-    "pytest-cov"
-]
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
