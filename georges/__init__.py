@@ -19,5 +19,6 @@ try:
     from georges_core.distribution import *
     from georges_core import particles
     from georges_core.sequences.betablock import BetaBlock
+    from georges_core.madx import madx
 except ModuleNotFoundError:
     pass

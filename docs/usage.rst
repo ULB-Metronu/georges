@@ -1,5 +1,6 @@
+***************************
 Using and executing Georges
-===========================
+***************************
 
 You can access the library by simply importing it:
 

@@ -1,16 +1,17 @@
+***********************************
 Welcome to Georges's documentation!
-========================================
+***********************************
 
 |Actions Status| |Documentation Status| |Python version| |version| |Bugs| |Coverage| |Reliability|
 |License| |Code Style| |Gitter|
 
 Introduction
-------------
+############
 
 Georges is an open source project hosted on Github under the GNU General Public Licence (GPL) version 3.
 
 Georges's documentation
-=======================
+#######################
 The documentation is part of the Georges-core repository itself and is made available *via* `Github Pages <https://pages.github.com>`_ .
 It is hosted at `ulb-metronu.github.io/georges/ <https://ulb-metronu.github.io/georges/>`_
 
@@ -45,7 +46,7 @@ It is hosted at `ulb-metronu.github.io/georges/ <https://ulb-metronu.github.io/g
     api/modules
 
 Indices and tables
-==================
+##################
 
 * :ref:`genindex`
 * :ref:`modindex`

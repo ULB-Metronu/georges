@@ -4,11 +4,13 @@ TODO
 """
 
 from __future__ import annotations
+from typing import Union
 
 import logging
 
 import pandas as _pd
 import numpy as _np
+import cpymad.madx
 
 from ..manzoni.observers import Observer as _Observer
 from ..manzoni.observers import MeanObserver as _MeanObserver
@@ -25,6 +27,7 @@ import matplotlib.ticker as mticker
 # from lmfit.models import GaussianModel
 from georges_core.vis import MatplotlibArtist as _MatplotlibArtist
 from georges_core.vis.artist import PALETTE
+
 
 palette = PALETTE['solarized']
 palette['both'] = palette['base03']
@@ -397,7 +400,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
               with_beta: bool = True,
               with_alpha: bool = False,
               with_dispersion: bool = False,
-              tfs_data: _pd.DataFrame = None,
+              tfs_data: Union[_pd.DataFrame, cpymad.madx.Table] = None,
               **kwargs):
         """
         Plot the Twiss function along the beamline
@@ -412,6 +415,14 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         """
         if not isinstance(observer, _TwissObserver):
             raise BeamPlottingException("The observer must be a TwissObserver.")
+        if isinstance(tfs_data, cpymad.madx.Table):
+            tfs_data = _pd.DataFrame(data={'S': tfs_data.s,
+                                           'BETX': tfs_data.betx,
+                                           'BETY': tfs_data.bety,
+                                           'ALFX': tfs_data.alfx,
+                                           'ALFY': tfs_data.alfy,
+                                           'DX': tfs_data.dx,
+                                           'DY': tfs_data.dy})
         df_observer = observer.to_df()
         twiss_palette = kwargs.get("palette", palette)
 
@@ -434,7 +445,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                           label="BETY - Manzoni"
                           )
             if tfs_data is not None:
-                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self._ax.plot(tfs_data['S'].values,
                               tfs_data['BETX'].values,
                               color=twiss_palette['TWISS_X'],
                               markeredgecolor=twiss_palette['TWISS_X'],
@@ -444,7 +455,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                               label="BETX - MADX"
                               )
 
-                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self._ax.plot(tfs_data['S'].values,
                               tfs_data['BETY'].values,
                               color=twiss_palette['TWISS_Y'],
                               markeredgecolor=twiss_palette['TWISS_Y'],
@@ -479,7 +490,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                           label="ALPHAY - Manzoni"
                           )
             if tfs_data is not None:
-                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self._ax.plot(tfs_data['S'].values,
                               tfs_data['ALFX'].values,
                               color=twiss_palette['TWISS_X'],
                               markeredgecolor=twiss_palette['TWISS_X'],
@@ -489,7 +500,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                               label="ALPHAX - MADX"
                               )
 
-                self._ax.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self._ax.plot(tfs_data['S'].values,
                               tfs_data['ALFY'].values,
                               color=twiss_palette['TWISS_Y'],
                               markeredgecolor=twiss_palette['TWISS_Y'],
@@ -526,7 +537,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                      label="DY - Manzoni"
                      )
             if tfs_data is not None:
-                ax2.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                ax2.plot(tfs_data['S'].values,
                          tfs_data['DX'].values,
                          color=twiss_palette['DX'],
                          markeredgecolor=twiss_palette['DX'],
@@ -536,7 +547,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                          label="DX - MADX"
                          )
 
-                ax2.plot(tfs_data['S'].apply(lambda e: e.m_as('m')),
+                ax2.plot(tfs_data['S'].values,
                          tfs_data['DY'].values,
                          color=twiss_palette['DY'],
                          markeredgecolor=twiss_palette['DY'],

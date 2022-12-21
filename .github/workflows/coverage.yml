@@ -5,9 +5,14 @@ name: coverage
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
   pull_request:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
@@ -19,6 +24,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
         with:
+          fetch-depth: 0
           submodules: recursive
       - name: Set up python
         uses: actions/setup-python@v3
@@ -36,14 +42,14 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        run: poetry install --no-interaction -E test
+        run: poetry install --no-interaction --with dev
       #----------------------------------------------
       #              run test suite with Sonar
       #----------------------------------------------
       - name: Run tox
         run: |
           source .venv/bin/activate
-          pytest --cov=georges --cov-report=xml tests/
+          tox -e py
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

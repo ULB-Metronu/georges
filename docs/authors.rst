@@ -1,8 +1,9 @@
+***********************
 Authorship and citation
-=======================
+***********************
 
 Authors
--------
+#######
 
 Alphabetical list of past and present authors:
 
@@ -14,7 +15,7 @@ Alphabetical list of past and present authors:
 * Marion Vanwelde
 
 Citation
---------
+########
 
 The reference paper for the George library is:
 
@@ -22,6 +23,6 @@ Authors of papers including reference to or results obtained with Georges are en
 
 
 List of publications
---------------------
+####################
 
 .. bibliography::

@@ -136,14 +136,15 @@ instance of the observer:
     plt.rc('text', usetex=False)
 
 Mean Observer
-=============
+#############
+
 .. tabs::
 
    .. tab:: Matplotlib
 
       .. jupyter-execute::
 
-        fig = plt.figure(figsize=(20,8))
+        fig = plt.figure(figsize=(10,4))
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
         manzoni_plot.plot_cartouche(sequence.df)
@@ -154,7 +155,7 @@ Mean Observer
 
       .. jupyter-execute::
 
-        manzoni_plot = vis.ManzoniPlotlyArtist(width=650, height=400)
+        manzoni_plot = vis.ManzoniPlotlyArtist(width=600, height=400)
         manzoni_plot.fig["layout"]["margin"] = dict(l=0, r=0, b=0)
         manzoni_plot.fig['layout']['legend'] = dict(yanchor="top",
                                                     y=0.99,
@@ -166,7 +167,7 @@ Mean Observer
         manzoni_plot.render()
 
 Std Observer
-============
+############
 
 .. tabs::
 
@@ -174,7 +175,7 @@ Std Observer
 
       .. jupyter-execute::
 
-        fig = plt.figure(figsize=(20,8))
+        fig = plt.figure(figsize=(10,4))
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
         manzoni_plot.plot_cartouche(sequence.df)
@@ -185,7 +186,7 @@ Std Observer
 
       .. jupyter-execute::
 
-        manzoni_plot = vis.ManzoniPlotlyArtist(width=650, height=400)
+        manzoni_plot = vis.ManzoniPlotlyArtist(width=600, height=400)
         manzoni_plot.fig["layout"]["margin"] = dict(l=0, r=0, b=0)
         manzoni_plot.fig['layout']['legend'] = dict(yanchor="top",
                                                     y=0.99,
@@ -198,7 +199,7 @@ Std Observer
         manzoni_plot.render()
 
 Beam Observer
-=============
+#############
 
 .. tabs::
 
@@ -206,7 +207,7 @@ Beam Observer
 
       .. jupyter-execute::
 
-        fig = plt.figure(figsize=(20,8))
+        fig = plt.figure(figsize=(10,4))
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
         manzoni_plot.plot_cartouche(sequence.df)
@@ -217,7 +218,7 @@ Beam Observer
 
       .. jupyter-execute::
 
-        manzoni_plot = vis.ManzoniPlotlyArtist(width=650, height=400)
+        manzoni_plot = vis.ManzoniPlotlyArtist(width=600, height=400)
         manzoni_plot.fig["layout"]["margin"] = dict(l=0, r=0, b=0)
         manzoni_plot.fig['layout']['legend'] = dict(yanchor="top",
                                                     y=0.99,
@@ -230,7 +231,7 @@ Beam Observer
 
 
 Phase Space Observer
-====================
+####################
 
 .. tabs::
 
@@ -238,7 +239,7 @@ Phase Space Observer
 
       .. jupyter-execute::
 
-        fig = plt.figure(figsize=(20,8))
+        fig = plt.figure(figsize=(10,4))
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
         manzoni_plot.plot_cartouche(sequence.df)
@@ -256,7 +257,7 @@ Phase Space Observer
         This method is not yet implemented.
 
 Losses Observer
-===============
+###############
 
 .. tabs::
 
@@ -264,7 +265,7 @@ Losses Observer
 
       .. jupyter-execute::
 
-        fig = plt.figure(figsize=(20,8))
+        fig = plt.figure(figsize=(10,4))
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
         manzoni_plot.plot_cartouche(sequence.df) # Preparation of the plot
@@ -274,7 +275,7 @@ Losses Observer
 
       .. jupyter-execute::
 
-        manzoni_plot = vis.ManzoniPlotlyArtist(width=650, height=400)
+        manzoni_plot = vis.ManzoniPlotlyArtist(width=600, height=400)
         manzoni_plot.fig["layout"]["margin"] = dict(l=0, r=0, b=0)
         manzoni_plot.fig['layout']['legend'] = dict(yanchor="top",
                                                     y=0.99,
@@ -286,7 +287,7 @@ Losses Observer
 
 
 Twiss Observer
-==============
+##############
 
 .. tabs::
 
@@ -294,7 +295,7 @@ Twiss Observer
 
       .. jupyter-execute::
 
-        fig = plt.figure(figsize=(20,8))
+        fig = plt.figure(figsize=(10,4))
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
         manzoni_plot.plot_cartouche(sequence.df)
@@ -304,7 +305,7 @@ Twiss Observer
 
       .. jupyter-execute::
 
-        manzoni_plot = vis.ManzoniPlotlyArtist(width=650, height=400)
+        manzoni_plot = vis.ManzoniPlotlyArtist(width=600, height=400)
         manzoni_plot.fig["layout"]["margin"] = dict(l=0, r=0, b=0)
         manzoni_plot.fig['layout']['legend'] = dict(yanchor="top",
                                                     y=0.99,

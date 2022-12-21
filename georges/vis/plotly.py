@@ -4,6 +4,8 @@ TODO
 """
 
 from __future__ import annotations
+from typing import Union
+import cpymad.madx
 
 import logging
 
@@ -318,7 +320,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
     def twiss(self, observer: _TwissObserver = None, with_beta: bool = True,
               with_alpha: bool = False,
               with_dispersion: bool = False,
-              tfs_data: _pd.DataFrame = None,
+              tfs_data: Union[_pd.DataFrame, cpymad.madx.Table] = None,
               **kwargs):
         """
         Plot the Twiss function along the beamline
@@ -332,6 +334,14 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
         """
         tracking_palette = kwargs.get("palette", palette)
         df_observer = observer.to_df()
+
+        if isinstance(tfs_data, cpymad.madx.Table):
+            tfs_data = _pd.DataFrame(data={'S': tfs_data.s,
+                                           'BETX': tfs_data.betx,
+                                           'BETY': tfs_data.bety,
+                                           'ALFX': tfs_data.alfx,
+                                           'ALFY': tfs_data.alfy,
+                                           'DX': tfs_data.dx, 'DY': tfs_data.dy})
 
         if with_beta:
             self.scatter(x=_np.hstack([0, df_observer['AT_EXIT'].apply(lambda e: e.m_as('m')).values]),
@@ -353,7 +363,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
             self.layout['yaxis']['title'] = r"$\beta \text{(m)}$"
 
             if tfs_data is not None:
-                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self.scatter(x=tfs_data['S'].values,
                              y=tfs_data['BETX'].values,
                              marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
                              mode='markers',
@@ -361,7 +371,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                              name=r"$\beta_x \text{ - MAD-X}$"
                              )
 
-                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self.scatter(x=tfs_data['S'].values,
                              y=tfs_data['BETY'].values,
                              marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
                              mode='markers',
@@ -390,7 +400,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
             self.layout['yaxis']['title'] = r"$\alpha$"
 
             if tfs_data is not None:
-                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self.scatter(x=tfs_data['S'].values,
                              y=tfs_data['ALFX'].values,
                              marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
                              mode='markers',
@@ -398,7 +408,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                              name=r"$\alpha_x \text{- MAD-X}$"
                              )
 
-                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self.scatter(x=tfs_data['S'].values,
                              y=tfs_data['ALFY'].values,
                              marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
                              mode='markers',
@@ -430,7 +440,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
             self.layout['yaxis2']['title'] = r"Dispersion"
 
             if tfs_data is not None:
-                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self.scatter(x=tfs_data['S'].values,
                              y=tfs_data['DX'].values,
                              marker={'symbol': 4, 'color': tracking_palette['blue'], 'size': 7},
                              mode='markers',
@@ -439,7 +449,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                              name=r"$D_x \text{- MAD-X}$"
                              )
 
-                self.scatter(x=tfs_data['S'].apply(lambda e: e.m_as('m')),
+                self.scatter(x=tfs_data['S'].values,
                              y=tfs_data['DY'].values,
                              marker={'symbol': 4, 'color': tracking_palette['red'], 'size': 7},
                              mode='markers',

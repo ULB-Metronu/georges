@@ -5,10 +5,13 @@ name: documentation
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
   pull_request:
-    branches: [ develop ]
-
+    branches:
+      - master
+      - develop
 
 jobs:
   build:
@@ -37,25 +40,7 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        run: poetry install --no-interaction -E sphinx
-      #----------------------------------------------
-      #              link with flake8
-      #----------------------------------------------
-#      - name: flake8 check syntax or undefined name
-#        uses: py-actions/flake8@v2
-#        with:
-#         ignore: "F401"
-#         max-line-length: "100"
-#         path: "georges_core"
-#         args: "--count --max-line-length=127 --select=E9,F63,F7,F82 --statistics"
-
-#      - name: flake8 check minor things
-#        uses: py-actions/flake8@v2
-#        with:
-#          ignore: "F401"
-#          max-line-length: "100"
-#          path: "georges_core"
-#          args: "--count --exit-zero --count --max-line-length=127 --statistics"
+        run: poetry install --no-interaction --with docs
 
       #----------------------------------------------
       #              Built the doc
@@ -63,4 +48,7 @@ jobs:
       - name: Run sphinx
         run: |
           source .venv/bin/activate
-          sphinx-build -b html docs build
+          cd docs
+          sudo apt install -y latexmk texlive-latex-extra
+          make html
+          make latexpdf

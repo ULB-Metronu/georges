@@ -1,5 +1,6 @@
+************
 Installation
-============
+************
 
 No attempt is made to support python versions earlier than CPython 3.5. Jython and alternative implementation have not been tested.
 
@@ -21,14 +22,14 @@ You can either stay on the bleeding-edge `master` branch or you can checkout a r
     git checkout tags/2018.2
 
 Dependencies
-------------
+############
 
 A coherent set of dependencies is listed in the Conda `environment.txt` file as well as in the `setup.py` file (for `setuptools` and `pip`). In this way, installation using either `conda` or `pip` is possible. Note that the `pip` requirement file `requirements.txt` contains a single dot `.`, which refers to the dependency list provided in the `setup.py` file.
 
 A typical user should not worry about those dependencies: they are properly managed either with `conda` (see next section) or with `pip` (see below).
 
 Installation with Anaconda and the Intel Python Distribution libraries
-----------------------------------------------------------------------
+######################################################################
 
 The installation procedure which follows creates a `conda` environment based on the Intel distribution for Python with all the necessary dependencies included and managed via `conda` itself (this ensures that all the dependencies are, if possible, based on the Intel channel and not managed with `pip`). Georges is then installed using `pip` from that `conda` environment. The dependencies are coherent and the `pip` installation of Georges will find all the dependencies listed in `setup.py` to be already installed in the `conda` environment.
 
@@ -64,7 +65,7 @@ Georges can be subsequently updated by running::
 
 
 Installation with pip
----------------------
+#####################
 
 In case Georges needs to be installed with the system Python or a Python installation that is not managed with `conda`, the following simple steps can be followed to use `pip` directly. All the dependencies are then managed with `pip`. Please note that this will typically not enable the Intel optimization, resulting in slower code execution for the :mod: manzoni module.
 
@@ -86,7 +87,7 @@ Georges can be subsequently updated by running::
 
 
 Using Georges with Jupyter Notebook
------------------------------------
+###################################
 
 Georges can be used with Jupyter notebooks. No special care is needed.
 
@@ -97,7 +98,7 @@ If you installed Georges within the `conda` environment, simply run (note that i
 
 
 Georges distribution with Docker
---------------------------------
+################################
 
 `TODO`
 
