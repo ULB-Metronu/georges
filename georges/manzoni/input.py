@@ -3,26 +3,30 @@ TODO
 """
 from __future__ import annotations
 
-from typing import Optional, Union, Dict
+from typing import Dict, List, Optional, Union
 
 import pandas as pd
-
 from georges_core import ureg as _ureg
 from georges_core.sequences import Sequence as _Sequence
-from . import elements
-from .beam import Beam as _Beam
-from .elements.scatterers import MaterialElement
-from .integrators import *
-from .observers import Observer as _Observer
+
 from ..fermi import materials
+from . import elements, track
+from .beam import Beam as _Beam
+from .elements import ManzoniElement
+from .elements.scatterers import MaterialElement
+from .integrators import Integrator, MadXIntegrator
+from .observers import Observer as _Observer
 
 MANZONI_FLAVOR = {"Sbend": "SBend"}
 
 
 class Input:
-    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None,
-                 beam: Optional[_Beam] = None,
-                 mapper: Dict[str, int] = None):
+    def __init__(
+        self,
+        sequence: Optional[List[elements.ManzoniElement]] = None,
+        beam: Optional[_Beam] = None,
+        mapper: Dict[str, int] = None,
+    ):
         self._sequence = sequence
         self._beam = beam
         self.mapper = mapper
@@ -44,7 +48,7 @@ class Input:
 
         _ = list(map(lambda e: pd.Series(e.attributes), self.sequence))
         df = pd.concat(_, axis=1).T
-        df['CLASS'] = list(map(lambda e: e.__class__.__name__, self.sequence))
+        df["CLASS"] = list(map(lambda e: e.__class__.__name__, self.sequence))
         return df.set_index("NAME")
 
     @property
@@ -73,11 +77,12 @@ class Input:
             e.unfreeze()
         return self
 
-    def track(self,
-              beam: _Beam,
-              observers: Union[List[_Observer], _Observer] = None,
-              check_apertures: bool = True,
-              ) -> Union[List[_Observer], _Observer]:
+    def track(
+        self,
+        beam: _Beam,
+        observers: Union[List[_Observer], _Observer] = None,
+        check_apertures: bool = True,
+    ) -> Union[List[_Observer], _Observer]:
         """
 
         Args:
@@ -130,10 +135,12 @@ class Input:
         return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
 
     @classmethod
-    def insert_thin_element(cls,
-                            sequence: georges.manzoni.input.Input = None,
-                            position: int = 0,
-                            thin_element: georges.manzoni.elements.elements.ManzoniElement = None) -> georges.manzoni.input.Input:
+    def insert_thin_element(
+        cls,
+        sequence: Input = None,
+        position: int = 0,
+        thin_element: ManzoniElement = None,
+    ) -> Input:
         """
         Insert a thin element (e.g fringes) in the sequence.
 
@@ -152,11 +159,12 @@ class Input:
         return cls(sequence=new_sequence, mapper=element_mapper)
 
     @classmethod
-    def from_sequence(cls,
-                      sequence: _Sequence,
-                      from_element: str = None,
-                      to_element: str = None
-                      ):
+    def from_sequence(
+        cls,
+        sequence: _Sequence,
+        from_element: str = None,
+        to_element: str = None,
+    ):
         """
         Creates a new `Input` from a generic sequence from `georges_core`.
 
@@ -169,17 +177,17 @@ class Input:
         """
         input_sequence = list()
         df_sequence = sequence.df.loc[from_element:to_element]
-        if 'MATERIAL' in df_sequence.columns:
-            idx = df_sequence[sequence.df['MATERIAL'].notnull()].index
+        if "MATERIAL" in df_sequence.columns:
+            idx = df_sequence[sequence.df["MATERIAL"].notnull()].index
             for ele in idx:
                 if not isinstance(df_sequence.loc[ele, "MATERIAL"], materials.CompoundType):
                     df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
 
         for name, element in df_sequence.iterrows():
-            element_class = getattr(elements, MANZONI_FLAVOR.get(element['CLASS'], element['CLASS']))
+            element_class = getattr(elements, MANZONI_FLAVOR.get(element["CLASS"], element["CLASS"]))
             parameters = list(set(list(element.index.values)).intersection(element_class.PARAMETERS.keys()))
             input_sequence.append(
-                element_class(name, **element[parameters])
+                element_class(name, **element[parameters]),
             )
         element_mapper = {k: v for v, k in enumerate(list(df_sequence.index.values))}
         return cls(sequence=input_sequence, mapper=element_mapper)

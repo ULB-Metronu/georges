@@ -52,11 +52,11 @@ The installation procedure which follows creates a `conda` environment based on 
 5. Install Georges using `pip` from the `conda` environment::
 
         # Typical installation
-        pip install . 
+        pip install .
 
         # Install with pip in editable mode to get access to the modifications on the git repository
         pip install -e .
-        
+
 Georges can be subsequently updated by running::
 
     cd path/to/georges
@@ -74,7 +74,7 @@ In case Georges needs to be installed with the system Python or a Python install
 2. Install Georges with `pip`::
 
         # Typical installation
-        pip install . 
+        pip install .
 
         # Install with pip in editable mode to get access to the modifications on the git repository
         pip install -e .
@@ -103,7 +103,7 @@ Georges distribution with Docker
 `TODO`
 
 A Docker image is made available to provide an easy access to a complete Jupyter Notebook + madx + georges environment.
- 
+
 Use  the *Dockerfile* to build the image::
 
     docker build .
@@ -119,7 +119,7 @@ You can run a container with::
 
 then connect to [http://localhost:8888](http://localhost:8888) to access the Jupyter Notebook interface.
 
-The image includes a complete Anaconda Python3 environment with the most common packages. 
+The image includes a complete Anaconda Python3 environment with the most common packages.
 The latest *MAD-X* development release is available in */usr/local/bin/madx*.
 
 

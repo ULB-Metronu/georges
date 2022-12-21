@@ -15,32 +15,17 @@ magic_trailing_comma = true
 profile = "black"
 line_length = 120
 include_trailing_comma = true
-extend_skip = ["georges_core/__init__.py"]
+extend_skip = ["georges/__init__.py"]
 
 [tool.flake8]
 ignore = ['E231', 'E241', 'W503', 'E203']
 per-file-ignores = [
-    '__init__.py:F401',
+    '__init__.py:F401,F403'
 ]
 max-line-length = 120
 count = true
-exclude = ['docs/**', '.tox/**', '.venv/**']
+exclude = ['docs/**', '.venv/**']
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py38, py39, py310
-isolated_build = true
-skip_missing_interpreters = true
-
-[testenv]
-description = Run the tests
-locked_deps =
-    pytest
-commands =
-    coverage run -m pytest
-    coverage xml
-"""
 
 [tool.poetry]
 name = "georges"
@@ -72,8 +57,6 @@ black = {extras = ["jupyter"], version = "^22.10.0"}
 pylint = "^2.15.2"
 flake8 = "^6.0.0"
 isort = "^5.10.1"
-tox = ">=3.27.1 <4.0.0"
-tox-poetry-installer = "^0.10.0"
 flake8-pyproject = "^1.2.2"
 mypy = "^0.991"
 coverage = {extras = ["toml"], version = "^6.5.0"}
@@ -92,15 +75,16 @@ jupyter-sphinx = "^0.4.0"
 jupyter-server-mathjax = "^0.2.6"
 cairosvg = "^2.5.2"
 sphinxcontrib-svg2pdfconverter = {extras = ["cairosvg"], version = "^1.2.1"}
-sphinx-tabs = "^3.4.1"
+sphinx-tabs = "^3.4.0"
+sphinx-rtd-theme = "^1.1.1"
 
 [tool.coverage.paths]
-source = ["georges_core"]
+source = ["georges"]
 
 [tool.coverage.run]
 branch = true
 relative_files = true
-source = ["georges_core"]
+source = ["georges"]
 
 [tool.coverage.report]
 skip_covered = true

@@ -1,24 +1,29 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING, Optional, List
+
+from typing import TYPE_CHECKING, List, Optional
+
 import numpy as _np
 import pandas as _pd
-from numba.typed import List as nList
 from georges_core.sequences import BetaBlock as _BetaBlock
 from georges_core.twiss import Twiss as _Twiss
+from numba.typed import List as nList
+
 from .beam import Beam as _Beam
 from .observers import BeamObserver as _BeamObserver
+
 if TYPE_CHECKING:
+    from .. import Kinematics as _Kinematics
     from .input import Input as _Input
     from .observers import Observer as _Observer
-    from .. import Kinematics as _Kinematics
 
 
-def track(beamline: _Input,
-          beam: _Beam,
-          observers: List[Optional[_Observer]] = None,
-          check_apertures_exit: bool = False,
-          check_apertures_entry: bool = False
-          ):
+def track(
+    beamline: _Input,
+    beam: _Beam,
+    observers: List[Optional[_Observer]] = None,
+    check_apertures_exit: bool = False,
+    check_apertures_entry: bool = False,
+):
     """
     Args:
         beamline:
@@ -54,14 +59,15 @@ def track(beamline: _Input,
         b2, b1 = b1, b2
 
 
-def twiss(beamline: _Input,
-          kinematics: _Kinematics,
-          reference_particle: _np.ndarray = None,
-          offsets=None,
-          twiss_parametrization: bool = True,
-          twiss_init: _BetaBlock = None,
-          with_phase_unrolling: bool = True
-          ) -> _pd.DataFrame:
+def twiss(
+    beamline: _Input,
+    kinematics: _Kinematics,
+    reference_particle: _np.ndarray = None,
+    offsets=None,
+    twiss_parametrization: bool = True,
+    twiss_init: _BetaBlock = None,
+    with_phase_unrolling: bool = True,
+) -> _pd.DataFrame:
     """
 
     Args:
@@ -75,6 +81,7 @@ def twiss(beamline: _Input,
     Returns:
 
     """
+
     def track_for_twiss() -> _pd.DataFrame:
         nonlocal reference_particle
         nonlocal offsets
@@ -84,19 +91,21 @@ def twiss(beamline: _Input,
         if offsets is None:
             offsets = _np.array([0.01, 0.01, 0.01, 0.01, 0.01])
         pt = _Beam.compute_pt(dpp=offsets[4], beta=kinematics.beta)
-        coordinates = _np.array([
-            reference_particle,
-            reference_particle + [offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, offsets[1], 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, offsets[2], 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, offsets[3], 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, 0.0, offsets[4], pt],
-            reference_particle + [-offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, -offsets[1], 0.0, 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, -offsets[2], 0.0, 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, -offsets[3], 0.0, 0.0],
-            reference_particle + [0.0, 0.0, 0.0, 0.0, -offsets[4], -pt],
-        ])
+        coordinates = _np.array(
+            [
+                reference_particle,
+                reference_particle + [offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
+                reference_particle + [0.0, offsets[1], 0.0, 0.0, 0.0, 0.0],
+                reference_particle + [0.0, 0.0, offsets[2], 0.0, 0.0, 0.0],
+                reference_particle + [0.0, 0.0, 0.0, offsets[3], 0.0, 0.0],
+                reference_particle + [0.0, 0.0, 0.0, 0.0, offsets[4], pt],
+                reference_particle + [-offsets[0], 0.0, 0.0, 0.0, 0.0, 0.0],
+                reference_particle + [0.0, -offsets[1], 0.0, 0.0, 0.0, 0.0],
+                reference_particle + [0.0, 0.0, -offsets[2], 0.0, 0.0, 0.0],
+                reference_particle + [0.0, 0.0, 0.0, -offsets[3], 0.0, 0.0],
+                reference_particle + [0.0, 0.0, 0.0, 0.0, -offsets[4], -pt],
+            ],
+        )
         beam = _Beam(kinematics=kinematics, distribution=coordinates)
         observer = _BeamObserver(with_input_beams=False)
         track(beam=beam, beamline=beamline, observers=[observer])
@@ -106,15 +115,15 @@ def twiss(beamline: _Input,
         normalization = 2 * offsets
         _matrix = {}
         for label, d in data.iterrows():
-            m = d['BEAM_OUT']
+            m = d["BEAM_OUT"]
             m[:, 4] = m[:, 5]
             m = m[:, 0:5]
             _matrix[label] = {
-                f'R{j + 1}{i + 1}': (m[i + 1, j] - m[i + 1 + 5, j]) / normalization[i]
+                f"R{j + 1}{i + 1}": (m[i + 1, j] - m[i + 1 + 5, j]) / normalization[i]
                 for j in range(0, 5)
                 for i in range(0, 5)
             }
-        return _pd.DataFrame.from_dict(_matrix, orient='index')
+        return _pd.DataFrame.from_dict(_matrix, orient="index")
 
     tracks = track_for_twiss()
     matrix = compute_matrix_for_twiss(tracks)

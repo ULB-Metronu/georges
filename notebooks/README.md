@@ -2,6 +2,6 @@
 
  - manzoni.nb: Mathematice notebook to generate the MAD-X transfer maps
  - Transport: folder to create the transfer maps (classic and exact in dpp) for:
-   - Combined dipole 
-   - Quadrupole 
+   - Combined dipole
+   - Quadrupole
    - Sextupoles

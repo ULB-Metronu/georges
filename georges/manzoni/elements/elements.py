@@ -2,21 +2,24 @@
 TODO
 """
 from __future__ import annotations
-from typing import Optional, Any, Tuple, Dict, Callable
+
 import inspect
 import uuid
+from typing import Any, Callable, Dict, Optional, Tuple
+
 import numpy as _np
+from georges_core.patchable import Patchable as _Patchable
 from numba.typed import List as nList
 from pint import UndefinedUnitError as _UndefinedUnitError
+
 from ... import ureg as _ureg
-from ..integrators import IntegratorType, MadXIntegrator, TransportSecondOrderTaylorIntegrator, \
-    TransportFirstOrderTaylorIntegrator, TransportSecondOrderTaylorIntegratorExact, \
-    TransportFirstOrderTaylorIntegratorExact
-from ..apertures import circular_aperture_check, \
-    rectangular_aperture_check, \
-    elliptical_aperture_check, \
-    phase_space_aperture_check
-from georges_core.patchable import Patchable as _Patchable
+from ..apertures import (
+    circular_aperture_check,
+    elliptical_aperture_check,
+    phase_space_aperture_check,
+    rectangular_aperture_check,
+)
+from ..integrators import IntegratorType, MadXIntegrator
 
 
 class ManzoniException(Exception):
@@ -28,6 +31,7 @@ class ManzoniException(Exception):
 
 class ManzoniAttributeException(ManzoniException):
     """Exception raised for errors in the Manzoni elements module."""
+
     pass
 
 
@@ -41,38 +45,32 @@ class ElementType(type):
 
     def __new__(mcs, name: str, bases: Tuple[ElementType, type, ...], dct: Dict[str, Any]):
         # Insert a default initializer (constructor) in case one is not present
-        if '__init__' not in dct:
-            def default_init(self,
-                             name: str = '',
-                             integrator: IntegratorType = MadXIntegrator,
-                             *params, **kwargs):
+        if "__init__" not in dct:
+
+            def default_init(self, name: str = "", integrator: IntegratorType = MadXIntegrator, *params, **kwargs):
                 """Default initializer for all Commands."""
                 defaults = {}
-                if 'post_init' in dct:
+                if "post_init" in dct:
                     defaults = {
                         parameter_name: parameter_value.default
-                        for parameter_name, parameter_value in inspect.signature(dct['post_init']).parameters.items()
+                        for parameter_name, parameter_value in inspect.signature(dct["post_init"]).parameters.items()
                         if parameter_value.default is not inspect.Parameter.empty
                     }
-                bases[0].__init__(self,
-                                  name,
-                                  integrator,
-                                  dct.get('PARAMETERS', {}),
-                                  *params, **{**defaults, **kwargs})
-                if 'post_init' in dct:
-                    dct['post_init'](self, **kwargs)
+                bases[0].__init__(self, name, integrator, dct.get("PARAMETERS", {}), *params, **{**defaults, **kwargs})
+                if "post_init" in dct:
+                    dct["post_init"](self, **kwargs)
 
-            dct['__init__'] = default_init
+            dct["__init__"] = default_init
 
         # Collect all post_init arguments
-        if '_POST_INIT' not in dct:
-            dct['_POST_INIT'] = {}
-        if 'post_init' in dct and len(bases) > 0:
-            dct['_POST_INIT'] = {*getattr(bases[0], '_POST_INIT', {}), *dct['post_init'].__code__.co_varnames}
+        if "_POST_INIT" not in dct:
+            dct["_POST_INIT"] = {}
+        if "post_init" in dct and len(bases) > 0:
+            dct["_POST_INIT"] = {*getattr(bases[0], "_POST_INIT", {}), *dct["post_init"].__code__.co_varnames}
 
         # Add PARAMETERS from the base class
         try:
-            dct['PARAMETERS'] = {**getattr(bases[0], 'PARAMETERS', {}), **dct.get('PARAMETERS', {})}
+            dct["PARAMETERS"] = {**getattr(bases[0], "PARAMETERS", {}), **dct.get("PARAMETERS", {})}
         except IndexError:
             pass
 
@@ -96,8 +94,8 @@ class ElementType(type):
 
     def __getattr__(cls, key: str):
         try:
-            if key.endswith('_'):
-                return cls.PARAMETERS[key.rstrip('_')][2]
+            if key.endswith("_"):
+                return cls.PARAMETERS[key.rstrip("_")][2]
             else:
                 return cls.PARAMETERS[key][0]
         except KeyError:
@@ -119,15 +117,16 @@ class Element(metaclass=ElementType):
     More info on this wonderful class.
     TODO
     """
+
     PARAMETERS: dict = {
-        'NAME': ('', 'Primary label for the Zgoubi command (default: auto-generated hash).'),
-        'AT_ENTRY': (0 * _ureg.m, 'Entrance position of the element.'),
-        'AT_CENTER': (0 * _ureg.m, 'Entrance position of the element.'),
-        'AT_EXIT': (0 * _ureg.m, 'Exit position of the element.')
+        "NAME": ("", "Primary label for the Zgoubi command (default: auto-generated hash)."),
+        "AT_ENTRY": (0 * _ureg.m, "Entrance position of the element."),
+        "AT_CENTER": (0 * _ureg.m, "Entrance position of the element."),
+        "AT_EXIT": (0 * _ureg.m, "Exit position of the element."),
     }
     """Parameters of the element, with their default value and their description ."""
 
-    def __init__(self, name: str = '', *params, **kwargs):
+    def __init__(self, name: str = "", *params, **kwargs):
         """
         TODO
         Args:
@@ -143,12 +142,12 @@ class Element(metaclass=ElementType):
             if k not in self._POST_INIT:
                 setattr(self, k, v)
         if name:
-            self._attributes['NAME'] = name
-        if not self._attributes['NAME']:
+            self._attributes["NAME"] = name
+        if not self._attributes["NAME"]:
             self.generate_label()
         Element.post_init(self, **kwargs)
 
-    def generate_label(self, prefix: str = ''):
+    def generate_label(self, prefix: str = ""):
         """
 
         Args:
@@ -157,10 +156,15 @@ class Element(metaclass=ElementType):
         Returns:
 
         """
-        self._attributes['NAME'] = '_'.join(filter(None, [
-            prefix,
-            str(uuid.uuid4().hex)
-        ]))[:20]
+        self._attributes["NAME"] = "_".join(
+            filter(
+                None,
+                [
+                    prefix,
+                    str(uuid.uuid4().hex),
+                ],
+            ),
+        )[:20]
         return self
 
     def post_init(self, **kwargs):  # -> NoReturn:
@@ -212,22 +216,23 @@ class Element(metaclass=ElementType):
             A ZgoubidooException is raised in case the parameter is not part of the class definition or if it has
             invalid dimension.
         """
-        if k.startswith('_') or not k.isupper():
+        if k.startswith("_") or not k.isupper():
             super().__setattr__(k, v)
         else:
-            k_ = k.rstrip('_')
+            k_ = k.rstrip("_")
             if k_ not in self._attributes.keys():
-                raise ManzoniAttributeException(f"The parameter {k_} is not part of the {self.__class__.__name__} "
-                                                f"definition.")
+                raise ManzoniAttributeException(
+                    f"The parameter {k_} is not part of the {self.__class__.__name__} " f"definition.",
+                )
 
             default = self._retrieve_default_parameter_value(k_)
             try:  # Avoid a bug in pint where a string starting with '#' cannot be parsed
-                default = default.lstrip('#')
+                default = default.lstrip("#")
             except AttributeError:
                 pass
-            if isinstance(v, (int, float)) and k.endswith('_'):
+            if isinstance(v, (int, float)) and k.endswith("_"):
                 v = _ureg.Quantity(v, _ureg.Quantity(default).units)
-            elif isinstance(v, str) and default is not None and not isinstance(default, str) and not v.startswith('#'):
+            elif isinstance(v, str) and default is not None and not isinstance(default, str) and not v.startswith("#"):
                 try:
                     v = _ureg.Quantity(v)
                 except _UndefinedUnitError:
@@ -238,10 +243,11 @@ class Element(metaclass=ElementType):
                 dimension = _ureg.Quantity(1).dimensionality  # No dimension
             try:
                 if default is not None and dimension != _ureg.Quantity(default).dimensionality:
-                    raise ManzoniAttributeException(f"Invalid dimension ({dimension} "
-                                                    f"instead of {_ureg.Quantity(default).dimensionality}) "
-                                                    f"for parameter {k_}={v} of {self.__class__.__name__}."
-                                                    )
+                    raise ManzoniAttributeException(
+                        f"Invalid dimension ({dimension} "
+                        f"instead of {_ureg.Quantity(default).dimensionality}) "
+                        f"for parameter {k_}={v} of {self.__class__.__name__}.",
+                    )
             except (ValueError, TypeError, _UndefinedUnitError):
                 pass
             self._attributes[k_] = v
@@ -312,12 +318,7 @@ class Element(metaclass=ElementType):
 class ManzoniElement(Element, _Patchable):
     INTEGRATOR: Optional[IntegratorType] = MadXIntegrator
 
-    def __init__(self,
-                 name: str = '',
-                 integrator: Optional[IntegratorType] = None,
-                 *params,
-                 **kwargs
-                 ):
+    def __init__(self, name: str = "", integrator: Optional[IntegratorType] = None, *params, **kwargs):
         """
 
         Args:
@@ -331,11 +332,12 @@ class ManzoniElement(Element, _Patchable):
         self._cache: Optional[nList] = None
         self._frozen: bool = False
 
-    def propagate(self,
-                  beam: _np.ndarray,
-                  out: Optional[_np.ndarray] = None,
-                  global_parameters: list = None,
-                  ) -> Tuple[_np.ndarray, _np.ndarray]:
+    def propagate(
+        self,
+        beam: _np.ndarray,
+        out: Optional[_np.ndarray] = None,
+        global_parameters: list = None,
+    ) -> Tuple[_np.ndarray, _np.ndarray]:
         """
 
         Args:
@@ -349,10 +351,11 @@ class ManzoniElement(Element, _Patchable):
 
         return self.integrator.propagate(self, beam, out, global_parameters)
 
-    def check_aperture(self,
-                       beam: _np.ndarray,
-                       out: _np.ndarray
-                       ):
+    def check_aperture(
+        self,
+        beam: _np.ndarray,
+        out: _np.ndarray,
+    ):
         """
 
         Args:
@@ -427,33 +430,46 @@ class ManzoniElement(Element, _Patchable):
 
     @property
     def aperture(self) -> Optional[Tuple[Callable, _np.ndarray]]:
-        if self.APERTYPE.upper() == 'CIRCULAR':
+        if self.APERTYPE.upper() == "CIRCULAR":
             return (
                 circular_aperture_check,
-                _np.array([
-                    self.APERTURE[0].m_as('meter')
-                ])
+                _np.array(
+                    [
+                        self.APERTURE[0].m_as("meter"),
+                    ],
+                ),
             )
-        elif self.APERTYPE.upper() == 'RECTANGULAR':
+        elif self.APERTYPE.upper() == "RECTANGULAR":
             return (
                 rectangular_aperture_check,
-                _np.array([
-                    self.APERTURE[0].m_as('meter'), self.APERTURE[1].m_as('meter')
-                ])
+                _np.array(
+                    [
+                        self.APERTURE[0].m_as("meter"),
+                        self.APERTURE[1].m_as("meter"),
+                    ],
+                ),
             )
-        elif self.APERTYPE.upper() == 'ELLIPTICAL':
+        elif self.APERTYPE.upper() == "ELLIPTICAL":
             return (
                 elliptical_aperture_check,
-                _np.array([
-                    self.APERTURE[0].m_as('meter'), self.APERTURE[1].m_as('meter')
-                ])
+                _np.array(
+                    [
+                        self.APERTURE[0].m_as("meter"),
+                        self.APERTURE[1].m_as("meter"),
+                    ],
+                ),
             )
-        elif self.APERTYPE.upper() == 'PHASE_SPACE':
+        elif self.APERTYPE.upper() == "PHASE_SPACE":
             return (
                 phase_space_aperture_check,
-                _np.array([
-                    self.APERTURE[0], self.APERTURE[1], self.APERTURE[2], self.APERTURE[3]
-                ])
+                _np.array(
+                    [
+                        self.APERTURE[0],
+                        self.APERTURE[1],
+                        self.APERTURE[2],
+                        self.APERTURE[3],
+                    ],
+                ),
             )
         else:
             return None

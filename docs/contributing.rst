@@ -31,8 +31,8 @@ to ensure consistent Python code. All the parameters are described in the `pypro
 
 Testing and metrics
 ###################
-All the tests are available in the georges's test repository. We use `pytest <https://docs.pytest.org/en/7.2.x/>`_ as a tool for testing and
-through `tox <https://tox.wiki/en/latest/>`_ and the results are then passed to `coverage` and uploaded to `sonar <https://www.sonarsource.com/products/sonarcloud/>`_
+All the tests are available in the georges's test repository. We use `pytest <https://docs.pytest.org/en/7.2.x/>`_ as a tool for testing
+and the results are then passed to `coverage` and uploaded to `sonar <https://www.sonarsource.com/products/sonarcloud/>`_
 to compute metrics such as:
 
 * Bugs

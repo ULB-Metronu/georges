@@ -2,6 +2,7 @@
 TODO
 """
 import numpy as _np
+
 from .. import ureg as _ureg
 
 
@@ -12,9 +13,8 @@ class ScatteringModelType(type):
 
 
 class FermiRossi(metaclass=ScatteringModelType):
-    """
+    """ """
 
-    """
     @staticmethod
     def t(pv: float, p1v1: float, **kwargs) -> float:
         """
@@ -28,17 +28,15 @@ class FermiRossi(metaclass=ScatteringModelType):
 
         """
         es = 15.0  # MeV
-        chi_0 = kwargs['material'].radiation_length.m_as('cm')
-        return (es/pv) ** 2 * (1/chi_0)
+        chi_0 = kwargs["material"].radiation_length.m_as("cm")
+        return (es / pv) ** 2 * (1 / chi_0)
 
 
 class DifferentialHighland(metaclass=ScatteringModelType):
-    """
-
-    """
+    """ """
 
     @staticmethod
-    def l(x, chi0):
+    def length(x, chi0):
         """
 
         Args:
@@ -51,16 +49,16 @@ class DifferentialHighland(metaclass=ScatteringModelType):
         return x / chi0
 
     @staticmethod
-    def f_dh(l):
+    def f_dh(length):
         """
 
         Args:
-            l:
+            length:
 
         Returns:
 
         """
-        return 0.970 * (1 + (_np.log(l) / 20.7)) * (1 + (_np.log(l) / 22.7))
+        return 0.970 * (1 + (_np.log(length) / 20.7)) * (1 + (_np.log(length) / 22.7))
 
     @staticmethod
     def t(pv: float, p1v1: float, **kwargs) -> float:
@@ -74,17 +72,18 @@ class DifferentialHighland(metaclass=ScatteringModelType):
         Returns:
 
         """
-        material = kwargs.get('material')
+        material = kwargs.get("material")
         es = 14.1  # MeV
-        chi0 = material.radiation_length.m_as('cm')
-        x = material.required_thickness(kinetic_energy_out=pv*_ureg.MeV, kinetic_energy_in=p1v1*_ureg.MeV).m_as('cm')
-        return DifferentialHighland.f_dh(DifferentialHighland.l(x, chi0)) * (es / pv) ** 2 * (1 / chi0)
+        chi0 = material.radiation_length.m_as("cm")
+        x = material.required_thickness(kinetic_energy_out=pv * _ureg.MeV, kinetic_energy_in=p1v1 * _ureg.MeV).m_as(
+            "cm",
+        )
+        return DifferentialHighland.f_dh(DifferentialHighland.length(x, chi0)) * (es / pv) ** 2 * (1 / chi0)
 
 
 class ICRU(metaclass=ScatteringModelType):
-    """
+    """ """
 
-    """
     @staticmethod
     def t(pv: float, p1v1: float, **kwargs) -> float:
         """
@@ -101,9 +100,8 @@ class ICRU(metaclass=ScatteringModelType):
 
 
 class ICRUProtons(metaclass=ScatteringModelType):
-    """
+    """ """
 
-    """
     @staticmethod
     def t(pv: float, p1v1: float, **kwargs) -> float:
         """
@@ -116,16 +114,15 @@ class ICRUProtons(metaclass=ScatteringModelType):
         Returns:
 
         """
-        material = kwargs['material']
+        material = kwargs["material"]
         es = 15.0  # MeV
-        chi_s = material.scattering_length.m_as('cm')
+        chi_s = material.scattering_length.m_as("cm")
         return (es / pv) ** 2 * (1 / chi_s)
 
 
 class DifferentialMoliere(metaclass=ScatteringModelType):
-    """
+    """ """
 
-    """
     @staticmethod
     def t(pv: float, p1v1: float, **kwargs) -> float:
         """
@@ -138,9 +135,9 @@ class DifferentialMoliere(metaclass=ScatteringModelType):
         Returns:
 
         """
-        material = kwargs['material']
+        material = kwargs["material"]
         es = 15.0  # MeV
-        chi_s = material.scattering_length.m_as('cm')
+        chi_s = material.scattering_length.m_as("cm")
         return DifferentialMoliere.f_dm(p1v1, pv) * (es / pv) ** 2 * (1 / chi_s)
 
     @staticmethod
@@ -160,7 +157,9 @@ class DifferentialMoliere(metaclass=ScatteringModelType):
             raise ValueError("'p1v1' must be > 0.")
         if p1v1 <= pv:
             raise ValueError("Initial 'p1v1' must be larger than final 'pv'.")
-        return 0.5244 \
-               + 0.1975 * _np.log10(1 - (pv / p1v1) ** 2) \
-               + 0.2320 * _np.log10(pv) \
-               - 0.0098 * _np.log10(pv) * _np.log10(1 - (pv / p1v1) ** 2)
+        return (
+            0.5244
+            + 0.1975 * _np.log10(1 - (pv / p1v1) ** 2)
+            + 0.2320 * _np.log10(pv)
+            - 0.0098 * _np.log10(pv) * _np.log10(1 - (pv / p1v1) ** 2)
+        )

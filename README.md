@@ -21,8 +21,8 @@ Georges' the lemur opinionated particle accelerator modeling Python package.
 ## Design
 The aim of this library is to unify the description and computation of particle accelerator beamlines for different tools (MAD-X, PTC, BDSim and G4Beamline at this stage) in a unique Python library.
 
-* Fermi 
+* Fermi
 * Manzoni
 
-Beamlines are loaded using *georges-core*. 
+Beamlines are loaded using *georges-core*.
 Support tools are also provided, notably a plotting library (entirely based on *Matplotlib*) which provides plotting capabilities for various optics computation (beam envelope, Twiss parameters, etc.).

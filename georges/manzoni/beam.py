@@ -25,7 +25,7 @@ class Beam:
         if first_order:
             return dpp * beta
         else:
-            return (- (2/beta) + np.sqrt((2/beta)**2 + 4 * (dpp**2 + 2 * dpp))) / 2
+            return (-(2 / beta) + np.sqrt((2 / beta) ** 2 + 4 * (dpp**2 + 2 * dpp))) / 2
 
     @classmethod
     def compute_dpp(cls, pt: np.ndarray, beta: float, first_order: bool = False) -> np.ndarray:
@@ -60,12 +60,18 @@ class Beam:
 class MadXBeam(Beam):
     def __init__(self, kinematics: _Kinematics, distribution: np.ndarray, first_order: bool = False):
         super().__init__(kinematics=kinematics, distribution=distribution)
-        self._distribution = np.insert(self._distribution, -1,
-                                       Beam.compute_pt(distribution[:, -1],
-                                                       kinematics.beta, first_order=first_order), axis=1)
+        self._distribution = np.insert(
+            self._distribution,
+            -1,
+            Beam.compute_pt(
+                distribution[:, -1],
+                kinematics.beta,
+                first_order=first_order,
+            ),
+            axis=1,
+        )
 
 
 class TransportBeam(Beam):
     def __init__(self, kinematics: _Kinematics, distribution: np.ndarray):
         super().__init__(kinematics=kinematics, distribution=distribution)
-

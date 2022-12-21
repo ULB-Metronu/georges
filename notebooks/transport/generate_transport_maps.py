@@ -4,28 +4,28 @@ import sympy as sy
 
 def generate_transport_matrix_tensor(h, k1, k2, order, sign):
     """
-        h:
-        k1: quadrupolar component
-        k2: sextupolar component
-        order: 1=matrix ; 2=tensor
-        sign: sign of h**2 + k1 (-1, 0, 1)
+    h:
+    k1: quadrupolar component
+    k2: sextupolar component
+    order: 1=matrix ; 2=tensor
+    sign: sign of h**2 + k1 (-1, 0, 1)
     """
 
-    a, b, c, d = sy.symbols('a b c d')
-    L = sy.symbols('L', positive=True, real=True)
-    ky, t, tau = sy.symbols('ky t tau', real=True)
+    a, b, c, d = sy.symbols("a b c d")
+    L = sy.symbols("L", positive=True, real=True)
+    ky, t, tau = sy.symbols("ky t tau", real=True)
 
     if sign == -1:
-        kx2 = sy.symbols('kx2', real=True, negative=True, nonzero=True)
+        kx2 = sy.symbols("kx2", real=True, negative=True, nonzero=True)
     elif sign == 0:
         kx2 = 0
     elif sign == 1:
-        kx2 = sy.symbols('kx2', real=True, positive=True, nonzero=True)
+        kx2 = sy.symbols("kx2", real=True, positive=True, nonzero=True)
     else:
         assert sign in [-1, 0, 1], f"sign must be -1, 0 or 1, got: {sign}"
 
-    x1 = sy.Function('x1')(t)
-    y1 = sy.Function('y1')(t)
+    x1 = sy.Function("x1")(t)
+    y1 = sy.Function("y1")(t)
 
     # General solution of EDs :
     xsol = sy.dsolve(sy.Eq(x1.diff(t, t) + kx2 * x1, 0), x1).rhs
@@ -39,7 +39,7 @@ def generate_transport_matrix_tensor(h, k1, k2, order, sign):
     cnd1y = sy.Eq(sy.diff(ysol, t).subs(t, 0), d)  # x'(0) = d
 
     # Solve for C1, C2:
-    C1, C2 = sy.symbols('C1, C2')
+    C1, C2 = sy.symbols("C1, C2")
     C1C2_sl = sy.solve([cnd0x, cnd1x], (C1, C2))
 
     # Solve for C3, C4:
@@ -84,7 +84,7 @@ def generate_transport_matrix_tensor(h, k1, k2, order, sign):
                 if R[i, j] != 0:
                     R[i, j] = sy.simplify(R[i, j].subs(t, L).as_real_imag()[0])
                     if sign != 0:
-                        R[i, j] = sy.simplify(R[i, j].subs(kx2, h ** 2 + k1))
+                        R[i, j] = sy.simplify(R[i, j].subs(kx2, h**2 + k1))
 
         return R
     # Second order :
@@ -93,41 +93,119 @@ def generate_transport_matrix_tensor(h, k1, k2, order, sign):
         F2 = sy.MutableDenseNDimArray.zeros(6, 6, 6)
         dx = sy.integrate(h * Gx, (tau, 0, t))
 
-        F2[0, 0, 0] = -(h ** 3 + k2 + 2 * k1 * h) * Cx ** 2 + sy.diff(h, t) * Cx * sy.diff(Cx, t) + sy.Rational(1,
-                                                                                                                2) * h * (
-                          sy.diff(Cx, t)) ** 2
-        F2[0, 0, 1] = -2 * (h ** 3 + k2 + 2 * k1 * h) * Cx * Sx + sy.diff(h, t) * (
-                Cx * sy.diff(Sx, t) + Sx * sy.diff(Cx, t)) + h * (sy.diff(Cx, t) * sy.diff(Sx, t))
-        F2[0, 0, 5] = (2 * h ** 2 + k1) * Cx + -2 * (h ** 3 + k2 + 2 * k1 * h) * Cx * dx + sy.diff(h, t) * (
-                Cx * sy.diff(dx, t) + dx * sy.diff(Cx, t)) + h * (sy.diff(Cx, t) * sy.diff(dx, t))
-        F2[0, 1, 1] = -(h ** 3 + k2 + 2 * k1 * h) * Sx ** 2 + sy.diff(h, t) * Sx * sy.diff(Sx, t) + sy.Rational(1,
-                                                                                                                2) * h * (
-                          sy.diff(Sx, t)) ** 2
-        F2[0, 1, 5] = (2 * h ** 2 + k1) * Sx + 2 * (h ** 3 + k2 + 2 * k1 * h) * Sx * dx + sy.diff(h, t) * (
-                Sx * sy.diff(dx, t) + dx * sy.diff(Sx, t)) + h * (sy.diff(Sx, t) * sy.diff(dx, t))
-        F2[0, 5, 5] = -h + (2 * h ** 2 + k1) * dx + (h ** 3 + k2 + 2 * k1 * h) * dx ** 2 + sy.diff(h, t) * dx * sy.diff(
-            dx, t) + sy.Rational(1, 2) * h * (sy.diff(dx, t)) ** 2
-        F2[0, 2, 2] = sy.Rational(1, 2) * (sy.diff(sy.diff(h, t), t) - k1 * h + 2 * k2) * Cy ** 2 + sy.diff(h,
-                                                                                                            t) * Cy * sy.diff(
-            Cy, t) - sy.Rational(1, 2) * h * sy.diff(Cy, t) ** 2
-        F2[0, 2, 3] = (sy.diff(sy.diff(h, t), t) + k1 * h + 2 * k2) * Cy * Sy + sy.diff(h, t) * (
-                Cy * sy.diff(Sy, t) + Sy * sy.diff(Cy, t)) - h * sy.diff(Cy, t) * sy.diff(Sy, t)
-        F2[0, 3, 3] = sy.Rational(1, 2) * (sy.diff(sy.diff(h, t), t) + k1 * h + 2 * k2) * Sy ** 2 + sy.diff(h,
-                                                                                                            t) * Sy * sy.diff(
-            Sy, t) - sy.Rational(1, 2) * h * sy.diff(Sy, t) ** 2
+        F2[0, 0, 0] = (
+            -(h**3 + k2 + 2 * k1 * h) * Cx**2
+            + sy.diff(h, t) * Cx * sy.diff(Cx, t)
+            + sy.Rational(
+                1,
+                2,
+            )
+            * h
+            * (sy.diff(Cx, t)) ** 2
+        )
+        F2[0, 0, 1] = (
+            -2 * (h**3 + k2 + 2 * k1 * h) * Cx * Sx
+            + sy.diff(h, t) * (Cx * sy.diff(Sx, t) + Sx * sy.diff(Cx, t))
+            + h * (sy.diff(Cx, t) * sy.diff(Sx, t))
+        )
+        F2[0, 0, 5] = (
+            (2 * h**2 + k1) * Cx
+            + -2 * (h**3 + k2 + 2 * k1 * h) * Cx * dx
+            + sy.diff(h, t) * (Cx * sy.diff(dx, t) + dx * sy.diff(Cx, t))
+            + h * (sy.diff(Cx, t) * sy.diff(dx, t))
+        )
+        F2[0, 1, 1] = (
+            -(h**3 + k2 + 2 * k1 * h) * Sx**2
+            + sy.diff(h, t) * Sx * sy.diff(Sx, t)
+            + sy.Rational(
+                1,
+                2,
+            )
+            * h
+            * (sy.diff(Sx, t)) ** 2
+        )
+        F2[0, 1, 5] = (
+            (2 * h**2 + k1) * Sx
+            + 2 * (h**3 + k2 + 2 * k1 * h) * Sx * dx
+            + sy.diff(h, t) * (Sx * sy.diff(dx, t) + dx * sy.diff(Sx, t))
+            + h * (sy.diff(Sx, t) * sy.diff(dx, t))
+        )
+        F2[0, 5, 5] = (
+            -h
+            + (2 * h**2 + k1) * dx
+            + (h**3 + k2 + 2 * k1 * h) * dx**2
+            + sy.diff(h, t)
+            * dx
+            * sy.diff(
+                dx,
+                t,
+            )
+            + sy.Rational(1, 2) * h * (sy.diff(dx, t)) ** 2
+        )
+        F2[0, 2, 2] = (
+            sy.Rational(1, 2) * (sy.diff(sy.diff(h, t), t) - k1 * h + 2 * k2) * Cy**2
+            + sy.diff(
+                h,
+                t,
+            )
+            * Cy
+            * sy.diff(
+                Cy,
+                t,
+            )
+            - sy.Rational(1, 2) * h * sy.diff(Cy, t) ** 2
+        )
+        F2[0, 2, 3] = (
+            (sy.diff(sy.diff(h, t), t) + k1 * h + 2 * k2) * Cy * Sy
+            + sy.diff(h, t) * (Cy * sy.diff(Sy, t) + Sy * sy.diff(Cy, t))
+            - h * sy.diff(Cy, t) * sy.diff(Sy, t)
+        )
+        F2[0, 3, 3] = (
+            sy.Rational(1, 2) * (sy.diff(sy.diff(h, t), t) + k1 * h + 2 * k2) * Sy**2
+            + sy.diff(
+                h,
+                t,
+            )
+            * Sy
+            * sy.diff(
+                Sy,
+                t,
+            )
+            - sy.Rational(1, 2) * h * sy.diff(Sy, t) ** 2
+        )
 
-        F2[2, 0, 2] = 2 * (k2 + k1 * h) * Cx * Cy + sy.diff(h, t) * (
-                Cx * sy.diff(Cy, t) - sy.diff(Cx, t) * Cy) + h * sy.diff(Cx, t) * sy.diff(Cy, t)
-        F2[2, 0, 3] = 2 * (k2 + k1 * h) * Cx * Sy + sy.diff(h, t) * (
-                Cx * sy.diff(Sy, t) - sy.diff(Cx, t) * Sy) + h * sy.diff(Cx, t) * sy.diff(Sy, t)
-        F2[2, 1, 2] = 2 * (k2 + k1 * h) * Sx * Cy + sy.diff(h, t) * (
-                Sx * sy.diff(Cy, t) - sy.diff(Sx, t) * Cy) + h * sy.diff(Sx, t) * sy.diff(Cy, t)
-        F2[2, 1, 3] = 2 * (k2 + k1 * h) * Sx * Sy + sy.diff(h, t) * (
-                Sx * sy.diff(Sy, t) - sy.diff(Sx, t) * Sy) + h * sy.diff(Sx, t) * sy.diff(Sy, t)
-        F2[2, 2, 5] = -k1 * Cy + 2 * (k2 + k1 * h) * Cy * dx - sy.diff(h, t) * (
-                Cy * sy.diff(dx, t) - sy.diff(Cy, t) * dx) + h * sy.diff(Cy, t) * sy.diff(dx, t)
-        F2[2, 3, 5] = -k1 * Sy + 2 * (k2 + k1 * h) * Cy * dx - sy.diff(h, t) * (
-                Sy * sy.diff(dx, t) - sy.diff(Sy, t) * dx) + h * sy.diff(Sy, t) * sy.diff(dx, t)
+        F2[2, 0, 2] = (
+            2 * (k2 + k1 * h) * Cx * Cy
+            + sy.diff(h, t) * (Cx * sy.diff(Cy, t) - sy.diff(Cx, t) * Cy)
+            + h * sy.diff(Cx, t) * sy.diff(Cy, t)
+        )
+        F2[2, 0, 3] = (
+            2 * (k2 + k1 * h) * Cx * Sy
+            + sy.diff(h, t) * (Cx * sy.diff(Sy, t) - sy.diff(Cx, t) * Sy)
+            + h * sy.diff(Cx, t) * sy.diff(Sy, t)
+        )
+        F2[2, 1, 2] = (
+            2 * (k2 + k1 * h) * Sx * Cy
+            + sy.diff(h, t) * (Sx * sy.diff(Cy, t) - sy.diff(Sx, t) * Cy)
+            + h * sy.diff(Sx, t) * sy.diff(Cy, t)
+        )
+        F2[2, 1, 3] = (
+            2 * (k2 + k1 * h) * Sx * Sy
+            + sy.diff(h, t) * (Sx * sy.diff(Sy, t) - sy.diff(Sx, t) * Sy)
+            + h * sy.diff(Sx, t) * sy.diff(Sy, t)
+        )
+        F2[2, 2, 5] = (
+            -k1 * Cy
+            + 2 * (k2 + k1 * h) * Cy * dx
+            - sy.diff(h, t) * (Cy * sy.diff(dx, t) - sy.diff(Cy, t) * dx)
+            + h * sy.diff(Cy, t) * sy.diff(dx, t)
+        )
+        F2[2, 3, 5] = (
+            -k1 * Sy
+            + 2 * (k2 + k1 * h) * Cy * dx
+            - sy.diff(h, t) * (Sy * sy.diff(dx, t) - sy.diff(Sy, t) * dx)
+            + h * sy.diff(Sy, t) * sy.diff(dx, t)
+        )
 
         # Solution for 2nd order coeficients :
         T = sy.MutableDenseNDimArray.zeros(6, 6, 6)
@@ -171,7 +249,7 @@ def generate_transport_matrix_tensor(h, k1, k2, order, sign):
                 for j in range(0, 6):
                     for k in range(0, 6):
                         if T[i, j, k] != 0:
-                            T[i, j, k] = T[i, j, k].subs(t, L).subs(kx2, h ** 2 + k1)
+                            T[i, j, k] = T[i, j, k].subs(t, L).subs(kx2, h**2 + k1)
 
         return T
 

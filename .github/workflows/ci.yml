@@ -53,4 +53,4 @@ jobs:
       - name: Run tox
         run: |
           source .venv/bin/activate
-          tox -e py
+          pytest tests
