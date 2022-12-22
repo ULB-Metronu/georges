@@ -243,7 +243,6 @@ Phase Space Observer
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
         manzoni_plot.plot_cartouche(sequence.df)
-        manzoni_plot.plot_beamline(sequence.df, print_label=False, with_aperture=True, plane='X')
         manzoni_plot.phase_space(observer=beam_observer_beam,
                                  element='Q1',
                                  dim=['X', 'PX'],

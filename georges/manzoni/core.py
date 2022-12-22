@@ -112,17 +112,25 @@ def twiss(
         return observer.to_df()
 
     def compute_matrix_for_twiss(data: _pd.DataFrame) -> _pd.DataFrame:
+        # Make some changes in the format of the matrices to be consistent with georges-core
+        # Indeed in georges core, we have a longitudinal coordinates
         normalization = 2 * offsets
+        normalization = _np.insert(normalization, -1, normalization[0], 0)
         _matrix = {}
         for label, d in data.iterrows():
             m = d["BEAM_OUT"]
             m[:, 4] = m[:, 5]
             m = m[:, 0:5]
+            m = _np.hstack((m, _np.zeros((m.shape[0], 1))))
+            m[:, [-2, -1]] = m[:, [-1, -2]]
+            m = _np.insert(m, 5, _np.zeros(m.shape[1]), 0)
+            m = _np.insert(m, -1, _np.zeros(m.shape[1]), 0)
             _matrix[label] = {
-                f"R{j + 1}{i + 1}": (m[i + 1, j] - m[i + 1 + 5, j]) / normalization[i]
-                for j in range(0, 5)
-                for i in range(0, 5)
+                f"R{j + 1}{i + 1}": (m[i + 1, j] - m[i + 1 + 6, j]) / normalization[i]
+                for j in range(0, 6)
+                for i in range(0, 6)
             }
+            _matrix[label]["S"] = d["AT_EXIT"].m_as("m")
         return _pd.DataFrame.from_dict(_matrix, orient="index")
 
     tracks = track_for_twiss()

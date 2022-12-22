@@ -880,12 +880,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
 
         self._fig.delaxes(self._ax)
         # Set up the geometry of the three plots
-        # rect_beam = [left, bottom, width, height]  # dimensions of temp plot
+        rect_beam = [left, bottom, width, height]  # dimensions of temp plot
         rect_histx = [left, bottom_h, width, hheight]  # dimensions of x-histogram
         rect_histy = [left_h, bottom, hwidth, height]  # dimensions of y-histogram
         rect_tab = [left_h, bottom_h, hwidth, hheight]  # dimensions of tab
         # Make the three plots
-        # ax_global = self._fig.add_axes(rect_beam)  # beam plot
+        ax_global = self._fig.add_axes(rect_beam)  # noqa: F841
         ax_histx = self._fig.add_axes(rect_histx)  # x histogram
         ax_histy = self._fig.add_axes(rect_histy)  # y histogram
         ax_histx.set_ylabel("Counts")

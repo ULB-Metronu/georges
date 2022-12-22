@@ -50,7 +50,7 @@ jobs:
       #----------------------------------------------
       #              run test suite with Sonar
       #----------------------------------------------
-      - name: Run tox
+      - name: Run pytest
         run: |
           source .venv/bin/activate
           pytest tests

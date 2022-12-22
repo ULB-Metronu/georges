@@ -10,3 +10,4 @@ coverage.xml
 .tox/
 docs/build
 docs/jupyter_execute
+twiss.tfs

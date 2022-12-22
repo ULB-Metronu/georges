@@ -5,13 +5,17 @@ from __future__ import annotations
 
 from typing import Dict, List, Optional, Union
 
-import pandas as pd
+import numpy as _np
+import pandas as _pd
+from georges_core import Kinematics as _Kinematics
 from georges_core import ureg as _ureg
+from georges_core.sequences import BetaBlock as _BetaBlock
 from georges_core.sequences import Sequence as _Sequence
 
 from ..fermi import materials
-from . import elements, track
+from . import elements
 from .beam import Beam as _Beam
+from .core import track, twiss
 from .elements import ManzoniElement
 from .elements.scatterers import MaterialElement
 from .integrators import Integrator, MadXIntegrator
@@ -46,8 +50,8 @@ class Input:
 
         """
 
-        _ = list(map(lambda e: pd.Series(e.attributes), self.sequence))
-        df = pd.concat(_, axis=1).T
+        _ = list(map(lambda e: _pd.Series(e.attributes), self.sequence))
+        df = _pd.concat(_, axis=1).T
         df["CLASS"] = list(map(lambda e: e.__class__.__name__, self.sequence))
         return df.set_index("NAME")
 
@@ -95,12 +99,35 @@ class Input:
         """
         if not isinstance(observers, list):
             observers = [observers]
-        track(self, beam, observers, check_apertures)
+        track(self, beam, observers, check_apertures_exit=check_apertures)
         if observers is not None:
             if len(observers) == 1:
                 return observers[0]
             else:
                 return observers
+
+    def twiss(
+        self,
+        kinematics: _Kinematics,
+        reference_particle: _np.ndarray = None,
+        offsets=None,
+        twiss_parametrization: bool = True,
+        twiss_init: _BetaBlock = None,
+    ) -> _pd.DataFrame:
+        """
+
+        Args:
+            kinematics:
+            reference_particle:
+            offsets:
+            twiss_parametrization:
+            twiss_init:
+
+        Returns:
+            The dataframe with the Twiss functions at each element.
+
+        """
+        return twiss(self, kinematics, reference_particle, offsets, twiss_parametrization, twiss_init)
 
     def adjust_energy(self, input_energy: _ureg.Quantity):
         current_energy = input_energy
