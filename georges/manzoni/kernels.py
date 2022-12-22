@@ -7,7 +7,7 @@ from numba import njit
 
 
 @njit(nogil=True)  # no parallel jit found
-def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray):
+def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray):  # pragma: no cover
     """
 
     Args:
@@ -22,7 +22,7 @@ def batched_vector_matrix(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray)
 
 
 @njit(parallel=True, nogil=True)
-def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray):
+def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray):  # pragma: no cover
     """
 
     Args:
@@ -44,7 +44,12 @@ def batched_vector_tensor(b1: _np.ndarray, b2: _np.ndarray, tensor: _np.ndarray)
 
 
 @njit(nogil=True)
-def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.ndarray, tensor: _np.ndarray):
+def batched_vector_matrix_tensor(
+    b1: _np.ndarray,
+    b2: _np.ndarray,
+    matrix: _np.ndarray,
+    tensor: _np.ndarray,
+):  # pragma: no cover
     """
 
     Args:
@@ -68,5 +73,5 @@ def batched_vector_matrix_tensor(b1: _np.ndarray, b2: _np.ndarray, matrix: _np.n
 
 
 @njit
-def matrix_matrix(m1, m2):
+def matrix_matrix(m1, m2):  # pragma: no cover
     return _np.matmul(m1, m2)

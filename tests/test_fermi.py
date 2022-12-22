@@ -155,3 +155,34 @@ def test_angle(material, model, ratio, epos_expected, angle_hanson, angle_model)
 
     _np.testing.assert_allclose(epos, epos_expected, rtol=1e-2)
     _np.testing.assert_allclose(a2, angle_hanson * ((angle_model / 100) + 1), rtol=5e-2)
+
+
+@pytest.mark.parametrize(
+    "material, epos",
+    [
+        (gmat.Beryllium, 70),
+        (gmat.Beryllium, 130),
+    ],
+)
+def test_energy(material, epos):
+    thickness = material.required_thickness(epos * _ureg.MeV, 230 * _ureg.MeV)
+    sequence = georges.PlacementSequence(name="LINE")
+    d1 = georges.Element.Degrader(
+        NAME="D1",
+        L=thickness,
+        MATERIAL=material,
+        WITH_LOSSES=True,
+    )
+
+    sequence.place(d1, at_entry=0 * _ureg.m)
+
+    pbs = georges.fermi.propagate(
+        sequence=sequence,
+        energy=230 * _ureg.MeV,
+        beam={
+            "A0": 0,
+            "A1": 0,
+            "A2": 0,
+        },
+    )
+    _np.testing.assert_allclose(epos, pbs["ENERGY_OUT"], rtol=1e-2)

@@ -20,6 +20,13 @@ from .mcs import DifferentialMoliere as _DifferentialMoliere
 from .mcs import ScatteringModelType as _ScatteringModelType
 
 
+class MaterialException(Exception):  # pragma: no cover
+    """Exception raised for errors when using zgoubidoo.Sequence"""
+
+    def __init__(self, m):
+        self.message = m
+
+
 def __bdsim_read_data(path: str) -> _pd.DataFrame:
     return _pd.read_csv(
         os.path.join(path, "bdsim", "data.csv"),
@@ -167,7 +174,7 @@ class CompoundType(type):
         return (
             cls.material_data is not None
             and cls.projected_range is not None
-            and (cls.projected_range is not None or cls.csda_range is not None)
+            or (cls.projected_range is not None and cls.csda_range is not None)
         )
 
     @property
@@ -219,7 +226,7 @@ class CompoundType(type):
         elif range_definition == CSDARange:
             return _np.exp(cls.csda_range(_np.log(energy))) / density * _ureg.cm
         else:
-            raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
+            raise MaterialException("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 
     def solve_range(
         cls,
@@ -250,7 +257,7 @@ class CompoundType(type):
                 kinetic=True,
             )
         else:
-            raise Exception("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
+            raise MaterialException("'projected' or 'csda' arguments are mutually exclusive and one must be defined.")
 
     def stopping(cls, thickness: _ureg.Quantity, kinetic_energy: _ureg.Quantity) -> _Kinematics:
         """

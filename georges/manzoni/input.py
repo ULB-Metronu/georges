@@ -36,11 +36,11 @@ class Input:
         self.mapper = mapper
 
     @property
-    def sequence(self):
+    def sequence(self):  # pragma: no cover
         return self._sequence
 
     @property
-    def beam(self):
+    def beam(self):  # pragma: no cover
         return self._beam
 
     def to_df(self):
@@ -56,7 +56,7 @@ class Input:
         return df.set_index("NAME")
 
     @property
-    def df(self):
+    def df(self):  # pragma: no cover
         return self.to_df()
 
     def freeze(self):

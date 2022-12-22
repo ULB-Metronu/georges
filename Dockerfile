@@ -21,7 +21,7 @@ ENV PATH="${PATH}:${POETRY_VENV}/bin"
 WORKDIR /home
 RUN git clone --recurse-submodules --branch develop https://github.com/rtesse/georges.git
 RUN poetry config virtualenvs.in-project true
-WORKDIR /home/georges-core
+WORKDIR /home/georges
 RUN poetry install
 
 ENV PATH="/home/georges-core/.venv/bin:$PATH"
