@@ -1,5 +1,7 @@
+.. integrators:
+
 Integrators
-###########
+-----------
 
 The file `integrators.py` contains the definition of all the integrator types,
 with a propagate function that is a wrapper to the `propagate` function of each of the

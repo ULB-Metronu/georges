@@ -1,5 +1,7 @@
+.. maps:
+
 Maps
-####
+----
 
 The `maps` submodule contains the physics of the propagation of the particles through each of the
 beamline elements described in the `elements` submodule. For each element, a first and second-order

@@ -1,5 +1,7 @@
+.. core:
+
 Core
-####
+----
 
 The beam propagation from one element to another in the beamline is implemented in the file `core.py`.
 The `track` function contains the loop over the different elements, with optionally the check of

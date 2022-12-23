@@ -16,7 +16,7 @@
 
 Georges' the lemur opinionated particle accelerator modeling Python package.
 
-<img src="https://raw.githubusercontent.com/ULB-Metronu/georges/legacy/docs/_static/georges.png" alt="drawing" width="300"/>
+<img src="docs/_static/georges.png" alt="drawing" width="300"/>
 
 ## Design
 The aim of this library is to unify the description and computation of particle accelerator beamlines for different tools (MAD-X, PTC, BDSim and G4Beamline at this stage) in a unique Python library.

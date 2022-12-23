@@ -1,5 +1,7 @@
+.. elements:
+
 Elements
-########
+--------
 
 The `elements` submodule contains the physical implementation of the different beamline elements,
 namely:

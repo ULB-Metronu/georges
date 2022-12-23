@@ -1,5 +1,7 @@
+.. observers:
+
 Observers
-#########
+---------
 
 Different observers are implemented in `Manzoni`. The syntax is as follow ::
 
@@ -12,7 +14,7 @@ The results are stored in a `pandas.DataFrame` and are available using::
 In the sections below, we detail each observer implemented in `Manzoni`
 
 MeanObserver
-************
+^^^^^^^^^^^^
 
 This observer store the mean of each quantity in the beam
 (:math:`\bar{x}`, :math:`\bar{px}`, :math:`\bar{y}`, :math:`\bar{py}`, :math:`\bar{dpp}`)
@@ -23,7 +25,7 @@ This observer store the mean of each quantity in the beam
 
 
 StdObserver
-***********
+^^^^^^^^^^^
 
 This observer store the standard deviation of each quantity in the beam
 (:math:`\sigma_x`, :math:`\sigma_{px}`, :math:`\sigma_y`, :math:`\sigma_{p}y`, :math:`\sigma_{dpp}`)
@@ -33,7 +35,7 @@ This observer store the standard deviation of each quantity in the beam
     observer = StdObserver(element=['eleA', 'eleB'])
 
 BeamObserver
-************
+^^^^^^^^^^^^
 
 This observer store the entire beam distribution at the exit of an element.
 If the flag input `with_input_beams` is set to `True`, the beam at the entrance of the
@@ -44,7 +46,7 @@ element is also stored.
     observer = BeamObserver(element=['eleA', 'eleB'], with_input_beams=True)
 
 LossesObserver
-**************
+^^^^^^^^^^^^^^
 
 This observer store the number of particles, the losses and the transmission of an element.
 
@@ -53,7 +55,7 @@ This observer store the number of particles, the losses and the transmission of 
     observer = LossesObserver(element=['eleA', 'eleB'])
 
 SymmetryObserver
-****************
+^^^^^^^^^^^^^^^^
 
 This observer compute the symmetry of the beam at the entrance
 and at the exit of an element. The symmetry is given by the following relation:
@@ -68,7 +70,7 @@ and at the exit of an element. The symmetry is given by the following relation:
 
 
 IbaBPMObserver
-**************
+^^^^^^^^^^^^^^
 
 This observer is used to validate the model with the IBA' Beam Profile Monitor.
 A Gaussian fit is performed directly on the beam position data. The element to store the
@@ -79,7 +81,7 @@ data must be a `Marker`.
     observer = IbaBpmObserver(element=['eleA', 'eleB'])
 
 UserObserver
-************
+^^^^^^^^^^^^
 
 It is also possible to define his own observer. First, you must create a class that inherits
 from the main Observer. The method `__call__(self, element, b1, b2)` receives the element

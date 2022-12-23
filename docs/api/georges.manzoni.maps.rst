@@ -60,14 +60,6 @@ georges.manzoni.maps.transport\_combined\_dipole\_ex module
    :undoc-members:
    :show-inheritance:
 
-georges.manzoni.maps.transport\_combined\_dipole\_old module
-------------------------------------------------------------
-
-.. automodule:: georges.manzoni.maps.transport_combined_dipole_old
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 georges.manzoni.maps.transport\_drift module
 --------------------------------------------
 

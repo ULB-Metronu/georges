@@ -1,5 +1,7 @@
+.. input:
+
 Input
-#####
+-----
 
 The file `input.py` contains the main class that needs instantiated to build a Manzoni input.
 It requires at least a beamline Sequence and a Beam instance to allow the tracking. Once instantiated,

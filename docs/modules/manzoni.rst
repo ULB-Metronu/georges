@@ -6,22 +6,25 @@ The Manzoni module aims to implement fast particle beam tracking through the mos
 and beamline elements (magnets, scatterers and degraders, collimators and cavities).
 The module is structured as follows:
 
+* :ref:`elements`
+* :ref:`apertures`
+* :ref:`beam`
+* :ref:`input`
+* :ref:`core`
+* :ref:`integrators`
+* :ref:`kernels`
+* :ref:`maps`
+* :ref:`observers`
+
 ..  toctree::
+    :hidden:
     :maxdepth: 1
 
-    manzoni/elements
-    manzoni/apertures
-    manzoni/beam
-    manzoni/input
-    manzoni/core
-    manzoni/integrators
-    manzoni/kernels
-    manzoni/maps
-    manzoni/observers
+    manzoni/structure
 
 
 Example
-#######
+=======
 
 ..  toctree::
     :maxdepth: 1
@@ -29,7 +32,7 @@ Example
     manzoni/manzoni_example
 
 Validation
-##########
+==========
 
 ..  toctree::
     :maxdepth: 1
