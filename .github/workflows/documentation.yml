@@ -51,4 +51,3 @@ jobs:
           cd docs
           sudo apt install -y latexmk texlive-latex-extra
           make html
-          make latexpdf
