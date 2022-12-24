@@ -1,4 +1,4 @@
-__version__ = "2022.1"
+__version__ = "2023.1"
 
 from georges_core import Q_, Kinematics, particles, ureg
 from georges_core.distribution import *

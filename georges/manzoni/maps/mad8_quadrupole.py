@@ -3,7 +3,7 @@ from numba import njit
 
 
 @njit(cache=True)
-def compute_mad_quadrupole_matrix(element_parameters: list, **_) -> np.ndarray:
+def compute_mad_quadrupole_matrix(element_parameters: list, global_parameters: list) -> np.ndarray:
     L: float = element_parameters[0]
     k1: float = element_parameters[1]
     R = np.zeros((6, 6))

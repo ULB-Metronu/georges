@@ -278,7 +278,7 @@ class Element(metaclass=ElementType):
 
         Examples:
             >>> c = Element('my_label_1')
-            >>> str(c)
+            >>> str(c) #doctest: +NORMALIZE_WHITESPACE
             "Element: {'NAME': 'my_label_1', 'AT_ENTRY': <Quantity(0, 'meter')>,
             'AT_CENTER': <Quantity(0, 'meter')>, 'AT_EXIT': <Quantity(0, 'meter')>}"
 
