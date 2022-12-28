@@ -4,6 +4,7 @@ filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::FutureWarning:"
 ]
+addopts = "--doctest-modules --ignore=libs"
 
 [tool.black]
 line-length = 120

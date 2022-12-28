@@ -2,124 +2,72 @@
 Installation
 ************
 
-No attempt is made to support python versions earlier than CPython 3.5. Jython and alternative implementation have not been tested.
+Georges is hosted on Github and can be downloaded using the following::
 
-The installation process to get Georges up and running is relatively simple:
-the whole library is ready to be installed with `poetry`.
+    git clone https://github.com/ULB-Metronu/georges.git
 
-However, as the :mod:`georges` submodules (in particular the :mod:`georges.manzoni` tracking code) are optimized to work with the [Intel distribution for Python](https://software.intel.com/en-us/articles/using-intel-distribution-for-python-with-anaconda), detailed installation instructions are provided to install :mod: georges with Conda. This is the recommended way for the installation.
+You can  stay on the bleeding-edge master branch or you can checkout
+a release tag::
 
-The Georges' git repository is hosted on [Github](https://github.com/ULB-Metronu/georges).
+    git checkout tags/2023.1
 
-## Obtaining the Georges source code with Git
-
-Simply clone the repository::
-
-    git clone https://github.com/ULB-Metronu/georges
-
-You can either stay on the bleeding-edge `master` branch or you can checkout a release tag::
-
-    git checkout tags/2018.2
+The installation process to get George’s running is relatively simple: the whole library is ready to
+be installed with `Poetry <https://python-poetry.org/>`_.
 
 Dependencies
 ############
 
-A coherent set of dependencies is listed in the Conda `environment.txt` file as well as in the `setup.py` file (for `setuptools` and `pip`). In this way, installation using either `conda` or `pip` is possible. Note that the `pip` requirement file `requirements.txt` contains a single dot `.`, which refers to the dependency list provided in the `setup.py` file.
+A coherent set of dependencies is listed in the `pyproject.toml` file (section tool.poetry.dependencies)
+A typical user should not worry about those dependencies: they are correctly managed either with poetry
 
-A typical user should not worry about those dependencies: they are properly managed either with `conda` (see next section) or with `pip` (see below).
+Installation using Poetry
+#########################
 
-Installation with Anaconda and the Intel Python Distribution libraries
-######################################################################
-
-The installation procedure which follows creates a `conda` environment based on the Intel distribution for Python with all the necessary dependencies included and managed via `conda` itself (this ensures that all the dependencies are, if possible, based on the Intel channel and not managed with `pip`). Georges is then installed using `pip` from that `conda` environment. The dependencies are coherent and the `pip` installation of Georges will find all the dependencies listed in `setup.py` to be already installed in the `conda` environment.
-
-1. Install [Conda](https://conda.io/docs/) for your operating system, follow the instructions for
-* [Linux](https://conda.io/docs/user-guide/install/linux.html)
-* [macOS](https://conda.io/docs/user-guide/install/macos.html)
-* [Windows](https://conda.io/docs/user-guide/install/windows.html)
-
-2. Obtain a copy of the git repository (see previous section)
-
-3. Create a dedicated `conda` environment (default name is `ipy3` for Intel Python 3)::
-
-        cd path/to/georges
-        conda env create -f environment.yml
-
-4. Activate the environment::
-
-        conda activate ipy3
-
-5. Install Georges using `pip` from the `conda` environment::
-
-        # Typical installation
-        pip install .
-
-        # Install with pip in editable mode to get access to the modifications on the git repository
-        pip install -e .
-
-Georges can be subsequently updated by running::
+Assuming you have Poetry and Python installed on your system, go to the location of the library and simply use
+these commands::
 
     cd path/to/georges
+    poetry install --without dev,docs
+
+.. note::
+
+    George’s uses python version >=3.8.1 and < 3.11
+
+Georges can be subsequently updated by running the following::
+
     git pull origin master
-    pip install --upgrade georges
+    poetry update
 
+Using Georges with Jupyter Lab
+##############################
 
-Installation with pip
-#####################
-
-In case Georges needs to be installed with the system Python or a Python installation that is not managed with `conda`, the following simple steps can be followed to use `pip` directly. All the dependencies are then managed with `pip`. Please note that this will typically not enable the Intel optimization, resulting in slower code execution for the :mod: manzoni module.
-
-1. Obtain a copy of the git repository (see previous section)
-
-2. Install Georges with `pip`::
-
-        # Typical installation
-        pip install .
-
-        # Install with pip in editable mode to get access to the modifications on the git repository
-        pip install -e .
-
-Georges can be subsequently updated by running::
-
-    cd path/to/georges
-    git pull origin master
-    pip install --upgrade georges
-
-
-Using Georges with Jupyter Notebook
-###################################
-
-Georges can be used with Jupyter notebooks. No special care is needed.
-
-If you installed Georges within the `conda` environment, simply run (note that it is not advised to put all your notebook within the `git` structure)::
+Georges can be used with Jupyter lab. No special care is needed,
+and you can simply run (note that it is not advised to put all your
+notebook within the git structure)::
 
     cd somewhere/good/for/notebooks
-    jupyter notebook
+    jupyter-lab
 
 
 Georges distribution with Docker
 ################################
 
-`TODO`
+A Docker image is made available to provide an easy access to a
+complete Jupyter Lab + georges environment.
 
-A Docker image is made available to provide an easy access to a complete Jupyter Notebook + madx + georges environment.
+Use the *Dockerfile* to build the image::
 
-Use  the *Dockerfile* to build the image::
-
-    docker build .
+    docker build
 
 or, to register the image as well::
 
-
-    docker build -t username/georges .
+    docker build -t georges- -fDockerfile .
 
 You can run a container with::
 
-    docker run -it username/georges
+    docker run -it --rm --name georges -p 8899:8899 georges
 
-then connect to [http://localhost:8888](http://localhost:8888) to access the Jupyter Notebook interface.
+then connect to http://127.0.0.1:8899 to access the Jupyter Lab interface
+and type::
 
-The image includes a complete Anaconda Python3 environment with the most common packages.
-The latest *MAD-X* development release is available in */usr/local/bin/madx*.
-
-
+    import georges

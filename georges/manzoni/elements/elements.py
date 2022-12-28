@@ -119,7 +119,7 @@ class Element(metaclass=ElementType):
     """
 
     PARAMETERS: dict = {
-        "NAME": ("", "Primary label for the Zgoubi command (default: auto-generated hash)."),
+        "NAME": ("", "Primary label for the Manzoni command (default: auto-generated hash)."),
         "AT_ENTRY": (0 * _ureg.m, "Entrance position of the element."),
         "AT_CENTER": (0 * _ureg.m, "Entrance position of the element."),
         "AT_EXIT": (0 * _ureg.m, "Exit position of the element."),
@@ -131,7 +131,6 @@ class Element(metaclass=ElementType):
         TODO
         Args:
             name:
-            label2:
             *params:
             **kwargs:
         """
@@ -202,10 +201,10 @@ class Element(metaclass=ElementType):
 
         It is also possible to use unit inference by appending an underscore to the attributes' name. In that
         case the unit of the default value is implicitely used. This is useful in case it is known that the parameter's
-        numerical value is expressed in Zgoubi's default units set.
+        numerical value is expressed in Manzoni's default units set.
 
         Examples:
-            >>> c = Command()
+            >>> c = Element()
             >>> c.NAME = 'FOOBAR'
 
         Args:
@@ -213,7 +212,7 @@ class Element(metaclass=ElementType):
             v: the attribute's value to be set
 
         Raises:
-            A ZgoubidooException is raised in case the parameter is not part of the class definition or if it has
+            A ManzoniException is raised in case the parameter is not part of the class definition or if it has
             invalid dimension.
         """
         if k.startswith("_") or not k.isupper():
@@ -272,14 +271,17 @@ class Element(metaclass=ElementType):
 
     def __str__(self) -> str:
         """
-        Provides the string representation of the command in the Zgoubi input file format.
+        Provides the string representation of the command in the Manzoni input file format.
 
         Returns:
             The string representation.
 
         Examples:
-            >>> c = Command('my_label_1', 'my_label_2')
+            >>> c = Element('my_label_1')
             >>> str(c)
+            "Element: {'NAME': 'my_label_1', 'AT_ENTRY': <Quantity(0, 'meter')>,
+            'AT_CENTER': <Quantity(0, 'meter')>, 'AT_EXIT': <Quantity(0, 'meter')>}"
+
         """
         return f"{self.__class__.__name__}: {str(self.attributes)}"
 

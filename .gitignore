@@ -11,3 +11,4 @@ coverage.xml
 docs/build
 docs/jupyter_execute
 twiss.tfs
+.vscode/

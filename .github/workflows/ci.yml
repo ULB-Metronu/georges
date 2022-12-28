@@ -20,8 +20,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        python: ['3.8', '3.9', '3.10']
+        os: [ubuntu-latest]
+        python: ["3.8", "3.9", "3.10"]
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
@@ -53,4 +53,4 @@ jobs:
       - name: Run pytest
         run: |
           source .venv/bin/activate
-          pytest tests
+          pytest
