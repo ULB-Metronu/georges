@@ -25,6 +25,7 @@ from ..manzoni.observers import LossesObserver as _LossesObserver
 from ..manzoni.observers import MeanObserver as _MeanObserver
 from ..manzoni.observers import Observer as _Observer
 from ..manzoni.observers import SigmaObserver as _SigmaObserver
+from ..manzoni.observers import SymmetryObserver as _SymmetryObserver
 from ..manzoni.observers import TwissObserver as _TwissObserver
 
 palette = PALETTE["solarized"]
@@ -466,6 +467,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             #                 linewidth=0.0,
             #                 color=tracking_palette['green'])
 
+        elif isinstance(observer, _SymmetryObserver):
+            raise BeamPlottingException("Use method vis.ManzoniMatplotlibArtist(ax=ax).symmetry to plot symmetry.")
+
         elif isinstance(observer, _LossesObserver):
             raise BeamPlottingException("Use method vis.ManzoniMatplotlibArtist(ax=ax).losses to plot losses.")
 
@@ -530,6 +534,37 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 "s-",
                 color=losses_palette["green"],
             )
+
+    def symmetry(self, observer: _LossesObserver = None, **kwargs):
+        """
+        Plot the symmetry of the beam along the beamline
+
+        Args:
+            observer: Observer used for the tracking
+        """
+
+        if not isinstance(observer, _SymmetryObserver):
+            raise BeamPlottingException("The observer must be a SymmetryObserver.")
+        symmetry_palette = kwargs.get("palette", palette)
+
+        df_observer = observer.to_df()
+        self._ax.plot(
+            _np.hstack([0, df_observer["AT_EXIT"].apply(lambda e: e.m_as("m")).values]),
+            _np.hstack(
+                [
+                    df_observer.iloc[0]["SYM_IN"],
+                    df_observer.iloc[:]["SYM_OUT"].values,
+                ],
+            )
+            * 100,
+            "^-",
+            color=symmetry_palette["blue"],
+            markeredgecolor=symmetry_palette["blue"],
+            markersize=2,
+            linewidth=1,
+        )
+        self._ax.set_xlabel("S (m)")
+        self._ax.set_ylabel("Asymmetry ($\%$)")
 
     @staticmethod
     def compute_halo(data, percentile):

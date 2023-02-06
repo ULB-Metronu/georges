@@ -127,6 +127,7 @@ instance of the observer:
     beam_observer_beam = mi.track(beam=beam, observers=observers.BeamObserver(with_input_beams=True))
     beam_observer_losses = mi.track(beam=beam, observers=observers.LossesObserver())
     beam_observer_tw = mi.track(beam=beam, observers=observers.TwissObserver())
+    symmetry_observer = mi.track(beam=beam, observers=observers.SymmetryObserver())
 
 .. jupyter-execute::
    :hide-output:
@@ -314,3 +315,27 @@ Twiss Observer
         manzoni_plot.twiss(beam_observer_tw, with_beta=True, with_alpha=False, with_dispersion=False)
         manzoni_plot.fig['data'][0]['showlegend'] = True
         manzoni_plot.render()
+
+Symmetry Observer
+#################
+
+.. tabs::
+
+   .. tab:: Matplotlib
+
+      .. jupyter-execute::
+
+        fig = plt.figure(figsize=(10,4))
+        ax = fig.add_subplot(111)
+        manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
+        manzoni_plot.plot_cartouche(sequence.df)
+        manzoni_plot.symmetry(observer=symmetry_observer)
+
+   .. tab:: Plotly
+
+      .. warning::
+
+        This method is not yet implemented.
+
+.. automodapi:: georges.vis
+    :no-heading:

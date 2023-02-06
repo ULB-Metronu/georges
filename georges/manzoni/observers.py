@@ -203,8 +203,8 @@ class LossesObserver(Observer):
 
 
 class SymmetryObserver(Observer):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, elements: Optional[List[str]] = None):
+        super().__init__(elements=elements)
 
         self.headers = (
             "NAME",
