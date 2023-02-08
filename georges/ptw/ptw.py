@@ -152,13 +152,21 @@ class BraggPeakAnalysis:
 
 class SpreadOutBraggPeakAnalysis:
 
-    def __init__(self, dose_data: pd.DataFrame, method: str, z_axis: _np.array, color: str, str_on_legend: str):
+    def __init__(self,
+                 dose_data: pd.DataFrame,
+                 method: str,
+                 z_axis: _np.array,
+                 color: str,
+                 str_on_legend: str,
+                 adjust_last_peak: None):
+
         self.dose_data = dose_data
         self.method = method
         self.z_axis = z_axis
         self.modul_type = 'Full'
         self.color = color
         self.str_on_legend = str_on_legend
+        self.adjust_last_peak = adjust_last_peak
 
     def get_library_max_ranges(self):
         max_ranges = _np.zeros(self.dose_data.shape[0])
@@ -212,9 +220,30 @@ class SpreadOutBraggPeakAnalysis:
 
             return sol['x']
 
+    def get_final_weights(self):
+
+        if self.adjust_last_peak is not None:
+            weights = self.compute_weights()
+            weights[0] *= self.adjust_last_peak
+
+        return weights
+
     def compute_sobp_profile(self) -> _np.array:
 
-        weighted_dose_data = _np.matmul(self.compute_weights().reshape(1, self.dose_data.shape[0]),
+        weights = self.get_final_weights()
+
+        # weights[0] *= 0.95
+        # weights[0] *= 0.97
+
+        # weights[-1] *= 0.92
+        # weights[-2] *= 1.05
+
+        # weights[0] *= 0.9
+        # weights[-1] *= 0.9
+
+        # weights[0] *= 0.95
+        weights = weights.reshape(1, self.dose_data.shape[0])
+        weighted_dose_data = _np.matmul(weights,
                                         self.dose_data.values)
 
         sobp_profile = weighted_dose_data.reshape(self.dose_data.shape[1])
@@ -230,7 +259,7 @@ class SpreadOutBraggPeakAnalysis:
                      linewidth=0.7,
                      color='r',
                      marker='*',
-                     markersize=2,
+                     markersize=4,
                      )
 
         if with_pristine_peaks:
@@ -245,12 +274,12 @@ class SpreadOutBraggPeakAnalysis:
                  linewidth=0.8,
                  color=self.color,
                  marker='*',
-                 markersize=2,
+                 markersize=5,
                  label=self.str_on_legend)
 
-        plt.xlabel('Depth (mm)')
+        plt.xlabel('Depth in water (mm)')
         plt.ylabel('Normalized dose (\\%)')
-        plt.legend(loc=(0.16, 1.01), fontsize=15, ncol=2, frameon=False)
+        plt.legend(loc=(0.15, 1.01), fontsize=20, ncol=2, frameon=False)
         plt.xlim(0, _np.max(self.z_axis))
 
     def recompute_sobp_for_another_range(self, bp_to_leave):
@@ -337,13 +366,30 @@ class SpreadOutBraggPeakAnalysis:
     def get_sobp_flatness(self):
 
         sobp_array = self.compute_sobp_profile()
-        idx_98 = _np.where(_np.isclose(sobp_array, 98, atol=1))[0]
+        idx_98 = _np.where(_np.isclose(sobp_array, 98, atol=1.5))[0]
         max_dose = _np.max(sobp_array[idx_98[0]:idx_98[-1]])
         min_dose = _np.min(sobp_array[idx_98[0]:idx_98[-1]])
 
         flatness = 1e2 * (max_dose - min_dose) / (max_dose + min_dose)
 
         return flatness
+
+    def get_ur_min_dose(self):
+
+        sobp_array = self.compute_sobp_profile()
+        idx_98 = _np.where(_np.isclose(sobp_array, 98, atol=1.5))[0]
+        max_dose = _np.max(sobp_array[idx_98[0]:idx_98[-1]])
+        min_dose = _np.min(sobp_array[idx_98[0]:idx_98[-1]])
+
+        return min_dose
+
+    def get_ur_max_dose(self):
+
+        sobp_array = self.compute_sobp_profile()
+        idx_98 = _np.where(_np.isclose(sobp_array, 98, atol=1.5))[0]
+        max_dose = _np.max(sobp_array[idx_98[0]:idx_98[-1]])
+
+        return max_dose
 
 
 class LateralProfileAnalysis:
