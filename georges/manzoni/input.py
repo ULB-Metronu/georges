@@ -21,7 +21,7 @@ from .elements.scatterers import MaterialElement
 from .integrators import Integrator, MadXIntegrator
 from .observers import Observer as _Observer
 
-MANZONI_FLAVOR = {"Sbend": "SBend"}
+MANZONI_FLAVOR = {"Sbend": "SBend", "Rbend": "RBend"}
 
 
 class Input:
