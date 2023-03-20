@@ -42,7 +42,9 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        run: poetry install --no-interaction --with dev
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry install --no-interaction --with dev
       #----------------------------------------------
       #              run test suite with Sonar
       #----------------------------------------------

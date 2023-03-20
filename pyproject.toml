@@ -4,7 +4,7 @@ filterwarnings = [
     "ignore::DeprecationWarning",
     "ignore::FutureWarning:"
 ]
-addopts = "--doctest-modules --ignore=libs"
+addopts = "--doctest-modules"
 
 [tool.black]
 line-length = 120
@@ -40,12 +40,11 @@ authors = ["Cédric Hernalsteens <cedric.hernalsteens@ulb.be>",
 
 [tool.poetry.dependencies]
 python = ">3.8.1 <3.11"
-hist = {extras = ["plot"], version = "^2.5.2"}
-georges-core = { path = "libs/georges-core/"}
-pymoo = "^0.6.0"
-numba = "^0.56.4"
-lmfit = "^1.1.0"
-sympy = "^1.11.1"
+georges-core = {git = "https://github.com/rtesse/georges-core.git", rev = "develop"}
+pymoo = "0.6.0"
+lmfit = "1.1.0"
+sympy = "1.11.1"
+hist = {extras = ["plot"],version="2.6.3"}
 
 [tool.poetry.group.docs]
 optional = true
@@ -54,32 +53,32 @@ optional = true
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.2.0"
-black = {extras = ["jupyter"], version = "^22.10.0"}
-pylint = "^2.15.2"
-flake8 = "^6.0.0"
-isort = "^5.10.1"
-flake8-pyproject = "^1.2.2"
-mypy = "^0.991"
-coverage = {extras = ["toml"], version = "^6.5.0"}
-pre-commit = "^2.21.0"
+pytest = "7.2.0"
+black = {extras = ["jupyter"], version = "22.10.0"}
+pylint = "2.15.2"
+flake8 = "6.0.0"
+isort = "5.0.1"
+flake8-pyproject = "1.2.2"
+mypy = "0.991"
+coverage = {extras = ["toml"], version = "6.5.0"}
+pre-commit = "2.21.0"
 
 [tool.poetry.group.docs.dependencies]
-sphinx = "^5.3.0"
-sphinx-material =  "^0.0.35"
-sphinx-automodapi =  "^0.14.1"
-sphinxcontrib-bibtex =  "^2.2.0"
-sphinx-copybutton =  "^0.5.1"
-sphinx-autobuild =  "^2021.3.14"
-m2r2 =  "^0.2.8"
-pandoc =  "^1.1.0"
-nbsphinx =  "^0.8.2"
-jupyter-sphinx = "^0.4.0"
-jupyter-server-mathjax = "^0.2.6"
-cairosvg = "^2.5.2"
-sphinxcontrib-svg2pdfconverter = {extras = ["cairosvg"], version = "^1.2.1"}
-sphinx-tabs = "^3.4.0"
-sphinx-rtd-theme = "^1.1.1"
+sphinx = "5.3.0"
+sphinx-material =  "0.0.35"
+sphinx-automodapi =  "0.14.1"
+sphinxcontrib-bibtex =  "2.2.0"
+sphinx-copybutton =  "0.5.1"
+sphinx-autobuild =  "2021.3.14"
+m2r2 =  "0.2.8"
+pandoc =  "1.1.0"
+nbsphinx =  "0.8.2"
+jupyter-sphinx = "0.4.0"
+jupyter-server-mathjax = "0.2.6"
+cairosvg = "2.5.2"
+sphinxcontrib-svg2pdfconverter = {extras = ["cairosvg"], version = "1.2.1"}
+sphinx-tabs = "3.4.0"
+sphinx-rtd-theme = "1.1.1"
 
 [tool.coverage.paths]
 source = ["georges"]
