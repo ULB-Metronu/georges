@@ -22,8 +22,6 @@ jobs:
       #----------------------------------------------
       - name: Check out repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Set up python
         uses: actions/setup-python@v2
         with:

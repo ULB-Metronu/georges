@@ -6,7 +6,6 @@ from numpy import cos, cosh, sin, sinh, sqrt
 
 @njit(cache=True)
 def compute_transport_quadrupole_matrix(element_parameters: nList) -> np.ndarray:
-
     L: float = element_parameters[0]
     k1: float = element_parameters[1]
     R = np.zeros((6, 6))
@@ -42,7 +41,6 @@ def compute_transport_quadrupole_matrix(element_parameters: nList) -> np.ndarray
 
 @njit(cache=True)
 def compute_transport_quadrupole_tensor(element_parameters: nList) -> np.ndarray:
-
     L: float = element_parameters[0]
     k1: float = element_parameters[1]
     T = np.zeros((6, 6, 6))

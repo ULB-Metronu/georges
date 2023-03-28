@@ -10,3 +10,6 @@ namely:
 - Collimators (rectangular, circular and elliptical);
 - Scatterers (thin materials that interact with the particles and only modify the transverse angle along the two transverse axes);
 - Degraders (thick materials which combine particle interaction with a simple drift type propagation along the material);
+
+.. automodapi:: georges.manzoni.elements
+    :no-heading:

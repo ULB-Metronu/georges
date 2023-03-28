@@ -6,7 +6,6 @@ from numpy import cos, cosh, sin, sinh, sqrt
 
 @njit(cache=True)
 def compute_transport_multipole_ex_matrix(element_parameters: nList) -> np.ndarray:
-
     L: float = element_parameters[0]
     k1: float = element_parameters[1]
     d: float = element_parameters[len(element_parameters) - 1]
@@ -44,7 +43,6 @@ def compute_transport_multipole_ex_matrix(element_parameters: nList) -> np.ndarr
 
 @njit(cache=True)
 def compute_transport_multipole_ex_tensor(element_parameters: nList) -> np.ndarray:
-
     L: float = element_parameters[0]
     k1: float = element_parameters[1]
     k2: float = element_parameters[2]

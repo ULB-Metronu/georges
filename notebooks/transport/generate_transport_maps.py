@@ -63,7 +63,6 @@ def generate_transport_matrix_tensor(h, k1, k2, order, sign):
 
     # First order :
     if order == 1:
-
         R = sy.tensor.array.MutableDenseNDimArray.zeros(6, 6)
         R[0, 0] = Cx
         R[0, 1] = Sx

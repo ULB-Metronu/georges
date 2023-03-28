@@ -8,7 +8,6 @@ from numpy import cos, cosh, sin, sinh, sqrt
 def compute_transport_combined_dipole_ex_matrix(
     element_parameters: nList,
 ) -> np.ndarray:
-
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]
     h = alpha / L
@@ -109,7 +108,6 @@ def compute_transport_combined_dipole_ex_matrix(
 def compute_transport_combined_dipole_ex_tensor(
     element_parameters: nList,
 ) -> np.ndarray:
-
     L: float = element_parameters[0]
     alpha: float = element_parameters[1]
     h = alpha / L

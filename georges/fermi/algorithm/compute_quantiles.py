@@ -190,7 +190,6 @@ def get_deviation_4dim(data: pd.DataFrame = None, quant=None) -> float:
 
 
 def get_cutted_data_4dim(beam: pd.DataFrame = None, quantile: float = 0) -> pd.DataFrame:
-
     # Compute the normalisation matrix
     matrix_h, matrix_v = compute_matrix(beam)
 

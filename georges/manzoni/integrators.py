@@ -232,7 +232,6 @@ class TransportFirstOrderTaylorIntegrator(TransportIntegrator):
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-
         if element.__class__.__name__.upper() in ["HKICKER", "VKICKER"]:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
@@ -275,7 +274,6 @@ class TransportFirstOrderTaylorIntegratorExact(TransportIntegrator):
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-
         if element.__class__.__name__.upper() in ["HKICKER", "VKICKER"]:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
@@ -321,7 +319,6 @@ class TransportSecondOrderTaylorIntegrator(TransportFirstOrderTaylorIntegrator):
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-
         if element.__class__.__name__.upper() in ["HKICKER", "VKICKER"]:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
@@ -365,7 +362,6 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
 
     @classmethod
     def propagate(cls, element, beam_in, beam_out, global_parameters: nList):
-
         if element.__class__.__name__.upper() in ["HKICKER", "VKICKER"]:
             return track_madx_kicker(beam_in, beam_out, element.cache, global_parameters)
 
@@ -377,7 +373,6 @@ class TransportSecondOrderTaylorIntegratorExact(TransportFirstOrderTaylorIntegra
             "CIRCULARCOLLIMATOR",
             "DUMP",
         ]:
-
             return track_madx_drift(beam_in, beam_out, element.cache, global_parameters)
 
         elif element.__class__.__name__.upper() == "SROTATION":

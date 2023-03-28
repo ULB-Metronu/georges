@@ -274,7 +274,6 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 )
 
         elif isinstance(observer, _BeamObserver):
-
             dico_plane = {"X": 0, "PX": 1, "Y": 2, "PY": 3}
             t = df_observer.apply(
                 lambda r: _pd.Series(
@@ -564,7 +563,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             linewidth=1,
         )
         self._ax.set_xlabel("S (m)")
-        self._ax.set_ylabel("Asymmetry ($\%$)")
+        self._ax.set_ylabel("Asymmetry ($\%$)")  # noqa: W605
 
     @staticmethod
     def compute_halo(data, percentile):

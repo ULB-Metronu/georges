@@ -225,13 +225,13 @@ napoleon_use_rtype = True
 autoclass_content = "both"
 autodoc_inherit_docstrings = True
 autodoc_default_options = {
-    # 'members': None,
+    #'members': None,
     "member-order": "bysource",
-    # 'undoc-members': None,
+    #'undoc-members': None,
     "private_members": None,
     "special_members": None,
-    # 'inherited-members': None,
-    # 'show-inheritance': None,
-    # 'ignore-module-all': None,
-    # 'exclude-members': 'KEYWORD, PARAMETERS',
+    #'inherited-members': None,
+    #'show-inheritance': None,
+    #'ignore-module-all': None,
+    #'exclude-members': 'KEYWORD, PARAMETERS',
 }

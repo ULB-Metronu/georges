@@ -9,8 +9,8 @@ You can access the library by simply importing it:
 
     import georges
 
-This will include only the core components of Georges. When importing `georges`, it will automatically import the
-`georges.Kinematics` and `georges.Distribution` modules. These modules are described in details in
+This will include only the core components of Georges. When importing :code:`georges`, it will automatically import the
+:code:`georges.Kinematics` and :code:`georges.Distribution` modules. These modules are described in details in
 the Georges-core's documentation. You can simply use these modules by typing:
 
 .. jupyter-execute::

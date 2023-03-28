@@ -38,6 +38,20 @@ Georges can be subsequently updated by running the following::
     git pull origin master
     poetry update
 
+.. note::
+
+    You can install a independent python environment with :code:`pyenv` (https://github.com/pyenv/pyenv) and
+    :code:`pyenv-virtualenv` (https://github.com/pyenv/pyenv-virtualenv) ::
+
+        pyenv install 3.8-dev
+        pyenv virtualenv 3.8-dev py38
+
+    Then, activate your Python environment and install :code:`georges-core` with Poetry ::
+
+        pyenv local py38
+        poetry install --without dev,docs
+
+
 Using Georges with Jupyter Lab
 ##############################
 

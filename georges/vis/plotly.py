@@ -186,7 +186,6 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
                 ]
 
         elif isinstance(observer, _BeamObserver):
-
             dico_plane = {"X": 0, "PX": 1, "Y": 2, "PY": 3}
             t = df_observer.apply(
                 lambda r: _pd.Series(

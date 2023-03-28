@@ -132,7 +132,7 @@ Let's define a line with drifts, quadrupoles and dipoles
 Two methods are available to validate the Twiss functions
 *********************************************************
 
-If you want a valdation of the line with `MAD-X`, there is two possibilities:
+If you want a validation of the line with :code:`MAD-X`, there is two possibilities:
     * Use a TwissObserver
     * Use Manzoni.twiss() to compute the Twiss functions along the line
 
