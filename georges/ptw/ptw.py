@@ -232,16 +232,6 @@ class SpreadOutBraggPeakAnalysis:
 
         weights = self.get_final_weights()
 
-        # weights[0] *= 0.95
-        # weights[0] *= 0.97
-
-        # weights[-1] *= 0.92
-        # weights[-2] *= 1.05
-
-        # weights[0] *= 0.9
-        # weights[-1] *= 0.9
-
-        # weights[0] *= 0.95
         weights = weights.reshape(1, self.dose_data.shape[0])
         weighted_dose_data = _np.matmul(weights,
                                         self.dose_data.values)
