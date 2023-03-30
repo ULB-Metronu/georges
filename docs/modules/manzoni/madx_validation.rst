@@ -122,12 +122,9 @@ Let's define a line with drifts, quadrupoles and dipoles
                                            betax=betax,
                                            betay=betay,
                                            alphax=alfax,
-                                           alphay=alfay).distribution[["X", "PX", "Y", "PY", "DPP"]].values
+                                           alphay=alfay).distribution.values
            )
 
-.. todo::
-
-    Correct when georges-core distribution will be updated
 
 Two methods are available to validate the Twiss functions
 *********************************************************
