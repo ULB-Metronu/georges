@@ -7,6 +7,7 @@ import georges
 from georges import ureg as _ureg
 from georges.manzoni import Input, observers
 from georges.manzoni.beam import MadXBeam
+from georges import vis
 
 
 def get_madx_twiss():
@@ -72,6 +73,7 @@ def test_from_11_particles():
     np.testing.assert_allclose(tw_observer["DISP3"], twiss_madx["DY"], atol=2e-2)
     np.testing.assert_allclose(tw_observer["DISP2"], twiss_madx["DPX"] * madx_line.metadata.kinematics.beta, atol=2e-2)
     np.testing.assert_allclose(tw_observer["DISP4"], twiss_madx["DDY"], atol=2e-2)
+
     os.remove("twiss.tfs")
 
 
@@ -108,4 +110,12 @@ def test_from_distribution():
     np.testing.assert_allclose(tw_df["DISP_OUT_Y"], twiss_madx["DY"], atol=2e-2)
     np.testing.assert_allclose(tw_df["DISP_OUT_XP"], twiss_madx["DPX"] * madx_line.metadata.kinematics.beta, atol=2e-2)
     np.testing.assert_allclose(tw_df["DISP_OUT_YP"], twiss_madx["DPY"], atol=2e-2)
+
+    # Test the plotting method
+    manzoni_plot = vis.ManzoniPlotlyArtist(width=800, height=600)
+    manzoni_plot.twiss(tw_observer, with_beta=True, with_alpha=False, with_dispersion=False, tfs_data=twiss_madx)
+    manzoni_plot.twiss(tw_observer, with_beta=False, with_alpha=True, with_dispersion=False, tfs_data=twiss_madx)
+    manzoni_plot.twiss(tw_observer, with_beta=False, with_alpha=False, with_dispersion=True, tfs_data=twiss_madx)
+    manzoni_plot.twiss(tw_observer, with_beta=True, with_alpha=True, with_dispersion=True, tfs_data=twiss_madx)
+
     os.remove("twiss.tfs")

@@ -107,14 +107,14 @@ class ProjectedRange(metaclass=RangeDefinitionType):
 
 class ElementType(type):
     @property
-    def atomic_a(cls) -> float:
-        if cls.material_data is None:
+    def atomic_a(cls) -> Optional[float]:
+        if cls.material_data is None:  # pragma: no cover
             return None
         return cls.material_data["A"]
 
     @property
-    def atomic_z(cls) -> int:
-        if cls.material_data is None:
+    def atomic_z(cls) -> Optional[int]:
+        if cls.material_data is None:  # pragma: no cover
             return None
         return cls.material_data["Z"]
 
@@ -179,7 +179,7 @@ class CompoundType(type):
 
     @property
     def density(cls) -> _Q:
-        if cls.material_data is None:
+        if cls.material_data is None:  # pragma: no cover
             return None
         return cls.material_data["rho"] * _ureg("g /cm**3")
 
@@ -217,7 +217,7 @@ class CompoundType(type):
         Returns:
 
         """
-        if not cls.valid_data:
+        if not cls.valid_data:  # pragma: no cover
             return None
         energy = kinetic_energy.m_as("MeV")
         density = cls.density.m_as("g/cm**3")
@@ -431,10 +431,10 @@ class Compound(metaclass=CompoundType):
         cls.material_data = material_data
         cls.bdsim_data = bdsim_data
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return self.__class__.__name__.lower()
 
-    def __eq__(self, y):
+    def __eq__(self, y):  # pragma: no cover
         return str(self) == str(y)
 
 

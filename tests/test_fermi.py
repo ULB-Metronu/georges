@@ -186,3 +186,40 @@ def test_energy(material, epos):
         },
     )
     _np.testing.assert_allclose(epos, pbs["ENERGY_OUT"], rtol=1e-2)
+
+
+@pytest.mark.parametrize(
+    "material,epos,delta_e,losses",
+    [
+        # Beryllium
+        (gmat.Beryllium, 70, 0.022927169502028305, 0.519213626364142),
+        (gmat.Beryllium, 90, 0.01444946282368409, 0.5618443440568988),
+        (gmat.Beryllium, 120, 0.008583083918666579, 0.6250186080931888),
+        (gmat.Beryllium, 150, 0.005492472355066447, 0.6946479723967349),
+        (gmat.Beryllium, 180, 0.0033996020727991016, 0.7790363716470412),
+        (gmat.Beryllium, 210, 0.001921270764939531, 0.8864877405236122),
+        (gmat.Beryllium, 230, 0.00020403791149303796, 0.9750354558285121),
+        # Aluminum
+        (gmat.Aluminum, 70, 0.02426572053455986, 0.6114788298258723),
+        (gmat.Aluminum, 90, 0.01532829554349649, 0.6433777619715105),
+        (gmat.Aluminum, 120, 0.009118971964947348, 0.6924861668914364),
+        (gmat.Aluminum, 150, 0.0058477106270463375, 0.7483490383774479),
+        (gmat.Aluminum, 180, 0.0036174051917678696, 0.8168641422694094),
+        (gmat.Aluminum, 210, 0.002025254924212988, 0.9039292444071848),
+        (gmat.Aluminum, 230, 0.00024353088612558138, 0.9751906773713338),
+        # Lead
+        (gmat.Lead, 70, 0.0292035699086797, 0.7384712459066811),
+        (gmat.Lead, 90, 0.018075092636654966, 0.7579369297914915),
+        (gmat.Lead, 120, 0.010498762892023006, 0.7917793659722127),
+        (gmat.Lead, 150, 0.0066430474209716595, 0.8322663009656336),
+        (gmat.Lead, 180, 0.004108628420929961, 0.880603516958809),
+        (gmat.Lead, 210, 0.002328754921664178, 0.9379967961387939),
+        (gmat.Lead, 230, 0.00011486696767115667, 0.9818855764672852),
+    ],
+)
+def test_energy_dispersion_losses(material, epos, delta_e, losses):
+    de = material.energy_dispersion(epos * _ureg.MeV)
+    loss = material.losses(epos * _ureg.MeV)
+
+    _np.testing.assert_almost_equal(de, delta_e, decimal=4)
+    _np.testing.assert_almost_equal(loss, losses, decimal=4)

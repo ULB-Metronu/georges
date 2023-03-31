@@ -1,13 +1,13 @@
 # Georges
 
-[![ci](https://github.com/rtesse/georges/actions/workflows/ci.yml/badge.svg?branch=develop)](https://github.com/rtesse/georges/actions/workflows/develop.yml)
-[![documentation](https://github.com/rtesse/georges/actions/workflows/documentation.yml/badge.svg?branch=develop)](https://github.com/ULB-Metronu/georges/actions/workflows/documentation.yml)
+[![ci](https://github.com/ULB-Metronu/georges/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ULB-Metronu/georges/actions/workflows/master.yml)
+[![documentation](https://github.com/ULB-Metronu/georges/actions/workflows/documentation.yml/badge.svg?branch=master)](https://github.com/ULB-Metronu/georges/actions/workflows/documentation.yml)
 ![Python](docs/_static/python_versions.svg)
-![version](https://img.shields.io/badge/version-2022.1-blue)
+![version](https://img.shields.io/badge/version-2023.1-blue)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=bugs)](https://sonarcloud.io/summary/new_code?id=rtesse_georges)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=coverage)](https://sonarcloud.io/summary/new_code?id=rtesse_georges)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=rtesse_georges)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges)
 
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
@@ -26,3 +26,10 @@ The aim of this library is to unify the description and computation of particle 
 
 Beamlines are loaded using *georges-core*.
 Support tools are also provided, notably a plotting library (entirely based on *Matplotlib*) which provides plotting capabilities for various optics computation (beam envelope, Twiss parameters, etc.).
+
+## Installation
+`georges` is available from PyPI with pip:
+
+    pip install georges
+
+For a custom installation, please read the installation section in the [documentation](https://ulb-metronu.github.io/georges/installation.html).
