@@ -1,21 +1,11 @@
+:tocdepth: 2
+
 *******************************************
 Georges’s visualization and plotting module
 *******************************************
 
 This module uses the `georges-core's plotting module <https://ulb-metronu.github.io/georges-core/modules/plotting.html>`_ . It can uses the *Matplotlib* ot the *Plotly* library as backend.
-After defining a *ManzoniArtist()*, the beamline can be displayed with different options:
 
-+----------------+------------------+----------------+
-| argument       |  type            |  default value |
-+================+==================+================+
-| beamline       | pandas.DataFrame | None           |
-+----------------+------------------+----------------+
-| print_label    | bool             | False          |
-+----------------+------------------+----------------+
-| with_aperture  | bool             | False          |
-+----------------+------------------+----------------+
-| plane          | str              | None           |
-+----------------+------------------+----------------+
 
 Example::
 

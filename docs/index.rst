@@ -1,20 +1,24 @@
-***********************************
+:tocdepth: 2
+
+###################################
 Welcome to Georges's documentation!
-***********************************
+###################################
 
 |Actions Status| |Documentation Status| |Python version| |version| |Bugs| |Coverage| |Reliability|
 |License| |Code Style| |Gitter|
 
-Introduction
-############
 
-Georges is an open source project hosted on Github under the GNU General Public Licence (GPL) version 3.
+:code:`Georges` provides a formalism for propagating many particles through magnetic elements while considering energy degradation by implementing the Fermi-Eyges technique. Beamlines are loaded and converted using `Georges-core <https://ulb-metronu.github.io/georges-core/index.html>`_,  where support tools are also provided, notably a plotting library (entirely based on Matplotlib and Plotly). It provides plotting capabilities for various optics computations (beam envelope, Twiss parameters, ...). 
+Additionally, :code:`Georges` includes a module for analyzing Bragg Peaks and estimating clinical properties such as R90 or lateral penumbra. It is also possible to determine the weight of each Bragg Peak in order to compute a Spread Out Bragg Peak (SOBP).
 
+***********************
 Georges's documentation
-#######################
-The documentation is part of the Georges-core repository itself and is made available *via* `Github Pages <https://pages.github.com>`_ .
-It is hosted at `ulb-metronu.github.io/georges/ <https://ulb-metronu.github.io/georges/>`_
+***********************
 
+The documentation is part of the Georges-core repository itself and is made available *via* `Github Pages <https://pages.github.com>`_ . It is hosted at `ulb-metronu.github.io/georges/ <https://ulb-metronu.github.io/georges/>`_
+
+We value your contributions and you can follow the instructions in :doc:`Contributing <contributing>`.
+Finally, if you’re having problems, please do let us know at our :doc:`Support <support>` page.
 
 ..  toctree::
     :maxdepth: 2
@@ -28,7 +32,7 @@ It is hosted at `ulb-metronu.github.io/georges/ <https://ulb-metronu.github.io/g
     changelog
 
 ..  toctree::
-    :maxdepth: 3
+    :maxdepth: 2
     :titlesonly:
     :caption: User Guide
     :glob:
@@ -38,7 +42,7 @@ It is hosted at `ulb-metronu.github.io/georges/ <https://ulb-metronu.github.io/g
     modules
 
 ..  toctree::
-    :maxdepth: 2
+    :maxdepth: 3
     :titlesonly:
     :caption: API Reference
     :glob:
@@ -62,7 +66,7 @@ Indices and tables
 
 .. |Python version| image:: _static/python_versions.svg
 
-.. |version| image:: https://img.shields.io/badge/version-2022.1-blue
+.. |version| image:: https://img.shields.io/badge/version-2023.1-blue
 
 .. |Bugs| image:: https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=bugs
    :target: https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges

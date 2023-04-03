@@ -17,8 +17,6 @@ Alphabetical list of past and present authors:
 Citation
 ########
 
-The reference paper for the George library is:
-
 Authors of papers including reference to or results obtained with Georges are encouraged to cite as follow:
 
 

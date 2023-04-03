@@ -122,7 +122,8 @@ Let's define a line with drifts, quadrupoles and dipoles
                                            betax=betax,
                                            betay=betay,
                                            alphax=alfax,
-                                           alphay=alfay).distribution.values
+                                           alphay=alfay,
+                                           dpprms=1e-3).distribution.values
            )
 
 

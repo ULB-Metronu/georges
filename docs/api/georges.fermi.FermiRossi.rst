@@ -5,6 +5,7 @@ FermiRossi
 
 .. autoclass:: FermiRossi
    :show-inheritance:
+   :noindex:
 
    .. rubric:: Methods Summary
 

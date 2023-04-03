@@ -46,15 +46,15 @@ Georges can be subsequently updated by running the following::
 
 .. note::
 
-    You can install a independent python environment with :code:`pyenv` (https://github.com/pyenv/pyenv) and
-    :code:`pyenv-virtualenv` (https://github.com/pyenv/pyenv-virtualenv) ::
+    You can install a independent python environment with `pyenv <https://github.com/pyenv/pyenv>`_  and
+    `pyenv-virtualenv <https://github.com/pyenv/pyenv-virtualenv>`_ ::
 
-        pyenv install 3.8-dev
-        pyenv virtualenv 3.8-dev py38
+        pyenv install 3.10-dev
+        pyenv virtualenv 3.10-dev py310
 
     Then, activate your Python environment and install :code:`georges` with Poetry ::
 
-        pyenv local py38
+        pyenv local py310
         poetry install --without dev,docs
 
 Conda environment

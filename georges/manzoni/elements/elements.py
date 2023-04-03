@@ -221,7 +221,7 @@ class Element(metaclass=ElementType):
             k_ = k.rstrip("_")
             if k_ not in self._attributes.keys():
                 raise ManzoniAttributeException(
-                    f"The parameter {k_} is not part of the {self.__class__.__name__} " f"definition.",
+                    f"The parameter {k_} is not part of the {self.__class__.__name__} ",
                 )
 
             default = self._retrieve_default_parameter_value(k_)

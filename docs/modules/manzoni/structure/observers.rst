@@ -131,3 +131,5 @@ Now this observer can be used by `Manzoni`::
 
     beam_Myobserver = mi.track(beam=beam, observers=MyMeanObserver())
 
+.. automodapi:: georges.manzoni.observers
+    :no-heading:

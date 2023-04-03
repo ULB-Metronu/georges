@@ -74,6 +74,10 @@ templates_path = ["_templates"]
 # You can specify multiple suffix as a list of string:
 #
 bibtex_bibfiles = ["refs.bib"]
+bibtex_default_style = "unsrt"
+bibtex_reference_style = "author_year"
+bibtex_cite_id = "{key}"
+
 source_suffix = [".rst", ".md"]
 
 # The master toctree document.
@@ -99,7 +103,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "pydata_sphinx_theme"
 # html_theme = "sphinx_book_theme"
 # html_theme = 'sphinx_material'
 

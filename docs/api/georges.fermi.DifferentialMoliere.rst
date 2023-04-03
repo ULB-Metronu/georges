@@ -5,6 +5,7 @@ DifferentialMoliere
 
 .. autoclass:: DifferentialMoliere
    :show-inheritance:
+   :noindex:
 
    .. rubric:: Methods Summary
 

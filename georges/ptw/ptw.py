@@ -1,9 +1,52 @@
+"""
+TODO
+"""
+from typing import List, Optional
+
 import matplotlib.pyplot as plt
 import numpy as _np
 import pandas as pd
+import scipy
 from numpy.polynomial import Polynomial
 from scipy.interpolate import interp1d
 from scipy.optimize import Bounds, minimize, newton_krylov
+
+
+def compute_dvh(dose_data, voxel_volume):
+    """
+    Args:
+        dose_data: 3D-array of the dose values.
+        voxel_volume: The volume of a unique voxel. We consider the same size for all voxels.
+
+    Returns:
+        dvh_dataframe: The dvh stored into a 2 columns dataframe
+
+    """
+    dvh_histogram = plt.hist(
+        dose_data.flatten(),
+        bins=100,
+        cumulative=-1,
+        density=True,
+    )
+
+    dvh_dataframe = pd.DataFrame(
+        columns=[
+            "volume",
+            "dose_value",
+        ],
+    )
+
+    dvh_dataframe["volume"] = dvh_histogram[0]
+    dvh_dataframe["dose_value"] = voxel_volume * (
+        dvh_histogram[1][:-1] + (dvh_histogram[1][1] - dvh_histogram[1][0]) / 2
+    )
+
+    return dvh_dataframe
+
+
+class BraggPeakException(Exception):
+    def __init__(self, m: str = "") -> None:  # pragam: no cover
+        self.message = m
 
 
 class BraggPeakAnalysis:
@@ -32,16 +75,6 @@ class BraggPeakAnalysis:
         return bp_interval
 
     def compute_percentage(self, x):  # Gives dose percentage in the distal region for a given z position
-        f = interp1d(
-            self.get_distal_interval()[self.get_distal_interval().columns[0]].values,
-            self.get_distal_interval()[self.get_distal_interval().columns[1]].values,
-            kind=2,
-            bounds_error=False,
-        )
-
-        return f(x)
-
-    def compute_percentage_full_bp(self, x):  # Gives dose percentage in the distal region for a given z position
         f = interp1d(
             self.get_distal_interval()[self.get_distal_interval().columns[0]].values,
             self.get_distal_interval()[self.get_distal_interval().columns[1]].values,
@@ -127,7 +160,7 @@ class BraggPeakAnalysis:
             return var
 
         else:
-            raise Exception(
+            raise BraggPeakException(
                 "Please choose a valid computation method (must be either 'polynomial_fit' or 'scipy.optimize')",
             )
 
@@ -158,7 +191,7 @@ class BraggPeakAnalysis:
         var = var[_np.where(fit_var == _np.max(fit_var))]  # take the value where the fit is maximum (global maximum)
         return var[0]
 
-    def compute_distal_fall_off(self) -> float:
+    def compute_distal_fall_off(self) -> List[float]:
         return [self.get_r10() - self.get_r90(), self.get_r20() - self.get_r80()]
 
     def compute_dfo_90_10(self) -> float:
@@ -171,12 +204,12 @@ class BraggPeakAnalysis:
 class SpreadOutBraggPeakAnalysis:
     def __init__(
         self,
-        dose_data: pd.DataFrame,
-        method: str,
-        z_axis: _np.array,
-        color: str,
-        str_on_legend: str,
-        adjust_last_peak: None,
+        dose_data: Optional[pd.DataFrame] = None,
+        method: str = scipy.optimize,
+        z_axis: Optional[_np.array] = None,
+        color: str = "blue",
+        str_on_legend: str = "",
+        adjust_last_peak: float = 1.0,
     ):
         self.dose_data = dose_data
         self.method = method
@@ -250,7 +283,7 @@ class SpreadOutBraggPeakAnalysis:
                 fun,
                 _np.zeros(n),
                 method="L-BFGS-B",
-                bounds=[(0.0, None) for x in range(n)],
+                bounds=[(0.0, None) for _ in range(n)],
             )
 
             return sol["x"]
@@ -362,7 +395,7 @@ class SpreadOutBraggPeakAnalysis:
         def compute_range(data, r, z_axis):
             idx_xin = pd.DataFrame(_np.abs(data - r)).idxmin()
             nearest_val = _np.flip(z_axis[idxmax - idx : idxmax])[idx_xin[0]]
-            function = interp1d(
+            fct = interp1d(
                 _np.flip(z_axis[idxmax - idx : idxmax]),
                 data,
                 kind=2,
@@ -370,7 +403,7 @@ class SpreadOutBraggPeakAnalysis:
             )
 
             res = minimize(
-                fun=lambda x: _np.abs(function(x=x) - r),
+                fun=lambda x: _np.abs(fct(x=x) - r),
                 bounds=Bounds(
                     lb=nearest_val - 0.5,
                     ub=nearest_val + 0.5,
@@ -611,38 +644,6 @@ class LateralProfileAnalysis:
         plt.grid()
 
 
-def compute_dvh(dose_data, voxel_volume):
-    """
-    Args:
-        dose_data: 3D-array of the dose values.
-        voxel_volume: The volume of a unique voxel. We consider the same size for all voxels.
-
-    Returns:
-        dvh_dataframe: The dvh stored into a 2 columns dataframe
-
-    """
-    dvh_histogram = plt.hist(
-        dose_data.flatten(),
-        bins=100,
-        cumulative=-1,
-        density=True,
-    )
-
-    dvh_dataframe = pd.DataFrame(
-        columns=[
-            "volume",
-            "dose_value",
-        ],
-    )
-
-    dvh_dataframe["volume"] = dvh_histogram[0]
-    dvh_dataframe["dose_value"] = voxel_volume * (
-        dvh_histogram[1][:-1] + (dvh_histogram[1][1] - dvh_histogram[1][0]) / 2
-    )
-
-    return dvh_dataframe
-
-
 class GammaAnalysis:
     pass
 
@@ -692,7 +693,7 @@ class RegularSpotScanning:
     def optimize_regular_grid_spots_placement(self):
         def compute_2d_profile_flatness(x):
             df = self.compute_2d_scanned_profile(spot_space=x)
-            profile = df.query("x**2+y**2<=@self.fieldsize**2")["total_dose"]
+            profile = df.query(f"x**2+y**2<={self.fieldsize**2}")["total_dose"]
 
             flatness = 1e2 * (_np.max(profile) - _np.min(profile)) / (_np.max(profile) + _np.min(profile))
 

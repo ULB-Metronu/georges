@@ -13,6 +13,21 @@ files = [
 ]
 
 [[package]]
+name = "accessible-pygments"
+version = "0.0.4"
+description = "A collection of accessible pygments styles"
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "accessible-pygments-0.0.4.tar.gz", hash = "sha256:e7b57a9b15958e9601c7e9eb07a440c813283545a20973f2574a5f453d0e953e"},
+    {file = "accessible_pygments-0.0.4-py2.py3-none-any.whl", hash = "sha256:416c6d8c1ea1c5ad8701903a20fcedf953c6e720d64f33dc47bfb2d3f2fa4e8d"},
+]
+
+[package.dependencies]
+pygments = ">=1.5"
+
+[[package]]
 name = "aiofiles"
 version = "22.1.0"
 description = "File support for asyncio."
@@ -3959,6 +3974,33 @@ files = [
 ]
 
 [[package]]
+name = "pydata-sphinx-theme"
+version = "0.13.3"
+description = "Bootstrap-based Sphinx theme from the PyData community"
+category = "dev"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pydata_sphinx_theme-0.13.3-py3-none-any.whl", hash = "sha256:bf41ca6c1c6216e929e28834e404bfc90e080b51915bbe7563b5e6fda70354f0"},
+    {file = "pydata_sphinx_theme-0.13.3.tar.gz", hash = "sha256:827f16b065c4fd97e847c11c108bf632b7f2ff53a3bca3272f63f3f3ff782ecc"},
+]
+
+[package.dependencies]
+accessible-pygments = "*"
+Babel = "*"
+beautifulsoup4 = "*"
+docutils = "!=0.17.0"
+packaging = "*"
+pygments = ">=2.7"
+sphinx = ">=4.2"
+typing-extensions = "*"
+
+[package.extras]
+dev = ["nox", "pre-commit", "pydata-sphinx-theme[doc,test]", "pyyaml"]
+doc = ["ablog (>=0.11.0rc2)", "colorama", "ipyleaflet", "jupyter_sphinx", "linkify-it-py", "matplotlib", "myst-nb", "nbsphinx", "numpy", "numpydoc", "pandas", "plotly", "rich", "sphinx-copybutton", "sphinx-design", "sphinx-favicon (>=1.0.1)", "sphinx-sitemap", "sphinx-togglebutton", "sphinxcontrib-youtube", "sphinxext-rediraffe", "xarray"]
+test = ["codecov", "pytest", "pytest-cov", "pytest-regressions"]
+
+[[package]]
 name = "pyflakes"
 version = "3.0.1"
 description = "passive checker of Python programs"
@@ -5550,4 +5592,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = ">3.8.1 <3.11"
-content-hash = "108f345521fa51768db1a62e0c623d05589c7e24966a4e9fe5605e59fc2b41c9"
+content-hash = "c86fcc0594de96909dd102b0dbcb983ff62dbec156d7cd3c89858d5dd3359b81"

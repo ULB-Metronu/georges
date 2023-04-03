@@ -1,6 +1,5 @@
-"""Plotly plotting module for Manzoni.
-
-TODO
+"""
+Plotly plotting module for Manzoni.
 """
 
 from __future__ import annotations
@@ -37,7 +36,7 @@ class BeamPlottingException(Exception):
 
 
 class ManzoniPlotlyArtist(_PlotlyArtist):
-    """A matplotlib implementation of a `Matplotlib` artist."""
+    """A plotly implementation of a `Plotly` artist."""
 
     def __init__(self, tracks_color: str = "b", **kwargs):
         """
@@ -60,18 +59,16 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
         halo: bool = True,
         **kwargs,
     ):
-        """
-        Plot the beam envelopes from tracking data.
-        Args:
-            observer: Observer used for the tracking
-            plane:
-            fill_between:
-            mean:
-            std:
-            halo:
-            **kwargs:
+        """Plot the beam envelopes from tracking data.
 
-        Returns:
+
+        Args:
+            observer (_Observer, optional): Observer used for the tracking. Defaults to None.
+            plane (str, optional): Plane to draw. Defaults to "X".
+            fill_between (bool, optional): Fill the gap between the lines in transparency. Defaults to False.
+            mean (bool, optional): Add the mean to the plot. Defaults to True.
+            std (bool, optional): Add the std to the plot. Defaults to False.
+            halo (bool, optional): Add a halo to the plot. Defaults to True.
 
         """
         tracking_palette = kwargs.get("palette", palette)
@@ -369,14 +366,14 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
 
         losses_palette = kwargs.get("palette", palette)
         df_observer = observer.to_df()
-        exit = df_observer["AT_EXIT"].apply(lambda e: e.m_as("m"))
+        exit_pos = df_observer["AT_EXIT"].apply(lambda e: e.m_as("m"))
 
         self.layout["xaxis"]["title"] = "S (m)"
         self.layout["yaxis"]["title"] = r"Losses (%)"
         self.layout["yaxis"]["titlefont"] = {"color": losses_palette["magenta"]}
 
         self.bar(
-            x=exit,
+            x=exit_pos,
             y=df_observer["LOSSES"],
             marker={"color": losses_palette["magenta"]},
             width=0.125,
@@ -397,7 +394,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
 
         if log_scale:
             self.scatter(
-                x=_np.hstack([0, exit.values]),
+                x=_np.hstack([0, exit_pos.values]),
                 y=_np.hstack([100, global_transmission]),
                 mode="lines+markers",
                 marker={"symbol": 17, "color": losses_palette["green"]},
@@ -412,7 +409,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
 
         else:
             self.scatter(
-                x=_np.hstack([0, exit.values]),
+                x=_np.hstack([0, exit_pos.values]),
                 y=_np.hstack([100, global_transmission]),
                 yaxis="y2",
                 mode="lines+markers",
@@ -443,15 +440,14 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
         tfs_data: Union[_pd.DataFrame, cpymad.madx.Table] = None,
         **kwargs,
     ):
-        """
-        Plot the Twiss function along the beamline
-        Args:
-            observer: Observer used for the tracking
-            with_beta: plot the beta
-            with_alpha: plot the alpha
-            with_dispersion: plot the dispersion
-            tfs_data: if provided, plot the data from MAD-X.
+        """Plot the Twiss function along the beamline
 
+        Args:
+            observer (_TwissObserver, optional): TwissObserver. Defaults to None.
+            with_beta (bool, optional): Add beta function to the plot. Defaults to True.
+            with_alpha (bool, optional): Add the alpha function ot the plot. Defaults to False.
+            with_dispersion (bool, optional): Add the dispersion to the plot. Defaults to False.
+            tfs_data (Union[_pd.DataFrame, cpymad.madx.Table], optional): tfs file from MAD. Defaults to None.
         """
         tracking_palette = kwargs.get("palette", palette)
         df_observer = observer.to_df()

@@ -5,6 +5,7 @@ ICRU
 
 .. autoclass:: ICRU
    :show-inheritance:
+   :noindex:
 
    .. rubric:: Methods Summary
 

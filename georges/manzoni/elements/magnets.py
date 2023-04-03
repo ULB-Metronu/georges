@@ -12,9 +12,7 @@ from .elements import ManzoniElement as _ManzoniElement
 
 
 class Marker(_ManzoniElement):
-    """
-    TODO
-    """
+    """Define a Marker"""
 
     INTEGRATOR = None
 

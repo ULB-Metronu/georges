@@ -19,13 +19,8 @@ Georges' the lemur opinionated particle accelerator modeling Python package.
 <img src="docs/_static/georges.png" alt="drawing" width="300"/>
 
 ## Design
-The aim of this library is to unify the description and computation of particle accelerator beamlines for different tools (MAD-X, PTC, BDSim and G4Beamline at this stage) in a unique Python library.
-
-* Fermi
-* Manzoni
-
-Beamlines are loaded using *georges-core*.
-Support tools are also provided, notably a plotting library (entirely based on *Matplotlib*) which provides plotting capabilities for various optics computation (beam envelope, Twiss parameters, etc.).
+`Georges` provides a formalism for propagating many particles through magnetic elements while considering energy degradation by implementing the Fermi-Eyges technique. Beamlines are loaded and converted using [Georges-core](https://ulb-metronu.github.io/georges-core/index.html), where support tools are also provided, notably a plotting library (entirely based on Matplotlib and Plotly). It provides plotting capabilities for various optics computations (beam envelope, Twiss parameters, ...). 
+Additionally, `Georges` includes a module for analyzing Bragg Peaks and estimating clinical properties such as R90 or lateral penumbra. It is also possible to determine the weight of each Bragg Peak in order to compute a Spread Out Bragg Peak (SOBP).
 
 ## Installation
 `georges` is available from PyPI with pip:

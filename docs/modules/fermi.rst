@@ -1,3 +1,5 @@
+:tocdepth: 2
+
 *****
 Fermi
 *****
@@ -251,3 +253,9 @@ deviation is `compute_quantiles.py` and it can be excecuted by:
 
 Where `path_to_results` is the path to the `bdsim` output files and `nparticles` is
 the number of primary particles used in the simulation.
+
+Structure
+#########
+
+.. automodapi:: georges.fermi
+    :no-heading:

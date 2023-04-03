@@ -1,6 +1,3 @@
-"""
-TODO
-"""
 from typing import List, Optional
 
 import numpy as _np
@@ -33,6 +30,12 @@ class Observer(metaclass=ObserverType):
 
 
 class BeamObserver(Observer):
+    """
+
+    Return the beam distribution at the exit of an element. Optionnaly, return the beam at the entrance of the element.
+
+    """
+
     def __init__(self, elements: Optional[List[str]] = None, with_input_beams: bool = False):
         super().__init__(elements)
         self._with_input_beams = with_input_beams
@@ -75,6 +78,12 @@ class SuperObserver(Observer):
 
 
 class MeanObserver(Observer):
+    """
+
+    Compute the mean values of the beam coordinates.
+
+    """
+
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = (
@@ -117,6 +126,12 @@ class MeanObserver(Observer):
 
 
 class SigmaObserver(Observer):
+    """
+
+    Compute the standard deviation of the beam coordinates.
+
+    """
+
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = (
@@ -159,6 +174,12 @@ class SigmaObserver(Observer):
 
 
 class LossesObserver(Observer):
+    """
+
+    Compute the losses and the transmission in an element.
+
+    """
+
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements)
         self.headers = (
@@ -203,6 +224,12 @@ class LossesObserver(Observer):
 
 
 class SymmetryObserver(Observer):
+    """
+
+    Compute the symmetry of the beam.
+
+    """
+
     def __init__(self, elements: Optional[List[str]] = None):
         super().__init__(elements=elements)
 
@@ -229,6 +256,13 @@ class SymmetryObserver(Observer):
 
 
 class TwissObserver(Observer):
+
+    """
+
+    Compute the Twiss parameters of the beam.
+
+    """
+
     def __init__(self, elements=None):
         super().__init__(elements)
         self.headers = (

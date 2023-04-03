@@ -5,9 +5,9 @@ import numpy as np
 
 import georges
 from georges import ureg as _ureg
+from georges import vis
 from georges.manzoni import Input, observers
 from georges.manzoni.beam import MadXBeam
-from georges import vis
 
 
 def get_madx_twiss():

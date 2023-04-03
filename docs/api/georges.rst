@@ -9,6 +9,7 @@ Subpackages
 
    georges.fermi
    georges.manzoni
+   georges.ptw
    georges.vis
 
 Module contents

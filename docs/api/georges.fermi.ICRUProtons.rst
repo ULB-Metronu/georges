@@ -5,6 +5,7 @@ ICRUProtons
 
 .. autoclass:: ICRUProtons
    :show-inheritance:
+   :noindex:
 
    .. rubric:: Methods Summary
 

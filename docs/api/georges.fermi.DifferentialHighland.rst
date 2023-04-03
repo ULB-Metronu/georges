@@ -5,6 +5,7 @@ DifferentialHighland
 
 .. autoclass:: DifferentialHighland
    :show-inheritance:
+   :noindex:
 
    .. rubric:: Methods Summary
 

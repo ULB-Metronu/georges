@@ -13,8 +13,6 @@ import matplotlib.patches as patches
 import matplotlib.ticker as mticker
 import numpy as _np
 import pandas as _pd
-
-# from lmfit.models import GaussianModel
 from georges_core.vis import MatplotlibArtist as _MatplotlibArtist
 from georges_core.vis.artist import PALETTE
 from lmfit.models import GaussianModel
@@ -209,6 +207,10 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 y1 = y0
             y = [y1, -y0]
 
+            if plane == "both":
+                label = ""
+            else:
+                label = kwargs.get("label", plane)
             self._ax.plot(
                 x,
                 y[0],
@@ -219,7 +221,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 markeredgecolor=tracking_palette[plane],
                 markersize=2,
                 linewidth=1,
-                label=kwargs.get("label", plane),
+                label=label,
             )
             if fill_between:
                 self._ax.fill_between(

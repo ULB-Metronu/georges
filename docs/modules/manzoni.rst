@@ -4,6 +4,10 @@ Manzoni
 
 The Manzoni module aims to implement fast particle beam tracking through the most encountered accelerator
 and beamline elements (magnets, scatterers and degraders, collimators and cavities).
+
+Structure
+=========
+
 The module is structured as follows:
 
 * :ref:`elements`

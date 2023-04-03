@@ -79,6 +79,7 @@ cairosvg = "2.7.0"
 sphinxcontrib-svg2pdfconverter = {extras = ["cairosvg"], version = "1.2.2"}
 sphinx-tabs = "3.4.1"
 sphinx-rtd-theme = "1.2.0"
+pydata-sphinx-theme = "0.13.3"
 
 [tool.coverage.paths]
 source = ["georges"]
