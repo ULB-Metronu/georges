@@ -1,7 +1,7 @@
 :tocdepth: 2
 
 *******************************************
-Georges’s visualization and plotting module
+Georges's visualization and plotting module
 *******************************************
 
 This module uses the `georges-core's plotting module <https://ulb-metronu.github.io/georges-core/modules/plotting.html>`_ . It can uses the *Matplotlib* ot the *Plotly* library as backend.
@@ -126,8 +126,11 @@ instance of the observer:
     import matplotlib.pyplot as plt
     plt.rc('text', usetex=False)
 
+Type of observers
+#################
+
 Mean Observer
-#############
+"""""""""""""
 
 .. tabs::
 
@@ -158,7 +161,7 @@ Mean Observer
         manzoni_plot.render()
 
 Std Observer
-############
+""""""""""""
 
 .. tabs::
 
@@ -190,7 +193,7 @@ Std Observer
         manzoni_plot.render()
 
 Beam Observer
-#############
+"""""""""""""
 
 .. tabs::
 
@@ -222,7 +225,7 @@ Beam Observer
 
 
 Phase Space Observer
-####################
+""""""""""""""""""""
 
 .. tabs::
 
@@ -247,7 +250,7 @@ Phase Space Observer
         This method is not yet implemented.
 
 Losses Observer
-###############
+"""""""""""""""
 
 .. tabs::
 
@@ -277,7 +280,7 @@ Losses Observer
 
 
 Twiss Observer
-##############
+""""""""""""""
 
 .. tabs::
 
@@ -307,7 +310,7 @@ Twiss Observer
         manzoni_plot.render()
 
 Symmetry Observer
-#################
+"""""""""""""""""
 
 .. tabs::
 
@@ -326,6 +329,9 @@ Symmetry Observer
       .. warning::
 
         This method is not yet implemented.
+
+API
+###
 
 .. automodapi:: georges.vis
     :no-heading:

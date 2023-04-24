@@ -18,7 +18,7 @@ import georges
 
 project = "Georges"
 copyright = (
-    "2018-2022, Cédric Hernalsteens (cedric.hernalsteens@ulb.be), Robin Tesse (robin.tesse@ulb.be), "
+    "2018-2023, Cédric Hernalsteens (cedric.hernalsteens@ulb.be), Robin Tesse (robin.tesse@ulb.be), "
     "Eustache Gnacadja (eustache.gnacadja@ulb.be), Eliott Ramoisiaux (eliott.ramoisiaux@ulb.be), "
     "Marion Vanwelde (marion.vanwelde@ulb.be), Kévin André"
 )

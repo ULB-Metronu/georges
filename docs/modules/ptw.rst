@@ -1,7 +1,12 @@
-:tocdepth: 1
+:tocdepth: 2
 
+***
 PTW
-===
+***
+
+
+Example
+#######
 
 
 .. jupyter-execute::
@@ -25,7 +30,7 @@ PTW
     path = f"{os.path.join(georges.__path__[0], '../docs/ptw_files')}"
 
 Load Bragg peak data
---------------------
+""""""""""""""""""""
 
 .. jupyter-execute::
 
@@ -35,7 +40,7 @@ Load Bragg peak data
     Bragg_peak_data['z'] = z_values
 
 Compute the SOBP
-----------------
+""""""""""""""""
 
 .. jupyter-execute::
 
@@ -52,13 +57,12 @@ Compute the SOBP
     sobp_analysis.view_sobp(with_pristine_peaks=True)
 
 Load lateral profile
---------------------
+""""""""""""""""""""
 
 .. jupyter-execute::
 
     profile_df = pd.read_csv(os.path.join(path,'lateral_profile.csv'))
-    lp_analysis = LateralProfileAnalysis(dose_profile=profile_df['dose'],
-    positions=profile_df['x'])
+    lp_analysis = LateralProfileAnalysis(dose_profile=profile_df["dose"], positions=profile_df["x"])
 
 .. jupyter-execute::
 
@@ -68,8 +72,8 @@ Load lateral profile
 
     lp_analysis.get_penumbra()
 
-Module structure
-----------------
+API
+###
 
 .. automodapi:: georges.ptw
     :no-heading:
