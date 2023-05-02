@@ -181,9 +181,16 @@ Compare results between MAD-X and Manzoni
 
          .. tab:: Dispersion
 
-            .. todo::
+            .. jupyter-execute::
 
-                To implement
+                fig = plt.figure(figsize=(10,4))
+                ax = fig.add_subplot(111)
+                manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
+                manzoni_plot.plot_cartouche(sequence.df) # Preparation of the plot
+                manzoni_plot.twiss(beam_observer_tw, with_beta=False, with_alpha=False, with_dispersion = True, tfs_data=tfs_data, relativistic_beta=kin.beta)
+                manzoni_plot.ax_disp.plot(manzoni_twiss['S'], manzoni_twiss['DISP1'], label='Manzoni-twiss', ls='--', color='k')
+                manzoni_plot.ax_disp.plot(manzoni_twiss['S'], manzoni_twiss['DISP3'], label='Manzoni-twiss', ls='--', color='k')
+                ax.legend(loc='upper left')
 
    .. tab:: Plotly
 
@@ -249,6 +256,30 @@ Compare results between MAD-X and Manzoni
 
          .. tab:: Dispersion
 
-            .. todo::
+            .. jupyter-execute::
 
-                To implement
+                manzoni_plot = vis.ManzoniPlotlyArtist(width=600, height=400)
+                manzoni_plot.fig["layout"]["margin"] = dict(l=0, r=0, b=0)
+                manzoni_plot.fig['layout']['legend'] =dict(
+                    yanchor="top",
+                    y=0.99,
+                    xanchor="left",
+                    x=0.01
+                )
+                manzoni_plot.scatter(x=manzoni_twiss['S'],
+                     y=manzoni_twiss['DISP1'],
+                     name='Manzoni_twiss',
+                     mode='lines',
+                     line={'dash': 'dash', 'color': 'black'})
+                manzoni_plot.scatter(x=manzoni_twiss['S'],
+                     y=manzoni_twiss['DISP3'],
+                     name='Manzoni_twiss',
+                     mode='lines',
+                     showlegend=False,
+                     line={'dash': 'dash', 'color': 'black'})
+                manzoni_plot.plot_cartouche(sequence.df, unsplit_bends=False, vertical_position=1.12)
+                manzoni_plot.twiss(beam_observer_tw, with_beta=False, with_alpha=False, with_dispersion=True ,tfs_data=tfs_data, relativistic_beta=kin.beta)
+                manzoni_plot.fig['data'][0]['showlegend'] = True
+                manzoni_plot.fig['data'][1]['showlegend'] = True
+                manzoni_plot.fig['data'][1]['showlegend'] = True
+                manzoni_plot.render()

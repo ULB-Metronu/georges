@@ -156,7 +156,7 @@ Plot results
         fig = plt.figure(figsize=(10,4))
         ax = fig.add_subplot(111)
         manzoni_plot = vis.ManzoniMatplotlibArtist(ax=ax)
-        manzoni_plot.plot_beamline(sequence.df, with_cartouche=True, print_label=True, with_aperture=True) 
+        manzoni_plot.plot_beamline(sequence.df, with_cartouche=True, print_label=True, with_aperture=True)
         manzoni_plot.tracking(beam_observer_std, plane="both")
 
    .. tab:: Losses

@@ -140,13 +140,26 @@ Georges distribution with Docker
 A Docker image is made available to provide an easy access to a
 complete Jupyter Lab + georges environment.
 
-Use the *Dockerfile* to build the image::
+Docker image from Github
+------------------------
+
+The docker image can be pulled from Github using::
+
+    docker pull ghcr.io/ulb-metronu/georges:master
+
+Docker image from scratch
+-------------------------
+
+Use the *Dockerfile* in Georges's repository to build the image::
 
     docker build
 
 or, to register the image as well::
 
     docker build -t georges -f Dockerfile .
+
+Run Docker
+----------
 
 You can run a container with::
 

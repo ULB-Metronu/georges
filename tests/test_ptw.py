@@ -1,9 +1,9 @@
 import os
+
 import pandas as pd
 from numpy.testing import assert_almost_equal
 
 import georges
-
 from georges.ptw import LateralProfileAnalysis
 
 

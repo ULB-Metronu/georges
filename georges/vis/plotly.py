@@ -438,6 +438,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
         with_alpha: bool = False,
         with_dispersion: bool = False,
         tfs_data: Union[_pd.DataFrame, cpymad.madx.Table] = None,
+        relativistic_beta: float = 1.0,
         **kwargs,
     ):
         """Plot the Twiss function along the beamline
@@ -448,6 +449,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
             with_alpha (bool, optional): Add the alpha function ot the plot. Defaults to False.
             with_dispersion (bool, optional): Add the dispersion to the plot. Defaults to False.
             tfs_data (Union[_pd.DataFrame, cpymad.madx.Table], optional): tfs file from MAD. Defaults to None.
+            relativistic_beta (float): Relativistic beta value to scale the dispersion. Default to 1.
         """
         tracking_palette = kwargs.get("palette", palette)
         df_observer = observer.to_df()
@@ -596,9 +598,12 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
             self.layout["yaxis2"]["title"] = r"Dispersion"
 
             if tfs_data is not None:
+                logging.warning(
+                    f"Dispersion from MAD-X is multiplied by the beta relativistic factor {relativistic_beta}.",
+                )
                 self.scatter(
                     x=tfs_data["S"].values,
-                    y=tfs_data["DX"].values,
+                    y=tfs_data["DX"].values * relativistic_beta,
                     marker={"symbol": 4, "color": tracking_palette["blue"], "size": 7},
                     mode="markers",
                     showlegend=True,
@@ -608,7 +613,7 @@ class ManzoniPlotlyArtist(_PlotlyArtist):
 
                 self.scatter(
                     x=tfs_data["S"].values,
-                    y=tfs_data["DY"].values,
+                    y=tfs_data["DY"].values * relativistic_beta,
                     marker={"symbol": 4, "color": tracking_palette["red"], "size": 7},
                     mode="markers",
                     showlegend=True,

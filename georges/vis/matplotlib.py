@@ -586,6 +586,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         with_alpha: bool = False,
         with_dispersion: bool = False,
         tfs_data: Union[_pd.DataFrame, cpymad.madx.Table] = None,
+        relativistic_beta: float = 1.0,
         **kwargs,
     ):
         """
@@ -597,6 +598,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             with_alpha: plot the alpha
             with_dispersion: plot the dispersion
             tfs_data: if provided, plot the data from MAD-X.
+            relativistic_beta (float): Relativistic beta value to scale the dispersion. Default to 1.
 
         """
         if not isinstance(observer, _TwissObserver):
@@ -732,8 +734,8 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
             self._ax.set_ylim([min_val - 5.0, max_val + 5.0])
 
         if with_dispersion:
-            ax2 = self._ax.twinx()
-            ax2.plot(
+            self.ax_disp = self._ax.twinx()
+            self.ax_disp.plot(
                 _np.hstack([0, df_observer["AT_EXIT"].apply(lambda e: e.m_as("m")).values]),
                 _np.hstack(
                     [
@@ -747,7 +749,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 label="DX - Manzoni",
             )
 
-            ax2.plot(
+            self.ax_disp.plot(
                 _np.hstack([0, df_observer["AT_EXIT"].apply(lambda e: e.m_as("m")).values]),
                 _np.hstack(
                     [
@@ -761,9 +763,12 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                 label="DY - Manzoni",
             )
             if tfs_data is not None:
-                ax2.plot(
+                logging.warning(
+                    f"Dispersion from MAD-X is multiplied by the beta relativistic factor {relativistic_beta}.",
+                )
+                self.ax_disp.plot(
                     tfs_data["S"].values,
-                    tfs_data["DX"].values,
+                    tfs_data["DX"].values * relativistic_beta,
                     color=twiss_palette["DX"],
                     markeredgecolor=twiss_palette["DX"],
                     markersize=4,
@@ -772,9 +777,9 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                     label="DX - MADX",
                 )
 
-                ax2.plot(
+                self.ax_disp.plot(
                     tfs_data["S"].values,
-                    tfs_data["DY"].values,
+                    tfs_data["DY"].values * relativistic_beta,
                     color=twiss_palette["DY"],
                     markeredgecolor=twiss_palette["DY"],
                     markersize=4,
@@ -783,14 +788,14 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
                     label="DY - MADX",
                 )
 
-            ax2.set_xlabel("S (m)")
-            ax2.set_ylabel("Dispersion (m)")
+            self.ax_disp.set_xlabel("S (m)")
+            self.ax_disp.set_ylabel("Dispersion (m)")
             max_val = _np.ceil(_np.maximum(df_observer["DISP_OUT_X"].max(), df_observer["DISP_OUT_Y"].max()))
             min_val = _np.floor(_np.minimum(df_observer["DISP_OUT_X"].min(), df_observer["DISP_OUT_Y"].min()))
             if max_val > 0:
-                ax2.yaxis.set_major_locator(mticker.MultipleLocator(_np.ceil(max_val / 10)))
-            ax2.set_ylim([min_val - 5.0, max_val + 5.0])
-            ax2.legend()
+                self.ax_disp.yaxis.set_major_locator(mticker.MultipleLocator(_np.ceil(max_val / 10)))
+            self.ax_disp.set_ylim([min_val - 5.0, max_val + 5.0])
+            self.ax_disp.legend()
 
     # Plotting for the phase space
     def phase_space(
