@@ -51,14 +51,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
-      - name: Run sphinx for html
-        run: |
-          source .venv/bin/activate
-          sudo apt install -y latexmk texlive-latex-extra
-          cd docs
-          make latexpdf
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: pdf
-          path: 'docs/build/latex/Georges-core.pdf'

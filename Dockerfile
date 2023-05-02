@@ -18,12 +18,12 @@ RUN python3 -m venv $POETRY_VENV \
 ENV PATH="${PATH}:${POETRY_VENV}/bin"
 
 WORKDIR /home
-RUN git clone https://github.com/ULB-Metronu/georges.git
+RUN git clone --branch master https://github.com/ULB-Metronu/georges.git
 RUN poetry config virtualenvs.in-project true
 WORKDIR /home/georges
 RUN poetry install
 
-ENV PATH="/home/georges-core/.venv/bin:$PATH"
+ENV PATH="/home/georges/.venv/bin:$PATH"
 RUN mkdir work
 WORKDIR /home/work
 CMD jupyter-lab --ip 0.0.0.0 --no-browser --allow-root --port=8899
