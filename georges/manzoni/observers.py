@@ -402,16 +402,15 @@ class IbaBpmObserver(Observer):
         return fit_bpm(distribution)
 
     def __call__(self, element, b1, b2):
-        if super().__call__(element, b1, b2):
-            if element.CLASS == "Marker":
-                print(element.NAME)  # To identify the BPM whose data are being fitted
-                self.data.append(
-                    (
-                        element.NAME,
-                        element.AT_ENTRY,
-                        element.AT_CENTER,
-                        element.AT_EXIT,
-                        self.fit_bpm(b2[:, 0])[0],
-                        self.fit_bpm(b2[:, 2])[0],
-                    ),
-                )
+        if super().__call__(element, b1, b2) and element.CLASS == "Marker":
+            print(element.NAME)  # To identify the BPM whose data are being fitted
+            self.data.append(
+                (
+                    element.NAME,
+                    element.AT_ENTRY,
+                    element.AT_CENTER,
+                    element.AT_EXIT,
+                    self.fit_bpm(b2[:, 0])[0],
+                    self.fit_bpm(b2[:, 2])[0],
+                ),
+            )

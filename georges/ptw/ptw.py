@@ -45,7 +45,7 @@ def compute_dvh(dose_data, voxel_volume):
 
 
 class BraggPeakException(Exception):
-    def __init__(self, m: str = "") -> None:  # pragam: no cover
+    def __init__(self, m: str = "") -> None:  # pragma: no cover
         self.message = m
 
 

@@ -926,7 +926,7 @@ class ManzoniMatplotlibArtist(_MatplotlibArtist):
         rect_histy = [left_h, bottom, hwidth, height]  # dimensions of y-histogram
         rect_tab = [left_h, bottom_h, hwidth, hheight]  # dimensions of tab
         # Make the three plots
-        ax_global = self._fig.add_axes(rect_beam)  # noqa: F841
+        _ = self._fig.add_axes(rect_beam)  # noqa: F841
         ax_histx = self._fig.add_axes(rect_histx)  # x histogram
         ax_histy = self._fig.add_axes(rect_histy)  # y histogram
         ax_histx.set_ylabel("Counts")
