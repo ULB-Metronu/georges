@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Setup Pages
         uses: actions/configure-pages@v2
       - name: Set up python
@@ -37,16 +35,30 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
       - name: Install dependencies
-        run: poetry install --no-interaction -E sphinx
-      - name: Run sphinx
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry install --no-interaction --with docs
+      - name: Run sphinx for html
         run: |
           source .venv/bin/activate
-          sphinx-build -b html docs build
+          cd docs
+          make html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: './build'
+          path: 'docs/build/html'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+      - name: Run sphinx for html
+        run: |
+          source .venv/bin/activate
+          sudo apt install -y latexmk texlive-latex-extra
+          cd docs
+          make latexpdf
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pdf
+          path: 'docs/build/latex/Georges-core.pdf'

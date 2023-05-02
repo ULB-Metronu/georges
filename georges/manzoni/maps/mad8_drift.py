@@ -1,5 +1,5 @@
-import numpy as _np
 import numba as _nb
+import numpy as _np
 from numba import njit
 
 
@@ -81,7 +81,6 @@ def drift6(b1: _np.ndarray, b2: _np.ndarray, length: float):
 
 @njit(parallel=True, fastmath=True)
 def compute_mad_drift_matrix(element_parameters: list, **_) -> _np.ndarray:
-
     L: float = element_parameters[0]
     R = _np.zeros((6, 6))
 
@@ -100,8 +99,6 @@ def compute_mad_drift_matrix(element_parameters: list, **_) -> _np.ndarray:
 
 @njit(parallel=True, fastmath=True)
 def compute_mad_drift_tensor(element_parameters: list, **_) -> _np.ndarray:
-
-    L: float = element_parameters[0]
     T = _np.zeros((6, 6, 6))
 
     return T

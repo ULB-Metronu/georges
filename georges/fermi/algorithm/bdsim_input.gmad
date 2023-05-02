@@ -1,0 +1,23 @@
+! BDSIM input
+
+include degrader_properties.gmad;
+
+beam, particle = "proton",
+      energy = 1.16827203*GeV,
+      distrType  = "reference";
+
+
+DEG: rcol, l=length, material=material, xsize=0, ysize=0, horizontalWidth=10*m;
+
+l0: line = (DEG);
+
+lattice: line = (l0);
+use, period=lattice;
+
+option,	physicsList="g4QGSP_BIC_EMZ",
+        stopSecondaries=0,
+        preprocessGDML=0,
+        samplersSplitLevel=1,
+	    worldMaterial="G4_Galactic";
+
+sample, all;

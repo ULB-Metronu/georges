@@ -1,17 +1,20 @@
 from typing import Tuple
-from numpy import sin, cos, sinh, cosh, sqrt
+
 from numba import njit, prange
 from numba.typed import List as nList
+from numpy import cos, cosh, sin, sinh, sqrt
 
 
 @njit(fastmath=True)
-def _apply_tilt_rotation(x: float,
-                         xp: float,
-                         y: float,
-                         yp: float,
-                         ct: float,
-                         st: float,
-                         sign: int) -> Tuple[float, float, float, float]:
+def _apply_tilt_rotation(
+    x: float,
+    xp: float,
+    y: float,
+    yp: float,
+    ct: float,
+    st: float,
+    sign: int,
+) -> Tuple[float, float, float, float]:
     """
 
     Args:
@@ -246,10 +249,12 @@ def track_madx_bend(b1, b2, element_parameters: nList, global_parameters: nList)
         quad_parameters.append(k1)
         quad_parameters.append(0.0)
         quad_parameters.append(tilt)
-        return track_madx_quadrupole(b1,
-                                     b2,
-                                     quad_parameters,
-                                     global_parameters)
+        return track_madx_quadrupole(
+            b1,
+            b2,
+            quad_parameters,
+            global_parameters,
+        )
 
     if tilt != 0.0:
         st: float = sin(tilt)

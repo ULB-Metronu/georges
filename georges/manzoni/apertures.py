@@ -1,5 +1,6 @@
 """
-TODO
+The file `apertures.py` is for the `collimator` elements and contains the implementation of the
+selection of the particle according to the type of collimator (rectangular, circular, elliptical).
 """
 import numpy as _np
 from numba import njit
@@ -59,4 +60,5 @@ def phase_space_aperture_check(b1, kargs: _np.ndarray):
 
     """
     return ((b1[:, 0] / kargs[0]) ** 2 + (b1[:, 1] / kargs[1]) ** 2) < 1 and (
-                (b1[:, 2] / kargs[2]) ** 2 + (b1[:, 3] / kargs[3]) ** 2) < 1
+        (b1[:, 2] / kargs[2]) ** 2 + (b1[:, 3] / kargs[3]) ** 2
+    ) < 1

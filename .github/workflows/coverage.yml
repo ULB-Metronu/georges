@@ -5,9 +5,14 @@ name: coverage
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
   pull_request:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
@@ -18,12 +23,10 @@ jobs:
       #----------------------------------------------
       - name: Check out repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Set up python
         uses: actions/setup-python@v3
         with:
-          python-version: 3.8
+          python-version: '3.10'
       #----------------------------------------------
       #  -----  install & configure poetry  -----
       #----------------------------------------------
@@ -36,14 +39,18 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        run: poetry install --no-interaction -E test
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry install --no-interaction --with dev
       #----------------------------------------------
       #              run test suite with Sonar
       #----------------------------------------------
-      - name: Run tox
+      - name: Run pytest
         run: |
           source .venv/bin/activate
-          pytest --cov=georges --cov-report=xml tests/
+          export NUMBA_DISABLE_JIT=1
+          coverage run -m pytest
+          coverage xml
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:

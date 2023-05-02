@@ -1,4 +1,0 @@
-[submodule "libs/georges-core"]
-	path = libs/georges-core
-	url = https://github.com/ULB-Metronu/georges-core.git
-    branch = develop

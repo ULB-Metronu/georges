@@ -1,38 +1,53 @@
 """
-TODO
+The file `input.py` contains the main class that needs instantiated to build a Manzoni input.
+It requires at least a beamline Sequence and a Beam instance to allow the tracking. Once instantiated,
+the Input class has a track function, which is just a wrapper on the track function of the file `core.py`,
+and can be directly called to perform the tracking through the beamline. There are also a couple of
+useful functions to freeze, unfreeze, set or get the parameters of a given element of the sequence.
+Finally, the “adjust_energy” function is important to calculate all the initial kinetic energies of
+all the scatterers and degraders of the beamline, starting from the initial kinetic energy of the beam.
+It is necessary to correct the particles' propagation through these elements during the tracking.
 """
 from __future__ import annotations
 
-from typing import Optional, Union, Dict
+from typing import Dict, List, Optional, Union
 
-import pandas as pd
-
+import numpy as _np
+import pandas as _pd
+from georges_core import Kinematics as _Kinematics
 from georges_core import ureg as _ureg
+from georges_core.sequences import BetaBlock as _BetaBlock
 from georges_core.sequences import Sequence as _Sequence
+
+from ..fermi import materials
 from . import elements
 from .beam import Beam as _Beam
+from .core import track, twiss
+from .elements import ManzoniElement
 from .elements.scatterers import MaterialElement
-from .integrators import *
+from .integrators import Integrator, MadXIntegrator
 from .observers import Observer as _Observer
-from ..fermi import materials
 
-MANZONI_FLAVOR = {"Sbend": "SBend"}
+MANZONI_FLAVOR = {"Sbend": "SBend", "Rbend": "RBend"}
 
 
 class Input:
-    def __init__(self, sequence: Optional[List[elements.ManzoniElement]] = None,
-                 beam: Optional[_Beam] = None,
-                 mapper: Dict[str, int] = None):
+    def __init__(
+        self,
+        sequence: Optional[List[elements.ManzoniElement]] = None,
+        beam: Optional[_Beam] = None,
+        mapper: Dict[str, int] = None,
+    ):
         self._sequence = sequence
         self._beam = beam
         self.mapper = mapper
 
     @property
-    def sequence(self):
+    def sequence(self):  # pragma: no cover
         return self._sequence
 
     @property
-    def beam(self):
+    def beam(self):  # pragma: no cover
         return self._beam
 
     def to_df(self):
@@ -42,13 +57,13 @@ class Input:
 
         """
 
-        _ = list(map(lambda e: pd.Series(e.attributes), self.sequence))
-        df = pd.concat(_, axis=1).T
-        df['CLASS'] = list(map(lambda e: e.__class__.__name__, self.sequence))
+        _ = list(map(lambda e: _pd.Series(e.attributes), self.sequence))
+        df = _pd.concat(_, axis=1).T
+        df["CLASS"] = list(map(lambda e: e.__class__.__name__, self.sequence))
         return df.set_index("NAME")
 
     @property
-    def df(self):
+    def df(self):  # pragma: no cover
         return self.to_df()
 
     def freeze(self):
@@ -73,11 +88,12 @@ class Input:
             e.unfreeze()
         return self
 
-    def track(self,
-              beam: _Beam,
-              observers: Union[List[_Observer], _Observer] = None,
-              check_apertures: bool = True,
-              ) -> Union[List[_Observer], _Observer]:
+    def track(
+        self,
+        beam: _Beam,
+        observers: Union[List[_Observer], _Observer] = None,
+        check_apertures: bool = True,
+    ) -> Union[List[_Observer], _Observer]:
         """
 
         Args:
@@ -90,12 +106,35 @@ class Input:
         """
         if not isinstance(observers, list):
             observers = [observers]
-        track(self, beam, observers, check_apertures)
+        track(self, beam, observers, check_apertures_exit=check_apertures)
         if observers is not None:
             if len(observers) == 1:
                 return observers[0]
             else:
                 return observers
+
+    def twiss(
+        self,
+        kinematics: _Kinematics,
+        reference_particle: _np.ndarray = None,
+        offsets=None,
+        twiss_parametrization: bool = True,
+        twiss_init: _BetaBlock = None,
+    ) -> _pd.DataFrame:
+        """
+
+        Args:
+            kinematics:
+            reference_particle:
+            offsets:
+            twiss_parametrization:
+            twiss_init:
+
+        Returns:
+            The dataframe with the Twiss functions at each element.
+
+        """
+        return twiss(self, kinematics, reference_particle, offsets, twiss_parametrization, twiss_init)
 
     def adjust_energy(self, input_energy: _ureg.Quantity):
         current_energy = input_energy
@@ -130,10 +169,12 @@ class Input:
         return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
 
     @classmethod
-    def insert_thin_element(cls,
-                            sequence: georges.manzoni.input.Input = None,
-                            position: int = 0,
-                            thin_element: georges.manzoni.elements.elements.ManzoniElement = None) -> georges.manzoni.input.Input:
+    def insert_thin_element(
+        cls,
+        sequence: Input = None,
+        position: int = 0,
+        thin_element: ManzoniElement = None,
+    ) -> Input:
         """
         Insert a thin element (e.g fringes) in the sequence.
 
@@ -152,11 +193,12 @@ class Input:
         return cls(sequence=new_sequence, mapper=element_mapper)
 
     @classmethod
-    def from_sequence(cls,
-                      sequence: _Sequence,
-                      from_element: str = None,
-                      to_element: str = None
-                      ):
+    def from_sequence(
+        cls,
+        sequence: _Sequence,
+        from_element: str = None,
+        to_element: str = None,
+    ):
         """
         Creates a new `Input` from a generic sequence from `georges_core`.
 
@@ -169,17 +211,17 @@ class Input:
         """
         input_sequence = list()
         df_sequence = sequence.df.loc[from_element:to_element]
-        if 'MATERIAL' in df_sequence.columns:
-            idx = df_sequence[sequence.df['MATERIAL'].notnull()].index
+        if "MATERIAL" in df_sequence.columns:
+            idx = df_sequence[sequence.df["MATERIAL"].notnull()].index
             for ele in idx:
                 if not isinstance(df_sequence.loc[ele, "MATERIAL"], materials.CompoundType):
                     df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
 
         for name, element in df_sequence.iterrows():
-            element_class = getattr(elements, MANZONI_FLAVOR.get(element['CLASS'], element['CLASS']))
+            element_class = getattr(elements, MANZONI_FLAVOR.get(element["CLASS"], element["CLASS"]))
             parameters = list(set(list(element.index.values)).intersection(element_class.PARAMETERS.keys()))
             input_sequence.append(
-                element_class(name, **element[parameters])
+                element_class(name, **element[parameters]),
             )
         element_mapper = {k: v for v, k in enumerate(list(df_sequence.index.values))}
         return cls(sequence=input_sequence, mapper=element_mapper)

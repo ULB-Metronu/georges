@@ -5,9 +5,14 @@ name: ci
 
 on:
   push:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
   pull_request:
-    branches: [ develop ]
+    branches:
+      - master
+      - develop
+    types: [opened, synchronize, reopened]
 
 jobs:
   build:
@@ -15,16 +20,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ ubuntu-latest ]
-        python: ['3.8', '3.9', '3.10']
+        os: [ubuntu-latest]
+        python: ["3.8", "3.9", "3.10"]
     steps:
       #----------------------------------------------
       #       check-out repo and set-up python
       #----------------------------------------------
       - name: Check out repository
         uses: actions/checkout@v3
-        with:
-          submodules: recursive
       - name: Set up python
         uses: actions/setup-python@v2
         with:
@@ -41,11 +44,13 @@ jobs:
       # install dependencies if cache does not exist
       #----------------------------------------------
       - name: Install dependencies
-        run: poetry install --no-interaction -E test
+        run: |
+          poetry config virtualenvs.create true --local
+          poetry install --no-interaction --with dev
       #----------------------------------------------
-      #              run test suite
+      #              run test suite with Sonar
       #----------------------------------------------
-      - name: Run pytests
+      - name: Run pytest
         run: |
           source .venv/bin/activate
-          pytest tests/
+          pytest

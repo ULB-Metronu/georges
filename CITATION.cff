@@ -1,4 +1,5 @@
 cff-version: 1.2.0
+license: GPL-3.0
 message: "If you use this software, please cite it as below."
 authors:
 - family-names: Hernalsteens
@@ -17,5 +18,5 @@ authors:
   given-names: Marion
   orcid: "https://orcid.org/0000-0002-0339-0759"
 title: "Georges"
-version: 2019.2
+version: 2023.1
 url: "https://github.com/ULB-Metronu/georges/"

@@ -1,7 +1,7 @@
-from numba import njit
 import numpy as np
-from numpy import cos, sin, tan
+from numba import njit
 from numba.typed import List as nList
+from numpy import cos, sin, tan
 
 
 @njit(cache=True)
@@ -49,8 +49,19 @@ def compute_transport_fringe_in_ex_tensor(element_parameters: nList) -> np.ndarr
     T[1, 0, 0] = k1 * tan(beta1) + (h * cos(beta1) ** (-1)) ** 3 / (2 * r1)
     T[1, 0, 1] = h * tan(beta1) ** 2
     T[1, 0, 4] = -h * tan(beta1)
-    T[1, 2, 2] = -k1 * tan(beta1) + 0.5 * h ** 2 * tan(beta1) + h ** 2 + tan(beta1) ** 3 - h * cos(
-        beta1) ** (-1) ** 3 / (2 * r1)
+    T[1, 2, 2] = (
+        -k1 * tan(beta1)
+        + 0.5 * h**2 * tan(beta1)
+        + h**2
+        + tan(beta1) ** 3
+        - h
+        * cos(
+            beta1,
+        )
+        ** (-1)
+        ** 3
+        / (2 * r1)
+    )
     T[1, 2, 3] = -h * tan(beta1) ** 2
     T[2, 0, 2] = h * tan(beta1) ** 2
     T[3, 0, 2] = -2 * k1 * tan(beta1) - h * cos(beta1) ** (-1) ** 3 / r1

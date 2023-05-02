@@ -1,0 +1,23 @@
+# https://stackoverflow.com/questions/70851048/does-it-make-sense-to-use-conda-poetry
+
+# Run:
+#    conda env create --file environment.yml
+# Run (overrides the environment name):
+#    conda env create --file environment.yml --name your_env_name
+# Customized environment "Intel Python 3"
+name: georges
+channels:
+  # Intel distribution for Python
+  # https://software.intel.com/en-us/distribution-for-python
+  - intel
+  # Conda forge distribution
+  # https://conda-forge.org
+  - conda-forge
+  # Default distribution from Continuum/Anaconda
+  - nodefaults
+dependencies:
+  - python=3.10.8
+  - intelpython3_full
+  - pip
+  - pip:
+      - poetry

@@ -1,2 +1,0 @@
-# BDSIM output processing
-
