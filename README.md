@@ -5,9 +5,9 @@
 ![Python](docs/_static/python_versions.svg)
 ![version](https://img.shields.io/badge/version-2023.1-blue)
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=bugs)](https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=bugs)](https://sonarcloud.io/summary/overall?id=ULB-Metronu_georges)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=coverage)](https://sonarcloud.io/summary/overall?id=ULB-Metronu_georges)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=ULB-Metronu_georges)
 
 [![License](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
