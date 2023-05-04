@@ -1,8 +1,8 @@
 :tocdepth: 2
 
-*******************************************
-Georges's visualization and plotting module
-*******************************************
+****************
+Results plotting
+****************
 
 This module uses the `georges-core's plotting module <https://ulb-metronu.github.io/georges-core/modules/plotting.html>`_ . It can uses the *Matplotlib* ot the *Plotly* library as backend.
 
