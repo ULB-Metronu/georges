@@ -1,8 +1,8 @@
 :tocdepth: 2
 
-###################################
-Welcome to Georges's documentation!
-###################################
+#################################
+Welcome to Georges documentation!
+#################################
 
 |Actions Status| |Documentation Status| |Python version| |version| |Bugs| |Coverage| |Reliability|
 |License| |Code Style| |Gitter|

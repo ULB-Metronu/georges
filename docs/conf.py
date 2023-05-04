@@ -75,7 +75,7 @@ templates_path = ["_templates"]
 #
 bibtex_bibfiles = ["refs.bib"]
 bibtex_default_style = "unsrt"
-bibtex_reference_style = "author_year"
+bibtex_reference_style = "label"
 bibtex_cite_id = "{key}"
 
 source_suffix = [".rst", ".md"]

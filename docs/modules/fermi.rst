@@ -8,7 +8,7 @@ Fermi-Eyges
 ###########
 
 The `Fermi-Eyges` module is a reimplementation of the Fermi-Eyges transport framework, largely based on the work and publications of Bernard Gottschalk.
-See :cite:t:`Hernalsteens2022` for the complete validation of this implementation.
+See :cite:p:`Hernalsteens2022` for the complete validation of this implementation.
 
 The module is composed of:
  - *Materials database* (`materials_db.py`): reads, loads and provides an interface to data (stopping power, radiation lengths, etc.) for a large set of materials commonly used in protontherapy. The database reads stopping power and range tables from the p-star database format or from SRIM software.
