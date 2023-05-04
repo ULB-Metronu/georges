@@ -24,3 +24,5 @@ List of publications
 ####################
 
 .. bibliography::
+   :all:
+   :style: unsrt

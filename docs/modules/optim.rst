@@ -36,7 +36,7 @@ The entire list of algorithm is described at the following link: https://pymoo.o
     To perform Twiss matching, the user should use the method :code:`manzoni.twiss()` as it is quicker and more precise than using a :code:`TwissObserver()`.
 
 As example, let's define a simple cell with three quadrupoles and two slits and we would like
-to have a symmetry lower than 10% while keeping the transmission high.
+to have an asymmetry lower than 10% while keeping the transmission high.
 
 .. jupyter-execute::
    :hide-output:
