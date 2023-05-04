@@ -33,8 +33,7 @@ The entire list of algorithm is described at the following link: https://pymoo.o
 
 .. warning::
 
-    :code:`Manzoni` is not designed to perform Twiss function matching in case of no losses. If the user would like to design a beamline, we suggest to
-    use design tools such as :code:`MAD-X` or :code:`MAD-NG`.
+    To perform Twiss matching, the user should use the method :code:`manzoni.twiss()` as it is quicker and more precise than using a :code:`TwissObserver()`.
 
 As example, let's define a simple cell with three quadrupoles and two slits and we would like
 to have a symmetry lower than 10% while keeping the transmission high.
