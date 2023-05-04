@@ -8,7 +8,12 @@ and beamline elements (magnets, scatterers and degraders, collimators and caviti
 Structure
 =========
 
-The module is structured as follows:
+The module is structured as depicted in figure below and described in the next sections:
+
+
+.. figure:: ../_static/georges_structure.png
+    :align: center
+    :width: 100%
 
 * :ref:`elements`
 * :ref:`apertures`

@@ -58,24 +58,24 @@ Indices and tables
 
 .. automodule:: georges
 
-.. |Actions Status| image:: https://github.com/ULB-Metronu/georges-core/actions/workflows/ci.yml/badge.svg?branch=master
-   :target: https://github.com/ULB-Metronu/georges-core/actions
+.. |Actions Status| image:: https://github.com/ULB-Metronu/georges/actions/workflows/ci.yml/badge.svg?branch=master
+   :target: https://github.com/ULB-Metronu/georges/actions
 
-.. |Documentation Status| image:: https://github.com/ULB-Metronu/georges-core/actions/workflows/documentation.yml/badge.svg?branch=master
-   :target: https://github.com/ULB-Metronu/georges-core/actions
+.. |Documentation Status| image:: https://github.com/ULB-Metronu/georges/actions/workflows/documentation.yml/badge.svg?branch=master
+   :target: https://github.com/ULB-Metronu/georges/actions
 
 .. |Python version| image:: _static/python_versions.svg
 
 .. |version| image:: https://img.shields.io/badge/version-2023.1-blue
 
-.. |Bugs| image:: https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=bugs
-   :target: https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges
+.. |Bugs| image:: https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=bugs
+   :target: https://sonarcloud.io/summary/overall?id=ULB-Metronu_georges
 
-.. |Coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=coverage
-   :target: https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges
+.. |Coverage| image:: https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=coverage
+   :target: https://sonarcloud.io/summary/overall?id=ULB-Metronu_georges
 
-.. |Reliability| image:: https://sonarcloud.io/api/project_badges/measure?project=rtesse_georges&metric=reliability_rating
-   :target: https://sonarcloud.io/summary/new_code?id=ULB-Metronu_georges
+.. |Reliability| image:: https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=reliability_rating
+   :target: https://sonarcloud.io/summary/overall?id=ULB-Metronu_georges
 
 .. |License| image:: https://img.shields.io/badge/License-GPLv3-blue.svg
    :target: https://www.gnu.org/licenses/gpl-3.0
@@ -83,6 +83,6 @@ Indices and tables
 .. |Code Style| image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/ambv/black
 
-.. |Gitter| image:: https://badges.gitter.im/ULB-Metronu/georges-core.svg?
-   :target: https://gitter.im/ULB-Metronu/georges-core?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
+.. |Gitter| image:: https://badges.gitter.im/ULB-Metronu/georges.svg?
+   :target: https://gitter.im/ULB-Metronu/georges?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge
 
