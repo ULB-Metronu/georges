@@ -50,6 +50,12 @@ class BraggPeakException(Exception):
 
 
 class BraggPeakAnalysis:
+    """
+    This class processes a normalized 1D depth dose profile, or a pristine Bragg peak, to extract key information such
+    as the maximum dose position, the distal range at a given percentage of the maximum, and the distal fall-off (DFO).
+    The user must provide both the dose data and the corresponding positions in depth.
+    """
+
     def __init__(self, bp: pd.DataFrame, method: str, low_dose=1, high_dose=70):
         self.data = bp
         self.low_bound = low_dose
@@ -202,6 +208,12 @@ class BraggPeakAnalysis:
 
 
 class SpreadOutBraggPeakAnalysis:
+    """
+    This class takes a set of Bragg peaks, or a Bragg peak library, as input and computes the relative weights required
+    to obtain a uniform depth dose profile, known as the SOBP. Additionally, this class processes the resulting SOBP
+    and provides the flatness, DFO, and distal range at a given percentage of the maximum to the user.
+    """
+
     def __init__(
         self,
         dose_data: Optional[pd.DataFrame] = None,
@@ -463,6 +475,13 @@ class SpreadOutBraggPeakAnalysis:
 
 
 class LateralProfileAnalysis:
+    """
+    This class takes a normalized 1D transverse dose profile as input and computes various parameters such as the field
+    size, the uniform region (defined as 80% of the field size), the transverse flatness of the uniform region, and the
+    lateral penumbra at the left and right of this region. The user must provide both the dose data and the
+    corresponding transverse positions.
+    """
+
     def __init__(self, dose_profile: _np.array, positions: _np.array):
         self.dose_profile = dose_profile
         self.positions = positions
@@ -649,6 +668,14 @@ class GammaAnalysis:
 
 
 class RegularSpotScanning:
+    """
+    This class provides a method to calculate the required spot spacing for a regular grid irradiation scheme in order
+    to obtain a two-dimensional uniform dose deposition profile for a given spot width (1 sigma) and a targeted
+    circular field. The user inputs the half value of the field size, the desired number of spots along each axis of
+    the field, and the standard deviation (1 sigma) of the beam. The required spot spacing to achieve a 2D dose
+    uniformity of at least 98% is directly outputted.
+    """
+
     def __init__(self, sigma, fieldsize, n_spots_per_axis):
         self.sigma = sigma
         self.fieldsize = fieldsize
@@ -718,6 +745,13 @@ class RegularSpotScanning:
 
 
 class ContourSpotScanning:
+    """
+    This class works similarly to RegularSpotScanning but uses a circular, contour-based irradiation scheme with a
+    central spot placed at the center of the field. The user can choose whether to impose the irradiation radius. The
+    output of the calculation includes the relative weight of the contour spots compared to the central spot and the
+    angle spacing between these spots.
+    """
+
     def __init__(self, sigma, fieldsize, desired_angle, shoot_on_aperture: bool = True, angle_imposed: bool = False):
         self.sigma = sigma
         self.fieldsize = fieldsize

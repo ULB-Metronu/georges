@@ -32,10 +32,10 @@ def propagate(sequence: Sequence, energy: _ureg.Quantity, beam: Optional[Mapping
     """
 
     Args:
-        sequence:
-        energy:
-        beam:
-        model:
+        sequence: Sequence to track in
+        energy: Beam energy
+        beam: A_i beam parameters
+        model: Model to use. Default is DifferentialMoliere
 
     Returns:
 
