@@ -2,8 +2,8 @@
 Installation
 ************
 
-You can install :code:`georges` from PyPI with pip::
-
+..
+ You can install :code:`georges` from PyPI with pip::
     pip install georges
 
 For development purposes you can copy the source code on your computer. georges is hosted on Github and can be downloaded using the following::
@@ -163,10 +163,16 @@ Run Docker
 
 You can run a container with::
 
-    docker run -it --rm --name georges -p 8899:8899 georges
+    docker run -it --rm --name georges -p 8899:8899 ${IMAGE_ID}
 
 then connect to http://127.0.0.1:8899 to access the Jupyter Lab interface
 and type::
 
     import georges
 
+.. note ::
+
+    You can tag the image using the following command::
+
+        docker image tag ${IMAGE_ID} georges
+        docker run -it --rm --name georges -p 8899:8899 georges

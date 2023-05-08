@@ -1,7 +1,7 @@
 Basic example
 #############
 
-In this example, we define beamline with `Quadrupoles`, `SBEND` and `Collimators`. We use different observers to analyse the beam and its properties.
+In this example, we define beamline with `Quadrupoles`, `SBEND` and `Collimators` and we use different observers to analyse the beam and its properties.
 
 Let's first import the necessary packages
 

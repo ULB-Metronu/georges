@@ -46,9 +46,9 @@ The documentation files are located in the docs repository and can be generated 
 go to the docs repository and use the `make` command::
 
     cd docs
-    make html / latexpdf
+    make html
 
-The results are in the folder `build/html` (`build/latex`).
+The results are in the folder `build/html`.
 
 Pre-commit file
 ###############
