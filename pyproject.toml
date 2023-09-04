@@ -42,8 +42,8 @@ authors = ["Cédric Hernalsteens <cedric.hernalsteens@ulb.be>",
 python = ">3.8.1 <3.11"
 georges-core = "2023.2"
 pymoo = "0.6.0.1"
-lmfit = "1.1.0"
-sympy = "1.11.1"
+lmfit = "1.2.2"
+sympy = "1.12"
 hist = {extras = ["plot"],version="2.6.3"}
 
 [tool.poetry.group.docs]

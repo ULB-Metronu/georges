@@ -138,7 +138,9 @@ Georges distribution with Docker
 #####################################
 
 A Docker image is made available to provide an easy access to a
-complete Jupyter Lab + georges environment.
+complete Jupyter Lab + georges environment. To pull the Docker image, the user
+must first create a Personal Access Token as described in the `Github Documentation
+<https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry>`_
 
 Docker image from Github
 ------------------------
