@@ -19,17 +19,15 @@ Citation
 
 Authors of papers including reference to or results obtained with Georges are encouraged to cite as follow::
 
-   @Misc{Georges,
-   author       = {C. Hernalsteens and R. Tesse and E. Gnacadja and N. Pauly and E. Ramoisiaux and M. Vanwelde},
-   howpublished = {\url{https://ulb-metronu.github.io/georges/}},
-   title        = {Georges},
-   year         = {2023},
-   url          = {https://ulb-metronu.github.io/georges/}
+@article{Georges,
+	author = {Robin Tesse and C{\'e}dric Hernalsteens and Eustache Gnacadja and Nicolas Pauly and Eliott Ramoisiaux and Marion Vanwelde},
+	doi = {https://doi.org/10.1016/j.softx.2023.101579},
+	journal = {SoftwareX},
+	pages = {101579},
+	title = {Georges: A modular Python library for seamless beam dynamics simulations and optimization},
+	volume = {24},
+	year = {2023}
    }
-
-.. note::
-
-   A paper is currently in preparation for Software-X.
 
 List of publications
 ####################

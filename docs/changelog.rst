@@ -2,8 +2,10 @@
 Changelog
 *********
 
-* 2023-xx
+* 2023-2
 
+    * Add the paper published in Software-X
+    * Update librairies
 
 * 2023-1
 
