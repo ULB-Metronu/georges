@@ -237,12 +237,11 @@ Python script
 #############
 
 If you would like to compute the coefficients for another material,
-you must adapt the file `degrader_properties.gmad` and run the script in
-`bdsim-input`:
+you must adapt the file `degrader_properties.gmad` and run the script `bdsim-input.gmad`:
 
 ::
 
-    bdsim --file=deg_tracking.gmad --outfile=output-${material}-E${energy} --ngenerate=nparticles --batch
+    bdsim --file=bdsim-input.gmad --outfile=output.root --ngenerate=nparticles --batch
 
 The program that computes the coefficients for losses and momentum
 deviation is `compute_quantiles.py` and it can be excecuted by:
