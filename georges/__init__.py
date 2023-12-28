@@ -1,4 +1,6 @@
-__version__ = "2023.1"
+from importlib.metadata import version
+
+__version__ = version("georges")
 
 from georges_core import Q_, Kinematics, particles, ureg
 from georges_core.distribution import *

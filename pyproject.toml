@@ -30,7 +30,7 @@ exclude = ['docs/**', '.venv/**']
 
 [tool.poetry]
 name = "georges"
-version = "2023.1"
+version = "2023.2"
 description = "Georges' accelerator physics library - Core"
 authors = ["Cédric Hernalsteens <cedric.hernalsteens@ulb.be>",
            "Robin Tesse <robin.tesse@ulb.be>",
