@@ -32,13 +32,14 @@ The module is structured as depicted in figure below and described in the next s
     manzoni/structure
 
 
-Example
-=======
+Examples
+========
 
 ..  toctree::
     :maxdepth: 1
 
-    manzoni/manzoni_example
+    manzoni/example_tracking
+    manzoni/example_energy_degradation
 
 Validation
 ==========

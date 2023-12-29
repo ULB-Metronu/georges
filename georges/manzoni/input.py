@@ -209,6 +209,7 @@ class Input:
         Returns:
 
         """
+
         input_sequence = list()
         df_sequence = sequence.df.loc[from_element:to_element]
         if "MATERIAL" in df_sequence.columns:
@@ -218,6 +219,7 @@ class Input:
                     df_sequence.loc[ele, "MATERIAL"] = getattr(materials, df_sequence.loc[ele, "MATERIAL"])
 
         for name, element in df_sequence.iterrows():
+            element = element.replace({_np.nan: None})
             element_class = getattr(elements, MANZONI_FLAVOR.get(element["CLASS"], element["CLASS"]))
             parameters = list(set(list(element.index.values)).intersection(element_class.PARAMETERS.keys()))
             input_sequence.append(

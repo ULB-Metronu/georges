@@ -1,5 +1,5 @@
-Basic example
-#############
+Particle tracking with collimator
+#################################
 
 In this example, we define beamline with `Quadrupoles`, `SBEND` and `Collimators` and we use different observers to analyse the beam and its properties.
 

@@ -60,8 +60,6 @@ class Scatterer(MaterialElement):
         "MATERIAL": (materials.Vacuum, "Degrader material"),
         "KINETIC_ENERGY": (0.0 * _ureg.MeV, "Incoming beam energy"),
         "L": (0.0 * _ureg.m, "Degrader length"),
-        "APERTYPE": (None, "Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)"),
-        "APERTURE": ([], ""),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
@@ -107,8 +105,6 @@ class Degrader(MaterialElement):
         "KINETIC_ENERGY": (0.0 * _ureg.MeV, "Incoming beam energy"),
         "L": (0.0 * _ureg.m, "Degrader length"),
         "WITH_LOSSES": (False, "Boolean to compute losses and dpp"),
-        "APERTYPE": (None, "Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)"),
-        "APERTURE": ([], ""),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
