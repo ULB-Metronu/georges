@@ -12,7 +12,9 @@ from .elements import ManzoniElement as _ManzoniElement
 
 
 class Marker(_ManzoniElement):
-    """Define a Marker"""
+    """
+    Define a Marker
+    """
 
     INTEGRATOR = None
 
@@ -22,6 +24,27 @@ class Marker(_ManzoniElement):
 
 
 class Matrix(_ManzoniElement):
+    """
+    Define a Matrix element.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Matrix with their default values.
+
+    Examples:
+        >>> m1 = Matrix('M1', MATRIX=_np.eye(6))
+        >>> m1 #doctest: +NORMALIZE_WHITESPACE
+            Matrix: {'NAME': 'M1',
+            'AT_ENTRY': <Quantity(0, 'meter')>,
+            'AT_CENTER': <Quantity(0, 'meter')>,
+            'AT_EXIT': <Quantity(0, 'meter')>,
+            'MATRIX': array([[1., 0., 0., 0., 0., 0.],
+                             [0., 1., 0., 0., 0., 0.],
+                             [0., 0., 1., 0., 0., 0.],
+                             [0., 0., 0., 1., 0., 0.],
+                             [0., 0., 0., 0., 1., 0.],
+                             [0., 0., 0., 0., 0., 1.]])}
+    """
+
     INTEGRATOR = None
     PARAMETERS = {
         "MATRIX": (_np.eye(6), "Transfer matrix."),
@@ -52,9 +75,27 @@ class Matrix(_ManzoniElement):
 
 
 class Gap(_ManzoniElement):
+    """
+    Define a gap where no physical geometry is placed
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Gap with their default values.
+
+    Examples:
+        >>> g1 = Gap('G1', L=1*_ureg.m)
+        >>> g1 #doctest: +NORMALIZE_WHITESPACE
+            Gap: {'NAME': 'G1',
+            'AT_ENTRY': <Quantity(0, 'meter')>,
+            'AT_CENTER': <Quantity(0, 'meter')>,
+            'AT_EXIT': <Quantity(0, 'meter')>,
+            'L': <Quantity(1, 'meter')>,
+            'APERTYPE': None,
+            'APERTURE': []}
+    """
+
     PARAMETERS = {
         "L": (0.0 * _ureg.m, "Drift length."),
-        "APERTYPE": (None, "Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)"),
+        "APERTYPE": (None, "Aperture type (CIRCULAR, ELLIPTICAL, RECTANGULAR or PHASE_SPACE)"),
         "APERTURE": ([], ""),
     }
     """Parameters of the element, with their default value and their descriptions."""
@@ -84,18 +125,50 @@ class Gap(_ManzoniElement):
 
 
 class Drift(Gap):
+    """
+    Definition of a Drift.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Drift with their default values.
+
+    Examples:
+        >>> d1 = Drift('D1', L=1*_ureg.m, APERTYPE='CIRCULAR', APERTURE=[5*_ureg.cm])
+        >>> d1 #doctest: +NORMALIZE_WHITESPACE
+            Drift: {'NAME': 'D1',
+                    'AT_ENTRY': <Quantity(0, 'meter')>,
+                    'AT_CENTER': <Quantity(0, 'meter')>,
+                    'AT_EXIT': <Quantity(0, 'meter')>,
+                    'L': <Quantity(1, 'meter')>,
+                    'APERTYPE': 'CIRCULAR',
+                    'APERTURE': [<Quantity(5, 'centimeter')>]}
+    """
+
     PARAMETERS = {
-        "APERTYPE": (None, "Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)"),
+        "APERTYPE": (None, "Aperture type (CIRCULAR, ELLIPTICAL, RECTANGULAR or PHASE_SPACE)"),
         "APERTURE": ([], ""),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
 
 class SRotation(_ManzoniElement):
+    """
+    Definition of a SRotation.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the SRotation with their default values.
+
+    Examples:
+        >>> s1 = SRotation('S1', ANGLE=10*_ureg.degrees)
+        >>> s1 #doctest: +NORMALIZE_WHITESPACE
+            SRotation: {'NAME': 'S1',
+                        'AT_ENTRY': <Quantity(0, 'meter')>,
+                        'AT_CENTER': <Quantity(0, 'meter')>,
+                        'AT_EXIT': <Quantity(0, 'meter')>,
+                        'ANGLE': <Quantity(10, 'degree')>}
+    """
+
     PARAMETERS = {
         "ANGLE": (0.0 * _ureg.radian, "Angle of rotation along the s-axis."),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> list:
@@ -111,20 +184,40 @@ class SRotation(_ManzoniElement):
 
 class Magnet(_ManzoniElement):
     PARAMETERS = {
-        "APERTYPE": (None, "Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)"),
+        "APERTYPE": (None, "Aperture type (CIRCULAR, ELLIPTICAL, RECTANGULAR or PHASE_SPACE)"),
         "APERTURE": ([], ""),
         "KINEMATICS": (None, "Reference kinematics"),
     }
 
 
 class Quadrupole(Magnet):
+    """
+    Define a Quadrupole magnet.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Quadrupole with their default values.
+
+    Examples:
+        >>> q1 = Quadrupole('Q1', L=1*_ureg.m, K1=3*_ureg.m**-2)
+        >>> q1 #doctest: +NORMALIZE_WHITESPACE
+            Quadrupole: {'NAME': 'Q1',
+            'AT_ENTRY': <Quantity(0, 'meter')>,
+            'AT_CENTER': <Quantity(0, 'meter')>,
+            'AT_EXIT': <Quantity(0, 'meter')>,
+            'APERTYPE': None, 'APERTURE': [],
+            'KINEMATICS': None,
+            'L': <Quantity(1, 'meter')>,
+            'K1': <Quantity(3, '1 / meter ** 2')>,
+            'K1S': <Quantity(0.0, '1 / meter ** 2')>,
+            'TILT': <Quantity(0.0, 'radian')>}
+    """
+
     PARAMETERS = {
         "L": (0.0 * _ureg.m, "Quadrupole length."),
         "K1": (0.0 * _ureg.m**-2, "Normalized gradient."),
         "K1S": (0.0 * _ureg.m**-2, "Normalized skew gradient."),
         "TILT": (0.0 * _ureg.radian, "Magnet tilt angle."),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> list:
@@ -149,6 +242,34 @@ class Quadrupole(Magnet):
 
 
 class Bend(Magnet):
+    """
+    Define a Bend magnet.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Bend with their default values.
+
+    Examples:
+        >>> b1 = Bend('B1', L=1*_ureg.m, ANGLE=30*_ureg.degrees, E1=5*_ureg.degrees, HGAP=2*_ureg.cm, K1=3*_ureg.m**-2)
+        >>> b1 #doctest: +NORMALIZE_WHITESPACE
+            Bend: {'NAME': 'B1',
+            'AT_ENTRY': <Quantity(0, 'meter')>,
+            'AT_CENTER': <Quantity(0, 'meter')>,
+            'AT_EXIT': <Quantity(0, 'meter')>,
+            'APERTYPE': None, 'APERTURE': [],
+            'KINEMATICS': None,
+            'ANGLE': <Quantity(30, 'degree')>,
+            'K0': <Quantity(0.0, '1 / meter')>,
+            'K1': <Quantity(3, '1 / meter ** 2')>,
+            'K2': <Quantity(0.0, '1 / meter ** 3')>,
+            'L': <Quantity(1, 'meter')>,
+            'E1': <Quantity(5, 'degree')>,
+            'E2': <Quantity(0.0, 'radian')>,
+            'TILT': <Quantity(0.0, 'radian')>,
+            'HGAP': <Quantity(2, 'centimeter')>,
+            'FINT': 0.0,
+            'FINTX': 0.0}
+    """
+
     PARAMETERS = {
         "ANGLE": (0.0 * _ureg.radian, "Bending angle."),
         "K0": (0.0 * _ureg.m**-1, "Dipolar normalized gradient"),
@@ -162,7 +283,6 @@ class Bend(Magnet):
         "FINT": (0.0, "Fringe field integral."),
         "FINTX": (0.0, "Exit fringe field integral."),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
     @staticmethod
     def compute_fringe(h: float, e: float, hgap: float, fint: float) -> Tuple[float, float]:
@@ -222,10 +342,18 @@ class Bend(Magnet):
 
 
 class SBend(Bend):
+    """
+    Definition of a SBend
+    """
+
     pass
 
 
 class RBend(Bend):
+    """
+    Definition of a RBend
+    """
+
     @property
     def length(self) -> float:
         length = self.L.m_as("m")
@@ -242,6 +370,35 @@ class RBend(Bend):
 
 
 class Fringein(Bend):
+    """
+    Define a Fringe field at the entrance of a bending magnet.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Fringein with their default values.
+
+    Examples:
+        >>> f1 = Fringein('F1', L=1*_ureg.mm, ANGLE=30*_ureg.degrees, E1=5*_ureg.degrees,
+        ...               HGAP=2*_ureg.cm, K1=3*_ureg.m**-2, R1=1*_ureg.cm)
+        >>> f1 #doctest: +NORMALIZE_WHITESPACE
+            Fringein: {'NAME': 'F1',
+                       'AT_ENTRY': <Quantity(0, 'meter')>,
+                       'AT_CENTER': <Quantity(0, 'meter')>,
+                       'AT_EXIT': <Quantity(0, 'meter')>,
+                       'APERTYPE': None, 'APERTURE': [],
+                       'KINEMATICS': None,
+                       'ANGLE': <Quantity(30, 'degree')>,
+                       'K0': <Quantity(0.0, '1 / meter')>,
+                       'K1': <Quantity(3, '1 / meter ** 2')>,
+                       'K2': <Quantity(0.0, '1 / meter ** 3')>,
+                       'L': <Quantity(1, 'millimeter')>,
+                       'E1': <Quantity(5, 'degree')>,
+                       'E2': <Quantity(0.0, 'radian')>,
+                       'TILT': <Quantity(0.0, 'radian')>,
+                       'HGAP': <Quantity(2, 'centimeter')>,
+                       'FINT': 0.0, 'FINTX': 0.0,
+                       'R1': <Quantity(1, 'centimeter')>}
+    """
+
     PARAMETERS = {
         "ANGLE": (0.0 * _ureg.radian, "Bending angle."),
         "L": (0.0 * _ureg.m, "Magnet length."),
@@ -272,6 +429,35 @@ class Fringein(Bend):
 
 
 class Fringeout(Bend):
+    """
+    Define a Fringe field at the exit of a bending magnet.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Fringeout with their default values.
+
+    Examples:
+        >>> f2 = Fringeout('F2', L=1*_ureg.mm, ANGLE=30*_ureg.degrees, E1=5*_ureg.degrees,
+        ...                 HGAP=2*_ureg.cm, K1=3*_ureg.m**-2, R2=1*_ureg.cm)
+        >>> f2 #doctest: +NORMALIZE_WHITESPACE
+            Fringeout: {'NAME': 'F2',
+                       'AT_ENTRY': <Quantity(0, 'meter')>,
+                       'AT_CENTER': <Quantity(0, 'meter')>,
+                       'AT_EXIT': <Quantity(0, 'meter')>,
+                       'APERTYPE': None, 'APERTURE': [],
+                       'KINEMATICS': None,
+                       'ANGLE': <Quantity(30, 'degree')>,
+                       'K0': <Quantity(0.0, '1 / meter')>,
+                       'K1': <Quantity(3, '1 / meter ** 2')>,
+                       'K2': <Quantity(0.0, '1 / meter ** 3')>,
+                       'L': <Quantity(1, 'millimeter')>,
+                       'E1': <Quantity(5, 'degree')>,
+                       'E2': <Quantity(0.0, 'radian')>,
+                       'TILT': <Quantity(0.0, 'radian')>,
+                       'HGAP': <Quantity(2, 'centimeter')>,
+                       'FINT': 0.0, 'FINTX': 0.0,
+                       'R2': <Quantity(1, 'centimeter')>}
+    """
+
     PARAMETERS = {
         "ANGLE": (0.0 * _ureg.radian, "Bending angle."),
         "L": (0.0 * _ureg.m, "Magnet length."),
@@ -301,13 +487,34 @@ class Fringeout(Bend):
 
 
 class DipEdge(Magnet):
+    """
+    Define a DipEdge element.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the DipEdge with their default values.
+
+    Examples:
+        >>> d1 = DipEdge('D1', H=1*_ureg.mm**-1)
+        >>> d1 #doctest: +NORMALIZE_WHITESPACE
+            DipEdge: {'NAME': 'D1',
+                      'AT_ENTRY': <Quantity(0, 'meter')>,
+                      'AT_CENTER': <Quantity(0, 'meter')>,
+                      'AT_EXIT': <Quantity(0, 'meter')>,
+                      'APERTYPE': None,
+                      'APERTURE': [],
+                      'KINEMATICS': None,
+                      'H': <Quantity(1, '1 / millimeter')>,
+                      'E1': <Quantity(0.0, 'radian')>,
+                      'HGAP': <Quantity(0.0, 'meter')>,
+                      'FINT': 0.0}
+    """
+
     PARAMETERS = {
         "H": (0.0 * _ureg.m**-1, "Inverse of the curvature radius."),
         "E1": (0.0 * _ureg.radian, "Entrance face angle."),
         "HGAP": (0.0 * _ureg.m, "Magnet gap."),
         "FINT": (0.0, "Fringe field integral."),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> list:
@@ -322,13 +529,33 @@ class Solenoid(Magnet):
     pass
 
 
-class Multipole(_ManzoniElement):
+class Multipole(Magnet):
+    """
+    Define a Multipole magnet.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Multipole with their default values.
+
+    Examples:
+        >>> m1 = Multipole('M1', L=10*_ureg.cm, K1=4*_ureg.m**-2, K2=0.1*_ureg.m**-3)
+        >>> m1 #doctest: +NORMALIZE_WHITESPACE
+            Multipole: {'NAME': 'M1',
+                        'AT_ENTRY': <Quantity(0, 'meter')>,
+                        'AT_CENTER': <Quantity(0, 'meter')>,
+                        'AT_EXIT': <Quantity(0, 'meter')>,
+                        'APERTYPE': None,
+                        'APERTURE': [],
+                        'KINEMATICS': None,
+                        'L': <Quantity(10, 'centimeter')>,
+                        'K1': <Quantity(4, '1 / meter ** 2')>,
+                        'K2': <Quantity(0.1, '1 / meter ** 3')>}
+    """
+
     PARAMETERS = {
         "L": (0.0 * _ureg.m, "Magnet length."),
         "K1": (0.0 * _ureg.m**-2, "Quadrupolar normalized gradient."),
         "K2": (0.0 * _ureg.m**-3, "Sextupolar normalized gradient."),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> list:
@@ -344,12 +571,30 @@ class Multipole(_ManzoniElement):
         )
 
 
-class Sextupole(_ManzoniElement):
+class Sextupole(Magnet):
+    """
+    Define a Sextupole magnet.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Sextupole with their default values.
+
+    Examples:
+        >>> s1 = Sextupole('S1', L=1*_ureg.m, K2=3*_ureg.m**-3)
+        >>> s1 #doctest: +NORMALIZE_WHITESPACE
+            Sextupole: {'NAME': 'S1',
+            'AT_ENTRY': <Quantity(0, 'meter')>,
+            'AT_CENTER': <Quantity(0, 'meter')>,
+            'AT_EXIT': <Quantity(0, 'meter')>,
+            'APERTYPE': None, 'APERTURE': [],
+            'KINEMATICS': None,
+            'L': <Quantity(1, 'meter')>,
+            'K2': <Quantity(3, '1 / meter ** 3')>}
+    """
+
     PARAMETERS = {
         "L": (0.0 * _ureg.m, "Magnet length."),
         "K2": (0.0 * _ureg.m**-3, "Sextupolar normalized gradient."),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> list:
@@ -364,19 +609,40 @@ class Sextupole(_ManzoniElement):
         )
 
 
-class Octupole(_ManzoniElement):
+class Octupole(Magnet):
     pass
 
 
-class Decapole(_ManzoniElement):
+class Decapole(Magnet):
     pass
 
 
-class Dodecapole(_ManzoniElement):
+class Dodecapole(Magnet):
     pass
 
 
 class Kicker(Magnet):
+    """
+    Define a Kicker element.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Kicker with their default values.
+
+    Examples:
+        >>> k1 = Kicker('K1', L=10*_ureg.cm, HKICK=0.1, VKICK=-0.2)
+        >>> k1 #doctest: +NORMALIZE_WHITESPACE
+            Kicker: {'NAME': 'K1',
+                     'AT_ENTRY': <Quantity(0, 'meter')>,
+                     'AT_CENTER': <Quantity(0, 'meter')>,
+                     'AT_EXIT': <Quantity(0, 'meter')>,
+                     'APERTYPE': None, 'APERTURE': [],
+                     'KINEMATICS': None,
+                     'L': <Quantity(10, 'centimeter')>,
+                     'HKICK': 0.1,
+                     'VKICK': -0.2,
+                     'TILT': <Quantity(0.0, 'radian')>}
+    """
+
     PARAMETERS = {
         "L": (0.0 * _ureg.m, "Kicker length."),
         "HKICK": (0.0, "The momentum change in the horizontal plane."),
@@ -415,6 +681,26 @@ class TKicker(Kicker):
 
 
 class HKicker(Magnet):
+    """
+    Define a HKicker element.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the HKicker with their default values.
+
+    Examples:
+        >>> h1 = HKicker('H1', L=10*_ureg.cm, KICK=0.1)
+        >>> h1 #doctest: +NORMALIZE_WHITESPACE
+            HKicker: {'NAME': 'H1',
+                     'AT_ENTRY': <Quantity(0, 'meter')>,
+                     'AT_CENTER': <Quantity(0, 'meter')>,
+                     'AT_EXIT': <Quantity(0, 'meter')>,
+                     'APERTYPE': None, 'APERTURE': [],
+                     'KINEMATICS': None,
+                     'L': <Quantity(10, 'centimeter')>,
+                     'KICK': 0.1,
+                     'TILT': <Quantity(0.0, 'radian')>}
+    """
+
     PARAMETERS = {
         "L": (0.0 * _ureg.m, "Kicker length."),
         "KICK": (0.0, "The momentum change."),
@@ -447,6 +733,26 @@ class HKicker(Magnet):
 
 
 class VKicker(Magnet):
+    """
+    Define a VKicker element.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the VKicker with their default values.
+
+    Examples:
+        >>> v1 = VKicker('V1', L=10*_ureg.cm, KICK=-0.2)
+        >>> v1 #doctest: +NORMALIZE_WHITESPACE
+            VKicker: {'NAME': 'V1',
+                     'AT_ENTRY': <Quantity(0, 'meter')>,
+                     'AT_CENTER': <Quantity(0, 'meter')>,
+                     'AT_EXIT': <Quantity(0, 'meter')>,
+                     'APERTYPE': None, 'APERTURE': [],
+                     'KINEMATICS': None,
+                     'L': <Quantity(10, 'centimeter')>,
+                     'KICK': -0.2,
+                     'TILT': <Quantity(0.0, 'radian')>}
+    """
+
     PARAMETERS = {
         "L": (0.0 * _ureg.m, "Kicker length."),
         "KICK": (0.0 * _ureg.radian, "The momentum change."),

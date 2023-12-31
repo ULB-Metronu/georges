@@ -56,14 +56,29 @@ class MaterialElement(_ManzoniElement):
 
 
 class Scatterer(MaterialElement):
+    """
+    Define a Scatterer.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Scatterer with their default values.
+
+    Examples:
+        >>> s1 = Scatterer('S1', MATERIAL=materials.Beryllium, KINETIC_ENERGY=230*_ureg.MeV)
+        >>> s1 #doctest: +NORMALIZE_WHITESPACE
+            Scatterer: {'NAME': 'S1',
+                        'AT_ENTRY': <Quantity(0, 'meter')>,
+                        'AT_CENTER': <Quantity(0, 'meter')>,
+                        'AT_EXIT': <Quantity(0, 'meter')>,
+                        'MATERIAL': <class 'georges.fermi.materials.Beryllium'>,
+                        'KINETIC_ENERGY': <Quantity(230, 'megaelectronvolt')>,
+                        'L': <Quantity(0.0, 'meter')>}
+    """
+
     PARAMETERS = {
         "MATERIAL": (materials.Vacuum, "Degrader material"),
         "KINETIC_ENERGY": (0.0 * _ureg.MeV, "Incoming beam energy"),
         "L": (0.0 * _ureg.m, "Degrader length"),
-        "APERTYPE": (None, "Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)"),
-        "APERTURE": ([], ""),
     }
-    """Parameters of the element, with their default value and their descriptions."""
 
     @property
     def parameters(self) -> List[float]:
@@ -102,13 +117,31 @@ class Scatterer(MaterialElement):
 
 
 class Degrader(MaterialElement):
+    """
+    Define a Degrader.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the Degrader with their default values.
+
+    Examples:
+        >>> d1 = Degrader('D1', MATERIAL=materials.Beryllium, L=5*_ureg.cm, KINETIC_ENERGY=230*_ureg.MeV,
+        ...               WITH_LOSSES=True)
+        >>> d1 #doctest: +NORMALIZE_WHITESPACE
+            Degrader: {'NAME': 'D1',
+                       'AT_ENTRY': <Quantity(0, 'meter')>,
+                       'AT_CENTER': <Quantity(0, 'meter')>,
+                       'AT_EXIT': <Quantity(0, 'meter')>,
+                       'MATERIAL': <class 'georges.fermi.materials.Beryllium'>,
+                       'KINETIC_ENERGY': <Quantity(230, 'megaelectronvolt')>,
+                       'L': <Quantity(5, 'centimeter')>,
+                       'WITH_LOSSES': True}
+    """
+
     PARAMETERS = {
         "MATERIAL": (materials.Vacuum, "Degrader material"),
         "KINETIC_ENERGY": (0.0 * _ureg.MeV, "Incoming beam energy"),
         "L": (0.0 * _ureg.m, "Degrader length"),
         "WITH_LOSSES": (False, "Boolean to compute losses and dpp"),
-        "APERTYPE": (None, "Aperture type (CIRCULAR, ELIPTIC or RECTANGULAR)"),
-        "APERTURE": ([], ""),
     }
     """Parameters of the element, with their default value and their descriptions."""
 
@@ -188,6 +221,26 @@ class Degrader(MaterialElement):
 
 
 class BeamStop(MaterialElement):
+    """
+    Define a BeamStop.
+
+    Attributes:
+        PARAMETERS (dict): Dictionary containing the parameters of the BeamStop with their default values.
+
+    Examples:
+        >>> b1 = BeamStop('B1', MATERIAL=materials.Beryllium, L=5*_ureg.cm, KINETIC_ENERGY=230*_ureg.MeV,
+        ...               RADIUS=3*_ureg.cm)
+        >>> b1 #doctest: +NORMALIZE_WHITESPACE
+            BeamStop: {'NAME': 'B1',
+                       'AT_ENTRY': <Quantity(0, 'meter')>,
+                       'AT_CENTER': <Quantity(0, 'meter')>,
+                       'AT_EXIT': <Quantity(0, 'meter')>,
+                       'MATERIAL': <class 'georges.fermi.materials.Beryllium'>,
+                       'L': <Quantity(5, 'centimeter')>,
+                       'RADIUS': <Quantity(3, 'centimeter')>,
+                       'KINETIC_ENERGY': <Quantity(230, 'megaelectronvolt')>}
+    """
+
     PARAMETERS = {
         "MATERIAL": (materials.Vacuum, "Beam Stop material"),
         "L": (0.0 * _ureg.m, "Beam Stop length"),
