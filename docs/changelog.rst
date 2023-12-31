@@ -2,8 +2,9 @@
 Changelog
 *********
 
-* 2023-2
+* 2024-1
 
+    * Add doctest
     * Add an example with energy degradation.
     * Fix filename to compute the coefficients with BDSIM.
     * Improve the documentation for the apertures
