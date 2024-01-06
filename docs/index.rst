@@ -66,7 +66,7 @@ Indices and tables
 
 .. |Python version| image:: _static/python_versions.svg
 
-.. |version| image:: https://img.shields.io/badge/version-2023.1-blue
+.. |version| image:: https://img.shields.io/badge/version-2024.2-blue
 
 .. |Bugs| image:: https://sonarcloud.io/api/project_badges/measure?project=ULB-Metronu_georges&metric=bugs
    :target: https://sonarcloud.io/summary/overall?id=ULB-Metronu_georges
