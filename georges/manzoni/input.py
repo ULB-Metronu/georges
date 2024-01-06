@@ -222,8 +222,9 @@ class Input:
             element = element.replace({_np.nan: None})
             element_class = getattr(elements, MANZONI_FLAVOR.get(element["CLASS"], element["CLASS"]))
             parameters = list(set(list(element.index.values)).intersection(element_class.PARAMETERS.keys()))
+            params = element[parameters].dropna()  # Remove the None from the parameters.
             input_sequence.append(
-                element_class(name, **element[parameters]),
+                element_class(name, **params),
             )
         element_mapper = {k: v for v, k in enumerate(list(df_sequence.index.values))}
         return cls(sequence=input_sequence, mapper=element_mapper)
