@@ -163,10 +163,14 @@ class Input:
             self.sequence[self.mapper[element]].__setattr__(param, parameters[param])
         self.sequence[self.mapper[element]].freeze()
 
-    def get_parameters(self, element: str, parameters: Optional[List] = None):
+    def get_parameters(self, element: str, parameters: Optional[Union[List, str]] = None):
         if parameters is None:
             parameters = self.sequence[self.mapper[element]].attributes
-        return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
+            return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
+        if isinstance(parameters, List):
+            return dict(zip(parameters, list(map(self.sequence[self.mapper[element]].__getattr__, parameters))))
+        if parameters is not None and isinstance(parameters, str):
+            return self.sequence[self.mapper[element]].__getattr__(parameters)
 
     @classmethod
     def insert_thin_element(

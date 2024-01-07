@@ -17,17 +17,21 @@ Alphabetical list of past and present authors:
 Citation
 ########
 
-Authors of papers including reference to or results obtained with Georges are encouraged to cite as follow::
+Authors of papers including reference to or results obtained with Georges are encouraged to cite as follows:
 
-@article{Georges,
-	author = {Robin Tesse and C{\'e}dric Hernalsteens and Eustache Gnacadja and Nicolas Pauly and Eliott Ramoisiaux and Marion Vanwelde},
-	doi = {https://doi.org/10.1016/j.softx.2023.101579},
-	journal = {SoftwareX},
-	pages = {101579},
-	title = {Georges: A modular Python library for seamless beam dynamics simulations and optimization},
-	volume = {24},
-	year = {2023}
-   }
+.. code-block:: bibtex
+
+    @article{Georges,
+        author  = {Robin Tesse and C{\'e}dric Hernalsteens and Eustache Gnacadja and Nicolas Pauly and Eliott Ramoisiaux and Marion Vanwelde},
+        doi     = {https://doi.org/10.1016/j.softx.2023.101579},
+        journal = {SoftwareX},
+        pages   = {101579},
+        title   = {Georges: A modular Python library for seamless beam dynamics simulations and optimization},
+        volume  = {24},
+        year    = {2023}
+    }
+
+
 
 List of publications
 ####################
