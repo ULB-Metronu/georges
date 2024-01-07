@@ -13,7 +13,7 @@ For development purposes you can copy the source code on your computer. georges 
 You can  stay on the bleeding-edge master branch or you can checkout
 a release tag::
 
-    git checkout tags/2023.1
+    git checkout tags/2024.2
 
 The installation process to get George’s running is relatively simple: the whole library is ready to
 be installed with `Poetry <https://python-poetry.org/>`_. However, depending your configuration,

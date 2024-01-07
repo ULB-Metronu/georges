@@ -40,7 +40,7 @@ def test_manzoni_tracking():
     )
 
     B3G2 = georges.Element.SBend(
-        NAME="B2G2",
+        NAME="B3G2",
         L=1.492 * _ureg.m,
         ANGLE=-90 * _ureg.degrees,
         K1=0 * _ureg.m**-2,

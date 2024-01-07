@@ -2,6 +2,14 @@
 Changelog
 *********
 
+* 2024-2
+
+    * Fix a bug when creating the Manzoni Input.
+    * Add some tests
+
+.. todolist::
+
+
 * 2024-1
 
     * Add doctest
@@ -10,8 +18,6 @@ Changelog
     * Improve the documentation for the apertures
     * Add the paper published in Software-X
     * Update librairies
-
-.. todolist::
 
 * 2023-1
 

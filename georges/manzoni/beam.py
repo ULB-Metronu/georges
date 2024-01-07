@@ -60,6 +60,10 @@ class Beam:
 
 
 class MadXBeam(Beam):
+    """
+    Beam distribution for MADX Integrator (x, x', y, y', dpp, pt)
+    """
+
     def __init__(self, kinematics: _Kinematics, distribution: np.ndarray, first_order: bool = False):
         super().__init__(kinematics=kinematics, distribution=distribution)
         pt = Beam.compute_pt(
@@ -73,5 +77,13 @@ class MadXBeam(Beam):
 
 
 class TransportBeam(Beam):
+    """
+    Beam distribution for Transport Integrator (x, x', y, y', l, dpp)
+    """
+
     def __init__(self, kinematics: _Kinematics, distribution: np.ndarray):
         super().__init__(kinematics=kinematics, distribution=distribution)
+        self._distribution = np.zeros((len(distribution), 6))
+        self._distribution[:, :-1] = distribution
+        self._distribution[:, -1] = 0
+        self._distribution[:, [-2, -1]] = self._distribution[:, [-1, -2]]
