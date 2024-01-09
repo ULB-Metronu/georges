@@ -436,7 +436,7 @@ class Fringeout(Bend):
         PARAMETERS (dict): Dictionary containing the parameters of the Fringeout with their default values.
 
     Examples:
-        >>> f2 = Fringeout('F2', L=1*_ureg.mm, ANGLE=30*_ureg.degrees, E1=5*_ureg.degrees,
+        >>> f2 = Fringeout('F2', L=1*_ureg.mm, ANGLE=30*_ureg.degrees, E2=5*_ureg.degrees,
         ...                 HGAP=2*_ureg.cm, K1=3*_ureg.m**-2, R2=1*_ureg.cm)
         >>> f2 #doctest: +NORMALIZE_WHITESPACE
             Fringeout: {'NAME': 'F2',
@@ -450,8 +450,8 @@ class Fringeout(Bend):
                        'K1': <Quantity(3, '1 / meter ** 2')>,
                        'K2': <Quantity(0.0, '1 / meter ** 3')>,
                        'L': <Quantity(1, 'millimeter')>,
-                       'E1': <Quantity(5, 'degree')>,
-                       'E2': <Quantity(0.0, 'radian')>,
+                       'E1': <Quantity(0.0, 'radian')>,
+                       'E2': <Quantity(5, 'degree')>,
                        'TILT': <Quantity(0.0, 'radian')>,
                        'HGAP': <Quantity(2, 'centimeter')>,
                        'FINT': 0.0, 'FINTX': 0.0,
