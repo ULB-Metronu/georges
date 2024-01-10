@@ -31,6 +31,15 @@ The module is structured as depicted in figure below and described in the next s
 
     manzoni/structure
 
+Integrators
+===========
+
+..  toctree::
+    :hidden:
+    :maxdepth: 1
+
+    manzoni/manzoni_integrators
+
 
 Examples
 ========

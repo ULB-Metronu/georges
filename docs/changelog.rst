@@ -4,7 +4,8 @@ Changelog
 
 * 2024-2
 
-    * Fix a bug when creating the Manzoni Input.
+    * Add documentation for integrators
+    * Fix a bug when creating the Manzoni Input
     * Add some tests
 
 .. todolist::
