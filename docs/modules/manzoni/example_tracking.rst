@@ -1,9 +1,10 @@
-Particle tracking with collimator
-#################################
+Particle Tracking with Collimator
+=================================
 
-In this example, we define beamline with `Quadrupoles`, `SBEND` and `Collimators` and we use different observers to analyse the beam and its properties.
+In this example, we define a beamline with `Quadrupoles`, `SBEND`, and `Collimators` and use different observers to analyze the beam and its properties.
 
 Let's first import the necessary packages
+------------------------------------------
 
 .. jupyter-execute::
    :hide-output:

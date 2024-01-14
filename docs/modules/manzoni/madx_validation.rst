@@ -1,5 +1,5 @@
 Validation with MAD_X
-#####################
+=====================
 
 The Manzoni tracking code can be validated against `MAD-X` using the converters described in
 `georges-core`. The example here below illustrates how to define a line, then use `MAD-X`
@@ -18,7 +18,7 @@ and finally compare the results with `Manzoni`.
     _ureg = georges.ureg
 
 We define the kinematics and the beam properties for the line
-*************************************************************
+-------------------------------------------------------------
 
 .. jupyter-execute::
    :hide-output:
@@ -33,7 +33,7 @@ We define the kinematics and the beam properties for the line
     alfay = 0.75
 
 Let's define a line with drifts, quadrupoles and dipoles
-********************************************************
+--------------------------------------------------------
 
 .. jupyter-execute::
    :hide-output:
@@ -128,7 +128,7 @@ Let's define a line with drifts, quadrupoles and dipoles
 
 
 Two methods are available to validate the Twiss functions
-*********************************************************
+---------------------------------------------------------
 
 If you want a validation of the line with :code:`MAD-X`, there is two possibilities:
     * Use a TwissObserver
@@ -145,7 +145,7 @@ If you want a validation of the line with :code:`MAD-X`, there is two possibilit
                                                                   ALPHA22=alfay))
 
 Compare results between MAD-X and Manzoni
-*****************************************
+-----------------------------------------
 
 .. tabs::
 

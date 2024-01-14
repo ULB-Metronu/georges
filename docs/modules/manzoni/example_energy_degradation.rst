@@ -1,5 +1,5 @@
 Particle tracking with energy degradation
-#########################################
+=========================================
 
 We replace the collimator from the previous example by an 10cm length energy degrader in Beryllium.
 The parameters `WITH_LOSSES` can be set to `True`` or `False`` depending the application. If it is set to `True`,
